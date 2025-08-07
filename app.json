@@ -26,7 +26,7 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.easyemoneyapp.eccappv2",
+      "bundleIdentifier": "",
       "buildNumber": "1",
       "infoPlist": {
         "NSFaceIDUsageDescription": "Allow OneTronix to use Face ID for secure and easy authentication.",
@@ -41,7 +41,7 @@
         "foregroundImage": "./assets/images/EccAdaptive.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.easyemoneyapp.eccappv2",
+      "package": "",
       "versionCode": 1,
       "permissions": [
         "android.permission.CAMERA",
@@ -112,7 +112,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "1c712b9b-6d4f-4f59-a301-006412798e29"
+        "projectId": ""
       }
     },
     "runtimeVersion": {
