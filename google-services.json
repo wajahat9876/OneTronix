@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "470430829315",
+    "project_id": "ecc-v2-67112",
+    "storage_bucket": "ecc-v2-67112.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:470430829315:android:b6678a6f658b338befb736",
+        "android_client_info": {
+          "package_name": "com.easyemoneyapp.eccappv2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-8WmyTJdsMa6mgGE7U1hi0EIPgmuoytI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,112 @@
+{
+  "cli": {
+    "version": ">= 2.8.0",
+    "appVersionSource": "local"
+  },
+  "build": {
+    "development-simulator": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      }
+    },
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "development",
+      "ios": {
+        "cocoapods": "1.14.0"
+      }
+    },
+    "preview2": {
+      "env": {
+        "EXPO_PUBLIC_HMAC_KEY1":"HRR9ByrtY9bkdl2biRQCpHi1TAhBBi",
+        "EXPO_PUBLIC_HMAC_KEY2":"8tHwFgQbW1t7wtP0OkALuHI7Q0ZQf7",
+        "EXPO_PUBLIC_HMAC_KEY3":"f6bTtBIeVbQsl61OXybzkRz2YB981v",
+        "EXPO_PUBLIC_HMAC_KEY4":"akjFOgvvCFw3lGiEhQkcSrALrkUoOA",
+        "EXPO_PUBLIC_HMAC_KEY5":"str_0gkgkgigigkwq",
+        "EXPO_PUBLIC_HMAC_KEY6":"str_1lkj?\"}>:Pdck",
+        "EXPO_PUBLIC_HMAC_KEY7":"B12fDCahT0TcPhV0sV0r4g3O2uWRBb",
+        "EXPO_PUBLIC_HMAC_KEY8":"str_2';/.]'dmnbvcxz"
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      },
+      "channel": "preview",
+      "ios": {
+        "cocoapods": "1.14.0"
+      }
+    },
+    "production": {
+
+      "env": {
+        "EXPO_PUBLIC_HMAC_KEY1":"HRR9ByrtY9bkdl2biRQCpHi1TAhBBi",
+        "EXPO_PUBLIC_HMAC_KEY2":"8tHwFgQbW1t7wtP0OkALuHI7Q0ZQf7",
+        "EXPO_PUBLIC_HMAC_KEY3":"f6bTtBIeVbQsl61OXybzkRz2YB981v",
+        "EXPO_PUBLIC_HMAC_KEY4":"akjFOgvvCFw3lGiEhQkcSrALrkUoOA",
+        "EXPO_PUBLIC_HMAC_KEY5":"str_0gkgkgigigkwq",
+        "EXPO_PUBLIC_HMAC_KEY6":"str_1lkj?\"}>:Pdck",
+        "EXPO_PUBLIC_HMAC_KEY7":"B12fDCahT0TcPhV0sV0r4g3O2uWRBb",
+        "EXPO_PUBLIC_HMAC_KEY8":"str_2';/.]'dmnbvcxz"
+      },
+      "ios": {
+        "autoIncrement": true,
+        "image": "sdk-52"
+      },
+      "android": {
+        "autoIncrement": true
+      }
+    },
+    "production-appstore": {
+      "env": {
+        "EXPO_PUBLIC_HMAC_KEY1":"HRR9ByrtY9bkdl2biRQCpHi1TAhBBi",
+        "EXPO_PUBLIC_HMAC_KEY2":"8tHwFgQbW1t7wtP0OkALuHI7Q0ZQf7",
+        "EXPO_PUBLIC_HMAC_KEY3":"f6bTtBIeVbQsl61OXybzkRz2YB981v",
+        "EXPO_PUBLIC_HMAC_KEY4":"akjFOgvvCFw3lGiEhQkcSrALrkUoOA",
+        "EXPO_PUBLIC_HMAC_KEY5":"str_0gkgkgigigkwq",
+        "EXPO_PUBLIC_HMAC_KEY6":"str_1lkj?\"}>:Pdck",
+        "EXPO_PUBLIC_HMAC_KEY7":"B12fDCahT0TcPhV0sV0r4g3O2uWRBb",
+        "EXPO_PUBLIC_HMAC_KEY8":"str_2';/.]'dmnbvcxz"
+      },
+      "ios": {
+        "autoIncrement": true,
+        "image": "macos-sonoma-14.6-xcode-16.0"
+      },
+      "android": {
+        "autoIncrement": true
+      },
+      "channel": "production-appstore"
+    },
+    "sqa": {
+      "env": {
+        "EXPO_PUBLIC_HMAC_KEY1":"HRR9ByrtY9bkdl2biRQCpHi1TAhBBi",
+        "EXPO_PUBLIC_HMAC_KEY2":"8tHwFgQbW1t7wtP0OkALuHI7Q0ZQf7",
+        "EXPO_PUBLIC_HMAC_KEY3":"f6bTtBIeVbQsl61OXybzkRz2YB981v",
+        "EXPO_PUBLIC_HMAC_KEY4":"akjFOgvvCFw3lGiEhQkcSrALrkUoOA",
+        "EXPO_PUBLIC_HMAC_KEY5":"str_0gkgkgigigkwq",
+        "EXPO_PUBLIC_HMAC_KEY6":"str_1lkj?\"}>:Pdck",
+        "EXPO_PUBLIC_HMAC_KEY7":"B12fDCahT0TcPhV0sV0r4g3O2uWRBb",
+        "EXPO_PUBLIC_HMAC_KEY8":"str_2';/.]'dmnbvcxz"
+      },
+      "channel": "sqa",
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "image": "macos-sonoma-14.6-xcode-16.0",
+        "autoIncrement": true,
+        "cocoapods": "1.14.0"
+      }
+    }
+  },
+  "submit": {
+    // "sqa":{}
+    "production": {}
+  }
+}

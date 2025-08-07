@@ -1,0 +1,489 @@
+diff --git a/node_modules/react-native-country-picker-modal/lib/CountryFilter.d.ts b/node_modules/react-native-country-picker-modal/lib/CountryFilter.d.ts
+index cab9d7a..82cb1c5 100644
+--- a/node_modules/react-native-country-picker-modal/lib/CountryFilter.d.ts
++++ b/node_modules/react-native-country-picker-modal/lib/CountryFilter.d.ts
+@@ -3,8 +3,8 @@ import { TextInputProps } from 'react-native';
+ export declare type CountryFilterProps = TextInputProps;
+ export declare const CountryFilter: {
+     (props: TextInputProps): JSX.Element;
+-    defaultProps: {
+-        autoFocus: boolean;
+-        placeholder: string;
+-    };
++    // defaultProps: {
++    //     autoFocus: boolean;
++    //     placeholder: string;
++    // };
+ };
+diff --git a/node_modules/react-native-country-picker-modal/lib/CountryFilter.js b/node_modules/react-native-country-picker-modal/lib/CountryFilter.js
+index 28b0dc4..33abad3 100644
+--- a/node_modules/react-native-country-picker-modal/lib/CountryFilter.js
++++ b/node_modules/react-native-country-picker-modal/lib/CountryFilter.js
+@@ -1,5 +1,5 @@
+ import React from 'react';
+-import { TextInput, StyleSheet, Platform } from 'react-native';
++import { Platform, StyleSheet, TextInput } from 'react-native';
+ import { useTheme } from './CountryTheme';
+ const styles = StyleSheet.create({
+     input: {
+@@ -21,8 +21,8 @@ export const CountryFilter = (props) => {
+             { fontFamily, fontSize, color: onBackgroundTextColor }
+         ] }, props)));
+ };
+-CountryFilter.defaultProps = {
+-    autoFocus: false,
+-    placeholder: 'Enter country name'
+-};
++// CountryFilter.defaultProps = {
++//     autoFocus: false,
++//     placeholder: 'Enter country name'
++// };
+ //# sourceMappingURL=CountryFilter.js.map
+\ No newline at end of file
+diff --git a/node_modules/react-native-country-picker-modal/lib/CountryList.d.ts b/node_modules/react-native-country-picker-modal/lib/CountryList.d.ts
+index a0b76b1..8d9c12c 100644
+--- a/node_modules/react-native-country-picker-modal/lib/CountryList.d.ts
++++ b/node_modules/react-native-country-picker-modal/lib/CountryList.d.ts
+@@ -15,8 +15,9 @@ interface CountryListProps {
+ }
+ export declare const CountryList: {
+     (props: CountryListProps): JSX.Element;
+-    defaultProps: {
+-        filterFocus: undefined;
+-    };
++    // defaultProps: {
++    //     filterFocus: undefined;
++    // };
+ };
+-export {};
++export { };
++
+diff --git a/node_modules/react-native-country-picker-modal/lib/CountryList.js b/node_modules/react-native-country-picker-modal/lib/CountryList.js
+index 8816018..0fa87f0 100644
+--- a/node_modules/react-native-country-picker-modal/lib/CountryList.js
++++ b/node_modules/react-native-country-picker-modal/lib/CountryList.js
+@@ -1,9 +1,9 @@
+-import React, { useRef, memo, useState, useEffect } from 'react';
+-import { StyleSheet, View, FlatList, ScrollView, TouchableOpacity, PixelRatio, Dimensions, } from 'react-native';
+-import { useTheme } from './CountryTheme';
+-import { Flag } from './Flag';
++import React, { memo, useEffect, useRef, useState } from 'react';
++import { Dimensions, FlatList, PixelRatio, ScrollView, StyleSheet, TouchableOpacity, View, } from 'react-native';
+ import { useContext } from './CountryContext';
+ import { CountryText } from './CountryText';
++import { useTheme } from './CountryTheme';
++import { Flag } from './Flag';
+ const borderBottomWidth = 2 / PixelRatio.get();
+ const styles = StyleSheet.create({
+     container: {
+@@ -51,7 +51,7 @@ const Letter = ({ letter, scrollTo }) => {
+ };
+ const CountryItem = (props) => {
+     const { activeOpacity, itemHeight, flagSize } = useTheme();
+-    const { country, onSelect, withFlag, withEmoji, withCallingCode, withCurrency, } = props;
++    const { country, onSelect, withFlag=true, withEmoji, withCallingCode=false, withCurrency, } = props;
+     const extraContent = [];
+     if (withCallingCode &&
+         country.callingCode &&
+@@ -69,10 +69,10 @@ const CountryItem = (props) => {
+                     country.name,
+                     extraContent.length > 0 && ` (${extraContent.join(', ')})`)))));
+ };
+-CountryItem.defaultProps = {
+-    withFlag: true,
+-    withCallingCode: false,
+-};
++// CountryItem.defaultProps = {
++//     withFlag: true,
++//     withCallingCode: false,
++// };
+ const MemoCountryItem = memo(CountryItem);
+ const renderItem = (props) => ({ item: country, }) => (React.createElement(MemoCountryItem, Object.assign({}, { country, ...props })));
+ const keyExtractor = (item) => item.cca2;
+@@ -82,7 +82,7 @@ const ItemSeparatorComponent = () => {
+ };
+ const { height } = Dimensions.get('window');
+ export const CountryList = (props) => {
+-    const { data, withAlphaFilter, withEmoji, withFlag, withCallingCode, withCurrency, onSelect, filter, flatListProps, filterFocus, } = props;
++    const { data, withAlphaFilter, withEmoji, withFlag, withCallingCode, withCurrency, onSelect, filter, flatListProps, filterFocus=undefined, } = props;
+     const flatListRef = useRef(null);
+     const [letter, setLetter] = useState('');
+     const { itemHeight, backgroundColor } = useTheme();
+@@ -130,7 +130,7 @@ export const CountryList = (props) => {
+         }, flatListProps)),
+         withAlphaFilter && (React.createElement(ScrollView, { contentContainerStyle: styles.letters, keyboardShouldPersistTaps: 'always' }, letters.map(letter => (React.createElement(Letter, Object.assign({ key: letter }, { letter, scrollTo }))))))));
+ };
+-CountryList.defaultProps = {
+-    filterFocus: undefined,
+-};
++// CountryList.defaultProps = {
++//     filterFocus: undefined,
++// };
+ //# sourceMappingURL=CountryList.js.map
+\ No newline at end of file
+diff --git a/node_modules/react-native-country-picker-modal/lib/CountryModal.d.ts b/node_modules/react-native-country-picker-modal/lib/CountryModal.d.ts
+index 3d1d29e..60a8bee 100644
+--- a/node_modules/react-native-country-picker-modal/lib/CountryModal.d.ts
++++ b/node_modules/react-native-country-picker-modal/lib/CountryModal.d.ts
+@@ -5,10 +5,10 @@ export declare const CountryModal: {
+         withModal?: boolean | undefined;
+         disableNativeModal?: boolean | undefined;
+     }): JSX.Element | null;
+-    defaultProps: {
+-        animationType: string;
+-        animated: boolean;
+-        withModal: boolean;
+-        disableNativeModal: boolean;
+-    };
++    // defaultProps: {
++    //     animationType: string;
++    //     animated: boolean;
++    //     withModal: boolean;
++    //     disableNativeModal: boolean;
++    // };
+ };
+diff --git a/node_modules/react-native-country-picker-modal/lib/CountryModal.js b/node_modules/react-native-country-picker-modal/lib/CountryModal.js
+index 1678e95..8236cd0 100644
+--- a/node_modules/react-native-country-picker-modal/lib/CountryModal.js
++++ b/node_modules/react-native-country-picker-modal/lib/CountryModal.js
+@@ -1,15 +1,19 @@
+ import * as React from 'react';
+-import { SafeAreaView, StyleSheet, Platform } from 'react-native';
++import { Platform, SafeAreaView, StyleSheet } from 'react-native';
+ import { AnimatedModal } from './AnimatedModal';
+-import { Modal } from './Modal';
+-import { useTheme } from './CountryTheme';
+ import { CountryModalContext } from './CountryModalProvider';
++import { useTheme } from './CountryTheme';
++import { Modal } from './Modal';
+ const styles = StyleSheet.create({
+     container: {
+         flex: 1,
+     },
+ });
+-export const CountryModal = ({ children, withModal, disableNativeModal, ...props }) => {
++export const CountryModal = ({  children,
++    withModal = true,
++    disableNativeModal = false,
++    animationType = 'slide',
++    animated = true, ...props }) => {
+     const { backgroundColor } = useTheme();
+     const { teleport } = React.useContext(CountryModalContext);
+     const content = (React.createElement(SafeAreaView, { style: [styles.container, { backgroundColor }] }, children));
+@@ -29,10 +33,10 @@ export const CountryModal = ({ children, withModal, disableNativeModal, ...props
+     }
+     return content;
+ };
+-CountryModal.defaultProps = {
+-    animationType: 'slide',
+-    animated: true,
+-    withModal: true,
+-    disableNativeModal: false,
+-};
++// CountryModal.defaultProps = {
++//     animationType: 'slide',
++//     animated: true,
++//     withModal: true,
++//     disableNativeModal: false,
++// };
+ //# sourceMappingURL=CountryModal.js.map
+\ No newline at end of file
+diff --git a/node_modules/react-native-country-picker-modal/lib/CountryPicker.d.ts b/node_modules/react-native-country-picker-modal/lib/CountryPicker.d.ts
+index 4ec9804..9ed1d19 100644
+--- a/node_modules/react-native-country-picker-modal/lib/CountryPicker.d.ts
++++ b/node_modules/react-native-country-picker-modal/lib/CountryPicker.d.ts
+@@ -1,8 +1,7 @@
+ import { ReactNode } from 'react';
+-import { ModalProps, FlatListProps, StyleProp, ViewStyle, ImageSourcePropType, ImageStyle } from 'react-native';
++import { FlatListProps, ImageSourcePropType, ImageStyle, ModalProps, StyleProp, ViewStyle } from 'react-native';
++import { CountryFilterProps } from './CountryFilter';
+ import { Country, CountryCode, Region, Subregion } from './types';
+-import { CountryFilter, CountryFilterProps } from './CountryFilter';
+-import { FlagButton } from './FlagButton';
+ interface CountryPickerProps {
+     countryCode?: CountryCode;
+     region?: Region;
+@@ -40,11 +39,12 @@ interface CountryPickerProps {
+ }
+ export declare const CountryPicker: {
+     (props: CountryPickerProps): JSX.Element;
+-    defaultProps: {
+-        withModal: boolean;
+-        withAlphaFilter: boolean;
+-        withCallingCode: boolean;
+-        placeholder: string;
+-    };
++    // defaultProps: {
++    //     withModal: boolean;
++    //     withAlphaFilter: boolean;
++    //     withCallingCode: boolean;
++    //     placeholder: string;
++    // };
+ };
+-export {};
++export { };
++
+diff --git a/node_modules/react-native-country-picker-modal/lib/CountryPicker.js b/node_modules/react-native-country-picker-modal/lib/CountryPicker.js
+index c4ba18e..8851bfe 100644
+--- a/node_modules/react-native-country-picker-modal/lib/CountryPicker.js
++++ b/node_modules/react-native-country-picker-modal/lib/CountryPicker.js
+@@ -1,15 +1,15 @@
+-import React, { useState, useEffect } from 'react';
++import React, { useEffect, useState } from 'react';
++import { useContext } from './CountryContext';
++import { CountryFilter } from './CountryFilter';
++import { CountryList } from './CountryList';
+ import { CountryModal } from './CountryModal';
++import { FlagButton } from './FlagButton';
+ import { HeaderModal } from './HeaderModal';
+ import { FlagType } from './types';
+-import { CountryFilter } from './CountryFilter';
+-import { FlagButton } from './FlagButton';
+-import { useContext } from './CountryContext';
+-import { CountryList } from './CountryList';
+ const renderFlagButton = (props) => props.renderFlagButton ? (props.renderFlagButton(props)) : (React.createElement(FlagButton, Object.assign({}, props)));
+ const renderFilter = (props) => props.renderCountryFilter ? (props.renderCountryFilter(props)) : (React.createElement(CountryFilter, Object.assign({}, props)));
+ export const CountryPicker = (props) => {
+-    const { countryCode, region, subregion, countryCodes, renderFlagButton: renderButton, renderCountryFilter, filterProps, modalProps, flatListProps, onSelect, withEmoji, withFilter, withCloseButton, withCountryNameButton, withCallingCodeButton, withCurrencyButton, containerButtonStyle, withAlphaFilter, withCallingCode, withCurrency, withFlag, withModal, disableNativeModal, withFlagButton, onClose: handleClose, onOpen: handleOpen, closeButtonImage, closeButtonStyle, closeButtonImageStyle, excludeCountries, placeholder, preferredCountries } = props;
++    const { countryCode, region, subregion, countryCodes, renderFlagButton: renderButton, renderCountryFilter, filterProps, modalProps, flatListProps, onSelect, withEmoji, withFilter, withCloseButton, withCountryNameButton, withCallingCodeButton, withCurrencyButton, containerButtonStyle, withAlphaFilter=false, withCallingCode=false, withCurrency, withFlag, withModal=true, disableNativeModal, withFlagButton, onClose: handleClose, onOpen: handleOpen, closeButtonImage, closeButtonStyle, closeButtonImageStyle, excludeCountries, placeholder='Select Country', preferredCountries } = props;
+     const [state, setState] = useState({
+         visible: props.visible || false,
+         countries: [],
+@@ -93,10 +93,10 @@ export const CountryPicker = (props) => {
+                 flatListProps,
+             })))));
+ };
+-CountryPicker.defaultProps = {
+-    withModal: true,
+-    withAlphaFilter: false,
+-    withCallingCode: false,
+-    placeholder: 'Select Country',
+-};
++// CountryPicker.defaultProps = {
++//     withModal: true,
++//     withAlphaFilter: false,
++//     withCallingCode: false,
++//     placeholder: 'Select Country',
++// };
+ //# sourceMappingURL=CountryPicker.js.map
+\ No newline at end of file
+diff --git a/node_modules/react-native-country-picker-modal/lib/Flag.d.ts b/node_modules/react-native-country-picker-modal/lib/Flag.d.ts
+index b2dc1f4..55e7b24 100644
+--- a/node_modules/react-native-country-picker-modal/lib/Flag.d.ts
++++ b/node_modules/react-native-country-picker-modal/lib/Flag.d.ts
+@@ -8,9 +8,10 @@ interface FlagType {
+ }
+ export declare const Flag: {
+     ({ countryCode, withEmoji, withFlagButton, flagSize, }: FlagType): JSX.Element | null;
+-    defaultProps: {
+-        withEmoji: boolean;
+-        withFlagButton: boolean;
+-    };
++    // defaultProps: {
++    //     withEmoji: boolean;
++    //     withFlagButton: boolean;
++    // };
+ };
+-export {};
++export { };
++
+diff --git a/node_modules/react-native-country-picker-modal/lib/Flag.js b/node_modules/react-native-country-picker-modal/lib/Flag.js
+index b974950..61841da 100644
+--- a/node_modules/react-native-country-picker-modal/lib/Flag.js
++++ b/node_modules/react-native-country-picker-modal/lib/Flag.js
+@@ -1,8 +1,8 @@
+ import React, { memo } from 'react';
+-import { Emoji } from './Emoji';
+-import { useContext } from './CountryContext';
+ import { useAsync } from 'react-async-hook';
+-import { Image, StyleSheet, PixelRatio, Text, View, ActivityIndicator, } from 'react-native';
++import { ActivityIndicator, Image, PixelRatio, StyleSheet, Text, View, } from 'react-native';
++import { useContext } from './CountryContext';
++import { Emoji } from './Emoji';
+ const styles = StyleSheet.create({
+     container: {
+         justifyContent: 'center',
+@@ -45,9 +45,9 @@ const EmojiFlag = memo(({ countryCode, flagSize }) => {
+     return (React.createElement(Text, { style: [styles.emojiFlag, { fontSize: flagSize }], allowFontScaling: false },
+         React.createElement(Emoji, Object.assign({}, { name: asyncResult.result }))));
+ });
+-export const Flag = ({ countryCode, withEmoji, withFlagButton, flagSize, }) => withFlagButton ? (React.createElement(View, { style: styles.container }, withEmoji ? (React.createElement(EmojiFlag, Object.assign({}, { countryCode, flagSize }))) : (React.createElement(ImageFlag, Object.assign({}, { countryCode, flagSize }))))) : null;
+-Flag.defaultProps = {
+-    withEmoji: true,
+-    withFlagButton: true,
+-};
++export const Flag = ({ countryCode, withEmoji=true, withFlagButton=true, flagSize, }) => withFlagButton ? (React.createElement(View, { style: styles.container }, withEmoji ? (React.createElement(EmojiFlag, Object.assign({}, { countryCode, flagSize }))) : (React.createElement(ImageFlag, Object.assign({}, { countryCode, flagSize }))))) : null;
++// Flag.defaultProps = {
++//     withEmoji: true,
++//     withFlagButton: true,
++// };
+ //# sourceMappingURL=Flag.js.map
+\ No newline at end of file
+diff --git a/node_modules/react-native-country-picker-modal/lib/FlagButton.d.ts b/node_modules/react-native-country-picker-modal/lib/FlagButton.d.ts
+index d52a40f..e7fc5d6 100644
+--- a/node_modules/react-native-country-picker-modal/lib/FlagButton.d.ts
++++ b/node_modules/react-native-country-picker-modal/lib/FlagButton.d.ts
+@@ -14,11 +14,11 @@ export interface FlagButtonProps {
+ }
+ export declare const FlagButton: {
+     ({ withEmoji, withCountryNameButton, withCallingCodeButton, withCurrencyButton, withFlagButton, countryCode, containerButtonStyle, onOpen, placeholder, }: FlagButtonProps): JSX.Element;
+-    defaultProps: {
+-        withEmoji: boolean;
+-        withCountryNameButton: boolean;
+-        withCallingCodeButton: boolean;
+-        withCurrencyButton: boolean;
+-        withFlagButton: boolean;
+-    };
++    // defaultProps: {
++    //     withEmoji: boolean;
++    //     withCountryNameButton: boolean;
++    //     withCallingCodeButton: boolean;
++    //     withCurrencyButton: boolean;
++    //     withFlagButton: boolean;
++    // };
+ };
+diff --git a/node_modules/react-native-country-picker-modal/lib/FlagButton.js b/node_modules/react-native-country-picker-modal/lib/FlagButton.js
+index 7ad3e7b..ba02873 100644
+--- a/node_modules/react-native-country-picker-modal/lib/FlagButton.js
++++ b/node_modules/react-native-country-picker-modal/lib/FlagButton.js
+@@ -1,9 +1,9 @@
+-import React, { useState, useEffect, memo } from 'react';
+-import { TouchableOpacity, StyleSheet, View, } from 'react-native';
+-import { Flag } from './Flag';
++import React, { memo, useEffect, useState } from 'react';
++import { StyleSheet, TouchableOpacity, View, } from 'react-native';
+ import { useContext } from './CountryContext';
+ import { CountryText } from './CountryText';
+ import { useTheme } from './CountryTheme';
++import { Flag } from './Flag';
+ const styles = StyleSheet.create({
+     container: {
+         alignItems: 'flex-start',
+@@ -49,7 +49,7 @@ const FlagWithSomething = memo(({ countryCode, withEmoji, withCountryNameButton,
+         withCurrencyButton && currency ? (React.createElement(FlagText, null, `(${currency}) `)) : null,
+         withCallingCodeButton && callingCode ? (React.createElement(FlagText, null, `+${callingCode}`)) : null));
+ });
+-export const FlagButton = ({ withEmoji, withCountryNameButton, withCallingCodeButton, withCurrencyButton, withFlagButton, countryCode, containerButtonStyle, onOpen, placeholder, }) => {
++export const FlagButton = ({ withEmoji=true, withCountryNameButton=false, withCallingCodeButton=false, withCurrencyButton=false, withFlagButton=false, countryCode, containerButtonStyle, onOpen, placeholder, }) => {
+     const { flagSizeButton: flagSize } = useTheme();
+     return (React.createElement(TouchableOpacity, { activeOpacity: 0.7, onPress: onOpen },
+         React.createElement(View, { style: [
+@@ -68,11 +68,5 @@ export const FlagButton = ({ withEmoji, withCountryNameButton, withCallingCodeBu
+                 placeholder,
+             })))));
+ };
+-FlagButton.defaultProps = {
+-    withEmoji: true,
+-    withCountryNameButton: false,
+-    withCallingCodeButton: false,
+-    withCurrencyButton: false,
+-    withFlagButton: true,
+-};
++
+ //# sourceMappingURL=FlagButton.js.map
+\ No newline at end of file
+diff --git a/node_modules/react-native-country-picker-modal/lib/HeaderModal.d.ts b/node_modules/react-native-country-picker-modal/lib/HeaderModal.d.ts
+index 11f8068..2802893 100644
+--- a/node_modules/react-native-country-picker-modal/lib/HeaderModal.d.ts
++++ b/node_modules/react-native-country-picker-modal/lib/HeaderModal.d.ts
+@@ -1,5 +1,5 @@
+ import { ReactNode } from 'react';
+-import { ImageSourcePropType, StyleProp, ViewStyle, ImageStyle } from 'react-native';
++import { ImageSourcePropType, ImageStyle, StyleProp, ViewStyle } from 'react-native';
+ interface HeaderModalProps {
+     withFilter?: boolean;
+     withCloseButton?: boolean;
+@@ -11,8 +11,9 @@ interface HeaderModalProps {
+ }
+ export declare const HeaderModal: {
+     (props: HeaderModalProps): JSX.Element;
+-    defaultProps: {
+-        withCloseButton: boolean;
+-    };
++    // defaultProps: {
++    //     withCloseButton: boolean;
++    // };
+ };
+-export {};
++export { };
++
+diff --git a/node_modules/react-native-country-picker-modal/lib/HeaderModal.js b/node_modules/react-native-country-picker-modal/lib/HeaderModal.js
+index d08566a..f6951af 100644
+--- a/node_modules/react-native-country-picker-modal/lib/HeaderModal.js
++++ b/node_modules/react-native-country-picker-modal/lib/HeaderModal.js
+@@ -1,5 +1,5 @@
+ import React from 'react';
+-import { View, StyleSheet } from 'react-native';
++import { StyleSheet, View } from 'react-native';
+ import CloseButton from './CloseButton';
+ const styles = StyleSheet.create({
+     container: {
+@@ -8,12 +8,12 @@ const styles = StyleSheet.create({
+     }
+ });
+ export const HeaderModal = (props) => {
+-    const { withFilter, withCloseButton, closeButtonImage, closeButtonStyle, closeButtonImageStyle, onClose, renderFilter } = props;
++    const { withFilter, withCloseButton=true, closeButtonImage, closeButtonStyle, closeButtonImageStyle, onClose, renderFilter } = props;
+     return (React.createElement(View, { style: styles.container },
+         withCloseButton && React.createElement(CloseButton, { image: closeButtonImage, style: closeButtonStyle, imageStyle: closeButtonImageStyle, onPress: onClose }),
+         withFilter && renderFilter(props)));
+ };
+-HeaderModal.defaultProps = {
+-    withCloseButton: true
+-};
++// HeaderModal.defaultProps = {
++//     withCloseButton: true
++// };
+ //# sourceMappingURL=HeaderModal.js.map
+\ No newline at end of file
+diff --git a/node_modules/react-native-country-picker-modal/lib/index.d.ts b/node_modules/react-native-country-picker-modal/lib/index.d.ts
+index 50bb70b..5128171 100644
+--- a/node_modules/react-native-country-picker-modal/lib/index.d.ts
++++ b/node_modules/react-native-country-picker-modal/lib/index.d.ts
+@@ -1,9 +1,9 @@
+ import { ReactNode } from 'react';
+-import { FlagButtonProps } from './FlagButton';
+-import { TranslationLanguageCode, CountryCode, Country, Region, Subregion } from './types';
+-import { Theme } from './CountryTheme';
++import { FlatListProps, ModalProps, StyleProp, ViewStyle } from 'react-native';
+ import { CountryFilterProps } from './CountryFilter';
+-import { StyleProp, ViewStyle, ModalProps, FlatListProps } from 'react-native';
++import { Theme } from './CountryTheme';
++import { FlagButtonProps } from './FlagButton';
++import { Country, CountryCode, Region, Subregion, TranslationLanguageCode } from './types';
+ interface Props {
+     countryCode: CountryCode;
+     region?: Region;
+@@ -38,20 +38,22 @@ interface Props {
+     onClose?(): void;
+ }
+ declare const Main: {
+-    ({ theme, translation, ...props }: Props): JSX.Element;
+-    defaultProps: {
+-        onSelect: () => void;
+-        withEmoji: boolean;
+-    };
++    ({ theme, translation, onSelect = () => {},
++    withEmoji = true, ...props }: Props): JSX.Element;
++    // defaultProps: {
++    //     onSelect: () => void;
++    //     withEmoji: boolean;
++    // };
+ };
+ export default Main;
+-export { getCountriesAsync as getAllCountries, getCountryCallingCodeAsync as getCallingCode, } from './CountryService';
+-export { CountryModal } from './CountryModal';
+-export { DARK_THEME, DEFAULT_THEME } from './CountryTheme';
+ export { CountryFilter } from './CountryFilter';
+ export { CountryList } from './CountryList';
+-export { FlagButton } from './FlagButton';
++export { CountryModal } from './CountryModal';
++export { CountryModalProvider } from './CountryModalProvider';
++export { getCountriesAsync as getAllCountries, getCountryCallingCodeAsync as getCallingCode } from './CountryService';
++export { DARK_THEME, DEFAULT_THEME } from './CountryTheme';
+ export { Flag } from './Flag';
++export { FlagButton } from './FlagButton';
+ export { HeaderModal } from './HeaderModal';
+-export { CountryModalProvider } from './CountryModalProvider';
+ export * from './types';
++
