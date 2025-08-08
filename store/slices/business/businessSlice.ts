@@ -18,6 +18,7 @@ export interface IBusinessState {
   businessCategory: string;
   businessType: number | undefined;
   data: VerifySignIn;
+
   businessKycUrl: string;
   beneficiaryDetails: businessPayee;
   selectedBenefBankDetails: any[];
@@ -36,7 +37,6 @@ const initialState: IBusinessState = {
   outgoingBusReduxData: { amount: "", transferReasonId: "", description: "" },
   signInBusinessEmail: "",
   businessPhone: "",
-
   selectedBenefBankDetails: [],
   lastSelectedBusinessBenefDetails: {
     isFirstTransfer: false,
@@ -82,6 +82,7 @@ const initialState: IBusinessState = {
     agentName: "",
     _id: "",
   },
+
   data: {
     auth_token: "",
     email: "",
@@ -163,12 +164,13 @@ const businessSlice = createSlice({
     //   },
     // );
 
-    // builder.addMatcher(
-    //   businessAuthApi.endpoints.businessSignin.matchFulfilled,
-    //   (state, { payload }) => {
-    // state.tempToken = payload.data?.jwttoken;
-    //   },
-    // );
+    builder.addMatcher(
+      businessAuthApi.endpoints.businessSignin.matchFulfilled,
+      (state, { payload }) => {
+        console.log(payload, "businessSignin");
+        state.auth_token = payload.results?.token;
+      }
+    );
 
     builder.addMatcher(
       businessAuthApi.endpoints.buisnessSignout.matchFulfilled,

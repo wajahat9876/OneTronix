@@ -3,6 +3,7 @@ import type { IAPIRespone, IAPIResponeData } from "store/types";
 
 export interface SignIn {
   auth_token: string;
+  token: string;
 }
 export interface LastSelectBenefDetails {
   isFirstTransfer?: boolean;
@@ -418,7 +419,7 @@ interface ActiveCompanies {
   }[];
 }
 
-export type ISignInResponse = IAPIResponeData<SignIn>;
+export type ISignInResponse = IAPIRespone<SignIn>;
 export type IVerifySignInResponse = IAPIResponeData<VerifySignIn>;
 export type IBusinessAutoSignUpResponse = IAPIResponeData<BusinessAutoSignUp>;
 export type IBusinessManualSignUpResponse =

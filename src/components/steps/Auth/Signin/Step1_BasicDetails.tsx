@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable camelcase */
 import { useBusinessSigninMutation } from "@/store/api/business/authApis";
-import { setSigninBusinessEmail } from "@/store/slices/business/businessSlice";
 import Logo from "@assets/eccLogo/ecc 1.svg";
 import WhiteOutline from "@assets/icons/user/qr/whiteOutline.png";
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -32,10 +31,11 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
   const handleBusinessSignIn = async (values: any) => {
     try {
       const result = await businessSignIn(values).unwrap();
-      dispatch(setSigninBusinessEmail(values?.email));
+      // dispatch(setSigninBusinessEmail(values?.email));
       if (result) {
         renderToastSuccess(result.message);
-        if (next) next?.();
+        router.replace("/(main)/Business/Home");
+        // if (next) next?.();
       }
     } catch (error: any) {
       console.log(error, "error");

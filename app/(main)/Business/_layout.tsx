@@ -1,22 +1,22 @@
 /* eslint-disable camelcase */
 /* eslint-disable import/order */
 
-import { useBusinessDetails } from '@/store/selectors/business/business';
-import IconBottomTabCard from '@assets/icons/bottom-tabs/home-payment-card-icon.svg';
-import IconBottomTabInfo from '@assets/icons/bottom-tabs/home-profile-icon.svg';
-import IconBottomTabSettings from '@assets/icons/bottom-tabs/home-setting-icon.svg';
-import IconBottomTabSendMoney from '@assets/icons/bottom-tabs/home-transfer-money.svg';
-import IconBottomTabHome from '@assets/icons/bottom-tabs/homepage-home-icon.svg';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import Colors from '@src/constants/Colors';
-import { useAppSelector } from '@src/hooks/useReduxHooks';
-import { ms, vs } from '@utils/design/design';
-import Home from 'app/(main)/Business/Home/index';
-import Info from 'app/(main)/Business/Info/index';
-import Setting from 'app/(main)/Business/Settings/index';
-import TransferMoney from 'app/(main)/Business/TransferMoney/index';
-import { Redirect } from 'expo-router';
-import Transaction from './Transaction';
+import { useBusinessDetails } from "@/store/selectors/business/business";
+import IconBottomTabCard from "@assets/icons/bottom-tabs/home-payment-card-icon.svg";
+import IconBottomTabInfo from "@assets/icons/bottom-tabs/home-profile-icon.svg";
+import IconBottomTabSettings from "@assets/icons/bottom-tabs/home-setting-icon.svg";
+import IconBottomTabSendMoney from "@assets/icons/bottom-tabs/home-transfer-money.svg";
+import IconBottomTabHome from "@assets/icons/bottom-tabs/homepage-home-icon.svg";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import Colors from "@src/constants/Colors";
+import { useAppSelector } from "@src/hooks/useReduxHooks";
+import { ms, vs } from "@utils/design/design";
+import Home from "app/(main)/Business/Home/index";
+import Info from "app/(main)/Business/Info/index";
+import Setting from "app/(main)/Business/Settings/index";
+import TransferMoney from "app/(main)/Business/TransferMoney/index";
+import { Redirect } from "expo-router";
+import Transaction from "./Transaction";
 // Icons
 // const MainStack = createBottomTabNavigator<RootTabParamList>();
 const Layout = () => {
@@ -25,9 +25,9 @@ const Layout = () => {
   if (!auth_token) {
     return <Redirect href="/(auth)/Welcome" />;
   }
-  if (auth_token && !businessData?.isPinSet) {
-    return <Redirect href="/(auth)/ChoosePin/Business" />;
-  }
+  // if (auth_token && !businessData?.isPinSet) {
+  //   return <Redirect href="/(auth)/ChoosePin/Business" />;
+  // }
   // if (!user?.data?.email) return <Redirect href="/(auth)/Welcome/" />;
   const Tab = createMaterialBottomTabNavigator();
   return (
@@ -41,7 +41,7 @@ const Layout = () => {
         borderRadius: ms(0),
         marginBottom: vs(20),
         borderTopWidth: 3,
-        borderColor: 'black',
+        borderColor: "black",
       }}
       screenOptions={{
         tabBarColor: Colors.light.theme.white,
@@ -72,7 +72,7 @@ const Layout = () => {
         component={TransferMoney}
         options={{
           tabBarIcon: () => <IconBottomTabSendMoney />,
-          tabBarLabel: '',
+          tabBarLabel: "",
         }}
       />
 

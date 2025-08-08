@@ -10,7 +10,7 @@ export interface IAPIResponeData<ResultType> {
   message: string;
   success: boolean;
   type: string;
-  data: ResultType;
+  // data: ResultType;
 }
 export interface IAPISuccess {
   status: number;
