@@ -1,27 +1,27 @@
 /* eslint-disable import/order */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable camelcase */
-import { useBusinessSigninMutation } from '@/store/api/business/authApis';
-import { setSigninBusinessEmail } from '@/store/slices/business/businessSlice';
-import Logo from '@assets/eccLogo/ecc 1.svg';
-import WhiteOutline from '@assets/icons/user/qr/whiteOutline.png';
-import BottomSheet from '@gorhom/bottom-sheet';
-import Button from '@src/components/globals/Button';
-import FormikInput from '@src/components/globals/FormikInput';
-import { Text, TouchableOpacity } from '@src/components/libraries';
-import Step2ScanQr from '@src/components/steps/Qr';
-import { textInputDefaultProps } from '@src/constants/Props';
-import { MultiStepFormProps } from '@src/hooks/useMultiStepForm/types';
-import { useAppDispatch } from '@src/hooks/useReduxHooks';
-import { renderToastError, renderToastSuccess } from '@src/hooks/useToasty';
-import { globalStyle } from '@src/styles/globals';
-import { hs, vs } from '@utils/design/design';
-import { Link, useRouter } from 'expo-router';
-import { useFormik } from 'formik';
-import { useMemo, useRef, useState } from 'react';
-import { Image, TextInput, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import * as Yup from 'yup';
+import { useBusinessSigninMutation } from "@/store/api/business/authApis";
+import { setSigninBusinessEmail } from "@/store/slices/business/businessSlice";
+import Logo from "@assets/eccLogo/ecc 1.svg";
+import WhiteOutline from "@assets/icons/user/qr/whiteOutline.png";
+import BottomSheet from "@gorhom/bottom-sheet";
+import Button from "@src/components/globals/Button";
+import FormikInput from "@src/components/globals/FormikInput";
+import { Text, TouchableOpacity } from "@src/components/libraries";
+import Step2ScanQr from "@src/components/steps/Qr";
+import { textInputDefaultProps } from "@src/constants/Props";
+import { MultiStepFormProps } from "@src/hooks/useMultiStepForm/types";
+import { useAppDispatch } from "@src/hooks/useReduxHooks";
+import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
+import { globalStyle } from "@src/styles/globals";
+import { hs, vs } from "@utils/design/design";
+import { useRouter } from "expo-router";
+import { useFormik } from "formik";
+import { useMemo, useRef, useState } from "react";
+import { Image, TextInput, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
+import * as Yup from "yup";
 
 const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
   const [businessSignIn, { isLoading: isBusinessSignInLoading }] =
@@ -38,22 +38,22 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
         if (next) next?.();
       }
     } catch (error: any) {
-      renderToastError(error?.data?.message || 'Something went wrong');
+      renderToastError(error?.data?.message || "Something went wrong");
     }
   };
 
   const formik = useFormik({
     initialValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string().email('Invalid email address').required('Required'),
+      email: Yup.string().email("Invalid email address").required("Required"),
       password: Yup.string()
-        .min(8, 'Password must be at least 8 characters')
-        .required('Required'),
+        .min(8, "Password must be at least 8 characters")
+        .required("Required"),
     }),
-    onSubmit: values => {
+    onSubmit: (values) => {
       const userCredentials = {
         ...values,
       };
@@ -75,7 +75,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
     setBottomSheetVisible(true);
     bottomSheetRef.current?.expand();
   };
-  const snapPoints = useMemo(() => ['100%'], []);
+  const snapPoints = useMemo(() => ["100%"], []);
   const [, setBottomSheetVisible] = useState(false);
   return (
     <KeyboardAwareScrollView
@@ -85,7 +85,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
       }}
       scrollEnabled={false}
       contentContainerStyle={{
-        justifyContent: 'center',
+        justifyContent: "center",
         paddingTop: vs(0),
         flexGrow: 1,
       }}
@@ -105,10 +105,19 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
         </TouchableOpacity>
 
         <Text
-          style={{ fontSize: 16, marginTop: vs(32) }}
+          style={{ fontSize: 18, marginTop: vs(32) }}
+          className="text-white font-poppins-medium"
+        >
+          Welcome!
+        </Text>
+        <Text
+          style={{
+            fontSize: 15,
+            alignSelf: "flex-start",
+          }}
           className="text-white font-poppins"
         >
-          Welcome Back, We missed you!
+          Email
         </Text>
         <FormikInput
           formik={formik}
@@ -117,12 +126,12 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
           textContentType="username"
           inputProps={{
             ...textInputDefaultProps,
-            textContentType: 'username',
-            autoComplete: 'username',
-            placeholder: 'Email',
-            keyboardType: 'email-address',
-            className: 'mt-4',
-            returnKeyType: 'next',
+            textContentType: "username",
+            autoComplete: "username",
+            placeholder: "Email",
+            keyboardType: "email-address",
+            className: "mt-4",
+            returnKeyType: "next",
             onSubmitEditing: () => {
               if (passwordRef?.current) {
                 passwordRef.current.focus();
@@ -130,6 +139,16 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
             },
           }}
         />
+        <Text
+          style={{
+            fontSize: 15,
+            alignSelf: "flex-start",
+            marginTop: vs(16),
+          }}
+          className="text-white font-poppins"
+        >
+          Password
+        </Text>
         <FormikInput
           formik={formik}
           name="password"
@@ -138,29 +157,26 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
           textContentType="password"
           inputProps={{
             ...textInputDefaultProps,
-            textContentType: 'password',
-            placeholder: 'Password',
-            className: 'mt-2',
-            returnKeyType: 'done',
+            textContentType: "password",
+            placeholder: "Password",
+            className: "mt-2",
+            returnKeyType: "done",
             password: true,
-            autoComplete: 'password',
+            autoComplete: "password",
           }}
         />
         <View className="flex-row justify-between w-full mt-4 px-2">
-          <Link href="/(auth)/Signup/Business" asChild>
-            <Text
-              style={{ fontSize: 15 }}
-              className="text-white font-poppins-medium"
-            >
-              Sign Up
-            </Text>
-          </Link>
+          {/* <Link href="/(auth)/Signup/Business" asChild> */}
+          <Text style={{ fontSize: 13 }} className="text-white font-poppins">
+            Don't have an account?{" "}
+          </Text>
+          {/* </Link> */}
           <TouchableOpacity
             onPress={() => {
-              router.push('/(auth)/Forgot/Business');
+              router.push("/(auth)/Forgot/Business");
             }}
           >
-            <Text style={{ fontSize: 15 }} className="text-white font-poppins">
+            <Text style={{ fontSize: 13 }} className="text-white font-poppins">
               Forgot Password
             </Text>
           </TouchableOpacity>
