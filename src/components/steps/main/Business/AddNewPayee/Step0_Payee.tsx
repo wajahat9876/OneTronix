@@ -1,32 +1,26 @@
 /* eslint-disable no-empty */
 /* eslint-disable camelcase */
 /* eslint-disable import/order */
-import { useGetCurrentBusinessQuery } from '@/store/api/business/businessCurrent';
+import { useGetCurrentBusinessQuery } from "@/store/api/business/businessCurrent";
+import { useBusinessDetails } from "@/store/selectors/business/business";
 import {
-  useLazyGetMultiPayeeQuery,
-  useLazyGetPayeeQuery,
-} from '@/store/api/business/mainApis';
-import { useBusinessDetails } from '@/store/selectors/business/business';
-import {
-  resetBeneficiaryDetails,
   setBeneficiaryDetails,
   setShowToogle,
-} from '@/store/slices/business/businessSlice';
-import EditSvg from '@assets/icons/DeleteIcon.svg';
-import CurrentBalanceCard from '@src/components/commons/main/card_stack/CurrentBalanceCard';
-import RecentTransferItem from '@src/components/commons/main/card_stack/RecentTransferItem';
-import ScreenAuth from '@src/components/globals/ScreenAuth';
-import { StyleSheet, Text, TouchableOpacity } from '@src/components/libraries';
-import { pageTransitionAnimation } from '@src/constants/Animation';
-import Colors from '@src/constants/Colors';
-import { MultiStepFormProps } from '@src/hooks/useMultiStepForm';
-import { useAppDispatch, useAppSelector } from '@src/hooks/useReduxHooks';
-import { globalStyle } from '@src/styles/globals';
-import { hs, ms, vs } from '@utils/design/design';
-import { useRouter } from 'expo-router';
+} from "@/store/slices/business/businessSlice";
+import EditSvg from "@assets/icons/DeleteIcon.svg";
+import RecentTransferItem from "@src/components/commons/main/card_stack/RecentTransferItem";
+import ScreenAuth from "@src/components/globals/ScreenAuth";
+import { StyleSheet, Text, TouchableOpacity } from "@src/components/libraries";
+import { pageTransitionAnimation } from "@src/constants/Animation";
+import Colors from "@src/constants/Colors";
+import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
+import { useAppDispatch, useAppSelector } from "@src/hooks/useReduxHooks";
+import { globalStyle } from "@src/styles/globals";
+import { hs, ms, vs } from "@utils/design/design";
+import { useRouter } from "expo-router";
 // eslint-disable-next-line prettier/prettier
-import { FlatList, Platform, RefreshControl, View } from 'react-native';
-import Animated from 'react-native-reanimated';
+import { FlatList, Platform, View } from "react-native";
+import Animated from "react-native-reanimated";
 
 const Step0_Payee = ({ goTo, next }: MultiStepFormProps) => {
   const router = useRouter();
@@ -35,8 +29,7 @@ const Step0_Payee = ({ goTo, next }: MultiStepFormProps) => {
     data: businessData,
     auth_token,
   } = useAppSelector(useBusinessDetails);
-  const [trigger, isFetching] = useLazyGetPayeeQuery();
-  const [multiTrigger, multiLoading] = useLazyGetMultiPayeeQuery();
+
   const { refetch } = useGetCurrentBusinessQuery(undefined, {
     skip: !auth_token,
   });
@@ -49,17 +42,7 @@ const Step0_Payee = ({ goTo, next }: MultiStepFormProps) => {
     dispatch(setBeneficiaryDetails(item));
     next?.();
   };
-  const handleRefresh = async () => {
-    if (businessData?.activeCurrency === 1) {
-      try {
-        await trigger({}).unwrap();
-      } catch (error) {}
-    } else {
-      try {
-        await multiTrigger({}).unwrap();
-      } catch (error) {}
-    }
-  };
+
   return (
     <Animated.View
       {...pageTransitionAnimation}
@@ -79,17 +62,17 @@ const Step0_Payee = ({ goTo, next }: MultiStepFormProps) => {
           rightIcon: true,
         }}
         back={() => {
-          router.replace('/(main)/Business/Home');
+          router.replace("/(main)/Business/Home");
         }}
       >
         <View style={styles.container}>
-          <View className="px-4">
+          {/* <View className="px-4">
             <CurrentBalanceCard
               balance={businessData?.accountBalance}
               currency={businessData?.activeCurrency}
               onPress={() => refetch()}
             />
-          </View>
+          </View> */}
           <TouchableOpacity
             style={{
               ...globalStyle.whiteRoundedCard,
@@ -97,7 +80,6 @@ const Step0_Payee = ({ goTo, next }: MultiStepFormProps) => {
               marginRight: hs(24),
             }}
             onPress={() => {
-              dispatch(resetBeneficiaryDetails());
               dispatch(setShowToogle(true));
               goTo?.(1);
             }}
@@ -106,7 +88,7 @@ const Step0_Payee = ({ goTo, next }: MultiStepFormProps) => {
               style={{
                 ...globalStyle.textRegular,
                 fontSize: 13,
-                color: 'black',
+                color: "black",
               }}
             >
               Add New
@@ -130,7 +112,7 @@ const Step0_Payee = ({ goTo, next }: MultiStepFormProps) => {
                 fontSize: 17,
                 marginTop: vs(24),
                 marginBottom: vs(10),
-                alignSelf: 'center',
+                alignSelf: "center",
               }}
             >
               No Beneficiaries Found
@@ -140,24 +122,24 @@ const Step0_Payee = ({ goTo, next }: MultiStepFormProps) => {
           <FlatList
             data={getBusinessBeneficiary}
             showsVerticalScrollIndicator={false}
-            refreshControl={
-              <RefreshControl
-                refreshing={isFetching.isLoading || multiLoading.isLoading}
-                onRefresh={() => handleRefresh()}
-                tintColor="blue"
-              />
-            }
+            // refreshControl={
+            //   <RefreshControl
+            //     refreshing={isFetching.isLoading || multiLoading.isLoading}
+            //     onRefresh={() => handleRefresh()}
+            //     tintColor="blue"
+            //   />
+            // }
             renderItem={({ item, index }) => {
               const marginTop = index === 0 ? 32 : 0;
               return (
                 <View
                   style={{
-                    backgroundColor: 'white',
+                    backgroundColor: "white",
                     borderRadius: 16,
                     padding: 8,
                     marginTop: 10,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
+                    flexDirection: "row",
+                    justifyContent: "space-between",
                   }}
                 >
                   <TouchableOpacity
@@ -170,7 +152,7 @@ const Step0_Payee = ({ goTo, next }: MultiStepFormProps) => {
                       date={
                         item?.accountNumber || item?.accountNo || item?.iban
                       }
-                      time={item?.contact?.phone || ' '}
+                      time={item?.contact?.phone || " "}
                       // amount={item.amount}
                       marginTop={marginTop}
                     />
@@ -199,7 +181,7 @@ const styles = StyleSheet.create({
     paddingRight: hs(16),
   },
   currentBalanceContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: Colors.light.theme.backgroundColorCurrentBalanceContainer,
     borderRadius: ms(24),
     marginTop: vs(16),
@@ -209,15 +191,15 @@ const styles = StyleSheet.create({
     paddingRight: hs(56),
   },
   editCard: {
-    backgroundColor: '#EAE9E8',
+    backgroundColor: "#EAE9E8",
     borderRadius: 8,
-    height: '70%',
+    height: "70%",
     padding: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 2.84,
-    elevation: Platform.OS === 'ios' ? 2 : 0,
+    elevation: Platform.OS === "ios" ? 2 : 0,
     marginTop: 10,
     marginLeft: -10,
   },

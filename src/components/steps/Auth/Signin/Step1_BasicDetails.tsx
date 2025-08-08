@@ -38,6 +38,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
         if (next) next?.();
       }
     } catch (error: any) {
+      console.log(error, "error");
       renderToastError(error?.data?.message || "Something went wrong");
     }
   };

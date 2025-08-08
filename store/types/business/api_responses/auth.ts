@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { IAPIRespone, IAPIResponeData } from 'store/types';
+import type { IAPIRespone, IAPIResponeData } from "store/types";
 
 export interface SignIn {
   auth_token: string;
@@ -16,7 +16,7 @@ export interface LastSelectBenefDetails {
   bankName?: string;
   routingCodes: {
     bic?: string;
-    'sort-code'?: string;
+    "sort-code"?: string;
     aba?: string;
   };
 }
@@ -42,29 +42,7 @@ export interface businessPayee {
   currency?: string;
   _id?: string;
 }
-export interface QuotesBusiness {
-  fee: number;
-  buyAmount: number;
-  buyCurrency: string;
-  createdAt: string;
-  currencyPair: string;
-  exchangeRate: number;
-  expiresAt: string;
-  marginAmount: number;
-  marginCurrency: string;
-  quoteId: string;
-  quoteRequest: {
-    buyCurrency: string;
-    fixedSide: string;
-    instructedAmount: number;
-    margin: number;
-    sellCurrency: string;
-    valueDate: string;
-  };
-  sellAmount: number;
-  sellCurrency: string;
-  valueDate: string;
-}
+
 export interface OutgoingTransfer {
   amount: string;
   transferReasonId: string;
@@ -73,103 +51,8 @@ export interface OutgoingTransfer {
   country?: string;
 }
 export interface VerifySignIn {
-  // accountsFee?: {
-  //   accountFee: any[];
-  //   otherFee?: any[];
-  //   corporateAccounts?: any[];
-  //   payments?: {
-  //     otherCurrencies?: any[];
-  //   };
-  //   accountName?: string;
-  // };
-  accountsFee?: any[];
-  mainApplicantAddress?: boolean;
-  jwttoken?: string;
-  cardStatus?: string | undefined;
-  alerts?: boolean;
-  devices?: any[];
-  feePlan?: any[];
-  isPinSet?: boolean;
-  directorVerified: boolean;
-  checkBusinessInfo: boolean;
-  allDirectors?: any[];
-  createdAt?: string;
-  accountBalance?: number;
-  activeCurrency?: number;
-  _id?: string;
-  businessType: boolean | undefined;
-  businessCategory?: string;
-  businessnName: string;
+  auth_token: string;
   email: string;
-  IBAN?: string;
-  SortCode?: string;
-  accountNumber?: string;
-
-  regNo: string;
-  phoneNumber: string;
-  averageSinglePayment?: string;
-  averagePerWeekPayment?: string;
-  annualTurnover?: string;
-  typicallyLargerPayment?: string;
-  emailVerfied: boolean;
-  phoneVerfied: boolean;
-  isVerified: boolean;
-  isVerifiedAt?: string;
-  numberOfDirectors?: number;
-  incorporationNumber?: string;
-  registrationDate?: string;
-  startedTradingDate?: string;
-  address?: {
-    line1: string;
-    line2: string;
-    line3: string;
-  };
-  city?: string;
-  country?: string;
-  businessWebsite?: string;
-  businessEmail?: string;
-  place?: string;
-  signupFlowCompleted?: boolean;
-  passCode?: string;
-  transactionLimit: number;
-  registredAt: null;
-  shareHolder: boolean;
-  checkApplicant: boolean;
-  checkDirector: boolean;
-
-  onBoardingFee: boolean;
-  monthlyFee: boolean;
-  accountBlock: boolean;
-  notAllowed: {
-    transactions: boolean;
-    getTransactions: boolean;
-    checkBalance: boolean;
-    signIn: boolean;
-  };
-  steps: number;
-  businessinfo?: any[];
-  docsUpload1: boolean;
-  docsUpload2: boolean;
-  businessDocs: any[];
-  checkImportantInfo?: boolean;
-  gbg?: Gbg;
-  kyc?: {
-    isFinished: boolean;
-    failedReason?: string;
-    kycStatus: string;
-  };
-  multiCurrencyAccounts?: any[];
-  companyDetails?: CompanyDetail[];
-  mainApplicant?: MainApplicant;
-  activeCurrencyAccount?: {
-    accountId: string;
-    accountNumber: string;
-    active: boolean;
-    currencyCode: string;
-    iban: string;
-    sortCode: string;
-    approved: boolean;
-  }[];
 }
 interface BusinessAutoSignUp {
   businessType: boolean;

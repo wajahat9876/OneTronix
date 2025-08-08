@@ -1,38 +1,37 @@
 /* eslint-disable import/order */
 /* eslint-disable camelcase */
-import { setBusinessPassCode } from '@/store/slices/business/businessSlice';
-import ButtonsGrid from '@src/components/globals/GridButtons';
-import OTP from '@src/components/globals/OTP';
-import ScreenAuth from '@src/components/globals/ScreenAuth';
-import { Text } from '@src/components/libraries';
-import Colors from '@src/constants/Colors';
-import useBusinessLogout from '@src/hooks/useBusinessLogout';
-import { MultiStepFormProps } from '@src/hooks/useMultiStepForm';
-import { useAppDispatch } from '@src/hooks/useReduxHooks';
-import { globalStyle } from '@src/styles/globals';
-import { kycStyles } from '@src/styles/KYC';
-import { vs } from '@utils/design/design';
-import { useCallback, useState } from 'react';
-import { View } from 'react-native';
+
+import ButtonsGrid from "@src/components/globals/GridButtons";
+import OTP from "@src/components/globals/OTP";
+import ScreenAuth from "@src/components/globals/ScreenAuth";
+import { Text } from "@src/components/libraries";
+import Colors from "@src/constants/Colors";
+import useBusinessLogout from "@src/hooks/useBusinessLogout";
+import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
+import { useAppDispatch } from "@src/hooks/useReduxHooks";
+import { globalStyle } from "@src/styles/globals";
+import { kycStyles } from "@src/styles/KYC";
+import { vs } from "@utils/design/design";
+import { useCallback, useState } from "react";
+import { View } from "react-native";
 
 const Step1_Choose_Pin = ({ next }: MultiStepFormProps) => {
-  const [input, updateInput] = useState<string>('');
+  const [input, updateInput] = useState<string>("");
   const { handleBusinessLogout } = useBusinessLogout();
   const dispatch = useAppDispatch();
   const handleSubmit = (pin: string) => {
-    dispatch(setBusinessPassCode(pin));
     if (next) {
       next();
     }
   };
   const reset = useCallback(() => {
-    updateInput('');
+    updateInput("");
   }, []);
   return (
     <ScreenAuth
       title="Pin Code"
       style={{
-        backgroundColor: 'transparent',
+        backgroundColor: "transparent",
       }}
       darkStatus
       appBarProps={{
@@ -75,7 +74,7 @@ const Step1_Choose_Pin = ({ next }: MultiStepFormProps) => {
             onUpdate={updateInput}
             onBackspace={updateInput}
             onReset={reset}
-            onMaxReached={pin => {
+            onMaxReached={(pin) => {
               handleSubmit(pin);
             }}
           />

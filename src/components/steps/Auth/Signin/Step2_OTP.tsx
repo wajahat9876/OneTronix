@@ -2,25 +2,24 @@
 /* eslint-disable import/order */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable camelcase */
-import { useBusinessVerifySignInMutation } from '@/store/api/business/authApis';
-import { useBusinessDetails } from '@/store/selectors/business/business';
-import { useConfig } from '@/store/selectors/config/config';
-import { setIsPinCodeAccepted } from '@/store/slices/common/signInTypeSlice';
-import ButtonsGrid from '@src/components/globals/GridButtons';
-import LoadingModal from '@src/components/globals/LoadingModal';
-import OTP from '@src/components/globals/OTP';
-import ScreenAuth from '@src/components/globals/ScreenAuth';
-import { StyleSheet, Text } from '@src/components/libraries';
-import Colors from '@src/constants/Colors';
-import { MultiStepFormProps } from '@src/hooks/useMultiStepForm/types';
-import { useAppDispatch, useAppSelector } from '@src/hooks/useReduxHooks';
-import { renderToastError, renderToastSuccess } from '@src/hooks/useToasty';
-import { globalStyle } from '@src/styles/globals';
-import { hs, vs } from '@utils/design/design';
-import { useRouter } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
-import { Platform, View } from 'react-native';
-import Animated from 'react-native-reanimated';
+import { useBusinessVerifySignInMutation } from "@/store/api/business/authApis";
+import { useBusinessDetails } from "@/store/selectors/business/business";
+import { useConfig } from "@/store/selectors/config/config";
+import ButtonsGrid from "@src/components/globals/GridButtons";
+import LoadingModal from "@src/components/globals/LoadingModal";
+import OTP from "@src/components/globals/OTP";
+import ScreenAuth from "@src/components/globals/ScreenAuth";
+import { StyleSheet, Text } from "@src/components/libraries";
+import Colors from "@src/constants/Colors";
+import { MultiStepFormProps } from "@src/hooks/useMultiStepForm/types";
+import { useAppDispatch, useAppSelector } from "@src/hooks/useReduxHooks";
+import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
+import { globalStyle } from "@src/styles/globals";
+import { hs, vs } from "@utils/design/design";
+import { useRouter } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
+import { Platform, View } from "react-native";
+import Animated from "react-native-reanimated";
 
 const Step2_OTP = ({ back }: MultiStepFormProps) => {
   const dispatch = useAppDispatch();
@@ -28,7 +27,7 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
   const [verifyBusinessSignIn, { isLoading: businessLoading }] =
     useBusinessVerifySignInMutation();
   const router = useRouter();
-  const [input, setInput] = useState<string>('');
+  const [input, setInput] = useState<string>("");
   const [otpExpired, setOTPExpired] = useState(false);
   const { deviceModal, deviceId, deviceType, pushToken } =
     useAppSelector(useConfig);
@@ -44,34 +43,34 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
         deviceId,
         deviceType,
         email: signInBusinessEmail,
-        otpTypes: 'SignIn',
+        otpTypes: "SignIn",
       };
       const result = await verifyBusinessSignIn(verifySignInData).unwrap();
-      if (result) {
-        if (result?.data?.isVerified && !result?.data?.mainApplicantAddress) {
-          router.replace('/(auth)/UpdatedAddress');
-        } else if (
-          result?.data?.isVerified &&
-          result?.data?.mainApplicantAddress &&
-          !result?.data?.isPinSet
-        ) {
-          router.replace('/(auth)/ChoosePin/Business');
-        } else if (
-          result?.data?.isVerified &&
-          result?.data?.mainApplicantAddress &&
-          result?.data?.isPinSet
-        ) {
-          dispatch(setIsPinCodeAccepted(true));
-          router.replace('/(main)/Business/Home');
-        } else {
-          router.replace('/(auth)/Signup/Business');
-        }
-        renderToastSuccess(result.message);
-        setInput('');
-      }
+      // if (result) {
+      //   if (result?.data?.isVerified && !result?.data?.mainApplicantAddress) {
+      //     router.replace('/(auth)/UpdatedAddress');
+      //   } else if (
+      //     result?.data?.isVerified &&
+      //     result?.data?.mainApplicantAddress &&
+      //     !result?.data?.isPinSet
+      //   ) {
+      //     router.replace('/(auth)/ChoosePin/Business');
+      //   } else if (
+      //     result?.data?.isVerified &&
+      //     result?.data?.mainApplicantAddress &&
+      //     result?.data?.isPinSet
+      //   ) {
+      //     dispatch(setIsPinCodeAccepted(true));
+      //     router.replace('/(main)/Business/Home');
+      //   } else {
+      //     router.replace('/(auth)/Signup/Business');
+      //   }
+      router.replace("/(main)/Business/Home");
+      renderToastSuccess(result.message);
+      setInput("");
     } catch (error: any) {
       renderToastError(error.data.message);
-      setInput('');
+      setInput("");
     }
   }, []);
 
@@ -106,7 +105,7 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
     }
   }, []);
   const reset = useCallback(() => {
-    setInput('');
+    setInput("");
   }, []);
 
   return (
@@ -162,7 +161,7 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
             onUpdate={setInput}
             onBackspace={setInput}
             onReset={reset}
-            onMaxReached={otp => {
+            onMaxReached={(otp) => {
               handleCodeSubmit(otp);
             }}
           />

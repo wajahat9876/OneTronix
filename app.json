@@ -38,7 +38,7 @@
         "foregroundImage": "./assets/images/EccAdaptive.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "",
+      "package": "com.wajahat959.onetronix",
       "versionCode": 1,
       "permissions": [
         "android.permission.CAMERA",

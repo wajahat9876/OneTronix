@@ -1,12 +1,10 @@
 export const dev = __DEV__;
 // https://api.eccmoney.co.uk/api/v1/ productionLink
 export default {
-  baseURL: dev
-    ? 'https://devapi.eccmoney.co.uk/api/v1/'
-    : 'https://devapi.eccmoney.co.uk/api/v1/',
+  baseURL: dev ? "http://51.20.118.73/api/v1/" : "http://51.20.118.73/api/v1/",
   baseURL2: dev
-    ? 'https://devapi.eccmoney.co.uk/api/v2/'
-    : 'https://devapi.eccmoney.co.uk/api/v2/',
+    ? "https://devapi.eccmoney.co.uk/api/v2/"
+    : "https://devapi.eccmoney.co.uk/api/v2/",
 
   packages: {
     personal: {

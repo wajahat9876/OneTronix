@@ -2,28 +2,28 @@
 /* eslint-disable camelcase */
 /* eslint-disable import/order */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import prepareHeaderBusiness from '@/store/slices/business/baseQueryWithHash';
+import { IBusinessState } from '@/store/slices/business/businessSlice';
 import { ICurrentResponse } from '@/store/types/business/api_responses/auth';
 import { handleLogout } from '@/store/utils/errorHandler';
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import Config from '@src/constants/Config';
 import { businessCurrentApi } from './businessCurrent';
 
 export const businessMainApi = createApi({
   reducerPath: 'businessMainApi',
   refetchOnFocus: false,
-  baseQuery: prepareHeaderBusiness,
-  //  fetchBaseQuery({
-  //   baseUrl: Config.baseURL,
-  //   prepareHeaders: (headers, { getState }) => {
-  //     const { tempToken, auth_token } = (
-  //       getState() as { business: IBusinessState }
-  //     ).business;
-  //     if (auth_token) {
-  //       headers.set('Authorization', `Bearer ${auth_token}`);
-  //     }
-  //     return headers;
-  //   },
-  // }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: Config.baseURL,
+    prepareHeaders: (headers, { getState }) => {
+      const { tempToken, auth_token } = (
+        getState() as { business: IBusinessState }
+      ).business;
+      if (auth_token) {
+        headers.set('Authorization', `Bearer ${auth_token}`);
+      }
+      return headers;
+    },
+  }),
 
   tagTypes: ['getPendingExchange'],
   endpoints: builder => ({
@@ -185,44 +185,10 @@ export const businessMainApi = createApi({
       },
     }),
 
-    multiEStatement: builder.mutation<any, any>({
-      query: ({ year, month }) => ({
-        url: `clearBank/multi-getEstatement?year=${year}&month=${month}`,
-        method: 'GET',
-      }),
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
+  
 
     // get Apis
-    gbpEStatement: builder.query<any, any>({
-      query: ({ from, to }) => ({
-        url: `clearBank/getTargetedTranscation?from=${from}&to=${to}&eStatement=true&transcationType=debitCredit&pageSize=1000&pageNumber=1`,
-        method: 'GET',
-      }),
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
+  
     getTransactionOtp: builder.mutation<any, any>({
       query: () => ({
         url: 'clearBank/transcationOtp',
@@ -524,7 +490,7 @@ export const {
   useDeleteMultiPayeeMutation,
   useLazyGetTargetedStatementQuery,
   useLazyGetMulticurrencyStatementQuery,
-  useMultiEStatementMutation,
+ 
   useGetPendingExchangeTransactionsQuery,
-  useLazyGbpEStatementQuery,
+
 } = businessMainApi;
