@@ -1,28 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable camelcase */
-import Logo from '@assets/eccLogo/ecc 1.svg';
-import Image from '@assets/images/BackgroundImage/Background.png';
-import SwipeUpToLogin from '@src/components/commons/user/welcome/SwipeUpToLogin';
-import BackgroundImage from '@src/components/globals/BackgroundImage';
-import Screen from '@src/components/globals/Screen';
-import { vs } from '@utils/design/design';
-import React, { useEffect, useState } from 'react';
-import { View, useWindowDimensions } from 'react-native';
+import Logo from "@assets/eccLogo/ecc 1.svg";
+import Image from "@assets/images/BackgroundImage/Background.png";
+import SwipeUpToLogin from "@src/components/commons/user/welcome/SwipeUpToLogin";
+import BackgroundImage from "@src/components/globals/BackgroundImage";
+import Screen from "@src/components/globals/Screen";
+import { vs } from "@utils/design/design";
+import React, { useEffect, useState } from "react";
+import { View, useWindowDimensions } from "react-native";
 import {
   Gesture,
   GestureDetector,
   GestureStateChangeEvent,
   GestureUpdateEvent,
   PanGestureHandlerEventPayload,
-} from 'react-native-gesture-handler';
+} from "react-native-gesture-handler";
 import Animated, {
   Easing,
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-} from 'react-native-reanimated';
-import Signin from '../Signin';
+} from "react-native-reanimated";
+import Signin from "../Signin";
 
 const Welcome = () => {
   const { height } = useWindowDimensions();
@@ -57,13 +57,17 @@ const Welcome = () => {
     })
     .onFinalize((e: GestureStateChangeEvent<PanGestureHandlerEventPayload>) => {
       if (y.value < -height / 2 || e.velocityY < -500) {
-        y.value = withTiming(-height, { easing: Easing.linear }, isFinished => {
-          if (isFinished) {
-            runOnJS(setShowLoginUi)(true);
+        y.value = withTiming(
+          -height,
+          { easing: Easing.linear },
+          (isFinished) => {
+            if (isFinished) {
+              runOnJS(setShowLoginUi)(true);
+            }
           }
-        });
+        );
       } else {
-        y.value = withTiming(0, { easing: Easing.linear }, isFinished => {
+        y.value = withTiming(0, { easing: Easing.linear }, (isFinished) => {
           if (isFinished) {
             runOnJS(setShowLoginUi)(false);
           }
@@ -93,6 +97,7 @@ const Welcome = () => {
   return (
     <>
       <BackgroundImage src={Image} />
+      {/* <EasyEmoneyGradient /> */}
       <Screen
         topColor="transparent"
         bottomColor="transparent"

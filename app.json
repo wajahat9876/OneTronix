@@ -4,7 +4,6 @@
     "slug": "one-tronix",
     "version": "1.0.0",
     "newArchEnabled": false,
-    "owner": "onetronix",
     "orientation": "portrait",
     "icon": "./assets/images/EccAdaptive.png",
     "scheme": "template",
@@ -26,13 +25,12 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "",
+      "bundleIdentifier": "com.wajahat959.onetronix",
       "buildNumber": "1",
       "infoPlist": {
         "NSFaceIDUsageDescription": "Allow OneTronix to use Face ID for secure and easy authentication.",
         "ITSAppUsesNonExemptEncryption": false
-      },
-    
+      }
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
@@ -62,7 +60,7 @@
           "recordAudioAndroid": true
         }
       ],
-       [
+      [
         "expo-build-properties",
         {
           "ios": {
@@ -104,14 +102,13 @@
         }
       ],
       "expo-asset"
-      
     ],
     "extra": {
       "router": {
         "origin": false
       },
       "eas": {
-        "projectId": ""
+        "projectId": "a5acf2e6-de37-423b-a6e0-a93c8ebf105c"
       }
     },
     "runtimeVersion": {

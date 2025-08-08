@@ -1,23 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from "@react-navigation/native";
 import {
   Blur,
   BlurMask,
   Canvas,
   Circle,
   Group,
-} from '@shopify/react-native-skia';
-import { ms } from '@utils/design/design';
-import { useCallback } from 'react';
+} from "@shopify/react-native-skia";
+import { ms } from "@utils/design/design";
+import { useCallback } from "react";
 
-import { useWindowDimensions } from 'react-native';
+import { useWindowDimensions } from "react-native";
 import {
   Easing,
   runOnUI,
   useSharedValue,
   withRepeat,
   withTiming,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
 const EasyEmoneyGradient = () => {
   const { width, height } = useWindowDimensions();
@@ -74,47 +74,47 @@ const EasyEmoneyGradient = () => {
         translateYellowY.value = 0;
         translateBlueY.value = 0;
       };
-    }, []),
+    }, [])
   );
   const animateGradient = useCallback(() => {
-    'worklet';
+    "worklet";
 
     // Indicates this is a worklet function
     translateX.value = withRepeat(
       withTiming(0, { duration: 8000, easing: Easing.linear }),
       -1,
-      true,
+      true
     );
     translateYellowX.value = withRepeat(
       withTiming(width, { duration: 8000 }),
       -1,
-      true,
+      true
     );
     translateY.value = withRepeat(
       withTiming(400, { duration: 8000 }),
       -1,
-      true,
+      true
     );
     translateYellowY.value = withRepeat(
       withTiming(100, { duration: 8000 }),
       -1,
-      true,
+      true
     );
     translateBlueY.value = withRepeat(
       withTiming(height - 20, { duration: 8000 }),
       -1,
-      true,
+      true
     );
   }, []);
   return (
     <Canvas
       style={{
         flex: 1,
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
+        position: "absolute",
+        width: "100%",
+        height: "100%",
         zIndex: -1,
-        backgroundColor: 'black',
+        backgroundColor: "black",
       }}
     >
       <Group>
@@ -123,11 +123,11 @@ const EasyEmoneyGradient = () => {
           r={50}
           cx={translateYellowX}
           cy={translateYellowY}
-          color="#FFD45C"
+          color="#F41A2C"
         />
-        <Circle r={100} cx={width / 2} cy={translateBlueY} color="#000F6C" />
-        <Circle r={60} cx={translateX} cy={ms(650)} color="#B088F9" />
-        <Circle r={50} cx={translateX} cy={ms(850)} color="#15569C" />
+        <Circle r={60} cx={width / 2} cy={translateBlueY} color="black" />
+        <Circle r={60} cx={translateX} cy={ms(650)} color="#F41A2C" />
+        <Circle r={50} cx={translateX} cy={ms(850)} color="#F41A2C" />
       </Group>
       <Blur blur={50} />
     </Canvas>

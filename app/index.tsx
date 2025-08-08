@@ -1,25 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/order */
 // eslint-disable-next-line import/order
-import { useBusinessDetails } from '@/store/selectors/business/business';
-import { useConfig } from '@/store/selectors/config/config';
-import { setModal, setValue } from '@/store/slices/config/configSlice';
-import { useNotifcations } from '@src/hooks/useNotification';
-import { useAppDispatch, useAppSelector } from '@src/hooks/useReduxHooks';
+import { useBusinessDetails } from "@/store/selectors/business/business";
+import { useConfig } from "@/store/selectors/config/config";
+import { setModal, setValue } from "@/store/slices/config/configSlice";
+import { useNotifcations } from "@src/hooks/useNotification";
+import { useAppDispatch, useAppSelector } from "@src/hooks/useReduxHooks";
 import {
   addNotificationReceivedListener,
   addNotificationResponseReceivedListener,
   removeNotificationSubscription,
   setNotificationHandler,
-} from 'expo-notifications';
-import { Redirect, useRootNavigationState } from 'expo-router';
-import { useEffect } from 'react';
-import { LogBox } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
+} from "expo-notifications";
+import { Redirect, useRootNavigationState } from "expo-router";
+import { useEffect } from "react";
+import { LogBox } from "react-native";
+import DeviceInfo from "react-native-device-info";
 import {
   configureReanimatedLogger,
   ReanimatedLogLevel,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
 const Index = () => {
   // This is the default configuration
@@ -29,7 +29,7 @@ const Index = () => {
   });
   useEffect(() => {
     LogBox.ignoreLogs([
-      'VirtualizedLists should never be nested', // Suppress this warning
+      "VirtualizedLists should never be nested", // Suppress this warning
     ]);
   }, []);
   const businessData = useAppSelector(useBusinessDetails);
@@ -39,12 +39,12 @@ const Index = () => {
   const { deviceId, tempDeviceId, deviceType } = useAppSelector(useConfig);
   // getUniqueId for device
   const getDeviceId = async () => {
-    DeviceInfo.getUniqueId().then(uniqueId => {
+    DeviceInfo.getUniqueId().then((uniqueId) => {
       dispatch(
         setValue({
-          type: 'deviceId',
+          type: "deviceId",
           value: uniqueId,
-        }),
+        })
       );
     });
   };
@@ -57,7 +57,7 @@ const Index = () => {
         setModal({
           modal,
           type,
-        }),
+        })
       );
     };
     fetchDeviceModel();
@@ -84,7 +84,7 @@ const Index = () => {
         }),
       });
       const responseListener = addNotificationResponseReceivedListener(
-        handleNotificationResponse,
+        handleNotificationResponse
       );
       const responseListener2 =
         addNotificationReceivedListener(handleNotification);
@@ -97,36 +97,8 @@ const Index = () => {
     registerNotifications();
   }, []);
   if (!rootNavigationState?.key) return null;
-  if (
-    businessData?.auth_token &&
-    businessData?.data?.isVerified &&
-    businessData?.data?.mainApplicantAddress &&
-    businessData?.data?.isPinSet
-  ) {
+  if (businessData?.auth_token) {
     return <Redirect href="/(main)/Business/Home" />;
-  }
-  if (
-    businessData?.auth_token &&
-    businessData?.data?.isVerified &&
-    !businessData?.data?.mainApplicantAddress
-  ) {
-    return <Redirect href="/(auth)/UpdatedAddress" />;
-  }
-  if (
-    businessData?.auth_token &&
-    businessData?.data?.isVerified &&
-    businessData?.data?.mainApplicantAddress &&
-    !businessData?.data?.isPinSet
-  ) {
-    return <Redirect href="/(auth)/ChoosePin/Business" />;
-  }
-  if (
-    businessData?.auth_token &&
-    businessData?.data?.emailVerfied &&
-    businessData?.data?.phoneVerfied &&
-    !businessData?.data?.isVerified
-  ) {
-    return <Redirect href="/(auth)/Signup/Business" />;
   }
   return <Redirect href="/(auth)/Welcome" />;
 };
