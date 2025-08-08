@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable camelcase */
-import Logo from "@assets/eccLogo/ecc 1.svg";
-import Image from "@assets/images/BackgroundImage/Background.png";
-import SwipeUpToLogin from "@src/components/commons/user/welcome/SwipeUpToLogin";
-import BackgroundImage from "@src/components/globals/BackgroundImage";
+import WelcomeTronixLogo from "@assets/eccLogo/WelcomeTronixLogo (1).svg";
+import EasyEmoneyGradient from "@src/components/globals/BackgroundGradient";
 import Screen from "@src/components/globals/Screen";
-import { vs } from "@utils/design/design";
+import { ms } from "@utils/design/design";
 import React, { useEffect, useState } from "react";
-import { View, useWindowDimensions } from "react-native";
+import { Text, View, useWindowDimensions } from "react-native";
 import {
   Gesture,
   GestureDetector,
@@ -23,10 +21,9 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import Signin from "../Signin";
-
 const Welcome = () => {
-  const { height } = useWindowDimensions();
-  const y = useSharedValue(0);
+  const { width } = useWindowDimensions(); // instead of height
+  const x = useSharedValue(0); // renamed from y
   const [showLoginUI, setShowLoginUi] = useState<boolean>(false);
 
   // const handleBackArrowClick = () => {
@@ -46,20 +43,22 @@ const Welcome = () => {
       duration: 1000, // Animation duration for entrance
       easing: Easing.out(Easing.ease),
     });
-    y.value = withTiming(0, {
+    x.value = withTiming(0, {
       duration: 1000,
       easing: Easing.out(Easing.ease),
     });
-  }, [opacity, y]);
+  }, [opacity, x]);
   const swipeGesture = Gesture.Pan()
     .onUpdate((e: GestureUpdateEvent<PanGestureHandlerEventPayload>) => {
-      y.value = e.translationY;
+      if (e.translationX < 0) {
+        x.value = e.translationX; // only allow right-to-left swipe
+      }
     })
     .onFinalize((e: GestureStateChangeEvent<PanGestureHandlerEventPayload>) => {
-      if (y.value < -height / 2 || e.velocityY < -500) {
-        y.value = withTiming(
-          -height,
-          { easing: Easing.linear },
+      if (x.value < -width / 3 || e.velocityX < -500) {
+        x.value = withTiming(
+          -width,
+          { easing: Easing.out(Easing.ease), duration: 300 },
           (isFinished) => {
             if (isFinished) {
               runOnJS(setShowLoginUi)(true);
@@ -67,18 +66,18 @@ const Welcome = () => {
           }
         );
       } else {
-        y.value = withTiming(0, { easing: Easing.linear }, (isFinished) => {
-          if (isFinished) {
-            runOnJS(setShowLoginUi)(false);
-          }
+        x.value = withTiming(0, {
+          easing: Easing.out(Easing.ease),
+          duration: 300,
         });
       }
     });
+
   const animatedContainerStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
     transform: [
       {
-        translateY: y.value, // Just use the current value
+        translateX: x.value, // 👈 changed from translateY
       },
     ],
   }));
@@ -96,8 +95,8 @@ const Welcome = () => {
 
   return (
     <>
-      <BackgroundImage src={Image} />
-      {/* <EasyEmoneyGradient /> */}
+      {/* <BackgroundImage src={Image} /> */}
+      <EasyEmoneyGradient />
       <Screen
         topColor="transparent"
         bottomColor="transparent"
@@ -109,14 +108,76 @@ const Welcome = () => {
           {!showLoginUI && (
             <GestureDetector gesture={swipeGesture}>
               <Animated.View
-                style={[animatedContainerStyle]}
-                className="flex-1 justify-between items-center w-full"
+                style={[animatedContainerStyle, { flex: 1, width: "100%" }]}
               >
-                <View style={{ marginTop: vs(100) }}>
+                <View style={{ alignSelf: "flex-end" }}>
+                  <WelcomeTronixLogo />
+                </View>
+                {/* <View
+                  style={{
+                    marginTop: vs(30),
+                    alignSelf: "flex-end",
+                    marginRight: vs(20),
+                  }}
+                >
                   <Logo />
+                </View> */}
+
+                <View
+                  style={{
+                    position: "absolute",
+                    bottom: 150,
+                    left: 20,
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "red",
+                      fontWeight: "900",
+                      fontSize: ms(45),
+                      lineHeight: 55,
+                    }}
+                  >
+                    ONE
+                  </Text>
+                  <Text
+                    style={{
+                      color: "red",
+                      fontSize: ms(45),
+                      lineHeight: 55,
+                      marginTop: -15, // tighten spacing between ONE and TRONIX
+                    }}
+                  >
+                    TRONIX
+                  </Text>
+                  <Text
+                    style={{
+                      color: "white",
+                      fontSize: ms(18),
+                      letterSpacing: 1,
+                      lineHeight: 28,
+                      marginTop: -5, // small gap from TRONIX
+                    }}
+                  >
+                    TECHNOLOGY PARTNER
+                  </Text>
                 </View>
 
-                <SwipeUpToLogin />
+                {/* <SwipeUpToLogin /> */}
+                <Text
+                  style={{
+                    color: "white",
+                    position: "absolute",
+                    bottom: 50,
+                    right: 20,
+                    fontFamily: "poppins-medium",
+                    alignItems: "flex-start",
+                    fontSize: ms(16),
+                  }}
+                >
+                  Get Started ➜
+                </Text>
               </Animated.View>
             </GestureDetector>
           )}
