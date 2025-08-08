@@ -1,22 +1,22 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { useGetCurrentBusinessQuery } from "@/store/api/business/businessCurrent";
-import { useBusinessDetails } from "@/store/selectors/business/business";
-import BottomSheet from "@gorhom/bottom-sheet";
-import { PortalBottomSheetRef } from "@src/components/globals/PortalBottomSheet/types";
-import ScreenAuth from "@src/components/globals/ScreenAuth";
-import { StyleSheet } from "@src/components/libraries";
-import { pageTransitionAnimation } from "@src/constants/Animation";
-import Colors from "@src/constants/Colors";
-import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
-import { useAppSelector } from "@src/hooks/useReduxHooks";
-import { ms } from "@utils/design/design";
-import { getRespValue } from "@utils/getRespValue";
-import { useFocusEffect, useRouter } from "expo-router";
-import React, { useCallback, useMemo, useRef, useState } from "react";
-import { Platform, StatusBar, View } from "react-native";
-import Animated from "react-native-reanimated";
+import { useGetCurrentBusinessQuery } from '@/store/api/business/businessCurrent';
+import { useBusinessDetails } from '@/store/selectors/business/business';
+import BottomSheet from '@gorhom/bottom-sheet';
+import { PortalBottomSheetRef } from '@src/components/globals/PortalBottomSheet/types';
+import ScreenAuth from '@src/components/globals/ScreenAuth';
+import { StyleSheet } from '@src/components/libraries';
+import { pageTransitionAnimation } from '@src/constants/Animation';
+import Colors from '@src/constants/Colors';
+import { MultiStepFormProps } from '@src/hooks/useMultiStepForm';
+import { useAppSelector } from '@src/hooks/useReduxHooks';
+import { ms } from '@utils/design/design';
+import { getRespValue } from '@utils/getRespValue';
+import { useFocusEffect, useRouter } from 'expo-router';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { Platform, StatusBar, View } from 'react-native';
+import Animated from 'react-native-reanimated';
 
 const Index = ({ goTo }: MultiStepFormProps) => {
   const router = useRouter();
@@ -45,16 +45,16 @@ const Index = ({ goTo }: MultiStepFormProps) => {
     setBottomSheetVisible(false);
     currencyModalRef.current?.close();
   };
-  const currencyPoints = useMemo(() => ["70%"], []);
+  const currencyPoints = useMemo(() => ['70%'], []);
 
   // To show only active Curre
   useFocusEffect(
     useCallback(() => {
-      StatusBar.setBarStyle("light-content", true);
+      StatusBar.setBarStyle('light-content', true);
       return () => {
-        StatusBar.setBarStyle("dark-content", true);
+        StatusBar.setBarStyle('dark-content', true);
       };
-    }, [])
+    }, []),
   );
 
   return (
@@ -62,7 +62,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
       <ScreenAuth
         title=""
         style={{
-          backgroundColor: "transparent",
+          backgroundColor: 'transparent',
         }}
         topColor="transparent"
         bottomColor={Colors.light.theme.backgroundTopCurveSection}
@@ -108,48 +108,48 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.theme.backgroundTopCurveSection,
   },
   bottomSheet: {
-    backgroundColor: "white",
-    borderCurve: "circular",
+    backgroundColor: 'white',
+    borderCurve: 'circular',
     borderRadius: 40,
     borderWidth: 5,
-    borderColor: "#f9f9f9",
+    borderColor: '#f9f9f9',
   },
   topHeader: {
-    backgroundColor: "black",
-    height: "41%",
-    overflow: "hidden",
+    backgroundColor: 'black',
+    height: '41%',
+    overflow: 'hidden',
     borderBottomLeftRadius: ms(42),
     borderBottomRightRadius: ms(42),
   },
   viewTrans: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 2,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   directionTxt: {
-    color: "black",
-    fontWeight: "400",
+    color: 'black',
+    fontWeight: '400',
     fontSize: getRespValue(16),
   },
   txtAccount: {
-    color: "black",
-    fontWeight: "600",
-    width: "70%",
+    color: 'black',
+    fontWeight: '600',
+    width: '70%',
     fontSize: getRespValue(16),
   },
-  txtTrans: { color: "black", fontWeight: "600", fontSize: getRespValue(16) },
+  txtTrans: { color: 'black', fontWeight: '600', fontSize: getRespValue(16) },
   transactionsCard: {
     marginLeft: 10,
-    justifyContent: "space-between",
-    backgroundColor: "white",
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
     borderRadius: 15,
     padding: 20,
-    width: "92%",
-    shadowColor: "#000",
+    width: '92%',
+    shadowColor: '#000',
     shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: Platform.OS === "ios" ? 2 : 0,
+    elevation: Platform.OS === 'ios' ? 2 : 0,
     marginBottom: 10,
   },
 });

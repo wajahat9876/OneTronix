@@ -2,38 +2,38 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable import/order */
 /* eslint-disable camelcase */
-import { useBusinessManualSignupMutation } from '@/store/api/business/authApis';
-import { useBusinessDetails } from '@/store/selectors/business/business';
-import { useConfig } from '@/store/selectors/config/config';
-import IconStepDone from '@assets/icons/signup/icon-step-done.svg';
-import Button from '@src/components/globals/Button';
-import FormikDatePicker from '@src/components/globals/FormikDatePicker';
-import FormikInput from '@src/components/globals/FormikInput';
-import FormikPhoneInput from '@src/components/globals/FormikPhoneInput';
-import DismissKeyboardView from '@src/components/globals/HideKeyboard';
-import Nationality from '@src/components/globals/Nationality';
-import ScreenAuth from '@src/components/globals/ScreenAuth';
-import SignupStepsHeader from '@src/components/globals/SignupStepsHeader';
-import { StyleSheet, Text } from '@src/components/libraries';
-import Colors from '@src/constants/Colors';
-import { textInputUnderlinedProps } from '@src/constants/Props';
-import { MultiStepFormProps } from '@src/hooks/useMultiStepForm';
-import { useAppSelector } from '@src/hooks/useReduxHooks';
-import { renderToastError, renderToastSuccess } from '@src/hooks/useToasty';
-import { globalStyle } from '@src/styles/globals';
-import { hs, vs } from '@utils/design/design';
-import { getRespValue } from '@utils/getRespValue';
-import IconStepInProgress from 'assets/icons/signup/icon-step-in-progress-ecc.svg';
-import IconStepRemaining from 'assets/icons/signup/icon-step-remaining.svg';
-import { useRouter } from 'expo-router';
-import { useFormik } from 'formik';
-import moment from 'moment';
-import { useRef } from 'react';
-import { Keyboard, Platform, TextInput, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import * as Yup from 'yup';
+import { useBusinessManualSignupMutation } from "@/store/api/business/authApis";
+import { useBusinessDetails } from "@/store/selectors/business/business";
+import { useConfig } from "@/store/selectors/config/config";
+import IconStepDone from "@assets/icons/signup/icon-step-done.svg";
+import Button from "@src/components/globals/Button";
+import FormikDatePicker from "@src/components/globals/FormikDatePicker";
+import FormikInput from "@src/components/globals/FormikInput";
+import FormikPhoneInput from "@src/components/globals/FormikPhoneInput";
+import DismissKeyboardView from "@src/components/globals/HideKeyboard";
+import Nationality from "@src/components/globals/Nationality";
+import ScreenAuth from "@src/components/globals/ScreenAuth";
+import SignupStepsHeader from "@src/components/globals/SignupStepsHeader";
+import { StyleSheet, Text } from "@src/components/libraries";
+import Colors from "@src/constants/Colors";
+import { textInputUnderlinedProps } from "@src/constants/Props";
+import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
+import { useAppSelector } from "@src/hooks/useReduxHooks";
+import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
+import { globalStyle } from "@src/styles/globals";
+import { hs, vs } from "@utils/design/design";
+import { getRespValue } from "@utils/getRespValue";
+import IconStepInProgress from "assets/icons/signup/icon-step-in-progress-ecc.svg";
+import IconStepRemaining from "assets/icons/signup/icon-step-remaining.svg";
+import { useRouter } from "expo-router";
+import { useFormik } from "formik";
+import moment from "moment";
+import { useRef } from "react";
+import { Keyboard, Platform, TextInput, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import * as Yup from "yup";
 
-const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
+const Step1_Details = ({ back, next }: MultiStepFormProps) => {
   const businessSelector = useAppSelector(useBusinessDetails);
   const { businessType, packageId } = businessSelector;
   const { pushToken, deviceModal, deviceId, deviceType } =
@@ -43,68 +43,68 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      businessName: '',
-      regNo: '',
-      phoneNumber: '',
-      businessEmail: '',
-      businessWebsite: '',
-      incorporationNumber: '',
-      numberOfDirectors: '',
-      registrationDate: '',
-      startedTradingDate: '',
-      addressLineOne: '',
-      addressLineTwo: '',
-      addressLineThree: '',
-      city: '',
-      country: '',
-      passCode: '',
-      place: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      averageSinglePayment: '',
-      averagePerWeekPayment: '',
-      annualTrunover: '',
-      typicallyLagerPayment: '',
+      businessName: "",
+      regNo: "",
+      phoneNumber: "",
+      businessEmail: "",
+      businessWebsite: "",
+      incorporationNumber: "",
+      numberOfDirectors: "",
+      registrationDate: "",
+      startedTradingDate: "",
+      addressLineOne: "",
+      addressLineTwo: "",
+      addressLineThree: "",
+      city: "",
+      country: "",
+      passCode: "",
+      place: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      averageSinglePayment: "",
+      averagePerWeekPayment: "",
+      annualTrunover: "",
+      typicallyLagerPayment: "",
     },
     validationSchema: Yup.object({
-      businessName: Yup.string().required('Required'),
+      businessName: Yup.string().required("Required"),
       regNo: Yup.string()
-        .required('Required')
-        .min(8, 'Must be 8 character long'),
+        .required("Required")
+        .min(8, "Must be 8 character long"),
       phoneNumber: Yup.string()
-        .min(10, 'Must be 10 digits')
-        .max(10, 'Must not be greater than 10 digits')
-        .required('Required'),
+        .min(10, "Must be 10 digits")
+        .max(10, "Must not be greater than 10 digits")
+        .required("Required"),
       businessEmail: Yup.string()
-        .email('Invalid email address')
-        .required('Required'),
+        .email("Invalid email address")
+        .required("Required"),
       businessWebsite: Yup.string()
-        .url('Invalid website link')
-        .required('Required'),
-      incorporationNumber: Yup.string().required('Required'),
+        .url("Invalid website link")
+        .required("Required"),
+      incorporationNumber: Yup.string().required("Required"),
       // numberOfDirectors: Yup.string().when('businessCategory', () => {
       //   return businessCategory === 'ltd'
       //     ? Yup.string().required('Required')
       //     : Yup.string();
       // }),
-      numberOfDirectors: Yup.string().required('Required'),
+      numberOfDirectors: Yup.string().required("Required"),
       registrationDate: Yup.date()
-        .typeError('Registration date must be a valid date')
+        .typeError("Registration date must be a valid date")
         .nullable()
-        .required('Registration date is required')
+        .required("Registration date is required")
         .max(
           new Date(Date.now() - 86400000),
-          'Registration date cannot be today or in the future',
+          "Registration date cannot be today or in the future"
         ),
 
       startedTradingDate: Yup.date()
-        .typeError('Started trading date must be a valid date')
+        .typeError("Started trading date must be a valid date")
         .nullable()
-        .required('Started trading date is required')
+        .required("Started trading date is required")
         .test(
-          'is-after-or-same',
-          'Trading date must be on or after registration date',
+          "is-after-or-same",
+          "Trading date must be on or after registration date",
           function (value) {
             // eslint-disable-next-line react/no-this-in-sfc
             const { registrationDate } = this.parent;
@@ -114,50 +114,50 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
             return (
               new Date(value).getTime() >= new Date(registrationDate).getTime()
             );
-          },
+          }
         ),
-      addressLineOne: Yup.string().required('Required'),
+      addressLineOne: Yup.string().required("Required"),
       addressLineTwo: Yup.string(),
       addressLineThree: Yup.string(),
-      city: Yup.string().required('Required'),
+      city: Yup.string().required("Required"),
       // country: Yup.string().required('Required'),
       passCode: Yup.string()
         .matches(
           /^(GIR\s?0AA|[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2})$/i,
-          'Invalid UK postal code',
+          "Invalid UK postal code"
         )
-        .required('Required'),
-      place: Yup.string().required('Required'),
-      email: Yup.string().email('Invalid email address').required('Required'),
+        .required("Required"),
+      place: Yup.string().required("Required"),
+      email: Yup.string().email("Invalid email address").required("Required"),
       password: Yup.string()
-        .min(8, 'Password must be at least 8 characters')
-        .matches(/[a-z]/, 'Atleast one LowerCase letter Require')
-        .matches(/[A-Z]/, 'Atleast one Uppercase Letter Require')
-        .matches(/[0-9]/, 'Atleast One Number Require')
-        .matches(/[@$!%*?&#]/, 'Atleast One Special Character Require')
-        .required('Required'),
+        .min(8, "Password must be at least 8 characters")
+        .matches(/[a-z]/, "Atleast one LowerCase letter Require")
+        .matches(/[A-Z]/, "Atleast one Uppercase Letter Require")
+        .matches(/[0-9]/, "Atleast One Number Require")
+        .matches(/[@$!%*?&#]/, "Atleast One Special Character Require")
+        .required("Required"),
       confirmPassword: Yup.string()
-        .required('Required')
-        .oneOf([Yup.ref('password'), ''], 'Password must match'),
+        .required("Required")
+        .oneOf([Yup.ref("password"), ""], "Password must match"),
       averageSinglePayment: Yup.string()
-        .required('Required')
-        .matches(/^[0-9]+$/, 'Only numbers are allowed'),
+        .required("Required")
+        .matches(/^[0-9]+$/, "Only numbers are allowed"),
       averagePerWeekPayment: Yup.string()
-        .required('Required')
-        .matches(/^[0-9]+$/, 'Only numbers are allowed'),
+        .required("Required")
+        .matches(/^[0-9]+$/, "Only numbers are allowed"),
       annualTrunover: Yup.string()
-        .required('Required')
-        .matches(/^[0-9]+$/, 'Only numbers are allowed'),
+        .required("Required")
+        .matches(/^[0-9]+$/, "Only numbers are allowed"),
       typicallyLagerPayment: Yup.string()
-        .required('Required')
-        .matches(/^[0-9]+$/, 'Only numbers are allowed'),
+        .required("Required")
+        .matches(/^[0-9]+$/, "Only numbers are allowed"),
     }),
-    onSubmit: values => {
+    onSubmit: (values) => {
       const { addressLineOne, addressLineTwo, addressLineThree, ...rest } =
         values;
       const formattedPhoneNumber = `+44${rest.phoneNumber.replace(
         /[- ]/g,
-        '',
+        ""
       )}`;
       const address = {
         line1: addressLineOne.trim(),
@@ -179,7 +179,7 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
         annualTrunover: values?.annualTrunover,
         averageSinglePayment: values?.averageSinglePayment,
         averagePerWeekPayment: values?.averagePerWeekPayment,
-        country: 'GB',
+        country: "GB",
         numberOfDirectors: parseInt(rest.numberOfDirectors, 10),
         address,
       };
@@ -225,7 +225,7 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
   return (
     <ScreenAuth
       title="Business Details"
-      style={{ backgroundColor: 'transparent' }}
+      style={{ backgroundColor: "transparent" }}
       topColor="transparent"
       darkStatus
       appBarProps={{
@@ -265,7 +265,7 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
         > */}
         <KeyboardAwareScrollView
           contentContainerStyle={{
-            paddingBottom: Platform.OS === 'ios' ? getRespValue(10) : 20,
+            paddingBottom: Platform.OS === "ios" ? getRespValue(10) : 20,
             flexGrow: 1,
           }}
           keyboardShouldPersistTaps="handled"
@@ -274,7 +274,7 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
           extraScrollHeight={20}
           enableAutomaticScroll
           scrollEnabled
-          extraHeight={Platform.OS === 'ios' ? getRespValue(250) : 180}
+          extraHeight={Platform.OS === "ios" ? getRespValue(250) : 180}
           viewIsInsideTabBar
           keyboardOpeningTime={0}
         >
@@ -284,7 +284,7 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
                 ...globalStyle.textMedium,
                 fontSize: 17,
                 marginTop: vs(32),
-                alignSelf: 'center',
+                alignSelf: "center",
               }}
             >
               Please fill out below fields
@@ -309,8 +309,8 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="businessName"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'Business Name',
-                returnKeyType: 'next',
+                placeholder: "Business Name",
+                returnKeyType: "next",
                 onSubmitEditing: () => {
                   if (businessRegNoRef?.current) {
                     businessRegNoRef?.current.focus();
@@ -327,8 +327,8 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="regNo"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'Business Registration #',
-                returnKeyType: 'next',
+                placeholder: "Business Registration #",
+                returnKeyType: "next",
                 onSubmitEditing: () => {
                   if (phoneNumberRef?.current) {
                     phoneNumberRef?.current.focus();
@@ -345,12 +345,12 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="phoneNumber"
               inputProps={{
                 ...textInputUnderlinedProps,
-                backgroundColor: 'transparent',
-                returnKeyType: 'done',
-                keyboardType: 'phone-pad',
+                backgroundColor: "transparent",
+                returnKeyType: "done",
+                keyboardType: "phone-pad",
                 onChangePhoneNumber(e: any) {
                   // eslint-disable-next-line no-console
-                  console.log('input: ', e);
+                  console.log("input: ", e);
                 },
                 onSubmitEditing: () => {
                   if (businessEmailRef?.current) {
@@ -368,9 +368,9 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="businessEmail"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'Business Email',
-                returnKeyType: 'next',
-                keyboardType: 'email-address',
+                placeholder: "Business Email",
+                returnKeyType: "next",
+                keyboardType: "email-address",
                 onSubmitEditing: () => {
                   if (businessWebsiteRef?.current) {
                     businessWebsiteRef?.current.focus();
@@ -387,9 +387,9 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="businessWebsite"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'Business website(https://test.com)',
-                returnKeyType: 'next',
-                keyboardType: 'url',
+                placeholder: "Business website(https://test.com)",
+                returnKeyType: "next",
+                keyboardType: "url",
                 onSubmitEditing: () => {
                   if (incorporationNumberRef?.current) {
                     incorporationNumberRef?.current.focus();
@@ -406,9 +406,9 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="incorporationNumber"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'Incorporation Number',
-                returnKeyType: 'next',
-                keyboardType: 'email-address',
+                placeholder: "Incorporation Number",
+                returnKeyType: "next",
+                keyboardType: "email-address",
                 onSubmitEditing: () => {
                   if (numberOfDirectorsRef?.current) {
                     numberOfDirectorsRef?.current.focus();
@@ -425,10 +425,10 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="numberOfDirectors"
               inputProps={{
                 ...textInputUnderlinedProps,
-                keyboardType: 'numeric',
-                placeholder: 'Number of Directors / Partners ',
-                backgroundColor: 'transparent',
-                returnKeyType: 'done',
+                keyboardType: "numeric",
+                placeholder: "Number of Directors / Partners ",
+                backgroundColor: "transparent",
+                returnKeyType: "done",
               }}
             />
           </View>
@@ -439,17 +439,17 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="registrationDate"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'Date of Registration',
+                placeholder: "Date of Registration",
                 placeholderTextColor: Colors.light.theme.placeholderColor,
               }}
               datePickerProps={{
-                maxDate: moment(new Date(), 'YYYY-MM-DD').toDate(),
+                maxDate: moment(new Date(), "YYYY-MM-DD").toDate(),
                 date: formik.values.registrationDate
                   ? moment(
                       formik.values.registrationDate,
-                      'YYYY-MM-DD',
+                      "YYYY-MM-DD"
                     ).toDate()
-                  : moment(new Date(), 'YYYY-MM-DD').toDate(),
+                  : moment(new Date(), "YYYY-MM-DD").toDate(),
               }}
             />
           </View>
@@ -460,17 +460,17 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="startedTradingDate"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'Started Trading on',
+                placeholder: "Started Trading on",
                 placeholderTextColor: Colors.light.theme.placeholderColor,
               }}
               datePickerProps={{
-                maxDate: moment(new Date(), 'YYYY-MM-DD').toDate(),
+                maxDate: moment(new Date(), "YYYY-MM-DD").toDate(),
                 date: formik.values.startedTradingDate
                   ? moment(
                       formik.values.startedTradingDate,
-                      'YYYY-MM-DD',
+                      "YYYY-MM-DD"
                     ).toDate()
-                  : moment(new Date(), 'YYYY-MM-DD').toDate(),
+                  : moment(new Date(), "YYYY-MM-DD").toDate(),
               }}
             />
           </View>
@@ -495,8 +495,8 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="place"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'Apartment Number',
-                returnKeyType: 'next',
+                placeholder: "Apartment Number",
+                returnKeyType: "next",
                 onSubmitEditing: () => {
                   if (addressLine1Ref?.current) {
                     addressLine1Ref?.current.focus();
@@ -512,8 +512,8 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="addressLineOne"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'Address Line 1',
-                returnKeyType: 'next',
+                placeholder: "Address Line 1",
+                returnKeyType: "next",
                 onSubmitEditing: () => {
                   if (addressLine2Ref?.current) {
                     addressLine2Ref?.current.focus();
@@ -530,8 +530,8 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="addressLineTwo"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'Address Line 2 (optional)',
-                returnKeyType: 'next',
+                placeholder: "Address Line 2 (optional)",
+                returnKeyType: "next",
                 onSubmitEditing: () => {
                   if (addressLine3Ref?.current) {
                     addressLine3Ref?.current.focus();
@@ -548,8 +548,8 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="addressLineThree"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'Address Line 3 (optional)',
-                returnKeyType: 'next',
+                placeholder: "Address Line 3 (optional)",
+                returnKeyType: "next",
                 onSubmitEditing: () => {
                   if (passCodeRef?.current) {
                     passCodeRef?.current.focus();
@@ -565,8 +565,8 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="passCode"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'Postal Code',
-                returnKeyType: 'next',
+                placeholder: "Postal Code",
+                returnKeyType: "next",
                 onSubmitEditing: () => {
                   if (cityRef?.current) {
                     cityRef?.current.focus();
@@ -582,8 +582,8 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="city"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'City',
-                returnKeyType: 'next',
+                placeholder: "City",
+                returnKeyType: "next",
                 onSubmitEditing: () => {
                   if (emailRef?.current) {
                     emailRef?.current.focus();
@@ -640,9 +640,9 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="email"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'Email',
-                returnKeyType: 'next',
-                keyboardType: 'email-address',
+                placeholder: "Email",
+                returnKeyType: "next",
+                keyboardType: "email-address",
                 onSubmitEditing: () => {
                   if (passwordRef?.current) {
                     passwordRef?.current.focus();
@@ -660,8 +660,8 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               inputProps={{
                 password: true,
                 ...textInputUnderlinedProps,
-                placeholder: 'Enter Password',
-                returnKeyType: 'next',
+                placeholder: "Enter Password",
+                returnKeyType: "next",
                 onSubmitEditing: () => {
                   if (confirmPasswordRef?.current) {
                     confirmPasswordRef?.current.focus();
@@ -679,8 +679,8 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               inputProps={{
                 password: true,
                 ...textInputUnderlinedProps,
-                placeholder: 'Re-enter Password',
-                returnKeyType: 'next',
+                placeholder: "Re-enter Password",
+                returnKeyType: "next",
                 onSubmitEditing: () => {
                   if (averageSinglePaymentRef?.current) {
                     averageSinglePaymentRef?.current.focus();
@@ -710,9 +710,9 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="averageSinglePayment"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'Average Single Payment',
-                returnKeyType: 'done',
-                keyboardType: 'number-pad',
+                placeholder: "Average Single Payment",
+                returnKeyType: "done",
+                keyboardType: "number-pad",
                 onSubmitEditing: () => {
                   if (averagePerWeekPaymentRef?.current) {
                     averagePerWeekPaymentRef?.current.focus();
@@ -729,9 +729,9 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="averagePerWeekPayment"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'Average Per Week Payment',
-                returnKeyType: 'done',
-                keyboardType: 'number-pad',
+                placeholder: "Average Per Week Payment",
+                returnKeyType: "done",
+                keyboardType: "number-pad",
                 onSubmitEditing: () => {
                   if (annualTrunoverRef?.current) {
                     annualTrunoverRef?.current.focus();
@@ -748,9 +748,9 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="annualTrunover"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'Annual Turnover',
-                returnKeyType: 'done',
-                keyboardType: 'number-pad',
+                placeholder: "Annual Turnover",
+                returnKeyType: "done",
+                keyboardType: "number-pad",
                 onSubmitEditing: () => {
                   if (typicallyLagerPaymentRef?.current) {
                     typicallyLagerPaymentRef?.current.focus();
@@ -767,9 +767,9 @@ const Step1_Business_Details = ({ back, next }: MultiStepFormProps) => {
               name="typicallyLagerPayment"
               inputProps={{
                 ...textInputUnderlinedProps,
-                placeholder: 'Typically Larger Payment',
-                returnKeyType: 'done',
-                keyboardType: 'number-pad',
+                placeholder: "Typically Larger Payment",
+                returnKeyType: "done",
+                keyboardType: "number-pad",
               }}
             />
           </View>
@@ -806,4 +806,4 @@ const styles = StyleSheet.create({
     marginBottom: vs(32),
   },
 });
-export default Step1_Business_Details;
+export default Step1_Details;

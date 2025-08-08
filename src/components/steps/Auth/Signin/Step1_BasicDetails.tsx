@@ -174,7 +174,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
           {/* </Link> */}
           <TouchableOpacity
             onPress={() => {
-              router.push("/(auth)/Forgot/Business");
+              router.push("/(auth)/Signup");
             }}
           >
             <Text style={{ fontSize: 13 }} className="text-white font-poppins">

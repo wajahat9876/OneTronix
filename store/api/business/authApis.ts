@@ -104,7 +104,7 @@ export const businessAuthApi = createApi({
       SignUpPayload
     >({
       query: (body) => ({
-        url: "auth/signup",
+        url: "user/createCustomer",
         method: "POST",
         body,
       }),
@@ -128,7 +128,7 @@ export const businessAuthApi = createApi({
       SignUpPayload
     >({
       query: (body) => ({
-        url: "auth/signup",
+        url: "user/createCustomer",
         method: "POST",
         body,
       }),
