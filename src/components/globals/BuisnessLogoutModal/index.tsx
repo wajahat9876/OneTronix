@@ -1,17 +1,19 @@
 /* eslint-disable import/order */
-import { MaterialIcons } from '@expo/vector-icons';
-import useBusinessLogout from '@src/hooks/useBusinessLogout';
-import { globalStyle } from '@src/styles/globals';
-import { hs, vs } from '@utils/design/design';
-import React, { useState } from 'react';
+import { MaterialIcons } from "@expo/vector-icons";
+import useBusinessLogout from "@src/hooks/useBusinessLogout";
+import { globalStyle } from "@src/styles/globals";
+import { hs, vs } from "@utils/design/design";
+import React, { useState } from "react";
 // eslint-disable-next-line prettier/prettier
 // import { useBuisnessSignoutMutation } from '@/store/api/business/authApis';
-import { useBuisnessSignoutMutation } from '@/store/api/business/authApis';
-import LogoutIcon from '@assets/icons/eccLogoutIcon.svg';
-import { renderToastError } from '@src/hooks/useToasty';
-import { getRespValue } from '@utils/getRespValue';
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Button from '../Button';
+import { useBuisnessSignoutMutation } from "@/store/api/business/authApis";
+import { businessLogout } from "@/store/slices/business/businessSlice";
+import LogoutIcon from "@assets/icons/eccLogoutIcon.svg";
+import { useAppDispatch } from "@src/hooks/useReduxHooks";
+import { renderToastError } from "@src/hooks/useToasty";
+import { getRespValue } from "@utils/getRespValue";
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Button from "../Button";
 // Global Logout Modal Component
 const LogoutModal: React.FC<{
   isVisible: boolean;
@@ -56,7 +58,7 @@ const BusinessLogoutModal: React.FC<{ marginTop: number }> = ({
 }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const { handleBusinessLogout } = useBusinessLogout();
-
+  const dispatch = useAppDispatch();
   const [businessSignout, { isLoading: businessLoading }] =
     useBuisnessSignoutMutation();
 
@@ -70,10 +72,11 @@ const BusinessLogoutModal: React.FC<{ marginTop: number }> = ({
 
   const handleConfirmLogout = async () => {
     try {
-      await businessSignout({}).unwrap();
+      // await businessSignout({}).unwrap();
+      dispatch(businessLogout());
       handleBusinessLogout();
     } catch (error: any) {
-      renderToastError(error?.data?.message || 'Something went wrong');
+      renderToastError(error?.data?.message || "Something went wrong");
     }
   };
 
@@ -82,8 +85,8 @@ const BusinessLogoutModal: React.FC<{ marginTop: number }> = ({
       <TouchableOpacity
         style={{
           ...globalStyle.whiteRoundedCard,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
+          flexDirection: "row",
+          justifyContent: "space-between",
           paddingLeft: hs(16),
           paddingRight: hs(8),
           paddingTop: vs(8),
@@ -113,25 +116,25 @@ const BusinessLogoutModal: React.FC<{ marginTop: number }> = ({
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContainer: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 20,
     borderRadius: 8,
-    width: '85%',
-    alignItems: 'center',
+    width: "85%",
+    alignItems: "center",
   },
   modalText: {
     fontSize: 18,
     marginBottom: 20,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
   },
 });
 
