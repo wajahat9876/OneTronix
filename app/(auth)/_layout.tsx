@@ -1,13 +1,13 @@
-import { Stack } from 'expo-router';
+import { Stack } from "expo-router";
 // const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const Layout = () => {
   return (
     <Stack
       screenOptions={{
         headerShown: false,
-        animation: 'slide_from_right',
+        animation: "slide_from_right",
         animationDuration: 500,
-        contentStyle: { backgroundColor: 'transparent' },
+        contentStyle: { backgroundColor: "transparent" },
       }}
       initialRouteName="Welcome/index"
     >
@@ -21,7 +21,13 @@ const Layout = () => {
         name="KYC/Business/index"
       />
       <Stack.Screen options={{ gestureEnabled: false }} name="Signin/index" />
-      <Stack.Screen options={{ gestureEnabled: false }} name="Signup/index" />
+      <Stack.Screen
+        options={{
+          gestureEnabled: false,
+          contentStyle: { backgroundColor: "#000" },
+        }}
+        name="Signup/index"
+      />
       <Stack.Screen
         options={{ gestureEnabled: false }}
         name="ChoosePin/Business/index"

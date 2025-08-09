@@ -2,21 +2,21 @@
 /* eslint-disable import/order */
 
 import { useBusinessDetails } from "@/store/selectors/business/business";
-import IconBottomTabCard from "@assets/icons/bottom-tabs/home-payment-card-icon.svg";
-import IconBottomTabInfo from "@assets/icons/bottom-tabs/home-profile-icon.svg";
+// import IconBottomTabCard from "@assets/icons/bottom-tabs/home-payment-card-icon.svg";
+// import IconBottomTabInfo from "@assets/icons/bottom-tabs/home-profile-icon.svg";
 import IconBottomTabSettings from "@assets/icons/bottom-tabs/home-setting-icon.svg";
-import IconBottomTabSendMoney from "@assets/icons/bottom-tabs/home-transfer-money.svg";
+// import IconBottomTabSendMoney from "@assets/icons/bottom-tabs/home-transfer-money.svg";
 import IconBottomTabHome from "@assets/icons/bottom-tabs/homepage-home-icon.svg";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import Colors from "@src/constants/Colors";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
 import { ms, vs } from "@utils/design/design";
 import Home from "app/(main)/Business/Home/index";
-import Info from "app/(main)/Business/Info/index";
+// import Info from "app/(main)/Business/Info/index";
 import Setting from "app/(main)/Business/Settings/index";
-import TransferMoney from "app/(main)/Business/TransferMoney/index";
+// import TransferMoney from "app/(main)/Business/TransferMoney/index";
 import { Redirect } from "expo-router";
-import Transaction from "./Transaction";
+// import Transaction from "./Transaction";
 // Icons
 // const MainStack = createBottomTabNavigator<RootTabParamList>();
 const Layout = () => {
@@ -59,15 +59,15 @@ const Layout = () => {
         }}
       />
 
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Transaction"
         component={Transaction}
         options={{
           tabBarIcon: () => <IconBottomTabCard />,
         }}
-      />
+      />  */}
 
-      <Tab.Screen
+      {/* <Tab.Screen
         name="TransferMoney"
         component={TransferMoney}
         options={{
@@ -82,7 +82,7 @@ const Layout = () => {
         options={{
           tabBarIcon: () => <IconBottomTabInfo />,
         }}
-      />
+      /> */}
 
       <Tab.Screen
         name="Settings"

@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable camelcase */
 import { useBusinessSigninMutation } from "@/store/api/business/authApis";
+import { setRole } from "@/store/slices/business/businessSlice";
 import Logo from "@assets/eccLogo/oneTronixLogo.svg";
 import WhiteOutline from "@assets/icons/user/qr/whiteOutline.png";
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -101,7 +102,13 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
             paddingHorizontal: hs(16),
           }}
         >
-          <View style={{ alignSelf: "flex-end", padding: hs(16) }}>
+          <View
+            style={{
+              alignSelf: "flex-end",
+              padding: hs(16),
+              marginTop: Platform.OS === "ios" ? vs(5) : vs(15),
+            }}
+          >
             <Logo />
           </View>
           <View
@@ -145,7 +152,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
           <Text
             style={{
               fontSize: ms(25),
-              marginTop: vs(90),
+              marginTop: vs(60),
               textAlign: "center",
             }}
             className="text-white font-poppins-semibold"
@@ -231,7 +238,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
             {/* </Link> */}
             <TouchableOpacity
               onPress={() => {
-                router.push("/(auth)/Signup");
+                // router.push("/(auth)/Signup");
               }}
             >
               <Text
@@ -287,18 +294,24 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
             >
               Don't have an account?
             </Text>
-            <Text
-              style={{
-                fontSize: 12,
-                color: "red",
-
-                marginTop: 5, // Adds consistent space
-                fontFamily: "Poppins-Regular", // Use custom font if needed
+            <TouchableOpacity
+              onPress={() => {
+                dispatch(setRole(true)), router.push("/(auth)/Signup");
               }}
             >
-              {" "}
-              Create an Account
-            </Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: "red",
+
+                  marginTop: 5, // Adds consistent space
+                  fontFamily: "Poppins-Regular", // Use custom font if needed
+                }}
+              >
+                {" "}
+                Create an Account
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
 

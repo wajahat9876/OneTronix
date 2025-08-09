@@ -1,17 +1,17 @@
 // eslint-disable-next-line import/order
 // eslint-disable-next-line import/order
-import SettingItem from '@src/components/commons/main/settings_stack/SettingItem';
-import GlobalLogout from '@src/components/globals/BuisnessLogoutModal';
-import ScreenAuth from '@src/components/globals/ScreenAuth';
-import { ScrollView, StyleSheet, Text } from '@src/components/libraries';
-import { pageTransitionAnimation } from '@src/constants/Animation';
-import Colors from '@src/constants/Colors';
-import { MultiStepFormProps } from '@src/hooks/useMultiStepForm';
-import { globalStyle } from '@src/styles/globals';
-import { hs, vs } from '@utils/design/design';
-import { useRouter } from 'expo-router';
-import { View } from 'react-native';
-import Animated from 'react-native-reanimated';
+// import SettingItem from '@src/components/commons/main/settings_stack/SettingItem';
+import GlobalLogout from "@src/components/globals/BuisnessLogoutModal";
+import ScreenAuth from "@src/components/globals/ScreenAuth";
+import { ScrollView, StyleSheet } from "@src/components/libraries";
+import { pageTransitionAnimation } from "@src/constants/Animation";
+import Colors from "@src/constants/Colors";
+import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
+// import { globalStyle } from '@src/styles/globals';
+import { hs, vs } from "@utils/design/design";
+import { useRouter } from "expo-router";
+import { View } from "react-native";
+import Animated from "react-native-reanimated";
 
 const Settings = ({ goTo }: MultiStepFormProps) => {
   const router = useRouter();
@@ -50,12 +50,12 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
           rightIcon: true,
         }}
         back={() => {
-          router.replace('/(main)/Business/Home');
+          // router.replace('/(main)/Business/Home');
         }}
       >
         <View style={styles.container}>
           <ScrollView>
-            <Text
+            {/* <Text
               style={{
                 ...globalStyle.textMedium,
                 fontSize: 17,
@@ -70,8 +70,8 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
               onClick={() => {
                 goTo?.(1);
               }}
-            />
-            <SettingItem
+            /> */}
+            {/* <SettingItem
               title="Currency Exchange"
               marginTop={vs(24)}
               onClick={() => {
@@ -101,8 +101,8 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
               onClick={() => {
                 goTo?.(12);
               }}
-            />
-            <SettingItem
+            /> */}
+            {/* <SettingItem
               title="Cut-off Time"
               marginTop={vs(24)}
               onClick={() => {
@@ -122,8 +122,8 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
               onClick={() => {
                 goTo?.(7);
               }}
-            />
-            <Text
+            /> */}
+            {/* <Text
               style={{
                 ...globalStyle.textMedium,
                 fontSize: 17,
@@ -145,16 +145,16 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
               onClick={() => {
                 goTo?.(3);
               }}
-            />
+            /> */}
             {/* <AlertsSettingsItem
               title="Transaction Alerts"
               switchValue={alert}
               onSwitchValueChange={toggleAlert}
             /> */}
-            <View style={{ marginBottom: vs(24) }}>
-              <GlobalLogout key="dsa" marginTop={vs(24)} />
-            </View>
           </ScrollView>
+          <View style={{ marginBottom: vs(24) }}>
+            <GlobalLogout key="dsa" marginTop={vs(24)} />
+          </View>
         </View>
       </ScreenAuth>
     </Animated.View>

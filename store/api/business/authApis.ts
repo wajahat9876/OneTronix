@@ -123,12 +123,32 @@ export const businessAuthApi = createApi({
       },
     }),
 
-    businessManualSignup: builder.mutation<
-      IBusinessManualSignUpResponse,
-      SignUpPayload
-    >({
+    businessManualSignup: builder.mutation<IBusinessManualSignUpResponse, any>({
       query: (body) => ({
         url: "user/createCustomer",
+        method: "POST",
+        body,
+      }),
+
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
+          );
+        } catch (data: ICurrentResponse | any) {
+          // handleLogout(data, { dispatch });
+        } finally {
+          // do nothing
+        }
+      },
+    }),
+    businessSignupInstaller: builder.mutation<
+      IBusinessManualSignUpResponse,
+      any
+    >({
+      query: (body) => ({
+        url: "user/createInstaller",
         method: "POST",
         body,
       }),
@@ -689,6 +709,7 @@ export const {
   useResendBusinessSigninOtpMutation,
   useBuisnessSignoutMutation,
   useUpdateAddressMutation,
+  useBusinessSignupInstallerMutation,
   // Unused Api
   useTransactionAlertMutation,
   useUpdateBusinessPhoneNumberMutation,

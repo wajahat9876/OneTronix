@@ -18,7 +18,6 @@ export interface IBusinessState {
   businessCategory: string;
   businessType: number | undefined;
   data: VerifySignIn;
-
   businessKycUrl: string;
   beneficiaryDetails: businessPayee;
   selectedBenefBankDetails: any[];
@@ -29,8 +28,11 @@ export interface IBusinessState {
   outgoingBusReduxData?: OutgoingTransfer;
   isInternal?: boolean;
   showIbanAccountToggle?: boolean;
+  deviceId: string;
+  role: boolean;
 }
 const initialState: IBusinessState = {
+  role: false,
   showIbanAccountToggle: false,
   businessEmail: "",
   isInternal: true,
@@ -57,6 +59,7 @@ const initialState: IBusinessState = {
   getBusinessBeneficiary: [],
   tempToken: "",
   auth_token: "",
+  deviceId: "",
   packageId: "",
   businessCategory: "",
   businessType: undefined,
@@ -96,6 +99,9 @@ const businessSlice = createSlice({
     setPackageId(state, action) {
       state.packageId = action.payload;
     },
+    setRole(state, action) {
+      state.role = action.payload;
+    },
     setIsInternal(state, action) {
       state.isInternal = action.payload;
     },
@@ -106,7 +112,7 @@ const businessSlice = createSlice({
       state.signInBusinessEmail = action.payload;
     },
     businessQrSignin: (state, action) => {
-      state.auth_token = action.payload;
+      state.deviceId = action.payload;
     },
     setBusinessKycUrl(state, action) {
       state.businessKycUrl = action.payload.Url;
@@ -139,6 +145,7 @@ const businessSlice = createSlice({
 
     businessLogout(state: IBusinessState) {
       console.log("Business Logout");
+      state.role = false;
       state.auth_token = "";
       state.tempToken = "";
       state.signInBusinessEmail = "";
@@ -155,14 +162,18 @@ const businessSlice = createSlice({
     // },
   },
   extraReducers(builder) {
-    // builder.addMatcher(
-    //   businessAuthApi.endpoints.businessAutoSignup.matchFulfilled,
-    //   (state, { payload }) => {
-    //     state.auth_token = payload.data?.jwttoken;
-    //     state.data = payload.data;
-    //     state.businessKycUrl = initialState.businessKycUrl;
-    //   },
-    // );
+    builder.addMatcher(
+      businessAuthApi.endpoints.businessManualSignup.matchFulfilled,
+      (state, { payload }) => {
+        state.auth_token = payload.results?.token;
+      }
+    );
+    builder.addMatcher(
+      businessAuthApi.endpoints.businessSignupInstaller.matchFulfilled,
+      (state, { payload }) => {
+        state.auth_token = payload.results?.token;
+      }
+    );
 
     builder.addMatcher(
       businessAuthApi.endpoints.businessSignin.matchFulfilled,
@@ -213,7 +224,7 @@ export const {
   setBeneficiaryId,
   businessQrSignin,
   setSigninBusinessEmail,
-
+  setRole,
   setShowToogle,
 } = businessSlice.actions;
 export default businessSlice.reducer;

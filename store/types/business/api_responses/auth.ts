@@ -92,6 +92,7 @@ interface BusinessAutoSignUp {
 }
 
 interface BusinessManualSignUp {
+  token: string;
   businessType: boolean;
   businessCategory: string;
   businessnName: string;
@@ -422,8 +423,7 @@ interface ActiveCompanies {
 export type ISignInResponse = IAPIRespone<SignIn>;
 export type IVerifySignInResponse = IAPIResponeData<VerifySignIn>;
 export type IBusinessAutoSignUpResponse = IAPIResponeData<BusinessAutoSignUp>;
-export type IBusinessManualSignUpResponse =
-  IAPIResponeData<BusinessManualSignUp>;
+export type IBusinessManualSignUpResponse = IAPIRespone<BusinessManualSignUp>;
 export type IVerifySignupEmailResponse = IAPIRespone<VerifySignupEmail>;
 export type IVerifySignupPhoneResponse = IAPIRespone<VerifySignupPhone>;
 export type IUploadDocumentResponse = IAPIRespone<DocumentResults>;
