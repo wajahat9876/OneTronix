@@ -5,7 +5,13 @@ import EasyEmoneyGradient from "@src/components/globals/BackgroundGradient";
 import Screen from "@src/components/globals/Screen";
 import { ms } from "@utils/design/design";
 import React, { useEffect, useState } from "react";
-import { Text, View, useWindowDimensions } from "react-native";
+import {
+  Platform,
+  StatusBar,
+  Text,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import {
   Gesture,
   GestureDetector,
@@ -97,6 +103,9 @@ const Welcome = () => {
     <>
       {/* <BackgroundImage src={Image} /> */}
       <EasyEmoneyGradient />
+      <StatusBar
+        barStyle={Platform.OS === "ios" ? "light-content" : "dark-content"}
+      />
       <Screen
         topColor="transparent"
         bottomColor="transparent"

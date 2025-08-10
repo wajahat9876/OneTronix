@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useMemo } from 'react';
+import React, { useMemo } from "react";
 import {
   Platform,
   ScrollView,
   StatusBar,
   View,
   View as ViewDef,
-} from 'react-native';
+} from "react-native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
-} from 'react-native-safe-area-context';
-import AppBar from '../AppBar';
-import { IScreenAuthProps } from './types';
+} from "react-native-safe-area-context";
+import AppBar from "../AppBar";
+import { IScreenAuthProps } from "./types";
 
 const ScreenAuth = (props: IScreenAuthProps) => {
   const {
@@ -39,13 +39,15 @@ const ScreenAuth = (props: IScreenAuthProps) => {
   const { top, bottom } = useSafeAreaInsets();
 
   const paddingTop = useMemo(
-    () => (Platform.OS === 'android' ? top * 0.9 : top),
-    [top],
+    () => (Platform.OS === "android" ? top * 0.9 : top),
+    [top]
   );
 
   if (scroll)
     return (
-      <SafeAreaView edges={['top', 'bottom']} style={{ flex: 1 }}>
+      <SafeAreaView
+        edges={Platform.OS === "android" ? ["top"] : ["top", "bottom"]}
+      >
         <ScrollView>
           <ViewDef {...rest}>{children}</ViewDef>
         </ScrollView>
@@ -54,12 +56,12 @@ const ScreenAuth = (props: IScreenAuthProps) => {
 
   return (
     <>
-      <StatusBar barStyle={darkStatus ? 'dark-content' : 'light-content'} />
+      <StatusBar barStyle={darkStatus ? "dark-content" : "light-content"} />
       <ViewDef
         {...rest}
         style={{
           flex: 1,
-          backgroundColor: 'transparent',
+          backgroundColor: "transparent",
           ...(style as object),
         }}
         className={`flex-1 ${className}`}

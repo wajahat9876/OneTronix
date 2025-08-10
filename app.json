@@ -5,13 +5,13 @@
     "version": "1.0.0",
     "newArchEnabled": false,
     "orientation": "portrait",
-    "icon": "./assets/images/EccAdaptive.png",
+    "icon": "./assets/images/adaptive-icon.png",
     "scheme": "template",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/SplashIcon.png",
+      "image": "./assets/images/icon.png",
       "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "experiments": {
       "typedRoutes": true
@@ -35,8 +35,8 @@
     "android": {
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/EccAdaptive.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#000000"
       },
       "package": "com.wajahat959.onetronix",
       "versionCode": 1,
@@ -78,9 +78,9 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/SplashIcon.png",
+          "image": "./assets/images/icon.png",
           "resizeMode": "cover",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#000000"
         }
       ],
       [

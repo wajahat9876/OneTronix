@@ -2,21 +2,22 @@
 /* eslint-disable import/order */
 /* eslint-disable no-irregular-whitespace */
 /* eslint-disable camelcase */
-import { useGetCurrentBusinessQuery } from '@/store/api/business/businessCurrent';
-import { useBusinessDetails } from '@/store/selectors/business/business';
-import ProcessingIcon from '@assets/icons/ProcessingIcon.svg';
-import backImage from '@assets/images/BackgroundImage/KycBackground.png';
-import BackgroundImage from '@src/components/globals/BackgroundImage';
-import Button from '@src/components/globals/Button';
-import { SafeAreaView, StyleSheet, Text } from '@src/components/libraries';
-import Colors from '@src/constants/Colors';
-import useBusinessLogout from '@src/hooks/useBusinessLogout';
-import { useAppSelector } from '@src/hooks/useReduxHooks';
-import { kycStyles } from '@src/styles/KYC';
-import { hs, vs } from '@utils/design/design';
-import { getRespValue } from '@utils/getRespValue';
-import React from 'react';
-import { View } from 'react-native';
+import { useGetCurrentBusinessQuery } from "@/store/api/business/businessCurrent";
+import { useBusinessDetails } from "@/store/selectors/business/business";
+import ProcessingIcon from "@assets/icons/ProcessingIcon.svg";
+import backImage from "@assets/images/BackgroundImage/KycBackground.png";
+import BackgroundImage from "@src/components/globals/BackgroundImage";
+import Button from "@src/components/globals/Button";
+import { StyleSheet, Text } from "@src/components/libraries";
+import Colors from "@src/constants/Colors";
+import useBusinessLogout from "@src/hooks/useBusinessLogout";
+import { useAppSelector } from "@src/hooks/useReduxHooks";
+import { kycStyles } from "@src/styles/KYC";
+import { hs, vs } from "@utils/design/design";
+import { getRespValue } from "@utils/getRespValue";
+import React from "react";
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Step5_KYC_Alert = () => {
   const { auth_token } = useAppSelector(useBusinessDetails);
@@ -69,14 +70,14 @@ const Step5_KYC_Alert = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    justifyContent: "flex-start",
+    alignItems: "center",
   },
   title: {
-    color: 'white',
-    fontFamily: 'poppins-semibold',
+    color: "white",
+    fontFamily: "poppins-semibold",
     fontSize: 24,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: vs(32),
     marginLeft: hs(8),
     marginRight: hs(8),
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 16,
     color: Colors.light.theme.white,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: vs(32),
   },
 });

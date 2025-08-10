@@ -26,7 +26,6 @@ import { useRef } from "react";
 import {
   Keyboard,
   Platform,
-  StatusBar,
   TextInput,
   TouchableOpacity,
   View,
@@ -116,7 +115,6 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
           backgroundColor: "transparent",
         }}
       >
-        <StatusBar barStyle="light-content" />
         <KeyboardAwareScrollView
           contentContainerStyle={{
             paddingBottom: Platform.OS === "ios" ? getRespValue(10) : 20,

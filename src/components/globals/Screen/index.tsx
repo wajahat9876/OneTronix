@@ -1,19 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import { useMemo } from 'react';
-import {
-  Platform,
-  ScrollView,
-  StatusBar,
-  View,
-  View as ViewDef,
-} from 'react-native';
+import { useMemo } from "react";
+import { Platform, ScrollView, View, View as ViewDef } from "react-native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
-} from 'react-native-safe-area-context';
-import AppBar from '../AppBar';
-import { IScreenProps } from './types';
+} from "react-native-safe-area-context";
+import AppBar from "../AppBar";
+import { IScreenProps } from "./types";
 
 const Screen = (props: IScreenProps) => {
   const {
@@ -38,13 +32,13 @@ const Screen = (props: IScreenProps) => {
   const { top, bottom } = useSafeAreaInsets();
 
   const paddingTop = useMemo(
-    () => (Platform.OS === 'android' ? top * 0.9 : top),
-    [top],
+    () => (Platform.OS === "android" ? top * 0.9 : top),
+    [top]
   );
 
   if (scroll)
     return (
-      <SafeAreaView edges={['top', 'bottom']} style={{ flex: 1 }}>
+      <SafeAreaView edges={Platform.OS === "android" ? [] : ["top", "bottom"]}>
         <ScrollView>
           <ViewDef {...rest}>{children}</ViewDef>
         </ScrollView>
@@ -53,13 +47,13 @@ const Screen = (props: IScreenProps) => {
 
   return (
     <>
-      <StatusBar barStyle={darkStatus ? 'dark-content' : 'light-content'} />
+      {/* <StatusBar barStyle={darkStatus ? "dark-content" : "light-content"} /> */}
 
       <ViewDef
         {...rest}
         style={{
           flex: 1,
-          backgroundColor: 'transparent',
+          backgroundColor: "transparent",
           ...(style as object),
         }}
         className={`flex-1 ${className}`}

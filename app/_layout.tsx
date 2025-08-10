@@ -1,30 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // eslint-disable-next-line import/extensions
-import { PortalProvider } from '@gorhom/portal';
-import { SelectProvider } from '@mobile-reality/react-native-select-pro';
-import CheckNetwork from '@src/components/globals/CheckNetwork';
-import useCachedResources from '@src/hooks/useCachedResources';
-import store from '@store/index';
-import { toastConfig } from '@utils/helpers/toast';
-import { Slot } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect } from 'react';
-import { ActivityIndicator, Text, TextInput, View } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { KeyboardProvider } from 'react-native-keyboard-controller';
-import { DefaultTheme, PaperProvider } from 'react-native-paper';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Toast from 'react-native-toast-message';
-import { Provider } from 'react-redux';
-import { persistStore } from 'redux-persist';
-import { PersistGate } from 'redux-persist/integration/react';
+import { PortalProvider } from "@gorhom/portal";
+import { SelectProvider } from "@mobile-reality/react-native-select-pro";
+import CheckNetwork from "@src/components/globals/CheckNetwork";
+import useCachedResources from "@src/hooks/useCachedResources";
+import store from "@store/index";
+import { toastConfig } from "@utils/helpers/toast";
+import { Slot } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import React, { useEffect } from "react";
+import { ActivityIndicator, Text, TextInput, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { DefaultTheme, PaperProvider } from "react-native-paper";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
+import { Provider } from "react-redux";
+import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
 
 // eslint-disable-next-line prettier/prettier
-export {
-
-  ErrorBoundary
-} from 'expo-router';
+export { ErrorBoundary } from "expo-router";
 
 SplashScreen.preventAutoHideAsync();
 SplashScreen.setOptions({
@@ -56,7 +51,7 @@ const ReduxWrapper = () => {
 
   if (!isLoadingComplete) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="small" />
       </View>
     );
@@ -64,13 +59,11 @@ const ReduxWrapper = () => {
 
   return (
     <>
-      {/* <PinCodeOverlay /> */}
       <Slot
         screenOptions={{
           headerShown: false,
         }}
       />
-      <StatusBar />
     </>
   );
 };
@@ -78,31 +71,29 @@ const ReduxWrapper = () => {
 const RootLayout = () => {
   return (
     <SelectProvider>
-      <GestureHandlerRootView className="flex-1">
-        <KeyboardProvider statusBarTranslucent>
-          <SafeAreaProvider>
-            <Provider store={store}>
-              <PersistGate loading={null} persistor={persistor}>
-                <PaperProvider
-                  theme={{
-                    ...DefaultTheme,
-                    colors: {
-                      ...DefaultTheme.colors,
-                      secondaryContainer: 'transparent',
-                    },
-                  }}
-                >
-                  <PortalProvider>
-                    <ReduxWrapper />
-                  </PortalProvider>
-                  <CheckNetwork />
-                </PaperProvider>
-              </PersistGate>
-            </Provider>
-            <Toast config={toastConfig} />
-          </SafeAreaProvider>
-        </KeyboardProvider>
-      </GestureHandlerRootView>
+      <SafeAreaProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <PaperProvider
+                theme={{
+                  ...DefaultTheme,
+                  colors: {
+                    ...DefaultTheme.colors,
+                    secondaryContainer: "transparent",
+                  },
+                }}
+              >
+                <PortalProvider>
+                  <ReduxWrapper />
+                </PortalProvider>
+                <CheckNetwork />
+              </PaperProvider>
+            </PersistGate>
+          </Provider>
+          <Toast config={toastConfig} />
+        </GestureHandlerRootView>
+      </SafeAreaProvider>
     </SelectProvider>
   );
 };
