@@ -1,22 +1,23 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { useGetCurrentBusinessQuery } from '@/store/api/business/businessCurrent';
-import { useBusinessDetails } from '@/store/selectors/business/business';
-import BottomSheet from '@gorhom/bottom-sheet';
-import { PortalBottomSheetRef } from '@src/components/globals/PortalBottomSheet/types';
-import ScreenAuth from '@src/components/globals/ScreenAuth';
-import { StyleSheet } from '@src/components/libraries';
-import { pageTransitionAnimation } from '@src/constants/Animation';
-import Colors from '@src/constants/Colors';
-import { MultiStepFormProps } from '@src/hooks/useMultiStepForm';
-import { useAppSelector } from '@src/hooks/useReduxHooks';
-import { ms } from '@utils/design/design';
-import { getRespValue } from '@utils/getRespValue';
-import { useFocusEffect, useRouter } from 'expo-router';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { Platform, StatusBar, View } from 'react-native';
-import Animated from 'react-native-reanimated';
+import { useGetCurrentBusinessQuery } from "@/store/api/business/businessCurrent";
+import { useBusinessDetails } from "@/store/selectors/business/business";
+import BottomSheet from "@gorhom/bottom-sheet";
+import FlowDiagram from "@src/components/globals/FlowDiagram";
+import { PortalBottomSheetRef } from "@src/components/globals/PortalBottomSheet/types";
+import ScreenAuth from "@src/components/globals/ScreenAuth";
+import { StyleSheet } from "@src/components/libraries";
+import { pageTransitionAnimation } from "@src/constants/Animation";
+import Colors from "@src/constants/Colors";
+import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
+import { useAppSelector } from "@src/hooks/useReduxHooks";
+import { ms } from "@utils/design/design";
+import { getRespValue } from "@utils/getRespValue";
+import { useRouter } from "expo-router";
+import React, { useMemo, useRef, useState } from "react";
+import { Platform, View } from "react-native";
+import Animated from "react-native-reanimated";
 
 const Index = ({ goTo }: MultiStepFormProps) => {
   const router = useRouter();
@@ -45,28 +46,31 @@ const Index = ({ goTo }: MultiStepFormProps) => {
     setBottomSheetVisible(false);
     currencyModalRef.current?.close();
   };
-  const currencyPoints = useMemo(() => ['70%'], []);
+  const currencyPoints = useMemo(() => ["70%"], []);
 
   // To show only active Curre
-  useFocusEffect(
-    useCallback(() => {
-      StatusBar.setBarStyle('light-content', true);
-      return () => {
-        StatusBar.setBarStyle('dark-content', true);
-      };
-    }, []),
-  );
-
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     StatusBar.setBarStyle("light-content", false);
+  //     return () => {
+  //       StatusBar.setBarStyle("dark-content", true);
+  //     };
+  //   }, [])
+  // );
+  const solar = 963;
+  const grid = 344;
+  const consumption = 529;
+  const battery = 90;
   return (
     <Animated.View {...pageTransitionAnimation} key="home" className="flex-1">
       <ScreenAuth
         title=""
         style={{
-          backgroundColor: 'transparent',
+          backgroundColor: "transparent",
         }}
         topColor="transparent"
         bottomColor={Colors.light.theme.backgroundTopCurveSection}
-        darkStatus={false}
+        darkStatus={true}
         disableTopSafeArea
         appBarProps={{
           light: false,
@@ -74,7 +78,15 @@ const Index = ({ goTo }: MultiStepFormProps) => {
         disableAppBar
         back={() => {}}
       >
-        <View style={styles.container}>{/* header section */}</View>
+        <View style={styles.container}>
+          <FlowDiagram
+            solar={963}
+            grid={99} // negative = importing
+            consumption={30}
+            battery={90}
+            batteryFlow={100} // negative = discharging
+          />
+        </View>
         {/* <PortalBottomSheet
           ref={bottomSheetRef}
           snapPoints={['55%']}
@@ -105,51 +117,51 @@ const Index = ({ goTo }: MultiStepFormProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.light.theme.backgroundTopCurveSection,
+    backgroundColor: "white",
   },
   bottomSheet: {
-    backgroundColor: 'white',
-    borderCurve: 'circular',
+    backgroundColor: "white",
+    borderCurve: "circular",
     borderRadius: 40,
     borderWidth: 5,
-    borderColor: '#f9f9f9',
+    borderColor: "#f9f9f9",
   },
   topHeader: {
-    backgroundColor: 'black',
-    height: '41%',
-    overflow: 'hidden',
+    backgroundColor: "black",
+    height: "41%",
+    overflow: "hidden",
     borderBottomLeftRadius: ms(42),
     borderBottomRightRadius: ms(42),
   },
   viewTrans: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginTop: 2,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   directionTxt: {
-    color: 'black',
-    fontWeight: '400',
+    color: "black",
+    fontWeight: "400",
     fontSize: getRespValue(16),
   },
   txtAccount: {
-    color: 'black',
-    fontWeight: '600',
-    width: '70%',
+    color: "black",
+    fontWeight: "600",
+    width: "70%",
     fontSize: getRespValue(16),
   },
-  txtTrans: { color: 'black', fontWeight: '600', fontSize: getRespValue(16) },
+  txtTrans: { color: "black", fontWeight: "600", fontSize: getRespValue(16) },
   transactionsCard: {
     marginLeft: 10,
-    justifyContent: 'space-between',
-    backgroundColor: 'white',
+    justifyContent: "space-between",
+    backgroundColor: "white",
     borderRadius: 15,
     padding: 20,
-    width: '92%',
-    shadowColor: '#000',
+    width: "92%",
+    shadowColor: "#000",
     shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: Platform.OS === 'ios' ? 2 : 0,
+    elevation: Platform.OS === "ios" ? 2 : 0,
     marginBottom: 10,
   },
 });
