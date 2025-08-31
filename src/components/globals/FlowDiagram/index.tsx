@@ -45,14 +45,13 @@ const AnimatedLinePath = ({
     <AnimatedPath
       d={d}
       stroke={color}
-      strokeWidth={3}
+      strokeWidth={4}
       fill="none"
-      strokeDasharray="8,6"
+      strokeDasharray="10,6"
       strokeDashoffset={dashOffset}
-      opacity={active ? 1 : 0.25}
+      opacity={active ? 1 : 0.15}
       strokeLinecap="round"
       strokeLinejoin="round"
-      // Optional: arrow markers if you want (commented below if not needed)
     />
   );
 };
@@ -125,7 +124,7 @@ const FlowDiagram = ({
   const solarPos = { x: centerX, y: topOffset + iconSize / 2 };
 
   const batteryPos = {
-    x: 40 + iconSize / 2,
+    x: 42 + iconSize / 2,
     y: ready ? layout.height - bottomOffset - iconSize / 2 : 300,
   };
   const gridPos = {
@@ -133,34 +132,55 @@ const FlowDiagram = ({
     y: ready ? layout.height - bottomOffset - iconSize / 2 : 300,
   };
   const loadPos = {
-    x: ready ? layout.width - 40 - iconSize / 2 : 320,
+    x: ready ? layout.width - 42 - iconSize / 2 : 320,
     y: ready ? layout.height - bottomOffset - iconSize / 2 : 300,
   };
   const inverterPos = {
     x: centerX,
-    y: ready && (solarPos.y + gridPos.y) / 2,
+    y: ready ? (solarPos.y + gridPos.y) / 2 : 0, // fallback to 0
   };
   // slightly offset endpoints so line doesn't go under icon center
-  const bump = (pt, dirX = 0, dirY = 0, amount = 18) => ({
-    x: pt.x + dirX * amount,
-    y: pt.y + dirY * amount,
-  });
+
+  const GAP = 6; // distance between line and icon
+  const R = iconSize / 2; // icon radius
+
+  const edge = (
+    pt: { x: number; y: number },
+    side: "top" | "bottom" | "left" | "right"
+  ) => {
+    switch (side) {
+      case "top":
+        return { x: pt.x, y: pt.y - (R + GAP) };
+      case "bottom":
+        return { x: pt.x, y: pt.y + (R + GAP) };
+      case "left":
+        return { x: pt.x - (R + GAP), y: pt.y };
+      case "right":
+        return { x: pt.x + (R + GAP), y: pt.y };
+      default:
+        return pt;
+    }
+  };
 
   // from/to points for nicer connection (so line ends near icon edge not at exact center)
-  const solarTo = bump(inverterPos, 0, -1, 28); // end above inverter
-  const solarFrom = bump(solarPos, 0, 1, 18); // start below solar icon
+  const solarTo = edge(inverterPos, "top");
+  const solarFrom = edge(solarPos, "bottom");
 
-  const invToBattery = bump(batteryPos, 0, -2, 10); // slightly above battery center
-  const invToGrid = bump(gridPos, 0, -1, 10);
-  const invToLoad = bump(loadPos, 0, -1, 10);
-  const invFrom = bump(inverterPos, 0, 0, 0);
+  const invLeft = edge(inverterPos, "left"); // leave inverter to the left
+  const invRight = edge(inverterPos, "right"); // leave inverter to the right
+  const invBottom = edge(inverterPos, "bottom"); // leave inverter to the bottom
+
+  const batTop = edge(batteryPos, "top"); // arrive battery from top
+  const gridTop = edge(gridPos, "top"); // arrive grid from top
+  const loadTop = edge(loadPos, "top"); // arrive load from top
+
+  // helper to stop line before touching icon
 
   // build path strings (pixel values)
-  const pathSolar = makeStraight(solarFrom, solarTo); // vertical-ish
-  const pathBattery = makeElbowLeft(invFrom, invToBattery, 40); // inverter -> left then down -> battery
-  const pathGrid = makeStraight(invFrom, invToGrid); // straight down
-  const pathLoad = makeElbowRight(invFrom, invToLoad, 40); // inverter -> right then down -> load
-
+  const pathSolar = makeStraight(solarFrom, solarTo);
+  const pathBattery = makeElbowLeft(invLeft, batTop, 30, 30); // a bit more inset/radius
+  const pathGrid = makeStraight(invBottom, gridTop);
+  const pathLoad = makeElbowRight(invRight, loadTop, 30, 30);
   return (
     <View style={styles.wrapper}>
       <View style={styles.container} onLayout={onLayout}>
@@ -203,7 +223,7 @@ const FlowDiagram = ({
                 },
               ]}
             />
-            <Text
+            {/* <Text
               style={[
                 styles.label,
                 {
@@ -213,7 +233,7 @@ const FlowDiagram = ({
               ]}
             >
               Inverter
-            </Text>
+            </Text> */}
 
             <Image
               source={{
@@ -304,7 +324,7 @@ const FlowDiagram = ({
               {/* Solar -> Inverter */}
               <AnimatedLinePath
                 d={pathSolar}
-                color="gray"
+                color="#27ae60"
                 active={solar > 0}
                 direction="forward"
               />
@@ -312,7 +332,7 @@ const FlowDiagram = ({
               {/* Inverter -> Battery (elbow left) */}
               <AnimatedLinePath
                 d={pathBattery}
-                color="#2ecc71"
+                color="#27ae60"
                 active={batteryWatt > 0 && batteryStatus !== "ONHOLD"}
                 direction={
                   batteryStatus === "CHARGING"
@@ -326,7 +346,7 @@ const FlowDiagram = ({
               {/* Inverter -> Grid */}
               <AnimatedLinePath
                 d={pathGrid}
-                color="#3498db"
+                color="#27ae60"
                 active={grid !== 0}
                 direction={grid > 0 ? "forward" : "backward"}
               />
@@ -334,7 +354,7 @@ const FlowDiagram = ({
               {/* Inverter -> Load (elbow right) */}
               <AnimatedLinePath
                 d={pathLoad}
-                color="#e74c3c"
+                color="#27ae60"
                 active={consumption > 0}
                 direction="forward"
               />
