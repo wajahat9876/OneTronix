@@ -16,7 +16,7 @@ const AnimatedLinePath = ({
 
   useEffect(() => {
     if (active) {
-      const toVal = direction === "forward" ? -200 : 200;
+      const toVal = direction === "forward" ? -400 : 400;
       animRef.current = Animated.loop(
         Animated.timing(dashOffset, {
           toValue: toVal,
@@ -42,17 +42,29 @@ const AnimatedLinePath = ({
   }, [active, direction, dashOffset]);
 
   return (
-    <AnimatedPath
-      d={d}
-      stroke={color}
-      strokeWidth={4}
-      fill="none"
-      strokeDasharray="10,6"
-      strokeDashoffset={dashOffset}
-      opacity={active ? 1 : 0.15}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
+    <>
+      {/* Full gray line */}
+      <Path
+        d={d}
+        stroke="lightgrey"
+        strokeWidth={4}
+        fill="none"
+        strokeLinecap="round"
+      />
+
+      {/* Shorter animated green line */}
+      <AnimatedPath
+        d={d}
+        stroke={color}
+        strokeWidth={4}
+        fill="none"
+        strokeDasharray="120,80" // 👈 green line ki length control
+        strokeDashoffset={dashOffset}
+        opacity={active ? 1 : 0.15}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </>
   );
 };
 

@@ -117,7 +117,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
             consumption={result?.results?.inverterData?.data?.output?.watt}
             battery={result?.results?.inverterData?.data?.battery?.watt}
             batteryWatt={result?.results?.inverterData?.data?.battery?.watt}
-            batteryStatus={"DISCHARGING"} // 🔹 "charging" | "discharging" | "full" from API
+            batteryStatus={result?.results?.inverterData?.data?.battery?.status} // 🔹 "charging" | "discharging" | "full" from API
           />
         </View>
         {/* <PortalBottomSheet
