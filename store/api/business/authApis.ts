@@ -55,7 +55,7 @@ export const businessAuthApi = createApi({
   endpoints: (builder) => ({
     businessSignin: builder.mutation<ISignInResponse, SignInPayload>({
       query: (body) => ({
-        url: "user/signin",
+        url: "user/auth/signin",
         method: "POST",
         body,
       }),
@@ -104,7 +104,7 @@ export const businessAuthApi = createApi({
       SignUpPayload
     >({
       query: (body) => ({
-        url: "user/createCustomer",
+        url: "user/auth/createCustomer",
         method: "POST",
         body,
       }),
@@ -125,7 +125,7 @@ export const businessAuthApi = createApi({
 
     businessManualSignup: builder.mutation<IBusinessManualSignUpResponse, any>({
       query: (body) => ({
-        url: "user/createCustomer",
+        url: "user/auth/createCustomer",
         method: "POST",
         body,
       }),
@@ -148,7 +148,7 @@ export const businessAuthApi = createApi({
       any
     >({
       query: (body) => ({
-        url: "user/createInstaller",
+        url: "user/auth/createInstaller",
         method: "POST",
         body,
       }),

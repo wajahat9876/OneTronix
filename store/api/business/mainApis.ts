@@ -2,15 +2,15 @@
 /* eslint-disable camelcase */
 /* eslint-disable import/order */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IBusinessState } from '@/store/slices/business/businessSlice';
-import { ICurrentResponse } from '@/store/types/business/api_responses/auth';
-import { handleLogout } from '@/store/utils/errorHandler';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import Config from '@src/constants/Config';
-import { businessCurrentApi } from './businessCurrent';
+import { IBusinessState } from "@/store/slices/business/businessSlice";
+import { ICurrentResponse } from "@/store/types/business/api_responses/auth";
+import { handleLogout } from "@/store/utils/errorHandler";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import Config from "@src/constants/Config";
+import { businessCurrentApi } from "./businessCurrent";
 
 export const businessMainApi = createApi({
-  reducerPath: 'businessMainApi',
+  reducerPath: "businessMainApi",
   refetchOnFocus: false,
   baseQuery: fetchBaseQuery({
     baseUrl: Config.baseURL,
@@ -19,18 +19,18 @@ export const businessMainApi = createApi({
         getState() as { business: IBusinessState }
       ).business;
       if (auth_token) {
-        headers.set('Authorization', `Bearer ${auth_token}`);
+        headers.set("Authorization", `Bearer ${auth_token}`);
       }
       return headers;
     },
   }),
 
-  tagTypes: ['getPendingExchange'],
-  endpoints: builder => ({
+  tagTypes: ["getPendingExchange"],
+  endpoints: (builder) => ({
     createCurrencyAccount: builder.mutation<any, any>({
-      query: body => ({
-        url: 'clearBank/multi-createAccount',
-        method: 'POST',
+      query: (body) => ({
+        url: "clearBank/multi-createAccount",
+        method: "POST",
         body,
       }),
 
@@ -38,7 +38,7 @@ export const businessMainApi = createApi({
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -48,16 +48,16 @@ export const businessMainApi = createApi({
       },
     }),
     createBusinessBeneficiary: builder.mutation<any, any>({
-      query: body => ({
-        url: 'business/integrated-finance/createBeneficiary',
-        method: 'POST',
+      query: (body) => ({
+        url: "business/integrated-finance/createBeneficiary",
+        method: "POST",
         body,
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -68,16 +68,16 @@ export const businessMainApi = createApi({
     }),
 
     transferAmount: builder.mutation<any, any>({
-      query: body => ({
-        url: 'clearBank/transferAmount',
-        method: 'POST',
+      query: (body) => ({
+        url: "clearBank/transferAmount",
+        method: "POST",
         body,
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -87,16 +87,16 @@ export const businessMainApi = createApi({
       },
     }),
     transferInternalPayment: builder.mutation<any, any>({
-      query: body => ({
-        url: 'clearBank/multi-internalPayments',
-        method: 'POST',
+      query: (body) => ({
+        url: "clearBank/multi-internalPayments",
+        method: "POST",
         body,
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -106,16 +106,16 @@ export const businessMainApi = createApi({
       },
     }),
     transferOutboundPayment: builder.mutation<any, any>({
-      query: body => ({
-        url: 'clearBank/multi-outboundPayment',
-        method: 'POST',
+      query: (body) => ({
+        url: "clearBank/multi-outboundPayment",
+        method: "POST",
         body,
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -125,18 +125,18 @@ export const businessMainApi = createApi({
       },
     }),
     exchangeQuoteBusiness: builder.mutation<any, any>({
-      query: body => ({
-        url: 'clearBank/multi-requestQuote',
-        method: 'POST',
+      query: (body) => ({
+        url: "clearBank/multi-requestQuote",
+        method: "POST",
         body,
       }),
 
-      invalidatesTags: ['getPendingExchange'],
+      invalidatesTags: ["getPendingExchange"],
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -146,16 +146,16 @@ export const businessMainApi = createApi({
       },
     }),
     exchangeTransactionsBusiness: builder.mutation<any, any>({
-      query: body => ({
-        url: 'clearBank/multi-executeQuote',
-        method: 'POST',
+      query: (body) => ({
+        url: "clearBank/multi-executeQuote",
+        method: "POST",
         body,
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -166,16 +166,16 @@ export const businessMainApi = createApi({
     }),
 
     changeActiveBusinessCurrency: builder.mutation<any, any>({
-      query: body => ({
-        url: 'clearBank/multi-changeActiveCurrency',
-        method: 'POST',
+      query: (body) => ({
+        url: "clearBank/multi-changeActiveCurrency",
+        method: "POST",
         body,
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -185,20 +185,18 @@ export const businessMainApi = createApi({
       },
     }),
 
-  
-
     // get Apis
-  
+
     getTransactionOtp: builder.mutation<any, any>({
       query: () => ({
-        url: 'clearBank/transcationOtp',
-        method: 'POST',
+        url: "clearBank/transcationOtp",
+        method: "POST",
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -209,14 +207,14 @@ export const businessMainApi = createApi({
     }),
     getMultiTransactionOtp: builder.mutation<any, any>({
       query: () => ({
-        url: 'clearBank/multi-transactionOtp',
-        method: 'POST',
+        url: "clearBank/multi-transactionOtp",
+        method: "POST",
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -226,16 +224,16 @@ export const businessMainApi = createApi({
       },
     }),
     deletePayee: builder.mutation<any, any>({
-      query: body => ({
-        url: 'clearBank/deletePayee',
-        method: 'POST',
+      query: (body) => ({
+        url: "clearBank/deletePayee",
+        method: "POST",
         body,
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -245,16 +243,16 @@ export const businessMainApi = createApi({
       },
     }),
     deleteMultiPayee: builder.mutation<any, any>({
-      query: body => ({
-        url: 'clearBank/multi-deletePayee',
-        method: 'POST',
+      query: (body) => ({
+        url: "clearBank/multi-deletePayee",
+        method: "POST",
         body,
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -263,16 +261,16 @@ export const businessMainApi = createApi({
         }
       },
     }),
-    getMultiPayee: builder.query<any, any>({
-      query: () => ({
-        url: 'clearBank/multi-getPayee?pageSize=1000&pageNumber=1',
-        method: 'GET',
+    getInverterData: builder.query<any, any>({
+      query: ({ deviceId }) => ({
+        url: `user/devices/inverterData?deviceId=${deviceId}`,
+        method: "GET",
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -284,13 +282,13 @@ export const businessMainApi = createApi({
     getTargetedStatement: builder.query<any, any>({
       query: ({ from, to }) => ({
         url: `clearBank/getTargetedTranscation?transcationType=debitCredit&from=${from}&to=${to}`,
-        method: 'GET',
+        method: "GET",
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -302,13 +300,13 @@ export const businessMainApi = createApi({
     getMulticurrencyStatement: builder.query<any, any>({
       query: ({ to, from }) => ({
         url: `clearBank/multi-getTargetedTranscation?transcationType=debitCredit&from=${from}&to=${to}`,
-        method: 'GET',
+        method: "GET",
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -320,13 +318,13 @@ export const businessMainApi = createApi({
     getTargetedTransaction: builder.query<any, any>({
       query: ({ pageNo, pageSize }) => ({
         url: `clearBank/getTargetedTranscation?transcationType=debitCredit&pageSize=${pageSize}&pageNumber=${pageNo}`,
-        method: 'GET',
+        method: "GET",
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -338,13 +336,13 @@ export const businessMainApi = createApi({
     getMulticurrencyTransaction: builder.query<any, any>({
       query: ({ pageNo, pageSize }) => ({
         url: `clearBank/multi-getTargetedTranscation?transcationType=debitCredit&pageSize=${pageSize}&pageNumber=${pageNo}`,
-        method: 'GET',
+        method: "GET",
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -356,14 +354,14 @@ export const businessMainApi = createApi({
     getPendingExchangeTransactions: builder.query<any, any>({
       query: ({ pageSize, pageNumber }) => ({
         url: `clearBank/multi-getPendingExchanges?pageNumber=${pageNumber}&pageSize=${pageSize}`,
-        method: 'GET',
+        method: "GET",
       }),
-      providesTags: ['getPendingExchange'],
+      providesTags: ["getPendingExchange"],
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -375,13 +373,13 @@ export const businessMainApi = createApi({
     getBusinessFeePlan: builder.query<any, any>({
       query: ({ id }) => ({
         url: `business/auth/feePlan?_id=${id}`,
-        method: 'GET',
+        method: "GET",
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -393,14 +391,14 @@ export const businessMainApi = createApi({
 
     getPayee: builder.query<any, any>({
       query: () => ({
-        url: 'clearBank/contacts?pageSize=20&pageNumber=1',
-        method: 'GET',
+        url: "clearBank/contacts?pageSize=20&pageNumber=1",
+        method: "GET",
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -412,14 +410,14 @@ export const businessMainApi = createApi({
 
     createBusinessBeneficiaryOtp: builder.mutation<any, any>({
       query: () => ({
-        url: 'business/integrated-finance/create-benificiary-otp',
-        method: 'GET',
+        url: "business/integrated-finance/create-benificiary-otp",
+        method: "GET",
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -430,14 +428,14 @@ export const businessMainApi = createApi({
     }),
     getAllAccountBalance: builder.query<any, any>({
       query: () => ({
-        url: 'clearBank/multi-getAllAccountsBalance',
-        method: 'GET',
+        url: "clearBank/multi-getAllAccountsBalance",
+        method: "GET",
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -448,14 +446,14 @@ export const businessMainApi = createApi({
     }),
     getFeeInvoice: builder.query<any, any>({
       query: () => ({
-        url: 'clearBank/feeInvoces',
-        method: 'GET',
+        url: "clearBank/feeInvoces",
+        method: "GET",
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(
-            businessCurrentApi.util.invalidateTags(['getBusinessCurrent']),
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
           );
         } catch (data: ICurrentResponse | any) {
           handleLogout(data, { dispatch });
@@ -468,6 +466,7 @@ export const businessMainApi = createApi({
 });
 
 export const {
+  useLazyGetInverterDataQuery,
   useGetAllAccountBalanceQuery,
   useGetMultiTransactionOtpMutation,
   useTransferInternalPaymentMutation,
@@ -481,7 +480,6 @@ export const {
   useGetMulticurrencyTransactionQuery,
   useGetTransactionOtpMutation,
   useLazyGetPayeeQuery,
-  useLazyGetMultiPayeeQuery,
   useTransferAmountMutation,
   useGetFeeInvoiceQuery,
   useGetBusinessFeePlanQuery,
@@ -490,7 +488,5 @@ export const {
   useDeleteMultiPayeeMutation,
   useLazyGetTargetedStatementQuery,
   useLazyGetMulticurrencyStatementQuery,
- 
   useGetPendingExchangeTransactionsQuery,
-
 } = businessMainApi;

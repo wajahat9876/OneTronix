@@ -54,6 +54,11 @@ export interface OutgoingTransfer {
 export interface VerifySignIn {
   auth_token: string;
   email: string;
+  firstName: string;
+  isBlocked: boolean;
+  lastName: string;
+  devices: any[];
+  _id: string;
 }
 interface BusinessAutoSignUp {
   businessType: boolean;
@@ -98,6 +103,11 @@ interface BusinessManualSignUp {
   businessnName: string;
   email: string;
   regNo: string;
+  linkedDeviceId: string;
+  averageSinglePayment: string;
+  averagePerWeekPayment: string;
+  annualTurnover: string;
+  typicallyLargerPayment: string;
   phoneNumber: string;
   checkBusinessInfo: boolean;
   packageId: string;
@@ -427,7 +437,7 @@ export type IBusinessManualSignUpResponse = IAPIRespone<BusinessManualSignUp>;
 export type IVerifySignupEmailResponse = IAPIRespone<VerifySignupEmail>;
 export type IVerifySignupPhoneResponse = IAPIRespone<VerifySignupPhone>;
 export type IUploadDocumentResponse = IAPIRespone<DocumentResults>;
-export type ICurrentResponse = IAPIResponeData<VerifySignIn>;
+export type ICurrentResponse = IAPIRespone<VerifySignIn>;
 export type IActiveCompaniesResponse = IAPIResponeData<ActiveCompanies>;
 export type IDirectorResponse = IAPIResponeData<CurrentDirector[]>;
 export type IShareholderResponse = IAPIRespone<ShareHolder[]>;

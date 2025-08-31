@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { useGetCurrentBusinessQuery } from "@/store/api/business/businessCurrent";
+import { useLazyGetInverterDataQuery } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import BottomSheet from "@gorhom/bottom-sheet";
 import FlowDiagram from "@src/components/globals/FlowDiagram";
@@ -12,16 +13,16 @@ import { pageTransitionAnimation } from "@src/constants/Animation";
 import Colors from "@src/constants/Colors";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
+import { renderToastError } from "@src/hooks/useToasty";
 import { ms } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
-import { useRouter } from "expo-router";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Platform, View } from "react-native";
 import Animated from "react-native-reanimated";
 
 const Index = ({ goTo }: MultiStepFormProps) => {
-  const router = useRouter();
-
+  // const router = useRouter();
+  const [result, setResult] = useState<any>(null);
   const { auth_token, data: businessData } = useAppSelector(useBusinessDetails);
 
   const {
@@ -31,8 +32,42 @@ const Index = ({ goTo }: MultiStepFormProps) => {
   } = useGetCurrentBusinessQuery(undefined, {
     skip: !auth_token,
   });
+  const deviceId = businessData?.devices?.[0]?._id;
 
+  // 2nd API → run only if deviceId exists
+  // const { data: inverterData, isFetching } = useGetInverterDataQuery(
+  //   { deviceId },
+  //   {
+  //     skip: !auth_token || !deviceId,
+  //   }
+  // );
+  const [trigger] = useLazyGetInverterDataQuery();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleTrigger = async () => {
+    try {
+      if (deviceId && auth_token) {
+        const res = await trigger({ deviceId });
+        setResult(res?.data);
+        console.log("res", res);
+      }
+    } catch (error: any) {
+      renderToastError(error?.data?.message);
+    }
+  };
+  useEffect(() => {
+    if (!deviceId) return;
+
+    // Run immediately on mount
+    handleTrigger();
+
+    // Run every 5 seconds
+    const interval = setInterval(() => {
+      handleTrigger();
+    }, 300000);
+
+    // Cleanup interval when deviceId changes or component unmounts
+    return () => clearInterval(interval);
+  }, [deviceId]);
 
   const bottomSheetRef = useRef<PortalBottomSheetRef>(null);
   const openBottomSheet = () => {
@@ -57,10 +92,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
   //     };
   //   }, [])
   // );
-  const solar = 963;
-  const grid = 344;
-  const consumption = 529;
-  const battery = 90;
+
   return (
     <Animated.View {...pageTransitionAnimation} key="home" className="flex-1">
       <ScreenAuth
@@ -80,11 +112,12 @@ const Index = ({ goTo }: MultiStepFormProps) => {
       >
         <View style={styles.container}>
           <FlowDiagram
-            solar={963}
+            solar={result?.results?.inverterData?.data?.solar?.watt}
             grid={99} // negative = importing
-            consumption={30}
-            battery={90}
-            batteryFlow={100} // negative = discharging
+            consumption={result?.results?.inverterData?.data?.output?.watt}
+            battery={result?.results?.inverterData?.data?.battery?.watt}
+            batteryWatt={result?.results?.inverterData?.data?.battery?.watt}
+            batteryStatus={result?.results?.inverterData?.data?.battery?.status} // 🔹 "charging" | "discharging" | "full" from API
           />
         </View>
         {/* <PortalBottomSheet

@@ -62,7 +62,8 @@ const FlowDiagram = ({
   grid = 0,
   consumption = 0,
   battery = 0,
-  batteryFlow = 0,
+  batteryWatt = 0, // 🔹 Wattage from API
+  batteryStatus = "onHold", // 🔹 "charging" | "discharging" | "onHold"
 }) => {
   const [layout, setLayout] = useState({ width: 0, height: 0 });
   const iconSize = 50;
@@ -166,26 +167,29 @@ const FlowDiagram = ({
         {ready && (
           <>
             {/* Icons (absolute, using computed centers) */}
-            <Image
-              source={{
-                uri: "https://img.icons8.com/ios-filled/100/solar-panel.png",
+            <View
+              style={{
+                position: "absolute",
+                left: solarPos.x - iconSize / 2,
+                top: solarPos.y - iconSize / 2,
+                flexDirection: "row",
+                alignItems: "center",
               }}
-              style={[
-                styles.icon,
-                {
-                  left: solarPos.x - iconSize / 2,
-                  top: solarPos.y - iconSize / 2,
-                },
-              ]}
-            />
-            <Text
-              style={[
-                styles.label,
-                { left: solarPos.x - 40, top: solarPos.y + iconSize / 2 + 6 },
-              ]}
             >
-              Solar {solar}w
-            </Text>
+              <Image
+                source={{
+                  uri: "https://img.icons8.com/ios-filled/100/solar-panel.png",
+                }}
+                style={{
+                  width: iconSize,
+                  height: iconSize,
+                  resizeMode: "contain",
+                }}
+              />
+              <Text style={[styles.label, { marginLeft: 50 }]}>
+                Solar {solar}w
+              </Text>
+            </View>
 
             <Image
               source={{
@@ -232,7 +236,7 @@ const FlowDiagram = ({
                 },
               ]}
             >
-              Battery {battery}%
+              {batteryWatt} w {battery}%
             </Text>
 
             <Image
@@ -309,8 +313,14 @@ const FlowDiagram = ({
               <AnimatedLinePath
                 d={pathBattery}
                 color="#2ecc71"
-                active={batteryFlow !== 0}
-                direction={batteryFlow > 0 ? "forward" : "backward"}
+                active={batteryWatt > 0 && batteryStatus !== "ONHOLD"}
+                direction={
+                  batteryStatus === "CHARGING"
+                    ? "forward" // inverter -> battery
+                    : batteryStatus === "DISCHARGING"
+                    ? "backward" // battery -> inverter
+                    : "forward" // default (but inactive if onHold or watt 0)
+                }
               />
 
               {/* Inverter -> Grid */}

@@ -1,6 +1,7 @@
 /* eslint-disable import/order */
 /* eslint-disable no-param-reassign */
 import { businessAuthApi } from "@/store/api/business/authApis";
+import { businessCurrentApi } from "@/store/api/business/businessCurrent";
 import {
   businessPayee,
   LastSelectBenefDetails,
@@ -89,6 +90,11 @@ const initialState: IBusinessState = {
   data: {
     auth_token: "",
     email: "",
+    firstName: "",
+    isBlocked: false,
+    lastName: "",
+    devices: [],
+    _id: "",
   },
 };
 
@@ -166,6 +172,13 @@ const businessSlice = createSlice({
       businessAuthApi.endpoints.businessManualSignup.matchFulfilled,
       (state, { payload }) => {
         state.auth_token = payload.results?.token;
+        state.deviceId = payload.results?.linkedDeviceId;
+      }
+    );
+    builder.addMatcher(
+      businessCurrentApi.endpoints.getCurrentBusiness.matchFulfilled,
+      (state, { payload }) => {
+        state.data = payload.results;
       }
     );
     builder.addMatcher(

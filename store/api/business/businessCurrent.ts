@@ -26,7 +26,7 @@ export const businessCurrentApi = createApi({
   endpoints: (builder) => ({
     getCurrentBusiness: builder.query<ICurrentResponse, void>({
       query: () => ({
-        url: "user/current",
+        url: "user/auth/current",
         method: "GET",
       }),
       providesTags: ["getBusinessCurrent"],
