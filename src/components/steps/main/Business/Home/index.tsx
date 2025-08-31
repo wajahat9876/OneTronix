@@ -10,14 +10,20 @@ import { PortalBottomSheetRef } from "@src/components/globals/PortalBottomSheet/
 import ScreenAuth from "@src/components/globals/ScreenAuth";
 import { StyleSheet } from "@src/components/libraries";
 import { pageTransitionAnimation } from "@src/constants/Animation";
-import Colors from "@src/constants/Colors";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
 import { renderToastError } from "@src/hooks/useToasty";
 import { ms } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Platform, View } from "react-native";
+import {
+  Platform,
+  RefreshControl,
+  ScrollView,
+  StatusBar,
+  Text,
+  View,
+} from "react-native";
 import Animated from "react-native-reanimated";
 
 const Index = ({ goTo }: MultiStepFormProps) => {
@@ -41,7 +47,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
   //     skip: !auth_token || !deviceId,
   //   }
   // );
-  const [trigger] = useLazyGetInverterDataQuery();
+  const [trigger, { isLoading }] = useLazyGetInverterDataQuery();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleTrigger = async () => {
     try {
@@ -95,13 +101,18 @@ const Index = ({ goTo }: MultiStepFormProps) => {
 
   return (
     <Animated.View {...pageTransitionAnimation} key="home" className="flex-1">
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle={"dark-content"}
+      />
       <ScreenAuth
         title=""
         style={{
-          backgroundColor: "transparent",
+          backgroundColor: "white",
         }}
-        topColor="transparent"
-        bottomColor={Colors.light.theme.backgroundTopCurveSection}
+        topColor=""
+        bottomColor={"transparent"}
         darkStatus={true}
         disableTopSafeArea
         appBarProps={{
@@ -110,16 +121,70 @@ const Index = ({ goTo }: MultiStepFormProps) => {
         disableAppBar
         back={() => {}}
       >
-        <View style={styles.container}>
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={{ flexGrow: 1 }}
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={handleTrigger}
+              tintColor={"blue"} // spinner color (iOS)
+              colors={["blue"]} // spinner color (Android)
+            />
+          }
+        >
           <FlowDiagram
             solar={result?.results?.inverterData?.data?.solar?.watt}
-            grid={99} // negative = importing
+            grid={99}
             consumption={result?.results?.inverterData?.data?.output?.watt}
             battery={result?.results?.inverterData?.data?.battery?.watt}
             batteryWatt={result?.results?.inverterData?.data?.battery?.watt}
-            batteryStatus={result?.results?.inverterData?.data?.battery?.status} // 🔹 "charging" | "discharging" | "full" from API
+            batteryStatus={result?.results?.inverterData?.data?.battery?.status}
           />
-        </View>
+          <View style={{ flexDirection: "row", marginTop: 20 }}>
+            <View style={styles.transactionsCard}>
+              <Text>Daily Production</Text>
+              <Text style={styles.txtStyle}>
+                {(
+                  result?.results?.dailySummary?.production?.dailyProduction ||
+                  0
+                ).toFixed(2)}{" "}
+                wh
+              </Text>
+            </View>
+            <View style={styles.transactionsCard}>
+              <Text>Daily Consumption</Text>
+              <Text style={styles.txtStyle}>
+                {(
+                  result?.results?.dailySummary?.consumption
+                    ?.dailyConsumption || 0
+                ).toFixed(2)}{" "}
+                wh
+              </Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: "row" }}>
+            <View style={styles.dailyCard}>
+              <Text style={{ color: "white" }}>Daily Purchase</Text>
+              <Text style={styles.dailyTxt}>
+                {(
+                  result?.results?.dailySummary?.grid?.dailyPurchase || 0
+                ).toFixed(2)}{" "}
+                wh
+              </Text>
+            </View>
+            <View style={styles.transactionsCard}>
+              <Text>Total Production</Text>
+              <Text style={styles.txtStyle}>
+                {(
+                  result?.results?.dailySummary?.consumption
+                    ?.dailyConsumption || 0
+                ).toFixed(2)}{" "}
+                wh
+              </Text>
+            </View>
+          </View>
+        </ScrollView>
         {/* <PortalBottomSheet
           ref={bottomSheetRef}
           snapPoints={['55%']}
@@ -151,6 +216,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+    marginTop: 30,
   },
   bottomSheet: {
     backgroundColor: "white",
@@ -183,18 +249,41 @@ const styles = StyleSheet.create({
     fontSize: getRespValue(16),
   },
   txtTrans: { color: "black", fontWeight: "600", fontSize: getRespValue(16) },
+  txtStyle: { fontSize: ms(20), fontWeight: "600", paddingVertical: 10 },
+  dailyTxt: {
+    fontSize: ms(20),
+    fontWeight: "600",
+    paddingVertical: 10,
+    color: "white",
+  },
+  dailyCard: {
+    marginLeft: 10,
+    justifyContent: "space-between",
+    backgroundColor: "red",
+    borderRadius: 15,
+    // height: 50,
+    padding: 20,
+    width: "45%",
+    shadowColor: "#000",
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: Platform.OS === "ios" ? 2 : 2,
+    marginBottom: 10,
+  },
   transactionsCard: {
     marginLeft: 10,
     justifyContent: "space-between",
     backgroundColor: "white",
     borderRadius: 15,
+    // height: 50,
     padding: 20,
-    width: "92%",
+    width: "45%",
     shadowColor: "#000",
     shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: Platform.OS === "ios" ? 2 : 0,
+    elevation: Platform.OS === "ios" ? 2 : 2,
     marginBottom: 10,
   },
 });

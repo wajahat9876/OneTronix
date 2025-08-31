@@ -13,7 +13,11 @@ const AnimatedLinePath = ({
 }) => {
   const dashOffset = useRef(new Animated.Value(0)).current;
   const animRef = useRef<Animated.CompositeAnimation | null>(null);
-
+  const [dotPos, setDotPos] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
+  const pathRef = useRef<any>(null);
   useEffect(() => {
     if (active) {
       const toVal = direction === "forward" ? -400 : 400;
@@ -47,7 +51,7 @@ const AnimatedLinePath = ({
       <Path
         d={d}
         stroke="lightgrey"
-        strokeWidth={4}
+        strokeWidth={3}
         fill="none"
         strokeLinecap="round"
       />
@@ -56,12 +60,12 @@ const AnimatedLinePath = ({
       <AnimatedPath
         d={d}
         stroke={color}
-        strokeWidth={4}
+        strokeWidth={2}
         fill="none"
         strokeDasharray="120,80" // 👈 green line ki length control
         strokeDashoffset={dashOffset}
-        opacity={active ? 1 : 0.15}
-        strokeLinecap="round"
+        opacity={active ? 1 : 0.2}
+        strokeLinecap="round" // <-- makes one end rounded like a dot
         strokeLinejoin="round"
       />
     </>
@@ -77,11 +81,11 @@ const FlowDiagram = ({
   batteryStatus = "onHold", // 🔹 "charging" | "discharging" | "onHold"
 }) => {
   const [layout, setLayout] = useState({ width: 0, height: 0 });
-  const iconSize = 50;
+  const iconSize = 45;
   const topOffset = 20;
   const bottomOffset = 60;
 
-  const onLayout = (e) => {
+  const onLayout = (e: any) => {
     const { width, height } = e.nativeEvent.layout;
     setLayout({ width, height });
   };
@@ -381,14 +385,14 @@ const FlowDiagram = ({
 const styles = StyleSheet.create({
   wrapper: { padding: 0 },
   container: {
-    height: 420,
-    backgroundColor: "white",
+    height: 360,
+    backgroundColor: "transparent",
     position: "relative",
   },
   icon: {
     position: "absolute",
-    width: 50,
-    height: 50,
+    width: 45,
+    height: 45,
     resizeMode: "contain",
     tintColor: "#444",
   },

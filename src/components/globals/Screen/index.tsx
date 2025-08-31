@@ -1,7 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import { useMemo } from "react";
-import { Platform, ScrollView, View, View as ViewDef } from "react-native";
+import {
+  Platform,
+  ScrollView,
+  StatusBar,
+  View,
+  View as ViewDef,
+} from "react-native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -48,7 +54,11 @@ const Screen = (props: IScreenProps) => {
   return (
     <>
       {/* <StatusBar barStyle={darkStatus ? "dark-content" : "light-content"} /> */}
-
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle={darkStatus ? "dark-content" : "light-content"}
+      />
       <ViewDef
         {...rest}
         style={{
