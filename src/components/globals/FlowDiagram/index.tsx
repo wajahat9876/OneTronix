@@ -1,7 +1,11 @@
+import SolarIcon from "@assets/HomeIcons/SolarIcon.png";
+import BatteryIcon from "@assets/HomeIcons/batteryIcon.png";
+import GridIcon from "@assets/HomeIcons/gridIcon.png";
+import HomeIcon from "@assets/HomeIcons/homeIcon.png";
+import InverterIcon from "@assets/HomeIcons/inverterIcon.png";
 import React, { useEffect, useRef, useState } from "react";
 import { Animated, Image, StyleSheet, Text, View } from "react-native";
 import Svg, { Defs, Marker, Path } from "react-native-svg";
-
 // Animated Path
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
@@ -51,7 +55,7 @@ const AnimatedLinePath = ({
       <Path
         d={d}
         stroke="lightgrey"
-        strokeWidth={3}
+        strokeWidth={2}
         fill="none"
         strokeLinecap="round"
       />
@@ -64,7 +68,7 @@ const AnimatedLinePath = ({
         fill="none"
         strokeDasharray="120,80" // 👈 green line ki length control
         strokeDashoffset={dashOffset}
-        opacity={active ? 1 : 0.2}
+        opacity={active ? 1 : 0}
         strokeLinecap="round" // <-- makes one end rounded like a dot
         strokeLinejoin="round"
       />
@@ -81,7 +85,7 @@ const FlowDiagram = ({
   batteryStatus = "onHold", // 🔹 "charging" | "discharging" | "onHold"
 }) => {
   const [layout, setLayout] = useState({ width: 0, height: 0 });
-  const iconSize = 45;
+  const iconSize = 60;
   const topOffset = 20;
   const bottomOffset = 60;
 
@@ -213,24 +217,21 @@ const FlowDiagram = ({
               }}
             >
               <Image
-                source={{
-                  uri: "https://img.icons8.com/ios-filled/100/solar-panel.png",
-                }}
+                source={SolarIcon}
                 style={{
                   width: iconSize,
                   height: iconSize,
                   resizeMode: "contain",
                 }}
               />
-              <Text style={[styles.label, { marginLeft: 50 }]}>
-                Solar {solar}w
+              <Text style={[styles.label, { marginLeft: 50 }]}>Solar</Text>
+              <Text style={{ top: 15, marginLeft: 25, fontSize: 11 }}>
+                {solar} w
               </Text>
             </View>
 
             <Image
-              source={{
-                uri: "https://img.icons8.com/ios-filled/100/server.png",
-              }}
+              source={InverterIcon}
               style={[
                 styles.icon,
                 {
@@ -252,9 +253,7 @@ const FlowDiagram = ({
             </Text> */}
 
             <Image
-              source={{
-                uri: "https://img.icons8.com/ios-filled/100/battery.png",
-              }}
+              source={BatteryIcon}
               style={[
                 styles.icon,
                 {
@@ -272,13 +271,21 @@ const FlowDiagram = ({
                 },
               ]}
             >
-              {batteryWatt} w {battery}%
+              Batteries
             </Text>
-
+            <Text
+              style={[
+                styles.value,
+                {
+                  left: batteryPos.x - 40,
+                  top: batteryPos.y + iconSize / 2 + 24,
+                },
+              ]}
+            >
+              {batteryWatt} w
+            </Text>
             <Image
-              source={{
-                uri: "https://img.icons8.com/ios-filled/100/transmission-tower.png",
-              }}
+              source={GridIcon}
               style={[
                 styles.icon,
                 {
@@ -293,11 +300,19 @@ const FlowDiagram = ({
                 { left: gridPos.x - 40, top: gridPos.y + iconSize / 2 + 6 },
               ]}
             >
-              Grid {grid}w
+              Grid
+            </Text>
+            <Text
+              style={[
+                styles.value,
+                { left: gridPos.x - 40, top: gridPos.y + iconSize / 2 + 24 },
+              ]}
+            >
+              {grid} w
             </Text>
 
             <Image
-              source={{ uri: "https://img.icons8.com/ios-filled/100/home.png" }}
+              source={HomeIcon}
               style={[
                 styles.icon,
                 {
@@ -312,7 +327,15 @@ const FlowDiagram = ({
                 { left: loadPos.x - 40, top: loadPos.y + iconSize / 2 + 6 },
               ]}
             >
-              Load {consumption}w
+              Load
+            </Text>
+            <Text
+              style={[
+                styles.value,
+                { left: loadPos.x - 40, top: loadPos.y + iconSize / 2 + 24 },
+              ]}
+            >
+              {consumption} w
             </Text>
 
             {/* SVG lines (paths with elbow shapes) */}
@@ -391,14 +414,21 @@ const styles = StyleSheet.create({
   },
   icon: {
     position: "absolute",
-    width: 45,
-    height: 45,
+    width: 55,
+    height: 50,
     resizeMode: "contain",
-    tintColor: "#444",
+    // tintColor: "#444",
   },
   label: {
     position: "absolute",
     fontSize: 13,
+    width: 80,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  value: {
+    position: "absolute",
+    fontSize: 11,
     width: 80,
     textAlign: "center",
   },

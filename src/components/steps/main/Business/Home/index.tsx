@@ -121,6 +121,26 @@ const Index = ({ goTo }: MultiStepFormProps) => {
         disableAppBar
         back={() => {}}
       >
+        <Text
+          style={{
+            marginTop: ms(40),
+            marginLeft: ms(20),
+            fontSize: ms(20),
+            fontFamily: "Excon-Light",
+          }}
+        >
+          System Status
+        </Text>
+        <Text
+          style={{
+            marginTop: ms(10),
+            marginLeft: ms(25),
+            fontSize: ms(15),
+            fontFamily: "Excon-Light",
+          }}
+        >
+          Hybrid
+        </Text>
         <ScrollView
           style={styles.container}
           contentContainerStyle={{ flexGrow: 1 }}
@@ -128,8 +148,8 @@ const Index = ({ goTo }: MultiStepFormProps) => {
             <RefreshControl
               refreshing={isLoading}
               onRefresh={handleTrigger}
-              tintColor={"blue"} // spinner color (iOS)
-              colors={["blue"]} // spinner color (Android)
+              tintColor={"#6EB482"} // spinner color (iOS)
+              colors={["#6EB482"]} // spinner color (Android)
             />
           }
         >
@@ -216,7 +236,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    marginTop: 30,
+    marginTop: 10,
   },
   bottomSheet: {
     backgroundColor: "white",

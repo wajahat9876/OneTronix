@@ -20,13 +20,7 @@ const Index = ({ navigation }: any) => {
     skip: !auth_token,
   });
   const { step, goTo } = useMultistepForm(
-    [
-      <BankStatements />,
-      <Home />,
-      <CreateAccount />,
-      <BankStatements />,
-      <MonthlyStatements />,
-    ],
+    [<Home />, <CreateAccount />, <BankStatements />, <MonthlyStatements />],
     {
       newHook: true,
       animatedViewProps: {
