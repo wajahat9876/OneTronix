@@ -27,6 +27,42 @@ export const businessMainApi = createApi({
 
   tagTypes: ["getPendingExchange"],
   endpoints: (builder) => ({
+    getInverterData: builder.query<any, any>({
+      query: ({ deviceId }) => ({
+        url: `user/devices/inverterData?deviceId=${deviceId}`,
+        method: "GET",
+      }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
+          );
+        } catch (data: ICurrentResponse | any) {
+          handleLogout(data, { dispatch });
+        } finally {
+          // do nothing
+        }
+      },
+    }),
+    getGraphData: builder.query<any, any>({
+      query: ({ type, date, deviceId }) => ({
+        url: `user/devices/summary?deviceId=${deviceId}&type=${type}&date=${date}`,
+        method: "GET",
+      }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
+          );
+        } catch (data: ICurrentResponse | any) {
+          handleLogout(data, { dispatch });
+        } finally {
+          // do nothing
+        }
+      },
+    }),
     createCurrencyAccount: builder.mutation<any, any>({
       query: (body) => ({
         url: "clearBank/multi-createAccount",
@@ -261,24 +297,7 @@ export const businessMainApi = createApi({
         }
       },
     }),
-    getInverterData: builder.query<any, any>({
-      query: ({ deviceId }) => ({
-        url: `user/devices/inverterData?deviceId=${deviceId}`,
-        method: "GET",
-      }),
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
+
     getTargetedStatement: builder.query<any, any>({
       query: ({ from, to }) => ({
         url: `clearBank/getTargetedTranscation?transcationType=debitCredit&from=${from}&to=${to}`,
@@ -467,6 +486,7 @@ export const businessMainApi = createApi({
 
 export const {
   useLazyGetInverterDataQuery,
+  useGetGraphDataQuery,
   useGetAllAccountBalanceQuery,
   useGetMultiTransactionOtpMutation,
   useTransferInternalPaymentMutation,

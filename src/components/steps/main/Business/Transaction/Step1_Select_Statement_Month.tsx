@@ -1,5 +1,8 @@
+import { useGetGraphDataQuery } from "@/store/api/business/mainApis";
+import { useBusinessDetails } from "@/store/selectors/business/business";
 import inter from "@assets/fonts/SpaceMono-Regular.ttf";
 import { useFont } from "@shopify/react-native-skia";
+import { useAppSelector } from "@src/hooks/useReduxHooks";
 import * as React from "react";
 import { useState } from "react";
 import {
@@ -23,6 +26,18 @@ import {
 export const PanZoom = () => {};
 
 export default function PanZoomPage() {
+  const { auth_token, data: businessData } = useAppSelector(useBusinessDetails);
+
+  //Api define
+  const { data } = useGetGraphDataQuery(
+    {
+      deviceId: businessData?.devices?.[0]?._id,
+      type: "daily",
+      date: "2025-09-02",
+    },
+    { skip: !auth_token }
+  );
+  console.log(data, "Api Data");
   const font = useFont(inter, 12);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
