@@ -1,10 +1,5 @@
 import inter from "@assets/fonts/SpaceMono-Regular.ttf";
-import {
-  multiply4,
-  scale,
-  translate,
-  useFont,
-} from "@shopify/react-native-skia";
+import { useFont } from "@shopify/react-native-skia";
 import * as React from "react";
 import { useState } from "react";
 import {
@@ -33,7 +28,7 @@ export default function PanZoomPage() {
   const [height, setHeight] = useState(0);
   const { state } = useChartTransformState();
 
-  const k = useSharedValue(1);
+  const k = useSharedValue<any>(1);
   const tx = useSharedValue(0);
   const ty = useSharedValue(0);
   const onePointOffset = width / DATA.length;
@@ -56,40 +51,55 @@ export default function PanZoomPage() {
   );
 
   useAnimatedReaction(
-    () => ({ k: k.value, tx: tx.value, ty: ty.value }),
-    ({ k, tx, ty }) => {
-      const vals = getTransformComponents(state.matrix.value);
+    () => ({ k: k.value, tx: tx.value }),
+    ({ k, tx }) => {
+      const maxZoom = 6; // 🚀 max zoom in
+      const minZoom = 1; // 🚀 min zoom out
+      const clampedK = Math.max(Math.min(k, maxZoom), minZoom);
+
       const pointWidth = width / DATA.length;
+      const totalContentWidth = pointWidth * DATA.length * clampedK; // scaled width of data
 
-      // Allow 1 point overscroll on the left
-      const leftOverscroll = pointWidth * 6;
+      const leftOverscroll = pointWidth * 2; // adjust as you like
+      const rightOverscroll = pointWidth * 2;
 
-      // Allow 2 points overscroll on the right
-      const rightOverscroll = pointWidth * 20;
+      // ✅ keep last point visible instead of cutting off
+      const maxRightTx = -(totalContentWidth - width) - rightOverscroll;
 
-      // Calculate max right translation considering zoom scale
-      const maxRightTx = -(width * k - width) - rightOverscroll;
-
-      // Clamp translationX between left and right boundaries
       const clampedTx = Math.min(Math.max(tx, maxRightTx), leftOverscroll);
 
-      // Apply clamped translation and scale
-      const m = setTranslate(state.matrix.value, clampedTx, ty);
-      state.matrix.value = setScale(m, k);
+      // Apply horizontal zoom only
+      let m = setTranslate(state.matrix.value, clampedTx, 0);
+      state.matrix.value = setScale(m, clampedK, 1);
+
+      // Lock zoom
+      if (k !== clampedK) {
+        k.value = clampedK;
+      }
     }
   );
+
+  const maxY = Math.max(...DATA.map((d) => d.highTmp));
 
   return (
     <SafeAreaView style={styles.safeView}>
       <View style={{ flex: 1, maxHeight: 400, padding: 32 }}>
         <CartesianChart
           data={DATA}
+          axisOptions={{
+            axisScales: { xAxisScale: "linear", yAxisScale: "linear" },
+          }}
+          domainPadding={{ top: 1, bottom: 1 }}
+          padding={{ top: 10, bottom: 10 }}
           xKey="day"
-          yKeys={["highTmp"]}
+          yKeys={["highTmp", "lowTmp"]}
           yAxis={[
             {
               font: font,
-              enableRescaling: true,
+              enableRescaling: false, // prevent auto-scaling
+              domain: [0, maxY], //graph ma 0 0r max value show krne k lie Yaxis ki
+              tickValues: [0, maxY],
+              tickCount: 3,
             },
           ]}
           xAxis={{
@@ -112,7 +122,25 @@ export default function PanZoomPage() {
                   opacity={0.3}
                   animate={{ type: "timing", duration: 300 }}
                 />
-                <Line points={points.highTmp} color="red" strokeWidth={2} />
+                <Line
+                  points={points.highTmp}
+                  color="red"
+                  strokeWidth={0.5}
+                  curveType="linear"
+                />
+                <Area
+                  points={points?.lowTmp}
+                  y0={chartBounds.bottom}
+                  color="blue"
+                  opacity={0.3}
+                  animate={{ type: "timing", duration: 300 }}
+                />
+                <Line
+                  points={points.lowTmp}
+                  color="blue"
+                  strokeWidth={0.5}
+                  curveType="linear"
+                />
               </>
             );
           }}
@@ -124,7 +152,7 @@ export default function PanZoomPage() {
         }}
       >
         <View style={{ gap: 10 }}>
-          <View style={{ flexDirection: "row", gap: 20 }}>
+          {/* <View style={{ flexDirection: "row", gap: 20 }}>
             <Button
               title={"Pan Left"}
               // style={{ flex: 1 }}
@@ -160,7 +188,7 @@ export default function PanZoomPage() {
                 );
               }}
             />
-          </View>
+          </View> */}
           <Button
             title="Reset"
             onPress={() => {
@@ -176,7 +204,7 @@ export default function PanZoomPage() {
             }}
           />
 
-          <View style={{ flexDirection: "row", gap: 20 }}>
+          {/* <View style={{ flexDirection: "row", gap: 20 }}>
             <Button
               title={"Pan Up"}
               // style={{ flex: 1 }}
@@ -197,8 +225,8 @@ export default function PanZoomPage() {
                 );
               }}
             />
-          </View>
-          <View style={{ flexDirection: "row", gap: 20 }}>
+          </View> */}
+          {/* <View style={{ flexDirection: "row", gap: 20 }}>
             <Button
               title={"Zoom In"}
               // style={{ flex: 1 }}
@@ -219,17 +247,24 @@ export default function PanZoomPage() {
                 );
               }}
             />
-          </View>
+          </View> */}
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
+const DATA = [
+  { day: 1, highTmp: 25, lowTmp: 0 },
+  { day: 2, highTmp: 32, lowTmp: 15 },
+  { day: 3, highTmp: 28, lowTmp: 5 },
+  { day: 4, highTmp: 45, lowTmp: 35 },
+  { day: 5, highTmp: 35, lowTmp: 45 },
+];
 
-const DATA = Array.from({ length: 31 }, (_, i) => ({
-  day: i,
-  highTmp: 40 + 30 * Math.random(),
-}));
+// const DATA = Array.from({ length: 31 }, (_, i) => ({
+//   day: i,
+//   highTmp: 40 + 30 * Math.random(),
+// }));
 
 const styles = StyleSheet.create({
   safeView: {
