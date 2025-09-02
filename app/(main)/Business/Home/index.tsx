@@ -1,17 +1,17 @@
 /* eslint-disable import/order */
 /* eslint-disable camelcase */
 /* eslint-disable react/jsx-pascal-case */
-import { useGetCurrentBusinessQuery } from '@/store/api/business/businessCurrent';
-import { useBusinessDetails } from '@/store/selectors/business/business';
-import Home from '@src/components/steps/main/Business/Home';
-import CreateAccount from '@src/components/steps/main/Business/Home/CreateAccount/CreateAccount';
-import { pageTransitionAnimation } from '@src/constants/Animation';
-import useMultistepForm from '@src/hooks/useMultiStepForm';
-import { useAppSelector } from '@src/hooks/useReduxHooks';
-import { useEffect, useRef } from 'react';
-import { View } from 'react-native';
-import BankStatements from './BankStatement';
-import MonthlyStatements from './MonthlyStatement';
+import { useGetCurrentBusinessQuery } from "@/store/api/business/businessCurrent";
+import { useBusinessDetails } from "@/store/selectors/business/business";
+import Home from "@src/components/steps/main/Business/Home";
+import CreateAccount from "@src/components/steps/main/Business/Home/CreateAccount/CreateAccount";
+import { pageTransitionAnimation } from "@src/constants/Animation";
+import useMultistepForm from "@src/hooks/useMultiStepForm";
+import { useAppSelector } from "@src/hooks/useReduxHooks";
+import { useEffect, useRef } from "react";
+import { View } from "react-native";
+import BankStatements from "./BankStatement";
+import MonthlyStatements from "./MonthlyStatement";
 
 const Index = ({ navigation }: any) => {
   const { auth_token } = useAppSelector(useBusinessDetails);
@@ -20,13 +20,19 @@ const Index = ({ navigation }: any) => {
     skip: !auth_token,
   });
   const { step, goTo } = useMultistepForm(
-    [<Home />, <CreateAccount />, <BankStatements />, <MonthlyStatements />],
+    [
+      <BankStatements />,
+      <Home />,
+      <CreateAccount />,
+      <BankStatements />,
+      <MonthlyStatements />,
+    ],
     {
       newHook: true,
       animatedViewProps: {
         ...pageTransitionAnimation,
       },
-    },
+    }
   );
   const doublePressRef = useRef(false);
   useEffect(() => {
@@ -44,7 +50,7 @@ const Index = ({ navigation }: any) => {
       }
     };
 
-    const unsubscribe = navigation.addListener('tabPress', handleTabPress);
+    const unsubscribe = navigation.addListener("tabPress", handleTabPress);
 
     return () => {
       clearTimeout(timer);

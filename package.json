@@ -106,6 +106,7 @@
     "redux-devtools-expo-dev-plugin": "^0.2.1",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",
+    "victory-native": "^41.19.3",
     "yup": "^1.4.0"
   },
   "devDependencies": {

@@ -2,7 +2,7 @@
 /* eslint-disable import/order */
 
 import { useBusinessDetails } from "@/store/selectors/business/business";
-// import IconBottomTabCard from "@assets/icons/bottom-tabs/home-payment-card-icon.svg";
+import IconBottomTabCard from "@assets/icons/bottom-tabs/home-payment-card-icon.svg";
 // import IconBottomTabInfo from "@assets/icons/bottom-tabs/home-profile-icon.svg";
 import IconBottomTabSettings from "@assets/icons/bottom-tabs/home-setting-icon.svg";
 // import IconBottomTabSendMoney from "@assets/icons/bottom-tabs/home-transfer-money.svg";
@@ -16,7 +16,7 @@ import Home from "app/(main)/Business/Home/index";
 import Setting from "app/(main)/Business/Settings/index";
 // import TransferMoney from "app/(main)/Business/TransferMoney/index";
 import { Redirect } from "expo-router";
-// import Transaction from "./Transaction";
+import Transaction from "./Transaction";
 // Icons
 // const MainStack = createBottomTabNavigator<RootTabParamList>();
 const Layout = () => {
@@ -59,13 +59,13 @@ const Layout = () => {
         }}
       />
 
-      {/* <Tab.Screen
-        name="Transaction"
+      <Tab.Screen
+        name="Report"
         component={Transaction}
         options={{
           tabBarIcon: () => <IconBottomTabCard />,
         }}
-      />  */}
+      />
 
       {/* <Tab.Screen
         name="TransferMoney"
