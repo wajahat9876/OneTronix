@@ -1,14 +1,14 @@
 /* eslint-disable no-unused-expressions */
-import { hs, ms, vs } from '@utils/design/design';
-import { FC, useEffect, useState } from 'react';
-import { LayoutChangeEvent, Pressable, Text, View } from 'react-native';
+import { hs, ms, vs } from "@utils/design/design";
+import { FC, useEffect, useState } from "react";
+import { LayoutChangeEvent, Pressable, Text, View } from "react-native";
 import Animated, {
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-} from 'react-native-reanimated';
-import { TabButtonsProps } from './types';
+} from "react-native-reanimated";
+import { TabButtonsProps } from "./types";
 
 const TabButtons: FC<TabButtonsProps> = ({
   disableRadious,
@@ -65,11 +65,11 @@ const TabButtons: FC<TabButtonsProps> = ({
     <View
       // accessibilityRole="tabbar"
       style={{
-        backgroundColor: isWhite ? 'white' : 'rgba(128, 128, 128, 0.5)',
+        backgroundColor: isWhite ? "white" : "gray",
         marginLeft: hideMarginLeft ? hs(0) : hs(42),
         marginRight: hideMarginRight ? hs(0) : hs(42),
-        justifyContent: 'center',
-        borderRadius: disableRadious ? ms(0) : ms(15),
+        justifyContent: "center",
+        borderRadius: disableRadious ? ms(0) : ms(16),
       }}
     >
       <Animated.View
@@ -79,14 +79,14 @@ const TabButtons: FC<TabButtonsProps> = ({
           {
             height: dimensions.height,
             width: buttonWidth,
-            backgroundColor: 'white',
+            backgroundColor: "#CCCCCC",
           },
         ]}
       />
       <View onLayout={onTabbarLayout} className="flex-row">
         {buttons.map((button, index) => {
-          const color = selectedTab === index ? 'black' : 'white';
-          const colorWhite = selectedTab === index ? 'white' : 'gray';
+          const color = selectedTab === index ? "black" : "white";
+          const colorWhite = selectedTab === index ? "white" : "gray";
           return (
             <Pressable
               key={button.title}
@@ -103,8 +103,8 @@ const TabButtons: FC<TabButtonsProps> = ({
                 style={{
                   color: isWhite ? colorWhite : color,
                   fontSize: ms(14),
-                  fontFamily: 'poppins-medium',
-                  alignSelf: 'center',
+                  fontFamily: "poppins-medium",
+                  alignSelf: "center",
                 }}
               >
                 {button.title}

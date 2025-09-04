@@ -1,90 +1,179 @@
-/* eslint-disable camelcase */
-import ButtonsGrid from '@src/components/globals/GridButtons';
-import OTP from '@src/components/globals/OTP';
-import ScreenAuth from '@src/components/globals/ScreenAuth';
-import { Text } from '@src/components/libraries';
-import Colors from '@src/constants/Colors';
-import { MultiStepFormProps } from '@src/hooks/useMultiStepForm';
-import { globalStyle } from '@src/styles/globals';
-import { vs } from '@utils/design/design';
-import { useCallback, useState } from 'react';
-import { View } from 'react-native';
+import { clone, ruleTypes } from "gifted-charts-core";
+import React, { useEffect, useState } from "react";
+import { Text, View } from "react-native";
+import { LineChart } from "react-native-gifted-charts";
 
-const Step2_Enter_Passcode = ({ next, back }: MultiStepFormProps) => {
-  const [input, updateInput] = useState<string>('');
+const AreaChartDynamicData = () => {
+  const lcomp = (v) => (
+    <Text style={{ width: 50, color: "white", fontWeight: "bold" }}>{v}</Text>
+  );
+  const dPoint = () => {
+    return (
+      <View
+        style={{
+          width: 14,
+          height: 14,
+          backgroundColor: "white",
+          borderWidth: 3,
+          borderRadius: 7,
+          borderColor: "#07BAD1",
+        }}
+      />
+    );
+  };
+  const latestData = [
+    {
+      value: 350,
+      labelComponent: () => lcomp("22 Nov"),
+      customDataPoint: dPoint,
+    },
+    {
+      value: 370,
+      hideDataPoint: true,
+    },
+    {
+      value: 460,
+      customDataPoint: dPoint,
+    },
+    {
+      value: 500,
+      hideDataPoint: true,
+    },
+    {
+      value: 570,
+      labelComponent: () => lcomp("24 Nov"),
+      customDataPoint: dPoint,
+    },
+    {
+      value: 560,
+      hideDataPoint: true,
+    },
+    {
+      value: 590,
+      customDataPoint: dPoint,
+    },
+    {
+      value: 490,
+      hideDataPoint: true,
+    },
+    {
+      value: 280,
+      labelComponent: () => lcomp("26 Nov"),
+      customDataPoint: dPoint,
+    },
+    {
+      value: 370,
+      hideDataPoint: true,
+    },
+    {
+      value: 350,
+      customDataPoint: dPoint,
+    },
+    {
+      value: 460,
+      hideDataPoint: true,
+    },
+    {
+      value: 520,
+      labelComponent: () => lcomp("28 Nov"),
+      customDataPoint: dPoint,
+    },
+    {
+      value: 490,
+      hideDataPoint: true,
+    },
+    {
+      value: 370,
+      hideDataPoint: true,
+    },
+    {
+      value: 350,
+      customDataPoint: dPoint,
+    },
+    {
+      value: 460,
+      labelComponent: () => lcomp("28 Nov"),
+      customDataPoint: dPoint,
+    },
+    {
+      value: 270,
+      hideDataPoint: true,
+    },
+    {
+      value: 350,
+      customDataPoint: dPoint,
+    },
+  ];
+  const [currentData, setCurrentData] = useState(clone(latestData));
+  useEffect(() => {
+    setTimeout(() => {
+      const newData = latestData.map((item) => {
+        return {
+          ...item,
+          value: 250,
+        };
+      });
+      setCurrentData(newData);
+    }, 1500);
 
-  const reset = useCallback(() => {
-    updateInput('');
+    setTimeout(() => {
+      const newData = latestData.map((item) => {
+        return {
+          ...item,
+          value: item.value - 50,
+        };
+      });
+      setCurrentData(newData);
+    }, 2500);
+
+    setTimeout(() => {
+      const newData = latestData.map((item) => {
+        return {
+          ...item,
+          value: 500 - item.value,
+        };
+      });
+      setCurrentData(newData);
+    }, 3500);
   }, []);
-  return (
-    <ScreenAuth
-      title="Change Pin"
-      style={{
-        backgroundColor: Colors.light.theme.backgroundTopCurveSection,
-      }}
-      topColor={Colors.light.theme.backgroundTopCurveSection}
-      bottomColor={Colors.light.theme.backgroundTopCurveSection}
-      darkStatus
-      appBarProps={{
-        light: true,
-      }}
-      back={() => {
-        if (back) back?.();
-      }}
-    >
-      <View className="mx-4 mt-4">
-        <Text style={{ ...globalStyle.textMedium, fontSize: 20 }}>
-          Confirm your Passcode
-        </Text>
-        <Text
-          style={{
-            ...globalStyle.textRegular,
-            fontSize: 14,
-            marginTop: vs(8),
-            textAlign: 'left',
-          }}
-        >
-          {` Please enter your pin code for your\n Statement.`}
-        </Text>
 
-        <View className="items-center mt-4">
-          <OTP
-            inputTextColor={Colors.light.theme.black}
-            code={input}
-            pinCount={4}
-            width={70}
-            editable={false}
-            secureTextEntry
-            boxColor={Colors.light.theme.textInputBackgroundLight}
-            onCodeFilled={() => {}}
-          />
-        </View>
-        <View
-          style={[
-            globalStyle.keyboard,
-            {
-              backgroundColor: Colors.light.theme.white,
-              height: '55%',
-              marginLeft: 0,
-              marginRight: 0,
-            },
-          ]}
-        >
-          <ButtonsGrid
-            keyboardButtonsColor={Colors.light.theme.black}
-            maxInputLength={4}
-            input={input}
-            onUpdate={updateInput}
-            onBackspace={updateInput}
-            onReset={reset}
-            onMaxReached={() => {
-              if (next) next?.();
-            }}
-          />
-        </View>
+  return (
+    <View>
+      <View
+        style={{
+          paddingVertical: 50,
+          backgroundColor: "#414141",
+        }}
+      >
+        <LineChart
+          width={currentData.length * 80}
+          isAnimated
+          thickness={3}
+          color="#07BAD1"
+          maxValue={600}
+          noOfSections={3}
+          animateOnDataChange
+          animationDuration={1000}
+          onDataChangeAnimationDuration={300}
+          areaChart
+          yAxisTextStyle={{ color: "lightgray" }}
+          data={currentData}
+          hideDataPoints
+          startFillColor={"rgb(84,219,234)"}
+          endFillColor={"rgb(84,219,234)"}
+          startOpacity={0.4}
+          endOpacity={0.1}
+          spacing={22}
+          backgroundColor="#414141"
+          rulesColor="gray"
+          rulesType={ruleTypes.SOLID}
+          initialSpacing={10}
+          yAxisColor="lightgray"
+          xAxisColor="lightgray"
+        />
       </View>
-    </ScreenAuth>
+    </View>
   );
 };
 
-export default Step2_Enter_Passcode;
+export default AreaChartDynamicData;

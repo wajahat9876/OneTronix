@@ -226,7 +226,7 @@ const FlowDiagram = ({
               />
               <Text style={[styles.label, { marginLeft: 50 }]}>Solar</Text>
               <Text style={{ top: 15, marginLeft: 25, fontSize: 11 }}>
-                {solar} w
+                {solar} kW
               </Text>
             </View>
 
@@ -282,7 +282,7 @@ const FlowDiagram = ({
                 },
               ]}
             >
-              {batteryWatt} w
+              {batteryWatt} kW
             </Text>
             <Image
               source={GridIcon}
@@ -308,7 +308,7 @@ const FlowDiagram = ({
                 { left: gridPos.x - 40, top: gridPos.y + iconSize / 2 + 24 },
               ]}
             >
-              {grid} w
+              {grid} kW
             </Text>
 
             <Image
@@ -335,7 +335,7 @@ const FlowDiagram = ({
                 { left: loadPos.x - 40, top: loadPos.y + iconSize / 2 + 24 },
               ]}
             >
-              {consumption} w
+              {consumption} kW
             </Text>
 
             {/* SVG lines (paths with elbow shapes) */}

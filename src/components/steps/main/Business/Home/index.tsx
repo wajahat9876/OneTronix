@@ -169,7 +169,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                   result?.results?.dailySummary?.production?.dailyProduction ||
                   0
                 ).toFixed(2)}{" "}
-                wh
+                kWh
               </Text>
             </View>
             <View style={styles.transactionsCard}>
@@ -179,7 +179,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                   result?.results?.dailySummary?.consumption
                     ?.dailyConsumption || 0
                 ).toFixed(2)}{" "}
-                wh
+                kWh
               </Text>
             </View>
           </View>
@@ -190,7 +190,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                 {(
                   result?.results?.dailySummary?.grid?.dailyPurchase || 0
                 ).toFixed(2)}{" "}
-                wh
+                kWh
               </Text>
             </View>
             <View style={styles.transactionsCard}>
@@ -200,7 +200,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                   result?.results?.dailySummary?.consumption
                     ?.dailyConsumption || 0
                 ).toFixed(2)}{" "}
-                wh
+                kWh
               </Text>
             </View>
           </View>
