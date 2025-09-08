@@ -49,7 +49,10 @@ export enum SelectMethod {
 export default function PanZoomPage() {
   //Filter Modal  code
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedParams, setSelectedParams] = useState<string[]>([]);
+  const [selectedParams, setSelectedParams] = useState<string[]>([
+    "Solar Power",
+    "Consumption Power",
+  ]);
   //Api define
   const { auth_token, data: businessData } = useAppSelector(useBusinessDetails);
 
@@ -204,6 +207,35 @@ export default function PanZoomPage() {
   }, [selectedTab]);
   // Ref
   const dateOfBirthRef = React.useRef() as React.MutableRefObject<TextInput>;
+  const selectedMaxY = React.useMemo(() => {
+    if (!selectedParams.length) return 100; // default max
+    return Math.max(
+      ...DATA.flatMap((d) =>
+        selectedParams.map((param) => {
+          switch (param) {
+            case "Solar Power":
+              return d.solarPower;
+            case "Consumption Power":
+              return d.consumptionPower;
+            // case "Ups-Load":
+            //   return d.upsLoad;
+            // case "Feed-in Power":
+            //   return d.feedInPower;
+            // case "Purchasing Power":
+            //   return d.purchasingPower;
+            // case "SOC":
+            //   return d.soc;
+            // case "Charging Power":
+            //   return d.chargingPower;
+            // case "Discharging Power":
+            //   return d.dischargingPower;
+            default:
+              return 0;
+          }
+        })
+      )
+    );
+  }, [selectedParams]);
 
   return (
     <SafeAreaView style={styles.safeView}>
@@ -293,8 +325,9 @@ export default function PanZoomPage() {
             {
               font: font,
               enableRescaling: false, // prevent auto-scaling
-              domain: [0, maxY], //graph ma 0 0r max value show krne k lie Yaxis ki
-              tickValues: [0, Number(maxY.toFixed(0))],
+              domain: [0, selectedMaxY], //graph ma 0 0r max value show krne k lie Yaxis ki
+              // tickValues: [0, Number(maxY.toFixed(0))],
+              tickValues: [0, Math.round(selectedMaxY / 2), selectedMaxY],
               tickCount: 3,
             },
           ]}
@@ -318,30 +351,71 @@ export default function PanZoomPage() {
           {({ points, chartBounds }) => {
             return (
               <>
-                <Line
-                  points={points.solarPower}
-                  color="orange"
-                  strokeWidth={0.5}
-                />
-                <Area
-                  points={points.solarPower}
-                  y0={chartBounds.bottom}
-                  color="orange"
-                  opacity={0.2}
-                />
+                {selectedParams.includes("Solar Power") && (
+                  <>
+                    <Line
+                      points={points.solarPower}
+                      color="orange"
+                      strokeWidth={0.5}
+                    />
+                    <Area
+                      points={points.solarPower}
+                      y0={chartBounds.bottom}
+                      color="orange"
+                      opacity={0.2}
+                    />
+                  </>
+                )}
 
-                <Line
-                  points={points.consumptionPower}
-                  color="blue"
-                  strokeWidth={0.5}
-                />
-                <Area
-                  points={points.consumptionPower}
-                  y0={chartBounds.bottom}
-                  color="blue"
-                  opacity={0.2}
-                />
+                {selectedParams.includes("Consumption Power") && (
+                  <>
+                    <Line
+                      points={points.consumptionPower}
+                      color="blue"
+                      strokeWidth={0.5}
+                    />
+                    <Area
+                      points={points.consumptionPower}
+                      y0={chartBounds.bottom}
+                      color="blue"
+                      opacity={0.2}
+                    />
+                  </>
+                )}
+
+                {/* {selectedParams.includes("Ups-Load") && (
+        <>
+          <Line points={points.upsLoad} color="green" strokeWidth={0.5} />
+          <Area points={points.upsLoad} y0={chartBounds.bottom} color="green" opacity={0.2} />
+        </>
+      )} */}
+                {/* Add other parameters similarly */}
               </>
+              // <>
+              //   <Line
+              //     points={points.solarPower}
+              //     color="orange"
+              //     strokeWidth={0.5}
+              //   />
+              //   <Area
+              //     points={points.solarPower}
+              //     y0={chartBounds.bottom}
+              //     color="orange"
+              //     opacity={0.2}
+              //   />
+
+              //   <Line
+              //     points={points.consumptionPower}
+              //     color="blue"
+              //     strokeWidth={0.5}
+              //   />
+              //   <Area
+              //     points={points.consumptionPower}
+              //     y0={chartBounds.bottom}
+              //     color="blue"
+              //     opacity={0.2}
+              //   />
+              // </>
             );
           }}
         </CartesianChart>
@@ -402,8 +476,8 @@ const DATA = [
   },
   {
     day: 10,
-    solarPower: 40 + 30 * Math.random(),
-    consumptionPower: 40 + 30 * Math.random(),
+    solarPower: 100,
+    consumptionPower: 5,
   },
 ];
 // const DATA = Array.from({ length: 289 }, (_, i) => {
