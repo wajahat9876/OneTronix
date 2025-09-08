@@ -46,29 +46,6 @@ export enum SelectMethod {
   Total = "total",
 }
 
-const PARAM_KEY_MAP: Record<string, string> = {
-  "Solar Power": "solarPower",
-  "Consumption Power": "consumptionPower",
-  "Ups-Load": "upsLoad",
-  "Feed-in Power": "feedInPower",
-  "Purchasing Power": "purchasingPower",
-  SOC: "soc",
-  "Charging Power": "chargingPower",
-  "Discharging Power": "dischargingPower",
-};
-
-// give each param a color
-const PARAM_COLORS: Record<string, string> = {
-  "Solar Power": "orange",
-  "Consumption Power": "blue",
-  "Ups-Load": "green",
-  "Feed-in Power": "purple",
-  "Purchasing Power": "red",
-  SOC: "brown",
-  "Charging Power": "teal",
-  "Discharging Power": "pink",
-};
-
 export default function PanZoomPage() {
   //Filter Modal  code
   const [modalVisible, setModalVisible] = useState(false);
@@ -148,6 +125,7 @@ export default function PanZoomPage() {
   );
   const [ticks, setTicks] = useState([0, 6, 12, 18, 24]);
   const ticksShared = useSharedValue(ticks);
+
   useAnimatedReaction(
     () => ({ k: k.value, tx: tx.value }),
     ({ k, tx }) => {
@@ -163,7 +141,6 @@ export default function PanZoomPage() {
         pointWidth * 2,
         pointWidth * Math.floor(DATA.length / 3)
       );
-
       // ✅ keep last point visible instead of cutting off
       const maxRightTx = -(totalContentWidth - width) - rightOverscroll;
 
@@ -344,7 +321,7 @@ export default function PanZoomPage() {
                 <Line
                   points={points.solarPower}
                   color="orange"
-                  strokeWidth={1.5}
+                  strokeWidth={0.5}
                 />
                 <Area
                   points={points.solarPower}
@@ -356,7 +333,7 @@ export default function PanZoomPage() {
                 <Line
                   points={points.consumptionPower}
                   color="blue"
-                  strokeWidth={1.5}
+                  strokeWidth={0.5}
                 />
                 <Area
                   points={points.consumptionPower}
@@ -402,27 +379,49 @@ export default function PanZoomPage() {
     </SafeAreaView>
   );
 }
-// const DATA = [
-//   { day: 0, highTmp: 40 + 30 * Math.random(), lowTmp: 40 + 30 * Math.random() },
-//   { day: 1, highTmp: 40 + 30 * Math.random(), lowTmp: 40 + 30 * Math.random() },
-//   { day: 2, highTmp: 40 + 30 * Math.random(), lowTmp: 40 + 30 * Math.random() },
-// ];
-const DATA = Array.from({ length: 289 }, (_, i) => {
-  // 289 points = 24h in 5min intervals
-  const hour = (i * 5) / 60; // 0 → 24
-  console.log("hour", hour);
-  return {
-    day: hour, // x-axis
-    solarPower: Math.max(
-      0,
-      Math.sin((Math.PI * hour) / 24) * 1000 + Math.random() * 50
-    ), // dummy solar curve
-    consumptionPower: Math.max(
-      0,
-      500 + Math.cos((Math.PI * hour) / 12) * 200 + Math.random() * 30
-    ),
-  };
-});
+const DATA = [
+  {
+    day: 0,
+    solarPower: 40,
+    consumptionPower: 20,
+  },
+  {
+    day: 1,
+    solarPower: 40 + 30 * Math.random(),
+    consumptionPower: 40 + 30 * Math.random(),
+  },
+  {
+    day: 2,
+    solarPower: 40 + 30 * Math.random(),
+    consumptionPower: 40 + 30 * Math.random(),
+  },
+  {
+    day: 5,
+    solarPower: 0,
+    consumptionPower: 0,
+  },
+  {
+    day: 10,
+    solarPower: 40 + 30 * Math.random(),
+    consumptionPower: 40 + 30 * Math.random(),
+  },
+];
+// const DATA = Array.from({ length: 289 }, (_, i) => {
+//   // 289 points = 24h in 5min intervals
+//   const hour = (i * 5) / 60; // 0 → 24
+//   console.log("hour", hour);
+//   return {
+//     day: hour, // x-axis
+//     solarPower: Math.max(
+//       0,
+//       Math.sin((Math.PI * hour) / 24) * 1000 + Math.random() * 50
+//     ), // dummy solar curve
+//     consumptionPower: Math.max(
+//       0,
+//       500 + Math.cos((Math.PI * hour) / 12) * 200 + Math.random() * 30
+//     ),
+//   };
+// });
 
 // const DATA = Array.from({ length: 31 }, (_, i) => ({
 //   day: i,
