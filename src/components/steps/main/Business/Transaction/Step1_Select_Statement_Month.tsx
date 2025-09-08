@@ -181,7 +181,7 @@ export default function PanZoomPage() {
       if (selectedTab === 0) {
         console.log(value);
         let newTicks: number[] = [];
-        if (value > 0.5 && value < 1.5) {
+        if (value > 0.5 && value <= 1.5) {
           // 6h → 0,6,12,18,24
           newTicks = [0, 6, 12, 18, 24];
         } else if (value > 1.5 && value <= 2.5) {
@@ -227,6 +227,7 @@ export default function PanZoomPage() {
   }, [selectedTab]);
   // Ref
   const dateOfBirthRef = React.useRef() as React.MutableRefObject<TextInput>;
+
   return (
     <SafeAreaView style={styles.safeView}>
       <View
