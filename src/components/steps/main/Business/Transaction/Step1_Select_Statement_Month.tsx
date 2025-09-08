@@ -319,7 +319,7 @@ export default function PanZoomPage() {
           domain={{ x: [0, 24] }}
           domainPadding={{ top: 1, bottom: 1 }}
           padding={{ top: 10, bottom: 10 }}
-          xKey="day"
+          xKey="hour"
           yKeys={["solarPower", "consumptionPower"]}
           yAxis={[
             {
@@ -354,6 +354,7 @@ export default function PanZoomPage() {
                 {selectedParams.includes("Solar Power") && (
                   <>
                     <Line
+                      key={"line"}
                       points={points.solarPower}
                       color="orange"
                       strokeWidth={0.5}
@@ -370,6 +371,7 @@ export default function PanZoomPage() {
                 {selectedParams.includes("Consumption Power") && (
                   <>
                     <Line
+                      key={"line2"}
                       points={points.consumptionPower}
                       color="blue"
                       strokeWidth={0.5}
@@ -455,27 +457,27 @@ export default function PanZoomPage() {
 }
 const DATA = [
   {
-    day: 0,
+    hour: 0,
     solarPower: 40,
     consumptionPower: 20,
   },
   {
-    day: 1,
+    hour: 1,
     solarPower: 40 + 30 * Math.random(),
     consumptionPower: 40 + 30 * Math.random(),
   },
   {
-    day: 2,
+    hour: 2,
     solarPower: 40 + 30 * Math.random(),
     consumptionPower: 40 + 30 * Math.random(),
   },
   {
-    day: 5,
+    hour: 5,
     solarPower: 0,
     consumptionPower: 0,
   },
   {
-    day: 10,
+    hour: 10,
     solarPower: 100,
     consumptionPower: 5,
   },
