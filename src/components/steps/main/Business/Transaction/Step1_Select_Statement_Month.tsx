@@ -227,12 +227,6 @@ export default function PanZoomPage() {
   }, [selectedTab]);
   // Ref
   const dateOfBirthRef = React.useRef() as React.MutableRefObject<TextInput>;
-  console.log(ticks?.length, "length");
-  const tickLabels = ticks.map((d) => {
-    const hour = Math.floor(d);
-    const min = Math.round((d - hour) * 60);
-    return `${hour}:${min.toString().padStart(2, "0")}`;
-  });
   return (
     <SafeAreaView style={styles.safeView}>
       <View
