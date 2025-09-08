@@ -25,7 +25,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useAnimatedReaction, useSharedValue } from "react-native-reanimated";
+import {
+  runOnJS,
+  useAnimatedReaction,
+  useSharedValue,
+} from "react-native-reanimated";
 import {
   Area,
   CartesianChart,
@@ -116,7 +120,7 @@ export default function PanZoomPage() {
     { skip: !auth_token }
   );
   // Graph Code
-  const font = useFont(inter, 12);
+  const font = useFont(inter, 8);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const { state } = useChartTransformState();
@@ -142,11 +146,12 @@ export default function PanZoomPage() {
       }
     }
   );
-
+  const [ticks, setTicks] = useState([0, 6, 12, 18, 24]);
+  const ticksShared = useSharedValue(ticks);
   useAnimatedReaction(
     () => ({ k: k.value, tx: tx.value }),
     ({ k, tx }) => {
-      const maxZoom = 6; // 🚀 max zoom in
+      const maxZoom = 5; // 🚀 max zoom in
       const minZoom = 1; // 🚀 min zoom out
       const clampedK = Math.max(Math.min(k, maxZoom), minZoom);
 
@@ -172,22 +177,62 @@ export default function PanZoomPage() {
       if (k !== clampedK) {
         k.value = clampedK;
       }
+      const value = Math.round(clampedK * 10) / 10;
+      if (selectedTab === 0) {
+        console.log(value);
+        let newTicks: number[] = [];
+        if (value > 0.5 && value < 1.5) {
+          // 6h → 0,6,12,18,24
+          newTicks = [0, 6, 12, 18, 24];
+        } else if (value > 1.5 && value <= 2.5) {
+          // 3h → 0,3,6,...24
+          newTicks = [0, 3, 6, 9, 12, 15, 18, 21, 24];
+        } else if (value > 2.5 && value <= 3.5) {
+          // 2h → 0,2,4,...24
+          newTicks = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24];
+        } else if (value > 3.5 && value <= 4.5) {
+          // 1h → 0,1,2,...24
+          newTicks = [
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+            19, 20, 21, 22, 23, 24,
+          ];
+        } else if (value > 4.5 && value <= 5.5) {
+          // 30 min → 0,0.5,1,1.5,...24
+          newTicks = [
+            0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8,
+            8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14, 14.5, 15,
+            15.5, 16, 16.5, 17, 17.5, 18, 18.5, 19, 19.5, 20, 20.5, 21, 21.5,
+            22, 22.5, 23, 23.5, 24,
+          ];
+        } else {
+          // 5 min → 0,0.0833,0.1666,...24
+          newTicks = [
+            0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8,
+            8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14, 14.5, 15,
+            15.5, 16, 16.5, 17, 17.5, 18, 18.5, 19, 19.5, 20, 20.5, 21, 21.5,
+            22, 22.5, 23, 23.5, 24,
+          ];
+        }
+        if (JSON.stringify(ticksShared.value) !== JSON.stringify(newTicks)) {
+          ticksShared.value = newTicks;
+          runOnJS(setTicks)(newTicks);
+        }
+      }
     }
   );
 
-  const maxY = Math.max(
-    ...DATA.flatMap((d: any) =>
-      selectedParams.map((param) => {
-        const key = PARAM_KEY_MAP[param];
-        return d[key] ?? 0;
-      })
-    )
-  );
+  const maxY = Math.max(...DATA.map((d) => d.solarPower));
   React.useEffect(() => {
     refetch();
   }, [selectedTab]);
   // Ref
   const dateOfBirthRef = React.useRef() as React.MutableRefObject<TextInput>;
+  console.log(ticks?.length, "length");
+  const tickLabels = ticks.map((d) => {
+    const hour = Math.floor(d);
+    const min = Math.round((d - hour) * 60);
+    return `${hour}:${min.toString().padStart(2, "0")}`;
+  });
   return (
     <SafeAreaView style={styles.safeView}>
       <View
@@ -267,22 +312,30 @@ export default function PanZoomPage() {
           axisOptions={{
             axisScales: { xAxisScale: "linear", yAxisScale: "linear" },
           }}
+          domain={{ x: [0, 24] }}
           domainPadding={{ top: 1, bottom: 1 }}
           padding={{ top: 10, bottom: 10 }}
           xKey="day"
-          yKeys={Object.values(PARAM_KEY_MAP) as (keyof (typeof DATA)[0])[]}
+          yKeys={["solarPower", "consumptionPower"]}
           yAxis={[
             {
               font: font,
               enableRescaling: false, // prevent auto-scaling
               domain: [0, maxY], //graph ma 0 0r max value show krne k lie Yaxis ki
-              tickValues: [0, maxY],
+              tickValues: [0, Number(maxY.toFixed(0))],
               tickCount: 3,
             },
           ]}
           xAxis={{
-            enableRescaling: true,
+            enableRescaling: false,
             font: font,
+            tickValues: ticks,
+            tickCount: Number(ticks?.length),
+            formatXLabel: (d: number) => {
+              const hour = Math.floor(d);
+              const min = Math.round((d - hour) * 60);
+              return `${hour}:${min.toString().padStart(2, "0")}`;
+            },
           }}
           transformState={state}
           onChartBoundsChange={({ top, left, right, bottom }) => {
@@ -293,28 +346,29 @@ export default function PanZoomPage() {
           {({ points, chartBounds }) => {
             return (
               <>
-                {selectedParams.map((param) => {
-                  const key = PARAM_KEY_MAP[param] as keyof typeof points;
-                  if (!points[key]) return null;
-                  const color = PARAM_COLORS[param] || "black";
-                  return (
-                    <React.Fragment key={param}>
-                      <Line
-                        points={points[key]}
-                        color={color}
-                        strokeWidth={1.5}
-                        curveType="linear"
-                      />
-                      {/* Optional shaded area */}
-                      <Area
-                        points={points[key]}
-                        y0={chartBounds.bottom}
-                        color={color}
-                        opacity={0.2}
-                      />
-                    </React.Fragment>
-                  );
-                })}
+                <Line
+                  points={points.solarPower}
+                  color="orange"
+                  strokeWidth={1.5}
+                />
+                <Area
+                  points={points.solarPower}
+                  y0={chartBounds.bottom}
+                  color="orange"
+                  opacity={0.2}
+                />
+
+                <Line
+                  points={points.consumptionPower}
+                  color="blue"
+                  strokeWidth={1.5}
+                />
+                <Area
+                  points={points.consumptionPower}
+                  y0={chartBounds.bottom}
+                  color="blue"
+                  opacity={0.2}
+                />
               </>
             );
           }}
@@ -353,31 +407,27 @@ export default function PanZoomPage() {
     </SafeAreaView>
   );
 }
-const DATA = [
-  {
-    day: 0,
-    solarPower: 25,
-    consumptionPower: 15,
-    upsLoad: 10,
-    feedInPower: 5,
-    purchasingPower: 8,
-    soc: 60,
-    chargingPower: 12,
-    dischargingPower: 6,
-  },
-  {
-    day: 1,
-    solarPower: 30,
-    consumptionPower: 20,
-    upsLoad: 12,
-    feedInPower: 8,
-    purchasingPower: 6,
-    soc: 62,
-    chargingPower: 15,
-    dischargingPower: 7,
-  },
-  // ...
-];
+// const DATA = [
+//   { day: 0, highTmp: 40 + 30 * Math.random(), lowTmp: 40 + 30 * Math.random() },
+//   { day: 1, highTmp: 40 + 30 * Math.random(), lowTmp: 40 + 30 * Math.random() },
+//   { day: 2, highTmp: 40 + 30 * Math.random(), lowTmp: 40 + 30 * Math.random() },
+// ];
+const DATA = Array.from({ length: 289 }, (_, i) => {
+  // 289 points = 24h in 5min intervals
+  const hour = (i * 5) / 60; // 0 → 24
+  console.log("hour", hour);
+  return {
+    day: hour, // x-axis
+    solarPower: Math.max(
+      0,
+      Math.sin((Math.PI * hour) / 24) * 1000 + Math.random() * 50
+    ), // dummy solar curve
+    consumptionPower: Math.max(
+      0,
+      500 + Math.cos((Math.PI * hour) / 12) * 200 + Math.random() * 30
+    ),
+  };
+});
 
 // const DATA = Array.from({ length: 31 }, (_, i) => ({
 //   day: i,
