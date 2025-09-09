@@ -165,9 +165,9 @@ const Index = ({ goTo }: MultiStepFormProps) => {
             <View style={styles.transactionsCard}>
               <Text>Daily Production</Text>
               <Text style={styles.txtStyle}>
-                {(
-                  result?.results?.dailySummary?.production?.dailyProduction ||
-                  0
+                {Number(
+                  result?.results?.dailySummary?.production?.dailyProduction
+                    ?.$numberDecimal ?? 0
                 ).toFixed(2)}{" "}
                 kWh
               </Text>
@@ -175,9 +175,9 @@ const Index = ({ goTo }: MultiStepFormProps) => {
             <View style={styles.transactionsCard}>
               <Text>Daily Consumption</Text>
               <Text style={styles.txtStyle}>
-                {(
-                  result?.results?.dailySummary?.consumption
-                    ?.dailyConsumption || 0
+                {Number(
+                  result?.results?.dailySummary?.consumption?.dailyConsumption
+                    ?.$numberDecimal || 0
                 ).toFixed(2)}{" "}
                 kWh
               </Text>
@@ -187,8 +187,9 @@ const Index = ({ goTo }: MultiStepFormProps) => {
             <View style={styles.dailyCard}>
               <Text style={{ color: "white" }}>Daily Purchase</Text>
               <Text style={styles.dailyTxt}>
-                {(
-                  result?.results?.dailySummary?.grid?.dailyPurchase || 0
+                {Number(
+                  result?.results?.dailySummary?.grid?.dailyPurchase
+                    ?.$numberDecimal || 0
                 ).toFixed(2)}{" "}
                 kWh
               </Text>
@@ -196,9 +197,9 @@ const Index = ({ goTo }: MultiStepFormProps) => {
             <View style={styles.transactionsCard}>
               <Text>Total Production</Text>
               <Text style={styles.txtStyle}>
-                {(
-                  result?.results?.dailySummary?.consumption
-                    ?.dailyConsumption || 0
+                {Number(
+                  result?.results?.dailySummary?.consumption?.dailyConsumption
+                    ?.$numberDecimal || 0
                 ).toFixed(2)}{" "}
                 kWh
               </Text>
