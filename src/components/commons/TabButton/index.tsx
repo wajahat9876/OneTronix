@@ -65,11 +65,12 @@ const TabButtons: FC<TabButtonsProps> = ({
     <View
       // accessibilityRole="tabbar"
       style={{
-        backgroundColor: isWhite ? "white" : "gray",
+        backgroundColor: isWhite ? "white" : "#F4192C",
         marginLeft: hideMarginLeft ? hs(0) : hs(42),
         marginRight: hideMarginRight ? hs(0) : hs(42),
         justifyContent: "center",
         borderRadius: disableRadious ? ms(0) : ms(16),
+        // height: vs(50),
       }}
     >
       <Animated.View
@@ -79,7 +80,7 @@ const TabButtons: FC<TabButtonsProps> = ({
           {
             height: dimensions.height,
             width: buttonWidth,
-            backgroundColor: "#CCCCCC",
+            backgroundColor: "#E6E5D8",
           },
         ]}
       />
@@ -92,7 +93,7 @@ const TabButtons: FC<TabButtonsProps> = ({
               key={button.title}
               className="flex-1"
               accessibilityRole="tab"
-              style={{ paddingVertical: vs(16) }}
+              style={{ paddingVertical: vs(10) }}
               accessibilityLabel={button.accessibilityLabel}
               onPress={() => {
                 onTabPress(index);
