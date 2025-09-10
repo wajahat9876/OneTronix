@@ -159,7 +159,7 @@ export default function PanZoomPage() {
   const { state } = useChartTransformState();
 
   const k = useSharedValue<any>(1);
-  const tx = useSharedValue(0);
+  const tx = useSharedValue<any>(0);
   const ty = useSharedValue(0);
   // const onePointOffset = width / DATA?.length;
   useAnimatedReaction(
@@ -197,19 +197,32 @@ export default function PanZoomPage() {
         pointWidth * 2,
         pointWidth * Math.floor(DATA.length / 3)
       );
+
       // ✅ keep last point visible instead of cutting off
       const maxRightTx = -(totalContentWidth - width) - rightOverscroll;
 
-      const clampedTx = Math.min(Math.max(tx, maxRightTx), leftOverscroll);
+      const currentVisibleStart = -tx / (pointWidth * DATA.length * k);
 
-      // Apply horizontal zoom only
+      // Apply the same visible start position with new zoom
+      let targetTx = -currentVisibleStart * pointWidth * DATA.length * clampedK;
+
+      // Make sure we don't scroll too far
+      const clampedTx = Math.min(
+        Math.max(targetTx, maxRightTx),
+        leftOverscroll
+      );
+
+      // Apply the zoom and translation
       let m = setTranslate(state.matrix.value, clampedTx, 0);
       state.matrix.value = setScale(m, clampedK, 1);
 
-      // Lock zoom
+      // Lock zoom and update translation if needed
       if (k !== clampedK) {
         k.value = clampedK;
+        // FIX: Also update the translation to maintain position
+        tx.value = clampedTx;
       }
+
       const value = Math.round(clampedK * 10) / 10;
       if (selectedTab === 0) {
         let newTicks: number[] = [];
@@ -252,7 +265,6 @@ export default function PanZoomPage() {
       }
     }
   );
-
   // const maxY = Math.max(...DATA.map((d) => d.solarPower));
   React.useEffect(() => {
     refetch();
