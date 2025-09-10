@@ -8,11 +8,12 @@ import { pageTransitionAnimation } from "@src/constants/Animation";
 import Colors from "@src/constants/Colors";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
 // import { globalStyle } from '@src/styles/globals';
+import { Picker } from "@react-native-picker/picker";
 import { hs, vs } from "@utils/design/design";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import { View } from "react-native";
 import Animated from "react-native-reanimated";
-
 const Settings = ({ goTo }: MultiStepFormProps) => {
   const router = useRouter();
 
@@ -31,6 +32,8 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
   //     renderToastError(error?.data?.message || 'Something went wrong');
   //   }
   // };
+  const [selectedLanguage, setSelectedLanguage] = useState();
+  console.log("selectedLanguage", selectedLanguage);
   return (
     <Animated.View
       {...pageTransitionAnimation}
@@ -55,6 +58,15 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
       >
         <View style={styles.container}>
           <ScrollView>
+            <Picker
+              selectedValue={selectedLanguage}
+              onValueChange={(itemValue, itemIndex) =>
+                setSelectedLanguage(itemValue)
+              }
+            >
+              <Picker.Item label="Java" value="java" />
+              <Picker.Item label="JavaScript" value="js" />
+            </Picker>
             {/* <Text
               style={{
                 ...globalStyle.textMedium,

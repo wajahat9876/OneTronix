@@ -29,9 +29,10 @@ interface ScanQr {
   snapPoints: any;
   closeBottomSheet: () => void;
   active?: boolean;
+  next?: () => void;
 }
 const Step2ScanQr = React.memo((props: ScanQr) => {
-  const { bottomSheetRef, snapPoints, closeBottomSheet, active } = props;
+  const { bottomSheetRef, snapPoints, closeBottomSheet, active, next } = props;
   const [hasPermission, setHasPermission] = useState<string | null>(null);
   const [scanned, setScanned] = useState(false);
   const { auth_token } = useAppSelector(useBusinessDetails);
@@ -60,7 +61,10 @@ const Step2ScanQr = React.memo((props: ScanQr) => {
       if (obj?.deviceId) {
         dispatch(setRole(false));
         dispatch(businessQrSignin(obj?.deviceId));
-        router.replace("/(auth)/Signup");
+        // router.replace("/(auth)/Signup");
+        setTimeout(() => {
+          next?.();
+        });
         setScanned(true);
       }
     } else {

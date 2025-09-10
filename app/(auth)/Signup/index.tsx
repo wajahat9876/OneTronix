@@ -4,6 +4,7 @@
 import { useGetCurrentBusinessQuery } from "@/store/api/business/businessCurrent";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import EasyEmoneyGradient from "@src/components/globals/BackgroundGradient";
+import Step0_ChooseAccount from "@src/components/steps/Auth/Signup/Step0_ChooseAccount";
 import Step1_Details from "@src/components/steps/Auth/Signup/Step1_Details";
 import { pageTransitionAnimation } from "@src/constants/Animation";
 import useMultistepForm from "@src/hooks/useMultiStepForm";
@@ -15,12 +16,15 @@ const Signup = () => {
   const { refetch } = useGetCurrentBusinessQuery(undefined, {
     skip: !auth_token,
   });
-  const { step } = useMultistepForm([<Step1_Details />], {
-    newHook: true,
-    animatedViewProps: {
-      ...pageTransitionAnimation,
-    },
-  });
+  const { step } = useMultistepForm(
+    [<Step0_ChooseAccount />, <Step1_Details />],
+    {
+      newHook: true,
+      animatedViewProps: {
+        ...pageTransitionAnimation,
+      },
+    }
+  );
 
   return (
     <>
