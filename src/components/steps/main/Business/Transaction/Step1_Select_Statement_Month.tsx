@@ -4,6 +4,7 @@ import inter from "@assets/fonts/SpaceMono-Regular.ttf";
 import FilterIcon from "@assets/icons/filter.png";
 import ResetIcon from "@assets/icons/reset.png";
 import { useFont } from "@shopify/react-native-skia";
+import { GeneralToolTip } from "@src/components/commons/business/GeneralTooltip";
 import TabButtons from "@src/components/commons/TabButton";
 import { TabButton } from "@src/components/commons/TabButton/types";
 import FilterModal from "@src/components/globals/FilterModal";
@@ -33,11 +34,14 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Area,
+  CartesianActionsHandle,
   CartesianChart,
+  CartesianChartRef,
   getTransformComponents,
   Line,
   setScale,
   setTranslate,
+  useChartPressState,
   useChartTransformState,
 } from "victory-native";
 export enum SelectMethod {
@@ -128,7 +132,7 @@ export default function PanZoomPage() {
 
     setDATA(mapped);
   }, [data, formik.values.dateOfBirth]);
-
+  const actionRef = React.useRef<CartesianActionsHandle>(null);
   // const DATA = React.useMemo(() => {
   //   if (!data?.results?.length) return [];
 
@@ -300,7 +304,16 @@ export default function PanZoomPage() {
   //     )
   //   );
   // }, [selectedParams]);
+  const { state: toolState, isActive } = useChartPressState<{
+    x: number;
+    y: Record<"ac" | "battery" | "output" | "solar", number>;
+  }>({
+    x: 0,
+    y: { ac: 0, battery: 0, output: 0, solar: 0 },
+  });
 
+  const chartRef =
+    React.useRef<CartesianChartRef<typeof toolState | undefined>>(null);
   const selectedMaxY = React.useMemo(() => {
     if (!selectedParams.length || !DATA.length) return 10;
     return Math.max(
@@ -439,6 +452,9 @@ export default function PanZoomPage() {
       <View style={{ width: "100%", paddingHorizontal: 16, height: 200 }}>
         {selectedTab === 0 && DATA.length ? (
           <CartesianChart
+            chartPressState={toolState}
+            actionsRef={actionRef}
+            ref={chartRef}
             key={`${formik.values.dateOfBirth}-${selectedTab}-${DATA.length}`}
             data={DATA.length ? DATA : NullData}
             axisOptions={{
@@ -486,7 +502,9 @@ export default function PanZoomPage() {
                         key={"line"}
                         points={points.ac}
                         color="orange"
-                        strokeWidth={0.5}
+                        strokeWidth={0.8}
+                        curveType="basis"
+                        connectMissingData={false}
 
                         // connectMissingData={false}
                       />
@@ -494,7 +512,8 @@ export default function PanZoomPage() {
                         points={points.ac}
                         y0={chartBounds.bottom}
                         color="orange"
-                        opacity={0.2}
+                        opacity={0.1}
+                        curveType="basis"
                       />
                     </>
                   )}
@@ -505,13 +524,15 @@ export default function PanZoomPage() {
                         key={"line2"}
                         points={points.battery}
                         color="blue"
-                        strokeWidth={0.5}
+                        strokeWidth={0.8}
+                        curveType="basis"
                       />
                       <Area
                         points={points.battery}
                         y0={chartBounds.bottom}
                         color="blue"
-                        opacity={0.2}
+                        opacity={0.1}
+                        curveType="basis"
                       />
                     </>
                   )}
@@ -521,13 +542,15 @@ export default function PanZoomPage() {
                         key={"line3"}
                         points={points.output}
                         color="red"
-                        strokeWidth={0.5}
+                        strokeWidth={0.8}
+                        curveType="basis"
                       />
                       <Area
                         points={points.output}
                         y0={chartBounds.bottom}
                         color="red"
-                        opacity={0.2}
+                        opacity={0.1}
+                        curveType="basis"
                       />
                     </>
                   )}
@@ -538,14 +561,24 @@ export default function PanZoomPage() {
                         points={points.solar}
                         color="purple"
                         strokeWidth={0.5}
+                        curveType="basis"
                       />
                       <Area
                         points={points.solar}
                         y0={chartBounds.bottom}
                         color="purple"
                         opacity={0.2}
+                        curveType="basis"
                       />
                     </>
+                  )}
+                  {isActive && (
+                    <GeneralToolTip
+                      xPos={toolState.x.position} // pixel space
+                      xVal={toolState.x.value} // data space (for HH:mm conversion)
+                      chartBounds={chartBounds} // pass chart bounds
+                      fontSrc={inter}
+                    />
                   )}
                 </>
               );
@@ -598,6 +631,7 @@ export default function PanZoomPage() {
     </SafeAreaView>
   );
 }
+
 // const DATA = [
 //   {
 //     hour: 0,
