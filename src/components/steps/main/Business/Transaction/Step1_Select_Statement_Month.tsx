@@ -133,28 +133,6 @@ export default function PanZoomPage() {
     setDATA(mapped);
   }, [data, formik.values.dateOfBirth]);
   const actionRef = React.useRef<CartesianActionsHandle>(null);
-  // const DATA = React.useMemo(() => {
-  //   if (!data?.results?.length) return [];
-
-  //   return data.results.map((item: any) => {
-  //     const time = moment.utc(item.createdAt);
-  //     const hour = time.hour() + time.minute() / 60;
-
-  //     return {
-  //       hour,
-  //       ac: item.data?.ac?.watt ?? 0,
-  //       battery: item.data?.battery?.chargingWatt ?? 0,
-  //       output: item.data?.output?.watt ?? 0,
-  //       solar: item.data?.solar?.watt ?? 0,
-  //     };
-  //   }) as {
-  //     hour: number;
-  //     ac: number;
-  //     battery: number;
-  //     output: number;
-  //     solar: number;
-  //   }[];
-  // }, [data, formik.values.dateOfBirth]);
 
   // Graph Code
   const font = useFont(inter, 8);
@@ -201,25 +179,19 @@ export default function PanZoomPage() {
         pointWidth * 2,
         pointWidth * Math.floor(DATA.length / 3)
       );
-
       // ✅ keep last point visible instead of cutting off
       const maxRightTx = -(totalContentWidth - width) - rightOverscroll;
-
       const currentVisibleStart = -tx / (pointWidth * DATA.length * k);
-
       // Apply the same visible start position with new zoom
       let targetTx = -currentVisibleStart * pointWidth * DATA.length * clampedK;
-
       // Make sure we don't scroll too far
       const clampedTx = Math.min(
         Math.max(targetTx, maxRightTx),
         leftOverscroll
       );
-
       // Apply the zoom and translation
       let m = setTranslate(state.matrix.value, clampedTx, 0);
       state.matrix.value = setScale(m, clampedK, 1);
-
       // Lock zoom and update translation if needed
       if (k !== clampedK) {
         k.value = clampedK;
@@ -587,9 +559,6 @@ export default function PanZoomPage() {
         ) : (
           <CartesianChart
             data={NullData}
-            // axisOptions={{
-            //   axisScales: { xAxisScale: "linear", yAxisScale: "linear" },
-            // }}
             domain={{ x: [0, 24] }}
             domainPadding={{ top: 1, bottom: 1 }}
             padding={{ top: 10, bottom: 10 }}
@@ -598,9 +567,9 @@ export default function PanZoomPage() {
             yAxis={[
               {
                 font: font,
-                enableRescaling: true, // prevent auto-scaling
-                domain: [0, selectedMaxY], //graph ma 0 0r max value show krne k lie Yaxis ki
-                // tickValues: [0, Number(maxY.toFixed(0))],
+                enableRescaling: true,
+                domain: [0, selectedMaxY],
+
                 tickValues: [0, Math.round(selectedMaxY / 2), selectedMaxY],
                 tickCount: 3,
               },
@@ -659,27 +628,6 @@ export default function PanZoomPage() {
 //     battery: 5,
 //   },
 // ];
-// const DATA = Array.from({ length: 289 }, (_, i) => {
-//   // 289 points = 24h in 5min intervals
-//   const hour = (i * 5) / 60; // 0 → 24
-//   console.log("hour", hour);
-//   return {
-//     day: hour, // x-axis
-//     solarPower: Math.max(
-//       0,
-//       Math.sin((Math.PI * hour) / 24) * 1000 + Math.random() * 50
-//     ), // dummy solar curve
-//     consumptionPower: Math.max(
-//       0,
-//       500 + Math.cos((Math.PI * hour) / 12) * 200 + Math.random() * 30
-//     ),
-//   };
-// });
-
-// const DATA = Array.from({ length: 31 }, (_, i) => ({
-//   day: i,
-//   highTmp: 40 + 30 * Math.random(),
-// }));
 
 const styles = StyleSheet.create({
   safeView: {
@@ -691,7 +639,6 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5, // makes it a circle
-    // backgroundColor: "orange",
     marginRight: 6, // space between dot and text
   },
 });
