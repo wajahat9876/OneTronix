@@ -556,8 +556,54 @@ export default function PanZoomPage() {
                 );
               }}
             </CartesianChart>
-          ) : (
+          ) : selectedTab === 1 || selectedTab === 2 || selectedTab === 3 ? (
             <BarGraph segment="Month" data={[]} />
+          ) : (
+            <CartesianChart
+              chartPressState={toolState}
+              actionsRef={actionRef}
+              ref={chartRef}
+              key={`${formik.values.dateOfBirth}-${selectedTab}-${DATA.length}`}
+              data={NullData}
+              axisOptions={{
+                axisScales: { xAxisScale: "linear", yAxisScale: "linear" },
+              }}
+              domain={{ x: [0, 24] }}
+              domainPadding={{ top: 1, bottom: 1 }}
+              padding={{ top: 10, bottom: 10 }}
+              xKey="hour"
+              yKeys={["ac", "battery", "output", "solar"]}
+              yAxis={[
+                {
+                  font: font,
+                  enableRescaling: false, // prevent auto-scaling
+                  domain: [0, selectedMaxY], //graph ma 0 0r max value show krne k lie Yaxis ki
+                  // tickValues: [0, Number(maxY.toFixed(0))],
+                  tickValues: [0, Math.round(selectedMaxY / 2), selectedMaxY],
+                  tickCount: 3,
+                },
+              ]}
+              xAxis={{
+                enableRescaling: false,
+                font: font,
+                tickValues: ticks,
+                tickCount: Number(ticks?.length),
+                formatXLabel: (d: number) => {
+                  const hour = Math.floor(d);
+                  const min = Math.round((d - hour) * 60);
+                  return `${hour}:${min.toString().padStart(2, "0")}`;
+                },
+              }}
+              transformState={state}
+              onChartBoundsChange={({ top, left, right, bottom }) => {
+                setWidth(right - left);
+                setHeight(bottom - top);
+              }}
+            >
+              {({ points, chartBounds }) => {
+                return <></>;
+              }}
+            </CartesianChart>
           )}
         </View>
         <View style={{ flex: 1, paddingHorizontal: 12 }}>
