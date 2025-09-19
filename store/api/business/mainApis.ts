@@ -63,6 +63,25 @@ export const businessMainApi = createApi({
         }
       },
     }),
+    getAnalyticsData: builder.query<any, any>({
+      query: ({ type, date, deviceId }) => ({
+        url: `user/devices/analytics?deviceId=${deviceId}&type=${type}&date=${date}`,
+        method: "GET",
+      }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
+          );
+        } catch (data: ICurrentResponse | any) {
+          handleLogout(data, { dispatch });
+        } finally {
+          // do nothing
+        }
+      },
+      keepUnusedDataFor: 0,
+    }),
     createCurrencyAccount: builder.mutation<any, any>({
       query: (body) => ({
         url: "clearBank/multi-createAccount",
@@ -487,6 +506,7 @@ export const businessMainApi = createApi({
 export const {
   useLazyGetInverterDataQuery,
   useGetGraphDataQuery,
+  useGetAnalyticsDataQuery,
   useGetAllAccountBalanceQuery,
   useGetMultiTransactionOtpMutation,
   useTransferInternalPaymentMutation,

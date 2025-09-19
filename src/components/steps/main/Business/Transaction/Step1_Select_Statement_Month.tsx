@@ -1,4 +1,7 @@
-import { useGetGraphDataQuery } from "@/store/api/business/mainApis";
+import {
+  useGetAnalyticsDataQuery,
+  useGetGraphDataQuery,
+} from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import inter from "@assets/fonts/SpaceMono-Regular.ttf";
 import FilterIcon from "@assets/icons/filter.png";
@@ -7,12 +10,14 @@ import { useFont } from "@shopify/react-native-skia";
 import { GeneralToolTip } from "@src/components/commons/business/GeneralTooltip";
 import TabButtons from "@src/components/commons/TabButton";
 import { TabButton } from "@src/components/commons/TabButton/types";
+import DonutChart2 from "@src/components/globals/DonutChart2";
 import FilterModal from "@src/components/globals/FilterModal";
 import FormikDatePicker from "@src/components/globals/FormikDatePicker";
+import { ScrollView } from "@src/components/libraries";
 import Colors from "@src/constants/Colors";
 import { textInputUnderlinedProps } from "@src/constants/Props";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
-import { vs } from "@utils/design/design";
+import { ms, vs } from "@utils/design/design";
 import { useFormik } from "formik";
 import moment from "moment";
 import * as React from "react";
@@ -103,8 +108,21 @@ export default function PanZoomPage() {
     },
     { skip: !auth_token }
   );
+  const { data: analyticsData, refetch: analyticsRefetch } =
+    useGetAnalyticsDataQuery(
+      {
+        deviceId: businessData?.devices?.[0]?._id,
+        type: tabValues[selectedTab],
+        date: formik?.values?.dateOfBirth,
+      },
+      {
+        skip: !auth_token,
+        refetchOnMountOrArgChange: true,
+      }
+    );
   React.useEffect(() => {
     refetch();
+    analyticsRefetch();
   }, [
     formik.values.dateOfBirth,
     tabValues[selectedTab],
@@ -170,10 +188,8 @@ export default function PanZoomPage() {
       const maxZoom = 5; // 🚀 max zoom in
       const minZoom = 1; // 🚀 min zoom out
       const clampedK = Math.max(Math.min(k, maxZoom), minZoom);
-
       const pointWidth = width / DATA.length;
       const totalContentWidth = pointWidth * DATA.length * clampedK; // scaled width of data
-
       const leftOverscroll = pointWidth * 0; // adjust as you like
       const rightOverscroll = Math.max(
         pointWidth * 2,
@@ -244,38 +260,10 @@ export default function PanZoomPage() {
   // const maxY = Math.max(...DATA.map((d) => d.solarPower));
   React.useEffect(() => {
     refetch();
+    analyticsRefetch();
   }, [selectedTab]);
   // Ref
   const dateOfBirthRef = React.useRef() as React.MutableRefObject<TextInput>;
-  // const selectedMaxY = React.useMemo(() => {
-  //   if (!selectedParams.length) return 100; // default max
-  //   return Math.max(
-  //     ...DATA.flatMap((d) =>
-  //       selectedParams.map((param) => {
-  //         switch (param) {
-  //           case "ac":
-  //             return d.ac;
-  //           case "battery":
-  //             return d.battery;
-  // case "Ups-Load":
-  //   return d.upsLoad;
-  // case "Feed-in Power":
-  //   return d.feedInPower;
-  // case "Purchasing Power":
-  //   return d.purchasingPower;
-  // case "SOC":
-  //   return d.soc;
-  // case "Charging Power":
-  //   return d.chargingPower;
-  // case "Discharging Power":
-  //   return d.dischargingPower;
-  //           default:
-  //             return 0;
-  //         }
-  //       })
-  //     )
-  //   );
-  // }, [selectedParams]);
   const { state: toolState, isActive } = useChartPressState<{
     x: number;
     y: Record<"ac" | "battery" | "output" | "solar", number>;
@@ -298,305 +286,351 @@ export default function PanZoomPage() {
     { hour: 0, ac: null, battery: null, output: null, solar: null },
     { hour: 24, ac: null, battery: null, output: null, solar: null },
   ];
-
+  // Analytics code
+  const labels = ["Daily", "Monthly", "Yearly", "Net"];
   return (
     <SafeAreaView
       style={styles.safeView}
       edges={Platform.OS === "android" ? ["top"] : ["top", "bottom"]}
     >
-      <View
-        style={{
-          width: "90%",
-          alignSelf: "center",
-          marginTop: vs(20),
-          marginBottom: vs(10),
-        }}
-      >
-        <TabButtons
-          buttons={tabButtons}
-          hideMarginLeft
-          hideMarginRight
-          selectedTab={selectedTab}
-          setSelectedTab={(index) => setSelectedTab(index)}
-        />
+      <ScrollView>
         <View
           style={{
+            width: "90%",
+            alignSelf: "center",
             marginTop: vs(20),
-            flexDirection: "row",
+            marginBottom: vs(10),
           }}
         >
+          <TabButtons
+            buttons={tabButtons}
+            hideMarginLeft
+            hideMarginRight
+            selectedTab={selectedTab}
+            setSelectedTab={(index) => setSelectedTab(index)}
+          />
           <View
             style={{
-              width: "65%",
-              marginTop: vs(6),
-              marginRight: 30,
-              marginLeft: -10,
+              marginTop: vs(20),
+              flexDirection: "row",
             }}
           >
-            <FormikDatePicker
-              ref={dateOfBirthRef}
-              formik={formik}
-              name="dateOfBirth"
-              inputProps={{
-                ...textInputUnderlinedProps,
-                placeholder: "Select Date",
-                placeholderTextColor: Colors.light.theme.placeholderColor,
+            <View
+              style={{
+                width: "65%",
+                marginTop: vs(6),
+                marginRight: 30,
+                marginLeft: -10,
               }}
-              datePickerProps={{
-                maxDate: moment(new Date(), "YYYY-MM-DD").toDate(),
-                date:
-                  formik.values.dateOfBirth &&
-                  moment(formik.values.dateOfBirth, "YYYY-MM-DD").toDate(),
-                onChange: (selectedDate: any) => {
-                  formik.setFieldValue(
-                    "dateOfBirth",
-                    moment(selectedDate).format("YYYY-MM-DD")
-                  );
+            >
+              <FormikDatePicker
+                ref={dateOfBirthRef}
+                formik={formik}
+                name="dateOfBirth"
+                inputProps={{
+                  ...textInputUnderlinedProps,
+                  placeholder: "Select Date",
+                  placeholderTextColor: Colors.light.theme.placeholderColor,
+                }}
+                datePickerProps={{
+                  maxDate: moment(new Date(), "YYYY-MM-DD").toDate(),
+                  date:
+                    formik.values.dateOfBirth &&
+                    moment(formik.values.dateOfBirth, "YYYY-MM-DD").toDate(),
+                  onChange: (selectedDate: any) => {
+                    formik.setFieldValue(
+                      "dateOfBirth",
+                      moment(selectedDate).format("YYYY-MM-DD")
+                    );
+                  },
+                }}
+              />
+            </View>
+            <View style={{ marginTop: vs(8) }}>
+              <View style={{ flexDirection: "row" }}>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                  <Image
+                    source={FilterIcon}
+                    style={{ width: 23, height: 23, marginRight: 30 }}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    // Reset scale and translation
+                    state.matrix.value = setScale(
+                      setTranslate(state.matrix.value, 0, 0),
+                      1
+                    );
+                    // Also reset your shared values to keep useAnimatedReaction in sync
+                    k.value = 1;
+                    tx.value = 0;
+                    ty.value = 0;
+                  }}
+                >
+                  <Image source={ResetIcon} style={{ width: 23, height: 23 }} />
+                </TouchableOpacity>
+              </View>
+
+              <FilterModal
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}
+                options={["ac", "battery", "output", "solar"]}
+                defaultSelected={["ac", "battery"]}
+                onConfirm={(selected: any) => setSelectedParams(selected)}
+              />
+            </View>
+          </View>
+        </View>
+        {selectedTab === 0 && DATA.length ? (
+          <View style={{ paddingVertical: 10, paddingHorizontal: 25 }}>
+            {selectedParams.includes("ac") && (
+              <View style={styles.dotText}>
+                <View
+                  style={[styles.colorDot, { backgroundColor: "orange" }]}
+                />
+                <Text style={{ color: "black", fontSize: 12 }}>AC</Text>
+              </View>
+            )}
+            {selectedParams.includes("battery") && (
+              <View style={styles.dotText}>
+                <View style={[styles.colorDot, { backgroundColor: "blue" }]} />
+                <Text style={{ color: "black", fontSize: 12 }}>Battery</Text>
+              </View>
+            )}
+            {selectedParams.includes("output") && (
+              <View style={styles.dotText}>
+                <View style={[styles.colorDot, { backgroundColor: "red" }]} />
+                <Text style={{ color: "black", fontSize: 12 }}>Output</Text>
+              </View>
+            )}
+            {selectedParams.includes("solar") && (
+              <View style={styles.dotText}>
+                <View
+                  style={[styles.colorDot, { backgroundColor: "purple" }]}
+                />
+                <Text style={{ color: "black", fontSize: 12 }}>Solar</Text>
+              </View>
+            )}
+          </View>
+        ) : (
+          <></>
+        )}
+        <View style={{ width: "100%", paddingHorizontal: 16, height: 200 }}>
+          {selectedTab === 0 && DATA.length ? (
+            <CartesianChart
+              chartPressState={toolState}
+              actionsRef={actionRef}
+              ref={chartRef}
+              key={`${formik.values.dateOfBirth}-${selectedTab}-${DATA.length}`}
+              data={DATA.length ? DATA : NullData}
+              axisOptions={{
+                axisScales: { xAxisScale: "linear", yAxisScale: "linear" },
+              }}
+              domain={{ x: [0, 24] }}
+              domainPadding={{ top: 1, bottom: 1 }}
+              padding={{ top: 10, bottom: 10 }}
+              xKey="hour"
+              yKeys={["ac", "battery", "output", "solar"]}
+              yAxis={[
+                {
+                  font: font,
+                  enableRescaling: false, // prevent auto-scaling
+                  domain: [0, selectedMaxY], //graph ma 0 0r max value show krne k lie Yaxis ki
+                  // tickValues: [0, Number(maxY.toFixed(0))],
+                  tickValues: [0, Math.round(selectedMaxY / 2), selectedMaxY],
+                  tickCount: 3,
+                  formatYLabel: (n: number) => `${n}kW`, // 👈 label with kW
+                },
+              ]}
+              xAxis={{
+                enableRescaling: false,
+                font: font,
+                tickValues: ticks,
+                tickCount: Number(ticks?.length),
+                formatXLabel: (d: number) => {
+                  const hour = Math.floor(d);
+                  const min = Math.round((d - hour) * 60);
+                  return `${hour}:${min.toString().padStart(2, "0")}`;
                 },
               }}
+              transformState={state}
+              onChartBoundsChange={({ top, left, right, bottom }) => {
+                setWidth(right - left);
+                setHeight(bottom - top);
+              }}
+            >
+              {({ points, chartBounds }) => {
+                return (
+                  <>
+                    {selectedParams.includes("ac") && (
+                      <>
+                        <Line
+                          key={"line"}
+                          points={points.ac}
+                          color="orange"
+                          strokeWidth={0.8}
+                          curveType="basis"
+                          connectMissingData={false}
+
+                          // connectMissingData={false}
+                        />
+                        <Area
+                          points={points.ac}
+                          y0={chartBounds.bottom}
+                          color="orange"
+                          opacity={0.1}
+                          curveType="basis"
+                        />
+                      </>
+                    )}
+
+                    {selectedParams.includes("battery") && (
+                      <>
+                        <Line
+                          key={"line2"}
+                          points={points.battery}
+                          color="blue"
+                          strokeWidth={0.8}
+                          curveType="basis"
+                        />
+                        <Area
+                          points={points.battery}
+                          y0={chartBounds.bottom}
+                          color="blue"
+                          opacity={0.1}
+                          curveType="basis"
+                        />
+                      </>
+                    )}
+                    {selectedParams.includes("output") && (
+                      <>
+                        <Line
+                          key={"line3"}
+                          points={points.output}
+                          color="red"
+                          strokeWidth={0.8}
+                          curveType="basis"
+                        />
+                        <Area
+                          points={points.output}
+                          y0={chartBounds.bottom}
+                          color="red"
+                          opacity={0.1}
+                          curveType="basis"
+                        />
+                      </>
+                    )}
+                    {selectedParams.includes("solar") && (
+                      <>
+                        <Line
+                          key={"line4"}
+                          points={points.solar}
+                          color="purple"
+                          strokeWidth={0.5}
+                          curveType="basis"
+                        />
+                        <Area
+                          points={points.solar}
+                          y0={chartBounds.bottom}
+                          color="purple"
+                          opacity={0.2}
+                          curveType="basis"
+                        />
+                      </>
+                    )}
+                    {isActive && (
+                      <GeneralToolTip
+                        xPos={toolState.x.position} // pixel space
+                        xVal={toolState.x.value} // data space (for HH:mm conversion)
+                        chartBounds={chartBounds} // pass chart bounds
+                        fontSrc={inter}
+                      />
+                    )}
+                  </>
+                );
+              }}
+            </CartesianChart>
+          ) : (
+            <CartesianChart
+              data={NullData}
+              domain={{ x: [0, 24] }}
+              domainPadding={{ top: 1, bottom: 1 }}
+              padding={{ top: 10, bottom: 10 }}
+              xKey="hour"
+              yKeys={[]}
+              yAxis={[
+                {
+                  font: font,
+                  enableRescaling: true,
+                  domain: [0, selectedMaxY],
+
+                  tickValues: [0, Math.round(selectedMaxY / 2), selectedMaxY],
+                  tickCount: 3,
+                },
+              ]}
+              xAxis={{
+                enableRescaling: false,
+                font: font,
+                tickValues: ticks,
+                tickCount: Number(ticks?.length),
+                formatXLabel: (d: number) => {
+                  const hour = Math.floor(d);
+                  const min = Math.round((d - hour) * 60);
+                  return `${hour}:${min.toString().padStart(2, "0")}`;
+                },
+              }}
+              transformState={undefined}
+              onChartBoundsChange={({ top, left, right, bottom }) => {
+                setWidth(right - left);
+                setHeight(bottom - top);
+              }}
+            >
+              {({ points, chartBounds }) => {
+                return <></>;
+              }}
+            </CartesianChart>
+          )}
+        </View>
+        <View style={{ flex: 1, paddingHorizontal: 12 }}>
+          {/* Production Section */}
+          <View style={{ alignItems: "center", marginBottom: 20 }}>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: "600",
+                color: "#111",
+                marginBottom: 8,
+              }}
+            >
+              {`${labels[selectedTab]} Production`}
+            </Text>
+            <DonutChart2
+              load={analyticsData?.results.consumption?.dailyConsumption || 0}
+              grid={0}
+              battery={analyticsData?.results?.battery?.dailyCharging || 0}
             />
           </View>
-          <View style={{ marginTop: vs(8) }}>
-            <View style={{ flexDirection: "row" }}>
-              <TouchableOpacity onPress={() => setModalVisible(true)}>
-                <Image
-                  source={FilterIcon}
-                  style={{ width: 23, height: 23, marginRight: 30 }}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  // Reset scale and translation
-                  state.matrix.value = setScale(
-                    setTranslate(state.matrix.value, 0, 0),
-                    1
-                  );
-                  // Also reset your shared values to keep useAnimatedReaction in sync
-                  k.value = 1;
-                  tx.value = 0;
-                  ty.value = 0;
-                }}
-              >
-                <Image source={ResetIcon} style={{ width: 23, height: 23 }} />
-              </TouchableOpacity>
-            </View>
 
-            <FilterModal
-              visible={modalVisible}
-              onClose={() => setModalVisible(false)}
-              options={["ac", "battery", "output", "solar"]}
-              defaultSelected={["ac", "battery"]}
-              onConfirm={(selected: any) => setSelectedParams(selected)}
+          {/* Consumption Section */}
+          <View style={{ alignItems: "center" }}>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: "600",
+                color: "#111",
+                marginBottom: 8,
+              }}
+            >
+              {`${labels[selectedTab]} Consumption`}
+            </Text>
+            <DonutChart2
+              solar={1}
+              grid={analyticsData?.results?.grid?.dailyPurchase || 0}
+              battery={analyticsData?.results?.battery?.dailyDischarging || 0}
             />
           </View>
         </View>
-      </View>
-      {selectedTab === 0 && DATA.length ? (
-        <View style={{ paddingVertical: 10, paddingHorizontal: 25 }}>
-          {selectedParams.includes("ac") && (
-            <View style={styles.dotText}>
-              <View style={[styles.colorDot, { backgroundColor: "orange" }]} />
-              <Text style={{ color: "black", fontSize: 12 }}>AC</Text>
-            </View>
-          )}
-          {selectedParams.includes("battery") && (
-            <View style={styles.dotText}>
-              <View style={[styles.colorDot, { backgroundColor: "blue" }]} />
-              <Text style={{ color: "black", fontSize: 12 }}>Battery</Text>
-            </View>
-          )}
-          {selectedParams.includes("output") && (
-            <View style={styles.dotText}>
-              <View style={[styles.colorDot, { backgroundColor: "red" }]} />
-              <Text style={{ color: "black", fontSize: 12 }}>Output</Text>
-            </View>
-          )}
-          {selectedParams.includes("solar") && (
-            <View style={styles.dotText}>
-              <View style={[styles.colorDot, { backgroundColor: "purple" }]} />
-              <Text style={{ color: "black", fontSize: 12 }}>Solar</Text>
-            </View>
-          )}
-        </View>
-      ) : (
-        <></>
-      )}
-      <View style={{ width: "100%", paddingHorizontal: 16, height: 200 }}>
-        {selectedTab === 0 && DATA.length ? (
-          <CartesianChart
-            chartPressState={toolState}
-            actionsRef={actionRef}
-            ref={chartRef}
-            key={`${formik.values.dateOfBirth}-${selectedTab}-${DATA.length}`}
-            data={DATA.length ? DATA : NullData}
-            axisOptions={{
-              axisScales: { xAxisScale: "linear", yAxisScale: "linear" },
-            }}
-            domain={{ x: [0, 24] }}
-            domainPadding={{ top: 1, bottom: 1 }}
-            padding={{ top: 10, bottom: 10 }}
-            xKey="hour"
-            yKeys={["ac", "battery", "output", "solar"]}
-            yAxis={[
-              {
-                font: font,
-                enableRescaling: false, // prevent auto-scaling
-                domain: [0, selectedMaxY], //graph ma 0 0r max value show krne k lie Yaxis ki
-                // tickValues: [0, Number(maxY.toFixed(0))],
-                tickValues: [0, Math.round(selectedMaxY / 2), selectedMaxY],
-                tickCount: 3,
-                formatYLabel: (n: number) => `${n}kW`, // 👈 label with kW
-              },
-            ]}
-            xAxis={{
-              enableRescaling: false,
-              font: font,
-              tickValues: ticks,
-              tickCount: Number(ticks?.length),
-              formatXLabel: (d: number) => {
-                const hour = Math.floor(d);
-                const min = Math.round((d - hour) * 60);
-                return `${hour}:${min.toString().padStart(2, "0")}`;
-              },
-            }}
-            transformState={state}
-            onChartBoundsChange={({ top, left, right, bottom }) => {
-              setWidth(right - left);
-              setHeight(bottom - top);
-            }}
-          >
-            {({ points, chartBounds }) => {
-              return (
-                <>
-                  {selectedParams.includes("ac") && (
-                    <>
-                      <Line
-                        key={"line"}
-                        points={points.ac}
-                        color="orange"
-                        strokeWidth={0.8}
-                        curveType="basis"
-                        connectMissingData={false}
-
-                        // connectMissingData={false}
-                      />
-                      <Area
-                        points={points.ac}
-                        y0={chartBounds.bottom}
-                        color="orange"
-                        opacity={0.1}
-                        curveType="basis"
-                      />
-                    </>
-                  )}
-
-                  {selectedParams.includes("battery") && (
-                    <>
-                      <Line
-                        key={"line2"}
-                        points={points.battery}
-                        color="blue"
-                        strokeWidth={0.8}
-                        curveType="basis"
-                      />
-                      <Area
-                        points={points.battery}
-                        y0={chartBounds.bottom}
-                        color="blue"
-                        opacity={0.1}
-                        curveType="basis"
-                      />
-                    </>
-                  )}
-                  {selectedParams.includes("output") && (
-                    <>
-                      <Line
-                        key={"line3"}
-                        points={points.output}
-                        color="red"
-                        strokeWidth={0.8}
-                        curveType="basis"
-                      />
-                      <Area
-                        points={points.output}
-                        y0={chartBounds.bottom}
-                        color="red"
-                        opacity={0.1}
-                        curveType="basis"
-                      />
-                    </>
-                  )}
-                  {selectedParams.includes("solar") && (
-                    <>
-                      <Line
-                        key={"line4"}
-                        points={points.solar}
-                        color="purple"
-                        strokeWidth={0.5}
-                        curveType="basis"
-                      />
-                      <Area
-                        points={points.solar}
-                        y0={chartBounds.bottom}
-                        color="purple"
-                        opacity={0.2}
-                        curveType="basis"
-                      />
-                    </>
-                  )}
-                  {isActive && (
-                    <GeneralToolTip
-                      xPos={toolState.x.position} // pixel space
-                      xVal={toolState.x.value} // data space (for HH:mm conversion)
-                      chartBounds={chartBounds} // pass chart bounds
-                      fontSrc={inter}
-                    />
-                  )}
-                </>
-              );
-            }}
-          </CartesianChart>
-        ) : (
-          <CartesianChart
-            data={NullData}
-            domain={{ x: [0, 24] }}
-            domainPadding={{ top: 1, bottom: 1 }}
-            padding={{ top: 10, bottom: 10 }}
-            xKey="hour"
-            yKeys={[]}
-            yAxis={[
-              {
-                font: font,
-                enableRescaling: true,
-                domain: [0, selectedMaxY],
-
-                tickValues: [0, Math.round(selectedMaxY / 2), selectedMaxY],
-                tickCount: 3,
-              },
-            ]}
-            xAxis={{
-              enableRescaling: false,
-              font: font,
-              tickValues: ticks,
-              tickCount: Number(ticks?.length),
-              formatXLabel: (d: number) => {
-                const hour = Math.floor(d);
-                const min = Math.round((d - hour) * 60);
-                return `${hour}:${min.toString().padStart(2, "0")}`;
-              },
-            }}
-            transformState={undefined}
-            onChartBoundsChange={({ top, left, right, bottom }) => {
-              setWidth(right - left);
-              setHeight(bottom - top);
-            }}
-          >
-            {({ points, chartBounds }) => {
-              return <></>;
-            }}
-          </CartesianChart>
-        )}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -641,4 +675,21 @@ const styles = StyleSheet.create({
     borderRadius: 5, // makes it a circle
     marginRight: 6, // space between dot and text
   },
+  card: {
+    marginLeft: 10,
+    justifyContent: "space-between",
+    backgroundColor: "white",
+    borderRadius: 15,
+    // height: 50,
+    padding: 20,
+    width: "95%",
+    shadowColor: "#000",
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1.84,
+    elevation: Platform.OS === "ios" ? 0.5 : 0.5,
+    marginBottom: 10,
+  },
+  txtStyle: { fontSize: ms(10), fontWeight: "600", paddingVertical: 8 },
+  labelStyles: { fontSize: ms(11), fontFamily: "Excon-Regular" },
 });

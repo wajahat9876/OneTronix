@@ -24,6 +24,9 @@ const useCachedResources = () => {
           poppins: require("@assets/fonts/Poppins/Poppins-Regular.ttf"),
           "poppins-thin": require("@assets/fonts/Poppins/Poppins-Thin.ttf"),
 
+          "Excon-Medium": require("@assets/fonts/Excon_Complete/Fonts/OTF/Excon-Medium.otf"),
+          "Excon-Regular": require("@assets/fonts/Excon_Complete/Fonts/OTF/Excon-Regular.otf"),
+
           "Excon-medium": require("@assets/fonts/Excon_Complete/Fonts/OTF/Excon-Medium.otf"),
         });
       } catch (e) {
