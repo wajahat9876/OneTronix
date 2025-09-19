@@ -39,8 +39,7 @@ const OneTronixBrand: React.FC<Props> = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: hs(16),
-    paddingVertical: vs(10),
+    padding: vs(26),
   },
   logoContainer: {
     alignSelf: "flex-end",
@@ -52,18 +51,21 @@ const styles = StyleSheet.create({
   one: {
     color: "red",
     fontWeight: "900",
-    fontSize: ms(35),
+    fontSize: ms(40),
     lineHeight: 45,
+    fontFamily: "Excon-Black",
   },
   tronix: {
     color: "red",
-    fontSize: ms(35),
+    fontSize: ms(44),
+    fontFamily: "Excon-Regular",
     lineHeight: 45,
-    marginTop: -15,
+    marginTop: -4,
   },
   partner: {
     color: "white",
-    fontSize: ms(12),
+    fontSize: ms(13),
+    fontFamily: "Excon-Regular",
     letterSpacing: 1,
     lineHeight: 18,
     marginTop: -5,

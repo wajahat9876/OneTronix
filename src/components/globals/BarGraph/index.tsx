@@ -11,6 +11,7 @@ import {
 import * as React from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 
+import inter from "@assets/fonts/SpaceMono-Regular.ttf";
 import {
   type SharedValue,
   useAnimatedReaction,
@@ -19,7 +20,6 @@ import {
   withTiming,
 } from "react-native-reanimated";
 import { BarGroup, CartesianChart, useChartPressState } from "victory-native";
-import inter from "../assets/inter-medium.ttf";
 
 const DATA = Array.from({ length: 6 }, (_, index) => {
   const low = Math.round(20 + 20 * Math.random());
@@ -34,18 +34,40 @@ const DATA = Array.from({ length: 6 }, (_, index) => {
     temp,
   };
 });
+type GraphDataItem = {
+  month: string;
+  low: number;
+  high: number;
+  temp: number;
+};
 
-export default function BarGraph(props: { segment: string }) {
+type BarGraphProps = {
+  segment: string;
+  data: GraphDataItem[];
+};
+export default function BarGraph({ segment, data }: BarGraphProps) {
   const [groupWidth, setGroupWidth] = React.useState(0);
   const [chartBottom, setChartBottom] = React.useState(0);
   const [chartLeft, setChartLeft] = React.useState(0);
   const font = useFont(inter, 12);
 
-  const { state, isActive } = useChartPressState({
-    x: "Jan",
-    y: { low: 0, high: 0, temp: 0 },
-  });
+  // const { state, isActive } = useChartPressState({
+  //   x: "Jan",
+  //   y: { low: 0, high: 0, temp: 0 },
+  // });
+  const safeData =
+    Array.isArray(data) && data?.length > 0
+      ? data
+      : [{ month: "N/A", low: 0, high: 0, temp: 0 }];
 
+  const { state, isActive } = useChartPressState({
+    x: safeData[0].month ?? "N/A",
+    y: {
+      low: safeData[0].low ?? 0,
+      high: safeData[0].high ?? 0,
+      temp: safeData[0].temp ?? 0,
+    },
+  });
   // Bar highlight
   const barGap = 5;
   const animConfig = { duration: 300 };
@@ -93,7 +115,7 @@ export default function BarGraph(props: { segment: string }) {
     <SafeAreaView style={styles.safeView}>
       <View style={styles.chart}>
         <CartesianChart
-          data={DATA}
+          data={safeData}
           xKey="month"
           yKeys={["low", "high", "temp"]}
           domain={{ y: [0] }}
@@ -181,6 +203,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   chart: {
+    flex: 1,
     height: 350,
   },
   optionsScrollView: {

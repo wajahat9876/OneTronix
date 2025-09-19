@@ -11,10 +11,12 @@ import { MultiStepFormProps } from "@src/hooks/useMultiStepForm/types";
 import { useAppDispatch } from "@src/hooks/useReduxHooks";
 import { hs, ms, vs } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
+import { useRouter } from "expo-router";
 import { useMemo, useRef, useState } from "react";
 import { Platform, Text, TextInput, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const [isActive, setActive] = useState(false);
   const [selectedValue, setSelectedValue] = useState();
@@ -65,7 +67,7 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
         <View
           style={{
             alignSelf: "flex-end",
-            padding: hs(16),
+            padding: hs(26),
             marginTop: Platform.OS === "ios" ? vs(5) : vs(15),
           }}
         >
@@ -73,7 +75,8 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
         </View>
         <View
           style={{
-            alignItems: "flex-start",
+            // alignItems: "flex-start",
+            marginLeft: 12,
             marginTop: vs(32),
           }}
         >
@@ -81,7 +84,8 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
             style={{
               color: "red",
               fontWeight: "900",
-              fontSize: ms(35),
+              fontSize: ms(44),
+              fontFamily: "Excon-Black",
               lineHeight: 45,
             }}
           >
@@ -90,9 +94,10 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
           <Text
             style={{
               color: "red",
-              fontSize: ms(35),
+              fontSize: ms(44),
+              fontFamily: "Excon-Regular",
               lineHeight: 45,
-              marginTop: -15, // tighten spacing between ONE and TRONIX
+              marginTop: -4, // tighten spacing between ONE and TRONIX
             }}
           >
             TRONIX
@@ -100,7 +105,8 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
           <Text
             style={{
               color: "white",
-              fontSize: ms(12),
+              fontSize: ms(13),
+              fontFamily: "Excon-Regular",
               letterSpacing: 1,
               lineHeight: 18,
               marginTop: -5, // small gap from TRONIX
@@ -113,7 +119,7 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
           selectedValue={selectedValue}
           onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
         >
-          <Picker.Item label="USer" value="user" color="white" />
+          <Picker.Item label="User" value="user" color="white" />
           <Picker.Item label="Installer" value="installer" color="white" />
         </Picker>
         <View style={{ alignItems: "center", paddingHorizontal: 20 }}>
@@ -137,6 +143,16 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
                 }}
               />
             </View>
+          </View>
+          <View style={{ width: "80%", marginTop: 10 }}>
+            <Button
+              btnTitle="Back"
+              btnColor="#F4192C"
+              btnTitleColor="white"
+              onClick={() => {
+                router.replace("/(auth)/Signin");
+              }}
+            />
           </View>
         </View>
 

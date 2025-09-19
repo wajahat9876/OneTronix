@@ -10,6 +10,7 @@ import { PortalBottomSheetRef } from "@src/components/globals/PortalBottomSheet/
 import ScreenAuth from "@src/components/globals/ScreenAuth";
 import { StyleSheet } from "@src/components/libraries";
 import { pageTransitionAnimation } from "@src/constants/Animation";
+import useFormatDate from "@src/hooks/useFormatDate";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
 import { renderToastError } from "@src/hooks/useToasty";
@@ -98,7 +99,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
   //     };
   //   }, [])
   // );
-
+  const { formatDate, formatTime } = useFormatDate();
   return (
     <Animated.View {...pageTransitionAnimation} key="home" className="flex-1">
       <StatusBar
@@ -131,16 +132,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
         >
           System Status
         </Text>
-        <Text
-          style={{
-            marginTop: ms(10),
-            marginLeft: ms(25),
-            fontSize: ms(15),
-            fontFamily: "Excon-Light",
-          }}
-        >
-          Hybrid
-        </Text>
+
         <ScrollView
           style={styles.container}
           contentContainerStyle={{ flexGrow: 1 }}
@@ -161,47 +153,67 @@ const Index = ({ goTo }: MultiStepFormProps) => {
             batteryWatt={result?.results?.inverterData?.data?.battery?.watt}
             batteryStatus={result?.results?.inverterData?.data?.battery?.status}
           />
+          <Text
+            style={{
+              textAlign: "center",
+              fontFamily: "Excon-Regular",
+              fontSize: ms(11),
+            }}
+          >
+            Last Updated:{" "}
+            {result?.results?.inverterData?.createdAt
+              ? formatTime(result?.results?.inverterData.createdAt)
+              : "-"}
+          </Text>
           <View style={{ flexDirection: "row", marginTop: 20 }}>
             <View style={styles.transactionsCard}>
-              <Text>Daily Production</Text>
+              <Text style={styles.txt}>Daily Production</Text>
               <Text style={styles.txtStyle}>
                 {Number(
                   result?.results?.dailySummary?.production?.dailyProduction
                     ?.$numberDecimal ?? 0
-                ).toFixed(2)}{" "}
-                kWh
+                ).toFixed(2)}
+                <Text style={styles.unitTxt}> kWh</Text>
               </Text>
             </View>
             <View style={styles.transactionsCard}>
-              <Text>Daily Consumption</Text>
+              <Text style={styles.txt}>Daily Consumption</Text>
               <Text style={styles.txtStyle}>
                 {Number(
                   result?.results?.dailySummary?.consumption?.dailyConsumption
                     ?.$numberDecimal || 0
                 ).toFixed(2)}{" "}
-                kWh
+                <Text style={styles.unitTxt}> kWh</Text>
               </Text>
             </View>
           </View>
           <View style={{ flexDirection: "row" }}>
             <View style={styles.dailyCard}>
-              <Text style={{ color: "white" }}>Daily Purchase</Text>
+              <Text
+                style={{
+                  color: "white",
+                  fontFamily: "Excon-Regular",
+                  fontSize: ms(13),
+                }}
+              >
+                Daily Purchase
+              </Text>
               <Text style={styles.dailyTxt}>
                 {Number(
                   result?.results?.dailySummary?.grid?.dailyPurchase
                     ?.$numberDecimal || 0
                 ).toFixed(2)}{" "}
-                kWh
+                <Text style={styles.unitTxt}> kWh</Text>
               </Text>
             </View>
             <View style={styles.transactionsCard}>
-              <Text>Total Production</Text>
+              <Text style={styles.txt}>Total Production</Text>
               <Text style={styles.txtStyle}>
                 {Number(
                   result?.results?.dailySummary?.consumption?.dailyConsumption
                     ?.$numberDecimal || 0
                 ).toFixed(2)}{" "}
-                kWh
+                <Text style={styles.unitTxt}> kWh</Text>
               </Text>
             </View>
           </View>
@@ -239,6 +251,10 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     marginTop: 10,
   },
+  unitTxt: {
+    fontSize: ms(13),
+    fontFamily: "Excon-Regular",
+  },
   bottomSheet: {
     backgroundColor: "white",
     borderCurve: "circular",
@@ -270,9 +286,9 @@ const styles = StyleSheet.create({
     fontSize: getRespValue(16),
   },
   txtTrans: { color: "black", fontWeight: "600", fontSize: getRespValue(16) },
-  txtStyle: { fontSize: ms(20), fontWeight: "600", paddingVertical: 10 },
+  txtStyle: { fontSize: ms(30), fontWeight: "600", paddingVertical: 10 },
   dailyTxt: {
-    fontSize: ms(20),
+    fontSize: ms(30),
     fontWeight: "600",
     paddingVertical: 10,
     color: "white",
@@ -306,6 +322,10 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: Platform.OS === "ios" ? 2 : 2,
     marginBottom: 10,
+  },
+  txt: {
+    fontFamily: "Excon-Regular",
+    fontSize: ms(13),
   },
 });
 export default Index;

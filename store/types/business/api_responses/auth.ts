@@ -5,6 +5,18 @@ export interface SignIn {
   auth_token: string;
   token: string;
 }
+export interface inverterData {
+  inverterData: {
+    data: {
+      ac: any;
+      battery: any;
+      hvdc: any;
+      output: any;
+      solar: any;
+      temperature: any;
+    };
+  };
+}
 export interface LastSelectBenefDetails {
   isFirstTransfer?: boolean;
   accountNumber?: string;

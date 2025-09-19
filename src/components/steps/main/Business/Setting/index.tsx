@@ -8,7 +8,6 @@ import { pageTransitionAnimation } from "@src/constants/Animation";
 import Colors from "@src/constants/Colors";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
 // import { globalStyle } from '@src/styles/globals';
-import { Picker } from "@react-native-picker/picker";
 import { hs, vs } from "@utils/design/design";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -58,7 +57,7 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
       >
         <View style={styles.container}>
           <ScrollView>
-            <Picker
+            {/* <Picker
               selectedValue={selectedLanguage}
               onValueChange={(itemValue, itemIndex) =>
                 setSelectedLanguage(itemValue)
@@ -66,7 +65,7 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
             >
               <Picker.Item label="Java" value="java" />
               <Picker.Item label="JavaScript" value="js" />
-            </Picker>
+            </Picker> */}
             {/* <Text
               style={{
                 ...globalStyle.textMedium,

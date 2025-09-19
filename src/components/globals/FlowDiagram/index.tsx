@@ -3,6 +3,7 @@ import BatteryIcon from "@assets/HomeIcons/batteryIcon.png";
 import GridIcon from "@assets/HomeIcons/gridIcon.png";
 import HomeIcon from "@assets/HomeIcons/homeIcon.png";
 import InverterIcon from "@assets/HomeIcons/inverterIcon.png";
+import { ms } from "@utils/design/design";
 import React, { useEffect, useRef, useState } from "react";
 import { Animated, Image, StyleSheet, Text, View } from "react-native";
 import Svg, { Defs, Marker, Path } from "react-native-svg";
@@ -225,7 +226,14 @@ const FlowDiagram = ({
                 }}
               />
               <Text style={[styles.label, { marginLeft: 50 }]}>Solar</Text>
-              <Text style={{ top: 15, marginLeft: 25, fontSize: 11 }}>
+              <Text
+                style={{
+                  top: 15,
+                  marginLeft: 25,
+                  fontSize: ms(9),
+                  fontFamily: "Excon-Regular",
+                }}
+              >
                 {solar} kW
               </Text>
             </View>
@@ -421,16 +429,18 @@ const styles = StyleSheet.create({
   },
   label: {
     position: "absolute",
-    fontSize: 13,
+    fontSize: ms(11),
     width: 80,
     fontWeight: "600",
     textAlign: "center",
+    fontFamily: "Excon-Medium",
   },
   value: {
     position: "absolute",
-    fontSize: 11,
+    fontSize: ms(9),
     width: 80,
     textAlign: "center",
+    fontFamily: "Excon-Regular",
   },
 });
 

@@ -65,29 +65,29 @@ const TabButtons: FC<TabButtonsProps> = ({
     <View
       // accessibilityRole="tabbar"
       style={{
-        backgroundColor: isWhite ? "white" : "#F4192C",
+        backgroundColor: isWhite ? "white" : "#F5F4F4",
         marginLeft: hideMarginLeft ? hs(0) : hs(42),
         marginRight: hideMarginRight ? hs(0) : hs(42),
         justifyContent: "center",
-        borderRadius: disableRadious ? ms(0) : ms(16),
+        borderRadius: disableRadious ? ms(0) : ms(8),
         // height: vs(50),
       }}
     >
       <Animated.View
-        className="rounded-2xl absolute"
+        className="rounded-xl absolute"
         style={[
           animatedStyle,
           {
             height: dimensions.height,
             width: buttonWidth,
-            backgroundColor: "#E6E5D8",
+            backgroundColor: "black",
           },
         ]}
       />
       <View onLayout={onTabbarLayout} className="flex-row">
         {buttons.map((button, index) => {
-          const color = selectedTab === index ? "black" : "white";
-          const colorWhite = selectedTab === index ? "white" : "gray";
+          const color = selectedTab === index ? "white" : "black";
+          const colorWhite = selectedTab === index ? "black" : "gray";
           return (
             <Pressable
               key={button.title}

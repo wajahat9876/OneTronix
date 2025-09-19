@@ -32,14 +32,26 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
 
     const total = entries.reduce((sum, [, v]) => sum + (v || 0), 0);
 
-    // Build data with midAngle for alignment
+    // Build data
     const data = (() => {
+      if (total === 0) {
+        // fallback slice so empty donut still shows
+        return [
+          {
+            value: 1,
+            color: "#e5e7eb", // light gray for empty chart
+            label: "No Data",
+            text: "0%",
+          },
+        ];
+      }
+
       let cumulative = 0;
       return entries.map(([key, value]) => {
         const val = value || 0;
-        const percentage = total > 0 ? (val / total) * 100 : 0;
+        const percentage = (val / total) * 100;
         const angle = (val / total) * 360;
-        const midAngle = cumulative + angle / 2; // midpoint of slice
+        const midAngle = cumulative + angle / 2;
         cumulative += angle;
 
         return {
@@ -64,16 +76,17 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
           donut
           radius={50}
           innerRadius={40}
-          data={data || []}
+          data={data}
           showText={false}
           focusOnPress={false}
-          showExternalLabels
+          showExternalLabels={total > 0} // hide labels if no data
           labelLineConfig={{
             length: 25,
             tailLength: 18,
             color: "gray",
           }}
           externalLabelComponent={(item: any) => {
+            if (!item.midAngle) return null;
             const isLeft = item.midAngle > 90 && item.midAngle < 270;
             return (
               <SvgText
@@ -90,41 +103,47 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
           }}
           centerLabelComponent={() => (
             <Text style={{ fontSize: 13, fontWeight: "bold" }}>
-              {total.toFixed(1)} kWh
+              {total === 0 ? "No Data" : `${total.toFixed(1)} kWh`}
             </Text>
           )}
         />
 
         {/* Legend */}
         <View style={{ marginTop: 12, alignItems: "flex-start" }}>
-          {data.map((item, index) => (
-            <View
-              key={index}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginBottom: 6,
-              }}
-            >
+          {total > 0 ? (
+            data.map((item, index) => (
               <View
+                key={index}
                 style={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: 6,
-                  backgroundColor: item.color,
-                  marginRight: 8,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 6,
                 }}
-              />
-              <Text style={{ fontSize: 12, color: "#333" }}>
-                {item.label} ({item.value} kWh — {item.text})
-              </Text>
-            </View>
-          ))}
+              >
+                <View
+                  style={{
+                    width: 12,
+                    height: 12,
+                    borderRadius: 6,
+                    backgroundColor: item.color,
+                    marginRight: 8,
+                  }}
+                />
+                <Text style={{ fontSize: 12, color: "#333" }}>
+                  {item.label} ({item.value} kWh — {item.text})
+                </Text>
+              </View>
+            ))
+          ) : (
+            <Text style={{ fontSize: 12, color: "#666" }}>
+              No breakdown available
+            </Text>
+          )}
         </View>
       </View>
     );
   }
 );
 
-DonutChart2.displayName = "DonutChart2"; // 👈 for devtools friendliness
+DonutChart2.displayName = "DonutChart2";
 export default DonutChart2;

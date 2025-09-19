@@ -8,8 +8,10 @@ import FilterIcon from "@assets/icons/filter.png";
 import ResetIcon from "@assets/icons/reset.png";
 import { useFont } from "@shopify/react-native-skia";
 import { GeneralToolTip } from "@src/components/commons/business/GeneralTooltip";
+import DetailRow from "@src/components/commons/DetailRow";
 import TabButtons from "@src/components/commons/TabButton";
 import { TabButton } from "@src/components/commons/TabButton/types";
+import BarGraph from "@src/components/globals/BarGraph";
 import DonutChart2 from "@src/components/globals/DonutChart2";
 import FilterModal from "@src/components/globals/FilterModal";
 import FormikDatePicker from "@src/components/globals/FormikDatePicker";
@@ -63,8 +65,12 @@ export default function PanZoomPage() {
     ("ac" | "battery" | "output" | "solar")[]
   >(["ac", "battery"]);
   //Api define
-  const { auth_token, data: businessData } = useAppSelector(useBusinessDetails);
-
+  const {
+    auth_token,
+    data: businessData,
+    inverterData,
+  } = useAppSelector(useBusinessDetails);
+  console.log(inverterData, "InverterData");
   // Tab Button Code
   const [selectedTab, setSelectedTab] = useState(0);
   const tabButtons: TabButton[] = [
@@ -551,76 +557,25 @@ export default function PanZoomPage() {
               }}
             </CartesianChart>
           ) : (
-            <CartesianChart
-              data={NullData}
-              domain={{ x: [0, 24] }}
-              domainPadding={{ top: 1, bottom: 1 }}
-              padding={{ top: 10, bottom: 10 }}
-              xKey="hour"
-              yKeys={[]}
-              yAxis={[
-                {
-                  font: font,
-                  enableRescaling: true,
-                  domain: [0, selectedMaxY],
-
-                  tickValues: [0, Math.round(selectedMaxY / 2), selectedMaxY],
-                  tickCount: 3,
-                },
-              ]}
-              xAxis={{
-                enableRescaling: false,
-                font: font,
-                tickValues: ticks,
-                tickCount: Number(ticks?.length),
-                formatXLabel: (d: number) => {
-                  const hour = Math.floor(d);
-                  const min = Math.round((d - hour) * 60);
-                  return `${hour}:${min.toString().padStart(2, "0")}`;
-                },
-              }}
-              transformState={undefined}
-              onChartBoundsChange={({ top, left, right, bottom }) => {
-                setWidth(right - left);
-                setHeight(bottom - top);
-              }}
-            >
-              {({ points, chartBounds }) => {
-                return <></>;
-              }}
-            </CartesianChart>
+            <BarGraph segment="Month" data={[]} />
           )}
         </View>
         <View style={{ flex: 1, paddingHorizontal: 12 }}>
           {/* Production Section */}
-          <View style={{ alignItems: "center", marginBottom: 20 }}>
+          <View style={styles.dailyProduction}>
             <Text
-              style={{
-                fontSize: 14,
-                fontWeight: "600",
-                color: "#111",
-                marginBottom: 8,
-              }}
-            >
-              {`${labels[selectedTab]} Production`}
-            </Text>
+              style={styles.txtProduction}
+            >{`${labels[selectedTab]} Production`}</Text>
             <DonutChart2
-              load={analyticsData?.results.consumption?.dailyConsumption || 0}
+              load={analyticsData?.results?.consumption?.dailyConsumption || 0}
               grid={0}
               battery={analyticsData?.results?.battery?.dailyCharging || 0}
             />
           </View>
 
           {/* Consumption Section */}
-          <View style={{ alignItems: "center" }}>
-            <Text
-              style={{
-                fontSize: 14,
-                fontWeight: "600",
-                color: "#111",
-                marginBottom: 8,
-              }}
-            >
+          <View style={styles.dailyProduction}>
+            <Text style={styles.txtProduction}>
               {`${labels[selectedTab]} Consumption`}
             </Text>
             <DonutChart2
@@ -628,6 +583,111 @@ export default function PanZoomPage() {
               grid={analyticsData?.results?.grid?.dailyPurchase || 0}
               battery={analyticsData?.results?.battery?.dailyDischarging || 0}
             />
+          </View>
+          {/* Current Cycle */}
+          <View style={styles.currentCycle}>
+            <Text style={[styles.txtProduction, { alignSelf: "center" }]}>
+              Current Cycle
+            </Text>
+            <View>
+              <Text style={styles.txtCycle}>AC</Text>
+              <DetailRow
+                label="Ampare"
+                value={inverterData?.inverterData?.data?.ac?.amp}
+              />
+              <DetailRow
+                label="Frequency"
+                value={inverterData?.inverterData?.data?.ac?.freq}
+              />
+              <DetailRow
+                label="Voltage"
+                value={inverterData?.inverterData?.data?.ac?.voltage}
+              />
+              <DetailRow
+                label="Watt"
+                value={inverterData?.inverterData?.data?.ac?.watt}
+              />
+            </View>
+            <View style={{ marginTop: 10 }}>
+              <Text style={styles.txtCycle}>Battery</Text>
+              <DetailRow
+                label="Charging Ampare"
+                value={inverterData?.inverterData?.data?.battery?.chargingAmp}
+              />
+              <DetailRow
+                label="Charging Watt"
+                value={inverterData?.inverterData?.data?.battery?.chargingWatt}
+              />
+              <DetailRow
+                label="Discharging Watt"
+                value={
+                  inverterData?.inverterData?.data?.battery?.dischargingWatt
+                }
+              />
+              <DetailRow
+                label="Inverter Ampare"
+                value={inverterData?.inverterData?.data?.battery?.inverterAmp}
+              />
+
+              <DetailRow
+                label="Voltage"
+                value={inverterData?.inverterData?.data?.battery?.voltage}
+              />
+            </View>
+            <View style={{ marginTop: 10 }}>
+              <Text style={styles.txtCycle}>HVDC</Text>
+
+              <DetailRow
+                label="Voltage"
+                value={inverterData?.inverterData?.data?.hvdc?.voltage}
+              />
+            </View>
+            <View style={{ marginTop: 10 }}>
+              <Text style={styles.txtCycle}>OutPut</Text>
+              <DetailRow
+                label="Load Ampare"
+                value={inverterData?.inverterData?.data?.output?.loadAmp}
+              />
+              <DetailRow
+                label="Watt"
+                value={inverterData?.inverterData?.data?.output?.watt}
+              />
+
+              <DetailRow
+                label="Voltage"
+                value={inverterData?.inverterData?.data?.output?.voltage}
+              />
+            </View>
+            <View style={{ marginTop: 10 }}>
+              <Text style={styles.txtCycle}>Solar</Text>
+              <DetailRow
+                label="Ampare"
+                value={inverterData?.inverterData?.data?.solar?.loadAmp}
+              />
+              <DetailRow
+                label="Watt"
+                value={inverterData?.inverterData?.data?.solar?.watt}
+              />
+              <DetailRow
+                label="Voltage"
+                value={inverterData?.inverterData?.data?.solar?.voltage}
+              />
+            </View>
+            <View style={{ marginTop: 10 }}>
+              <Text style={styles.txtCycle}>Temperature</Text>
+              <DetailRow
+                label="Booster"
+                value={inverterData?.inverterData?.data?.temperature?.booster}
+              />
+              <DetailRow
+                label="Inverter"
+                value={inverterData?.inverterData?.data?.temperature?.inverter}
+              />
+              <DetailRow
+                label="MPPT"
+                value={inverterData?.inverterData?.data?.temperature?.mppt}
+              />
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -667,6 +727,33 @@ const styles = StyleSheet.create({
   safeView: {
     flex: 1,
     backgroundColor: "white",
+  },
+  dailyProduction: {
+    alignItems: "center",
+    marginBottom: 20,
+    backgroundColor: "#F5F4F4",
+    padding: 10,
+    borderRadius: 10,
+  },
+  currentCycle: {
+    // alignItems: "center",
+    marginBottom: 20,
+    backgroundColor: "#F5F4F4",
+    padding: 10,
+    borderRadius: 10,
+  },
+  txtProduction: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#111",
+    marginBottom: 8,
+  },
+  txtCycle: {
+    paddingHorizontal: 12,
+    fontSize: ms(13),
+    fontWeight: "600",
+    color: "#111",
+    marginBottom: 8,
   },
   dotText: { flexDirection: "row", alignItems: "center", marginBottom: 4 },
   colorDot: {

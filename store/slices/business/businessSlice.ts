@@ -2,8 +2,10 @@
 /* eslint-disable no-param-reassign */
 import { businessAuthApi } from "@/store/api/business/authApis";
 import { businessCurrentApi } from "@/store/api/business/businessCurrent";
+import { businessMainApi } from "@/store/api/business/mainApis";
 import {
   businessPayee,
+  inverterData,
   LastSelectBenefDetails,
   OutgoingTransfer,
   VerifySignIn,
@@ -31,6 +33,7 @@ export interface IBusinessState {
   showIbanAccountToggle?: boolean;
   deviceId: string;
   role: boolean;
+  inverterData?: inverterData;
 }
 const initialState: IBusinessState = {
   role: false,
@@ -187,7 +190,12 @@ const businessSlice = createSlice({
         state.auth_token = payload.results?.token;
       }
     );
-
+    builder.addMatcher(
+      businessMainApi.endpoints.getInverterData.matchFulfilled,
+      (state, { payload }) => {
+        state.inverterData = payload?.results;
+      }
+    );
     builder.addMatcher(
       businessAuthApi.endpoints.businessSignin.matchFulfilled,
       (state, { payload }) => {

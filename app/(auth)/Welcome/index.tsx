@@ -136,8 +136,9 @@ const Welcome = () => {
                     style={{
                       color: "red",
                       fontWeight: "900",
-                      fontSize: ms(45),
+                      fontSize: ms(50),
                       lineHeight: 55,
+                      fontFamily: "Excon-Black",
                     }}
                   >
                     ONE
@@ -145,9 +146,10 @@ const Welcome = () => {
                   <Text
                     style={{
                       color: "red",
-                      fontSize: ms(45),
+                      fontSize: ms(55),
+                      fontFamily: "Excon-Regular",
                       lineHeight: 55,
-                      marginTop: -15, // tighten spacing between ONE and TRONIX
+                      marginTop: -4, // tighten spacing between ONE and TRONIX
                     }}
                   >
                     TRONIX
@@ -155,7 +157,8 @@ const Welcome = () => {
                   <Text
                     style={{
                       color: "white",
-                      fontSize: ms(18),
+                      fontSize: ms(16.5),
+
                       letterSpacing: 1,
                       lineHeight: 28,
                       marginTop: -5, // small gap from TRONIX

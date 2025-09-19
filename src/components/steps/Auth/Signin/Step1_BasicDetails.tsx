@@ -4,12 +4,10 @@
 import { useBusinessSigninMutation } from "@/store/api/business/authApis";
 import { setRole } from "@/store/slices/business/businessSlice";
 import Logo from "@assets/eccLogo/oneTronixLogo.svg";
-import WhiteOutline from "@assets/icons/user/qr/whiteOutline.png";
 import BottomSheet from "@gorhom/bottom-sheet";
 import Button from "@src/components/globals/Button";
 import FormikInput from "@src/components/globals/FormikInput";
 import { Text, TouchableOpacity } from "@src/components/libraries";
-import Step2ScanQr from "@src/components/steps/Qr";
 import { textInputDefaultProps } from "@src/constants/Props";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm/types";
 import { useAppDispatch } from "@src/hooks/useReduxHooks";
@@ -19,7 +17,7 @@ import { getRespValue } from "@utils/getRespValue";
 import { useRouter } from "expo-router";
 import { useFormik } from "formik";
 import { useMemo, useRef, useState } from "react";
-import { Image, Platform, TextInput, View } from "react-native";
+import { Platform, TextInput, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as Yup from "yup";
 
@@ -121,8 +119,9 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
               style={{
                 color: "red",
                 fontWeight: "900",
-                fontSize: ms(35),
+                fontSize: ms(40),
                 lineHeight: 45,
+                fontFamily: "Excon-Black",
               }}
             >
               ONE
@@ -130,9 +129,10 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
             <Text
               style={{
                 color: "red",
-                fontSize: ms(35),
+                fontSize: ms(44),
+                fontFamily: "Excon-Regular",
                 lineHeight: 45,
-                marginTop: -15, // tighten spacing between ONE and TRONIX
+                marginTop: -4, // tighten spacing between ONE and TRONIX
               }}
             >
               TRONIX
@@ -140,7 +140,8 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
             <Text
               style={{
                 color: "white",
-                fontSize: ms(12),
+                fontSize: ms(13),
+                fontFamily: "Excon-Regular",
                 letterSpacing: 1,
                 lineHeight: 18,
                 marginTop: -5, // small gap from TRONIX
@@ -151,9 +152,10 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
           </View>
           <Text
             style={{
-              fontSize: ms(25),
-              marginTop: vs(60),
+              fontSize: ms(24),
+              marginTop: vs(100),
               textAlign: "center",
+              fontFamily: "Excon-Medium",
             }}
             className="text-white font-poppins-semibold"
           >
@@ -171,9 +173,10 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
           </Text>
           <Text
             style={{
-              fontSize: 15,
+              fontSize: ms(16),
               alignSelf: "flex-start",
               marginLeft: hs(10),
+              fontFamily: "Excon-Regular",
             }}
             className="text-white font-poppins"
           >
@@ -201,10 +204,11 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
           />
           <Text
             style={{
-              fontSize: 15,
+              fontSize: ms(16),
               alignSelf: "flex-start",
               marginTop: vs(16),
               marginLeft: hs(10),
+              fontFamily: "Excon-Regular",
             }}
             className="text-white font-poppins"
           >
@@ -243,7 +247,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
             >
               <Text
                 style={{ fontSize: 13 }}
-                className="text-white font-poppins"
+                className="text-white font-Excon-Regular"
               >
                 Forgot Password
               </Text>
@@ -273,12 +277,12 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
               />
             </View>
 
-            <TouchableOpacity onPress={() => openBottomSheet()}>
+            {/* <TouchableOpacity onPress={() => openBottomSheet()}>
               <Image
                 source={WhiteOutline}
                 style={{ height: 25, width: 25, marginLeft: 10 }}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
           {/* Text below row */}
@@ -289,7 +293,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
                 color: "white",
 
                 marginTop: 5, // Adds consistent space
-                fontFamily: "Poppins-Regular", // Use custom font if needed
+                fontFamily: "Excon-Regular",
               }}
             >
               Don't have an account?
@@ -303,9 +307,8 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
                 style={{
                   fontSize: 12,
                   color: "red",
-
-                  marginTop: 5, // Adds consistent space
-                  fontFamily: "Poppins-Regular", // Use custom font if needed
+                  marginTop: 6, // Adds consistent space
+                  fontFamily: "Excon-Regular",
                 }}
               >
                 {" "}
@@ -315,13 +318,13 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
           </View>
         </View>
 
-        <Step2ScanQr
+        {/* <Step2ScanQr
           snapPoints={snapPoints}
           bottomSheetRef={bottomSheetRef}
           key="dssa"
           closeBottomSheet={closeBottomSheet}
           active={isActive}
-        />
+        /> */}
       </KeyboardAwareScrollView>
     </>
   );

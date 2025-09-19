@@ -133,9 +133,10 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
           <DismissKeyboardView>
             <Text
               style={{
-                fontSize: ms(25),
+                fontSize: ms(24),
                 marginTop: vs(20),
                 textAlign: "center",
+                fontFamily: "Excon-Medium",
               }}
               className="text-white font-poppins-semibold"
             >
@@ -153,17 +154,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
             </Text>
           </DismissKeyboardView>
           <DismissKeyboardView>
-            <Text
-              style={{
-                fontSize: 15,
-                alignSelf: "flex-start",
-                marginLeft: hs(40),
-                marginTop: vs(10),
-              }}
-              className="text-white font-poppins"
-            >
-              First Name
-            </Text>
+            <Text style={styles.labelTxt}>First Name</Text>
           </DismissKeyboardView>
           <View style={styles.textInput}>
             <FormikInput
@@ -185,17 +176,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
             />
           </View>
           <DismissKeyboardView>
-            <Text
-              style={{
-                fontSize: 15,
-                alignSelf: "flex-start",
-                marginLeft: hs(40),
-                marginTop: vs(10),
-              }}
-              className="text-white font-poppins"
-            >
-              Last Name
-            </Text>
+            <Text style={styles.labelTxt}>Last Name</Text>
           </DismissKeyboardView>
           <View style={styles.textInput}>
             <FormikInput
@@ -219,17 +200,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
           </View>
           {/* create password */}
           <DismissKeyboardView>
-            <Text
-              style={{
-                fontSize: 15,
-                alignSelf: "flex-start",
-                marginLeft: hs(40),
-                marginTop: vs(20),
-              }}
-              className="text-white font-poppins"
-            >
-              Email
-            </Text>
+            <Text style={styles.labelTxt}>Email</Text>
           </DismissKeyboardView>
           <View style={styles.textInput}>
             <FormikInput
@@ -255,17 +226,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
             />
           </View>
           <DismissKeyboardView>
-            <Text
-              style={{
-                fontSize: 15,
-                alignSelf: "flex-start",
-                marginLeft: hs(40),
-                marginTop: vs(20),
-              }}
-              className="text-white font-poppins"
-            >
-              Password
-            </Text>
+            <Text style={styles.labelTxt}>Password</Text>
           </DismissKeyboardView>
           <View style={styles.textInput}>
             <FormikInput
@@ -291,17 +252,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
             />
           </View>
           <DismissKeyboardView>
-            <Text
-              style={{
-                fontSize: 15,
-                alignSelf: "flex-start",
-                marginLeft: hs(40),
-                marginTop: vs(20),
-              }}
-              className="text-white font-poppins"
-            >
-              Confirm Password
-            </Text>
+            <Text style={styles.labelTxt}>Confirm Password</Text>
           </DismissKeyboardView>
           <View style={styles.textInput}>
             <FormikInput
@@ -339,9 +290,9 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
           <View style={{ flexDirection: "row", alignSelf: "center" }}>
             <Text
               style={{
-                fontSize: 12,
+                fontSize: ms(12),
                 color: "white",
-                fontFamily: "Poppins-Regular", // Use custom font if needed
+                fontFamily: "Excon-Regular",
               }}
             >
               Already have an account?
@@ -354,10 +305,9 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
             >
               <Text
                 style={{
-                  fontSize: 12,
-
+                  fontSize: ms(12),
                   color: "red",
-                  fontFamily: "Poppins-Regular", // Use custom font if needed
+                  fontFamily: "Excon-Regular",
                 }}
               >
                 {" "}
@@ -381,6 +331,14 @@ const styles = StyleSheet.create({
     marginLeft: hs(16),
     marginRight: hs(8),
     marginBottom: vs(12),
+  },
+  labelTxt: {
+    fontSize: ms(16),
+    alignSelf: "flex-start",
+    marginLeft: hs(40),
+    marginTop: vs(10),
+    fontFamily: "Excon-Regular",
+    color: "white",
   },
 });
 export default Step1_Details;
