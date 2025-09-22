@@ -5,7 +5,6 @@ import { setRole } from "@/store/slices/business/businessSlice";
 import Logo from "@assets/eccLogo/oneTronixLogo.svg";
 import BottomSheet from "@gorhom/bottom-sheet";
 // import { Picker } from "@react-native-picker/picker";
-import Button from "@src/components/globals/Button";
 import Step2ScanQr from "@src/components/steps/Qr";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm/types";
 import { useAppDispatch } from "@src/hooks/useReduxHooks";
@@ -13,7 +12,13 @@ import { hs, ms, vs } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
 import { useRouter } from "expo-router";
 import { useMemo, useRef, useState } from "react";
-import { Platform, Text, TextInput, View } from "react-native";
+import {
+  Platform,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Picker from "react-native-animated-wheel-picker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
@@ -71,12 +76,31 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
       >
         <View
           style={{
-            alignSelf: "flex-end",
-            padding: hs(26),
-            marginTop: Platform.OS === "ios" ? vs(5) : vs(15),
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingHorizontal: hs(10),
+            paddingVertical: hs(30),
+            marginTop: Platform.OS === "ios" ? vs(10) : vs(15),
           }}
         >
-          <Logo />
+          <TouchableOpacity onPress={() => router.replace("/(auth)/Signin")}>
+            <Text
+              style={{
+                color: "white",
+                fontSize: ms(14),
+                marginTop: vs(10),
+              }}
+            >
+              ← Back
+            </Text>
+          </TouchableOpacity>
+          <View
+            style={{
+              alignSelf: "flex-end",
+            }}
+          >
+            <Logo />
+          </View>
         </View>
         <View
           style={{
@@ -127,17 +151,10 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
             onSelected={(item) => setSelectedValue(item?.value)}
           />
         </View>
-        <View style={{ alignItems: "center", paddingHorizontal: 20 }}>
+        <View style={{ alignItems: "flex-end", marginRight: 10 }}>
           {/* Button and Scan in a Row */}
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-              alignItems: "center",
-              width: "100%",
-            }}
-          >
-            <View style={{ width: "80%" }}>
+
+          {/* <View style={{ width: "80%" }}>
               <Button
                 disabled={!selectedValue}
                 btnTitle="Continue"
@@ -147,18 +164,18 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
                   handlePress();
                 }}
               />
-            </View>
-          </View>
-          <View style={{ width: "80%", marginTop: 10 }}>
-            <Button
-              btnTitle="Back"
-              btnColor="#F4192C"
-              btnTitleColor="white"
-              onClick={() => {
-                router.replace("/(auth)/Signin");
+            </View> */}
+          <TouchableOpacity onPress={() => handlePress()}>
+            <Text
+              style={{
+                color: "white",
+                fontSize: ms(14),
+                marginTop: vs(10),
               }}
-            />
-          </View>
+            >
+              Next →
+            </Text>
+          </TouchableOpacity>
         </View>
 
         <Step2ScanQr
