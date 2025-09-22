@@ -4,7 +4,7 @@
 import { setRole } from "@/store/slices/business/businessSlice";
 import Logo from "@assets/eccLogo/oneTronixLogo.svg";
 import BottomSheet from "@gorhom/bottom-sheet";
-import { Picker } from "@react-native-picker/picker";
+// import { Picker } from "@react-native-picker/picker";
 import Button from "@src/components/globals/Button";
 import Step2ScanQr from "@src/components/steps/Qr";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm/types";
@@ -14,12 +14,13 @@ import { getRespValue } from "@utils/getRespValue";
 import { useRouter } from "expo-router";
 import { useMemo, useRef, useState } from "react";
 import { Platform, Text, TextInput, View } from "react-native";
+import Picker from "react-native-animated-wheel-picker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [isActive, setActive] = useState(false);
-  const [selectedValue, setSelectedValue] = useState();
+  const [selectedValue, setSelectedValue] = useState(1);
   // refs
   const passwordRef = useRef() as React.MutableRefObject<TextInput>;
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -39,7 +40,7 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
 
   console.log("selectedLanguage", selectedValue);
   const handlePress = () => {
-    if (selectedValue === "user") {
+    if (selectedValue === 1) {
       openBottomSheet();
     } else {
       console.log("Trigger");
@@ -47,6 +48,10 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
       goTo?.(1);
     }
   };
+  const DATA = [
+    { title: "Customer", value: 1 },
+    { title: "Installer", value: 2 },
+  ];
   return (
     <>
       <KeyboardAwareScrollView
@@ -115,13 +120,13 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
             TECHNOLOGY PARTNER
           </Text>
         </View>
-        <Picker
-          selectedValue={selectedValue}
-          onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-        >
-          <Picker.Item label="User" value="user" color="white" />
-          <Picker.Item label="Installer" value="installer" color="white" />
-        </Picker>
+        <View style={{ height: 200 }}>
+          <Picker
+            pickerData={DATA}
+            textStyle={{ fontSize: 27 }}
+            onSelected={(item) => setSelectedValue(item?.value)}
+          />
+        </View>
         <View style={{ alignItems: "center", paddingHorizontal: 20 }}>
           {/* Button and Scan in a Row */}
           <View
