@@ -4,5 +4,14 @@
     "source.organizeImports": "explicit"
   },
   "editor.formatOnSave": true,
-  "eslint.validate": ["javascript"]
+  "eslint.validate": ["javascript"],
+
+  "editor.suggest.insertMode": "replace",
+"editor.suggest.showIcons": true,
+"editor.suggest.showStatusBar": true,
+"editor.suggest.filterGraceful": true,
+"editor.suggest.snippetsPreventQuickSuggestions": false,
+"typescript.suggest.completeFunctionCalls": false,
+"editor.quickSuggestionsDelay": 300
+
 }

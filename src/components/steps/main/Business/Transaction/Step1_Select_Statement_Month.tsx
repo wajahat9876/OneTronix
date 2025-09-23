@@ -5,13 +5,13 @@ import {
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import inter from "@assets/fonts/SpaceMono-Regular.ttf";
 import FilterIcon from "@assets/icons/filter.png";
-import ResetIcon from "@assets/icons/reset.png";
+import BottomSheet from "@gorhom/bottom-sheet";
 import { useFont } from "@shopify/react-native-skia";
+import BarGraph2 from "@src/components/commons/business/BarGraph2";
 import { GeneralToolTip } from "@src/components/commons/business/GeneralTooltip";
 import DetailRow from "@src/components/commons/DetailRow";
 import TabButtons from "@src/components/commons/TabButton";
 import { TabButton } from "@src/components/commons/TabButton/types";
-import BarGraph from "@src/components/globals/BarGraph";
 import DonutChart2 from "@src/components/globals/DonutChart2";
 import FilterModal from "@src/components/globals/FilterModal";
 import FormikDatePicker from "@src/components/globals/FormikDatePicker";
@@ -20,6 +20,7 @@ import Colors from "@src/constants/Colors";
 import { textInputUnderlinedProps } from "@src/constants/Props";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
 import { ms, vs } from "@utils/design/design";
+import dayjs from "dayjs";
 import { useFormik } from "formik";
 import moment from "moment";
 import * as React from "react";
@@ -33,6 +34,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import MonthPicker from "react-native-month-year-picker";
 import {
   runOnJS,
   useAnimatedReaction,
@@ -53,17 +55,18 @@ import {
 } from "victory-native";
 export enum SelectMethod {
   Daily = "daily",
-  Monthly = "monthlllly", //bad ma theek krna ha
+  Monthly = "monthly", //bad ma theek krna ha
   Yearly = "yearly",
   Total = "total",
 }
-
 export default function PanZoomPage() {
   //Filter Modal  code
   const [modalVisible, setModalVisible] = useState(false);
+  const [date, setDate] = useState(new Date());
   const [selectedParams, setSelectedParams] = useState<
     ("ac" | "battery" | "output" | "solar")[]
   >(["ac", "battery"]);
+
   //Api define
   const {
     auth_token,
@@ -73,6 +76,7 @@ export default function PanZoomPage() {
   console.log(inverterData, "InverterData");
   // Tab Button Code
   const [selectedTab, setSelectedTab] = useState(0);
+
   const tabButtons: TabButton[] = [
     {
       title: "Day",
@@ -105,6 +109,10 @@ export default function PanZoomPage() {
     },
     onSubmit: () => {},
   });
+  const formattedDate =
+    selectedTab === 1
+      ? dayjs(formik?.values?.dateOfBirth).format("YYYY-MM")
+      : dayjs(formik?.values?.dateOfBirth).format("YYYY-MM-DD");
   //Api Call
   const { data, refetch } = useGetGraphDataQuery(
     {
@@ -119,13 +127,14 @@ export default function PanZoomPage() {
       {
         deviceId: businessData?.devices?.[0]?._id,
         type: tabValues[selectedTab],
-        date: formik?.values?.dateOfBirth,
+        date: formattedDate,
       },
       {
         skip: !auth_token,
         refetchOnMountOrArgChange: true,
       }
     );
+  console.log(data, data);
   React.useEffect(() => {
     refetch();
     analyticsRefetch();
@@ -294,33 +303,93 @@ export default function PanZoomPage() {
   ];
   // Analytics code
   const labels = ["Daily", "Monthly", "Yearly", "Net"];
+  const onValueChange = (event: any, selectedDate?: Date) => {
+    if (selectedDate) {
+      formik.setFieldValue(
+        "dateOfBirth",
+        moment(selectedDate).format("YYYY-MM-DD")
+      );
+      setDate(selectedDate);
+      setShow(false);
+      bottomSheetRef.current?.close();
+      console.log(selectedDate, "selectedDate");
+    }
+  };
+  const [show, setShow] = useState(false);
+  const [stateVisible, setBottomSheetVisible] = useState(false);
+  const showPicker = React.useCallback((value: any) => setShow(value), []);
+  const bottomSheetRef = React.useRef<BottomSheet>(null);
+  const openBottomSheet = () => {
+    showPicker(true);
+    setBottomSheetVisible(true);
+    bottomSheetRef.current?.expand();
+  };
+  // MonthBar Graph Data
+
   return (
     <SafeAreaView
       style={styles.safeView}
       edges={Platform.OS === "android" ? ["top"] : ["top", "bottom"]}
     >
       <ScrollView>
-        <View
-          style={{
-            width: "90%",
-            alignSelf: "center",
-            marginTop: vs(20),
-            marginBottom: vs(10),
-          }}
-        >
-          <TabButtons
-            buttons={tabButtons}
-            hideMarginLeft
-            hideMarginRight
-            selectedTab={selectedTab}
-            setSelectedTab={(index) => setSelectedTab(index)}
-          />
+        <View style={{ flex: 1 }}>
           <View
             style={{
-              marginTop: vs(20),
               flexDirection: "row",
+              marginTop: vs(20),
+              marginBottom: vs(10),
+              justifyContent: "space-between",
             }}
           >
+            <View
+              style={{
+                width: "80%",
+                marginLeft: 10,
+              }}
+            >
+              <TabButtons
+                buttons={tabButtons}
+                hideMarginLeft
+                hideMarginRight
+                selectedTab={selectedTab}
+                setSelectedTab={(index) => setSelectedTab(index)}
+              />
+            </View>
+            <View style={{ marginTop: vs(8) }}>
+              <View style={{ flexDirection: "row" }}>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                  <Image
+                    source={FilterIcon}
+                    style={{ width: 23, height: 23, marginRight: 30 }}
+                  />
+                </TouchableOpacity>
+                {/* <TouchableOpacity
+                  onPress={() => {
+                    // Reset scale and translation
+                    state.matrix.value = setScale(
+                      setTranslate(state.matrix.value, 0, 0),
+                      1
+                    );
+                    // Also reset your shared values to keep useAnimatedReaction in sync
+                    k.value = 1;
+                    tx.value = 0;
+                    ty.value = 0;
+                  }}
+                >
+                  <Image source={ResetIcon} style={{ width: 23, height: 23 }} />
+                </TouchableOpacity> */}
+              </View>
+
+              <FilterModal
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}
+                options={["ac", "battery", "output", "solar"]}
+                defaultSelected={["ac", "battery"]}
+                onConfirm={(selected: any) => setSelectedParams(selected)}
+              />
+            </View>
+          </View>
+          {selectedTab === 0 ? (
             <View
               style={{
                 width: "65%",
@@ -352,76 +421,65 @@ export default function PanZoomPage() {
                 }}
               />
             </View>
-            <View style={{ marginTop: vs(8) }}>
-              <View style={{ flexDirection: "row" }}>
-                <TouchableOpacity onPress={() => setModalVisible(true)}>
-                  <Image
-                    source={FilterIcon}
-                    style={{ width: 23, height: 23, marginRight: 30 }}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    // Reset scale and translation
-                    state.matrix.value = setScale(
-                      setTranslate(state.matrix.value, 0, 0),
-                      1
-                    );
-                    // Also reset your shared values to keep useAnimatedReaction in sync
-                    k.value = 1;
-                    tx.value = 0;
-                    ty.value = 0;
-                  }}
-                >
-                  <Image source={ResetIcon} style={{ width: 23, height: 23 }} />
+          ) : (
+            <>
+              <View
+                style={{
+                  flexDirection: "row",
+                  paddingHorizontal: 20,
+                  paddingVertical: 10,
+                }}
+              >
+                <Text>Select Date </Text>
+                <TouchableOpacity onPress={() => openBottomSheet()}>
+                  <Text>{moment(date).format("MM-YYYY")}</Text>
                 </TouchableOpacity>
               </View>
-
-              <FilterModal
-                visible={modalVisible}
-                onClose={() => setModalVisible(false)}
-                options={["ac", "battery", "output", "solar"]}
-                defaultSelected={["ac", "battery"]}
-                onConfirm={(selected: any) => setSelectedParams(selected)}
-              />
-            </View>
-          </View>
+            </>
+          )}
         </View>
         {selectedTab === 0 && DATA.length ? (
-          <View style={{ paddingVertical: 10, paddingHorizontal: 25 }}>
-            {selectedParams.includes("ac") && (
-              <View style={styles.dotText}>
-                <View
-                  style={[styles.colorDot, { backgroundColor: "orange" }]}
-                />
-                <Text style={{ color: "black", fontSize: 12 }}>AC</Text>
-              </View>
-            )}
-            {selectedParams.includes("battery") && (
-              <View style={styles.dotText}>
-                <View style={[styles.colorDot, { backgroundColor: "blue" }]} />
-                <Text style={{ color: "black", fontSize: 12 }}>Battery</Text>
-              </View>
-            )}
-            {selectedParams.includes("output") && (
-              <View style={styles.dotText}>
-                <View style={[styles.colorDot, { backgroundColor: "red" }]} />
-                <Text style={{ color: "black", fontSize: 12 }}>Output</Text>
-              </View>
-            )}
-            {selectedParams.includes("solar") && (
-              <View style={styles.dotText}>
-                <View
-                  style={[styles.colorDot, { backgroundColor: "purple" }]}
-                />
-                <Text style={{ color: "black", fontSize: 12 }}>Solar</Text>
-              </View>
-            )}
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              paddingHorizontal: 16,
+
+              marginTop: 20,
+              justifyContent: "center",
+            }}
+          >
+            {selectedParams.map((param) => {
+              const paramColors: Record<string, string> = {
+                ac: "orange",
+                battery: "blue",
+                output: "red",
+                solar: "purple",
+              };
+              return (
+                <View key={param} style={[styles.dotText, { marginRight: 12 }]}>
+                  <View
+                    style={[
+                      styles.colorDot,
+                      { backgroundColor: paramColors[param] },
+                    ]}
+                  />
+                  <Text style={{ color: "#111", fontSize: 12 }}>
+                    {param.toUpperCase()}
+                  </Text>
+                </View>
+              );
+            })}
           </View>
-        ) : (
-          <></>
-        )}
-        <View style={{ width: "100%", paddingHorizontal: 16, height: 200 }}>
+        ) : null}
+
+        <View
+          style={{
+            width: "100%",
+            height: selectedTab != 0 ? 250 : 200,
+            paddingHorizontal: 16,
+          }}
+        >
           {selectedTab === 0 && DATA.length ? (
             <CartesianChart
               chartPressState={toolState}
@@ -557,7 +615,15 @@ export default function PanZoomPage() {
               }}
             </CartesianChart>
           ) : selectedTab === 1 || selectedTab === 2 || selectedTab === 3 ? (
-            <BarGraph segment="Month" data={[]} />
+            // <BarGraph segment="month" data={barData} />
+            <View style={{ marginVertical: 20 }}>
+              <BarGraph2
+                selectedTab={selectedTab}
+                date={date}
+                selectedParams={selectedParams}
+                data={data?.results || []}
+              />
+            </View>
           ) : (
             <CartesianChart
               chartPressState={toolState}
@@ -606,7 +672,8 @@ export default function PanZoomPage() {
             </CartesianChart>
           )}
         </View>
-        <View style={{ flex: 1, paddingHorizontal: 12 }}>
+
+        <View style={{ paddingHorizontal: 12 }}>
           {/* Production Section */}
           <View style={styles.dailyProduction}>
             <Text
@@ -737,6 +804,27 @@ export default function PanZoomPage() {
           </View>
         </View>
       </ScrollView>
+      <BottomSheet
+        handleIndicatorStyle={{ backgroundColor: "transparent" }}
+        style={{ backgroundColor: "transparent" }}
+        backgroundStyle={{ backgroundColor: "transparent" }}
+        ref={bottomSheetRef}
+        index={-1}
+        snapPoints={["42%"]}
+      >
+        {show && (
+          <MonthPicker
+            onChange={onValueChange}
+            okButton="OK"
+            cancelButton={false}
+            value={date}
+            minimumDate={new Date(2000, 0)}
+            maximumDate={new Date()}
+            locale="us"
+            neutralButton="Cancel"
+          />
+        )}
+      </BottomSheet>
     </SafeAreaView>
   );
 }
