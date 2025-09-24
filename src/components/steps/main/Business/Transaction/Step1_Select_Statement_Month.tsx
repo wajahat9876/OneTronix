@@ -73,7 +73,7 @@ export default function PanZoomPage() {
     data: businessData,
     inverterData,
   } = useAppSelector(useBusinessDetails);
-  console.log(inverterData, "InverterData");
+  // console.log(inverterData, "InverterData");
   // Tab Button Code
   const [selectedTab, setSelectedTab] = useState(0);
 
@@ -134,7 +134,7 @@ export default function PanZoomPage() {
         refetchOnMountOrArgChange: true,
       }
     );
-  console.log(data, data);
+  // console.log(data, data);
   React.useEffect(() => {
     refetch();
     analyticsRefetch();
@@ -168,7 +168,7 @@ export default function PanZoomPage() {
   const actionRef = React.useRef<CartesianActionsHandle>(null);
 
   // Graph Code
-  const font = useFont(inter, 8);
+  const font = useFont(inter, 10);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const { state } = useChartTransformState();
@@ -298,7 +298,7 @@ export default function PanZoomPage() {
   //Null Handle
 
   const NullData = [
-    { hour: 0, ac: null, battery: null, output: null, solar: null },
+    { hour: 0, ac: 5, battery: null, output: null, solar: null },
     { hour: 24, ac: null, battery: null, output: null, solar: null },
   ];
   // Analytics code
@@ -312,7 +312,7 @@ export default function PanZoomPage() {
       setDate(selectedDate);
       setShow(false);
       bottomSheetRef.current?.close();
-      console.log(selectedDate, "selectedDate");
+      // console.log(selectedDate, "selectedDate");
     }
   };
   const [show, setShow] = useState(false);
@@ -325,7 +325,17 @@ export default function PanZoomPage() {
     bottomSheetRef.current?.expand();
   };
   // MonthBar Graph Data
+  console.log(toolState, "toolState");
+  const defaultMaxValues = React.useMemo(() => {
+    if (!DATA.length) return {};
 
+    const result: Record<string, number> = {};
+    ["ac", "battery", "output", "solar"].forEach((param) => {
+      const maxVal = Math.max(...DATA.map((d) => d[param] ?? 0));
+      result[param] = maxVal;
+    });
+    return result;
+  }, [DATA]);
   return (
     <SafeAreaView
       style={styles.safeView}
@@ -451,11 +461,21 @@ export default function PanZoomPage() {
           >
             {selectedParams.map((param) => {
               const paramColors: Record<string, string> = {
-                ac: "orange",
+                ac: "red",
                 battery: "blue",
-                output: "red",
+                output: "#F7D102",
                 solar: "purple",
               };
+
+              const raw = toolState?.y?.[param]?.value;
+              const value = isActive
+                ? raw?.value !== undefined
+                  ? Number(raw.value).toFixed(2)
+                  : "--"
+                : defaultMaxValues[param] !== undefined
+                ? defaultMaxValues[param]!.toFixed(2)
+                : "--";
+
               return (
                 <View key={param} style={[styles.dotText, { marginRight: 12 }]}>
                   <View
@@ -464,8 +484,8 @@ export default function PanZoomPage() {
                       { backgroundColor: paramColors[param] },
                     ]}
                   />
-                  <Text style={{ color: "#111", fontSize: 12 }}>
-                    {param.toUpperCase()}
+                  <Text style={{ color: "#111", fontSize: 10 }}>
+                    {param.toUpperCase()}: {value}
                   </Text>
                 </View>
               );
@@ -485,13 +505,15 @@ export default function PanZoomPage() {
               chartPressState={toolState}
               actionsRef={actionRef}
               ref={chartRef}
-              key={`${formik.values.dateOfBirth}-${selectedTab}-${DATA.length}`}
-              data={DATA.length ? DATA : NullData}
+              key={`${formik.values.dateOfBirth}-${selectedTab}-${
+                data?.results?.length || 0
+              }`}
+              data={DATA}
               axisOptions={{
                 axisScales: { xAxisScale: "linear", yAxisScale: "linear" },
               }}
               domain={{ x: [0, 24] }}
-              domainPadding={{ top: 1, bottom: 1 }}
+              domainPadding={{ top: 1, bottom: 0.1 }}
               padding={{ top: 10, bottom: 10 }}
               xKey="hour"
               yKeys={["ac", "battery", "output", "solar"]}
@@ -502,8 +524,11 @@ export default function PanZoomPage() {
                   domain: [0, selectedMaxY], //graph ma 0 0r max value show krne k lie Yaxis ki
                   // tickValues: [0, Number(maxY.toFixed(0))],
                   tickValues: [0, Math.round(selectedMaxY / 2), selectedMaxY],
-                  tickCount: 3,
+                  tickCount: 2,
                   formatYLabel: (n: number) => `${n}kW`, // 👈 label with kW
+                  lineWidth: 1,
+                  labelOffset: 4,
+                  labelColor: "green",
                 },
               ]}
               xAxis={{
@@ -511,6 +536,7 @@ export default function PanZoomPage() {
                 font: font,
                 tickValues: ticks,
                 tickCount: Number(ticks?.length),
+                labelColor: "green",
                 formatXLabel: (d: number) => {
                   const hour = Math.floor(d);
                   const min = Math.round((d - hour) * 60);
@@ -529,10 +555,11 @@ export default function PanZoomPage() {
                     {selectedParams.includes("ac") && (
                       <>
                         <Line
+                          // animate={{ type: "timing", duration: 300 }}
                           key={"line"}
                           points={points.ac}
-                          color="orange"
-                          strokeWidth={0.8}
+                          color="red"
+                          strokeWidth={1}
                           curveType="basis"
                           connectMissingData={false}
 
@@ -541,8 +568,8 @@ export default function PanZoomPage() {
                         <Area
                           points={points.ac}
                           y0={chartBounds.bottom}
-                          color="orange"
-                          opacity={0.1}
+                          color="red"
+                          opacity={0.3}
                           curveType="basis"
                         />
                       </>
@@ -554,14 +581,14 @@ export default function PanZoomPage() {
                           key={"line2"}
                           points={points.battery}
                           color="blue"
-                          strokeWidth={0.8}
+                          strokeWidth={1}
                           curveType="basis"
                         />
                         <Area
                           points={points.battery}
                           y0={chartBounds.bottom}
                           color="blue"
-                          opacity={0.1}
+                          opacity={0.3}
                           curveType="basis"
                         />
                       </>
@@ -571,15 +598,15 @@ export default function PanZoomPage() {
                         <Line
                           key={"line3"}
                           points={points.output}
-                          color="red"
-                          strokeWidth={0.8}
+                          color="#F7D102"
+                          strokeWidth={1}
                           curveType="basis"
                         />
                         <Area
                           points={points.output}
                           y0={chartBounds.bottom}
-                          color="red"
-                          opacity={0.1}
+                          color="#F7D102"
+                          opacity={0.3}
                           curveType="basis"
                         />
                       </>
@@ -589,15 +616,15 @@ export default function PanZoomPage() {
                         <Line
                           key={"line4"}
                           points={points.solar}
-                          color="purple"
-                          strokeWidth={0.5}
+                          color="#8C11BA"
+                          strokeWidth={1}
                           curveType="basis"
                         />
                         <Area
                           points={points.solar}
                           y0={chartBounds.bottom}
-                          color="purple"
-                          opacity={0.2}
+                          color="#8C11BA"
+                          opacity={0.3}
                           curveType="basis"
                         />
                       </>
@@ -626,10 +653,7 @@ export default function PanZoomPage() {
             </View>
           ) : (
             <CartesianChart
-              chartPressState={toolState}
-              actionsRef={actionRef}
-              ref={chartRef}
-              key={`${formik.values.dateOfBirth}-${selectedTab}-${DATA.length}`}
+              key={`dsadsa`}
               data={NullData}
               axisOptions={{
                 axisScales: { xAxisScale: "linear", yAxisScale: "linear" },
@@ -653,14 +677,14 @@ export default function PanZoomPage() {
                 enableRescaling: false,
                 font: font,
                 tickValues: ticks,
-                tickCount: Number(ticks?.length),
+                tickCount: 6,
                 formatXLabel: (d: number) => {
                   const hour = Math.floor(d);
                   const min = Math.round((d - hour) * 60);
                   return `${hour}:${min.toString().padStart(2, "0")}`;
                 },
               }}
-              transformState={state}
+              // transformState={state}
               onChartBoundsChange={({ top, left, right, bottom }) => {
                 setWidth(right - left);
                 setHeight(bottom - top);
@@ -692,7 +716,7 @@ export default function PanZoomPage() {
               {`${labels[selectedTab]} Consumption`}
             </Text>
             <DonutChart2
-              solar={1}
+              solar={0}
               grid={analyticsData?.results?.grid?.dailyPurchase || 0}
               battery={analyticsData?.results?.battery?.dailyDischarging || 0}
             />
@@ -821,7 +845,6 @@ export default function PanZoomPage() {
             minimumDate={new Date(2000, 0)}
             maximumDate={new Date()}
             locale="us"
-            neutralButton="Cancel"
           />
         )}
       </BottomSheet>
@@ -865,7 +888,7 @@ const styles = StyleSheet.create({
   dailyProduction: {
     alignItems: "center",
     marginBottom: 20,
-    backgroundColor: "#F5F4F4",
+    backgroundColor: "transparent",
     padding: 10,
     borderRadius: 10,
   },

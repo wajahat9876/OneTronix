@@ -1,6 +1,12 @@
 import React, { useMemo } from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { BarChart } from "react-native-gifted-charts";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -18,13 +24,13 @@ export default function BarGraph2({
   data,
 }: BarGraphProps) {
   const colors: Record<string, string> = {
-    ac: "#f97316",
-    battery: "#4f8ef7",
-    output: "#22c55e",
-    solar: "#a855f7",
+    ac: "red",
+    battery: "blue",
+    output: "#F7D102",
+    solar: "#8C11BA",
   };
 
-  // Generate dummy multi-bar data based on selectedTab & selectedParams
+  // chartData logic (same as yours)
   const chartData = useMemo(() => {
     const result: any[] = [];
     let xValues: number[] = [];
@@ -37,14 +43,13 @@ export default function BarGraph2({
       ).getDate();
       xValues = Array.from({ length: daysInMonth }, (_, i) => i + 1);
     } else if (selectedTab === 2) {
-      xValues = Array.from({ length: 12 }, (_, i) => i + 1); // months
+      xValues = Array.from({ length: 12 }, (_, i) => i + 1);
     } else if (selectedTab === 3) {
-      xValues = Array.from({ length: 6 }, (_, i) => 2020 + i); // years
+      xValues = Array.from({ length: 6 }, (_, i) => 2020 + i);
     }
 
     xValues.forEach((x) => {
       selectedParams.forEach((param, index) => {
-        // Find API entry for this x-axis value (for daily tab, match day)
         const apiEntry = data.find((d) => {
           if (selectedTab === 1) {
             return new Date(d.createdAt).getDate() === x;
@@ -56,7 +61,6 @@ export default function BarGraph2({
           return false;
         });
 
-        // Extract value from API or default to 0
         let value = 0;
         if (apiEntry) {
           switch (param) {
@@ -92,10 +96,26 @@ export default function BarGraph2({
     return result;
   }, [selectedTab, date, selectedParams, data]);
 
-  // Correct chart width based on number of groups
+  // 🔹 Zoom values
+  const scale = useSharedValue(1);
+
+  const pinchGesture = Gesture.Pinch()
+    .onUpdate((e) => {
+      scale.value = e.scale;
+    })
+    .onEnd(() => {
+      // clamp scale between min and max
+      if (scale.value < 1) scale.value = withSpring(1);
+      if (scale.value > 1.2) scale.value = withSpring(1);
+    });
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scaleX: scale.value }],
+  }));
 
   return (
     <View style={styles.container}>
+      {/* Legends */}
       <View
         style={{
           flexDirection: "row",
@@ -121,69 +141,57 @@ export default function BarGraph2({
           </View>
         ))}
       </View>
-      <BarChart
-        data={chartData}
-        width={300}
-        // scrollToEnd
-        height={150}
-        barWidth={18}
-        spacing={5}
-        // roundedTop
-        // roundedBottom
-        yAxisTextStyle={{ fontSize: 12, color: "gray" }}
-        hideRules={false} // show background lines
-        rulesType="solid" // solid or dashed
-        rulesColor="#e0e0e0" // color of background lines
-        rulesThickness={1} // thickness of lines
-        xAxisThickness={1}
-        xAxisColor="#ccc"
-        yAxisThickness={1}
-        yAxisColor="#ccc"
-        noOfSections={3}
-        maxValue={Math.max(...chartData.map((d) => d.value)) + 10}
-        renderTooltip={(item: any) => {
-          if (!item) return null; // safeguard
-          console.log(item, "item");
-          return (
-            <View
-              style={{
-                backgroundColor: "#333",
-                padding: 6,
-                borderRadius: 4,
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ color: "red", fontSize: 12 }}>
-                {item.value} {item.param?.toUpperCase()}
-              </Text>
-            </View>
-          );
-        }}
-      />
+
+      {/* Zoomable chart */}
+      <GestureDetector gesture={pinchGesture}>
+        <Animated.View style={animatedStyle}>
+          <BarChart
+            data={chartData}
+            width={300}
+            height={150}
+            barWidth={18}
+            spacing={5}
+            yAxisTextStyle={{ fontSize: 12, color: "gray" }}
+            hideRules={false}
+            rulesType="solid"
+            rulesColor="#e0e0e0"
+            rulesThickness={1}
+            xAxisThickness={1}
+            xAxisColor="#ccc"
+            yAxisThickness={1}
+            yAxisColor="#ccc"
+            noOfSections={3}
+            maxValue={Math.max(...chartData.map((d) => d.value)) + 10}
+            renderTooltip={(item: any) => {
+              if (!item) return null;
+              return (
+                <View
+                  style={{
+                    backgroundColor: "#333",
+                    padding: 6,
+                    borderRadius: 4,
+                    alignItems: "center",
+                  }}
+                >
+                  <Text style={{ color: "red", fontSize: 12 }}>
+                    {item.value} {item.param?.toUpperCase()}
+                  </Text>
+                </View>
+              );
+            }}
+          />
+        </Animated.View>
+      </GestureDetector>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {},
-  title: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#111",
-    marginBottom: 8,
-    alignSelf: "center",
-  },
-  tooltip: {
-    backgroundColor: "#333",
-    padding: 5,
-    borderRadius: 5,
-    marginBottom: 4,
-  },
-  dotText: { flexDirection: "row", alignItems: "center", marginBottom: 4 },
   colorDot: {
     width: 10,
     height: 10,
-    borderRadius: 5, // makes it a circle
-    marginRight: 6, // space between dot and text
+    borderRadius: 5,
+    marginRight: 6,
   },
 });

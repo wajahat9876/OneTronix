@@ -29,15 +29,15 @@ export function GeneralToolTip({
           x: xPos.value,
           y: chartBounds.bottom,
         }))}
-        color="gray"
+        color="rgba(31,41,55,0.85)"
         strokeWidth={0.5}
       />
       {/* time label (top of line) */}
       <Text
         x={useDerivedValue(() => xPos.value + 5)}
-        y={chartBounds.top + 15}
+        y={chartBounds.top + 8}
         text={label}
-        color="black"
+        color="gray"
         font={font}
       />
     </>

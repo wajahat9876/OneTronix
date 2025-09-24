@@ -20,10 +20,10 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
     };
 
     const colorMap: Record<string, string> = {
-      load: "#A8F7C8",
+      load: "#F5192C",
       grid: "#3b82f6",
-      battery: "#5DB5AE",
-      solar: "#f59e0b",
+      battery: "#AF1520",
+      solar: "#F7D102",
     };
 
     const entries = Object.entries({ load, grid, battery, solar }).filter(
@@ -32,86 +32,94 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
 
     const total = entries.reduce((sum, [, v]) => sum + (v || 0), 0);
 
-    // Build data
-    const data = (() => {
-      if (total === 0) {
-        // fallback slice so empty donut still shows
-        return [
-          {
-            value: 1,
-            color: "#e5e7eb", // light gray for empty chart
-            label: "No Data",
-            text: "0%",
-          },
-        ];
-      }
+    // control gap size here
+    const gapRatio = 0.3; // 15% gap
+    const gapValue = total * gapRatio || 1;
 
-      let cumulative = 0;
-      return entries.map(([key, value]) => {
-        const val = value || 0;
-        const percentage = (val / total) * 100;
-        const angle = (val / total) * 360;
-        const midAngle = cumulative + angle / 2;
-        cumulative += angle;
-
-        return {
-          value: val,
-          color: colorMap[key],
-          text: `${percentage.toFixed(1)}%`,
-          label: labelMap[key],
-          midAngle,
-          labelLineConfig: {
-            length: 25,
-            tailLength: 18,
-            color: colorMap[key],
-            strokeWidth: 1.5,
-          },
-        };
-      });
-    })();
+    const data =
+      total === 0
+        ? [
+            {
+              value: 1,
+              color: "#e5e7eb",
+              label: "No Data",
+              text: "0%",
+            },
+          ]
+        : [
+            ...entries.map(([key, value]) => {
+              const val = value || 0;
+              const percentage = (val / total) * 100;
+              return {
+                value: val,
+                color: colorMap[key],
+                text: `${percentage.toFixed(1)}%`,
+                label: labelMap[key],
+              };
+            }),
+            {
+              value: gapValue,
+              color: "#ffffff", // bottom space always white
+              label: "Gap",
+              text: "",
+            },
+          ];
 
     return (
       <View ref={ref} style={{ alignItems: "center", padding: 20 }}>
         <PieChart
           donut
-          radius={50}
-          innerRadius={40}
-          data={data}
+          radius={70}
+          innerRadius={60}
+          data={data.map((item) => ({
+            ...item,
+            labelLineConfig: {
+              length: 2,
+              thickness: 1,
+              color: item.color, // ✅ match line color with slice/text color
+            },
+          }))}
           showText={false}
           focusOnPress={false}
-          showExternalLabels={total > 0} // hide labels if no data
+          showExternalLabels={true}
           labelLineConfig={{
-            length: 25,
-            tailLength: 18,
-            color: "gray",
+            length: 12,
+            thickness: 1,
+            color: "black",
           }}
-          externalLabelComponent={(item: any) => {
-            if (!item.midAngle) return null;
-            const isLeft = item.midAngle > 90 && item.midAngle < 270;
-            return (
+          externalLabelComponent={(item: any) =>
+            item.label !== "Gap" ? (
               <SvgText
+                alignmentBaseline="middle"
                 fontSize={10}
                 fontWeight="600"
                 fill={item?.color ?? "#333"}
-                textAnchor={isLeft ? "end" : "start"}
-                dx={isLeft ? -0 : 8}
-                dy={6}
+                textAnchor="start"
+                dy={0}
+                dx={-5}
               >
                 {item?.text}
               </SvgText>
-            );
-          }}
+            ) : null
+          }
           centerLabelComponent={() => (
-            <Text style={{ fontSize: 13, fontWeight: "bold" }}>
+            <Text
+              style={{
+                fontSize: 13,
+                fontWeight: "bold",
+                marginTop: total ? 90 : 0,
+              }}
+            >
               {total === 0 ? "No Data" : `${total.toFixed(1)} kWh`}
             </Text>
           )}
+          initialAngle={79.29} // ✅ rotate chart so white gap is at the bottom
         />
 
         {/* Legend */}
         <View style={{ marginTop: 12, alignItems: "flex-start" }}>
           {total > 0 ? (
-            data.map((item, index) => (
+            entries.map(([key, value], index) => (
               <View
                 key={index}
                 style={{
@@ -125,12 +133,12 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
                     width: 12,
                     height: 12,
                     borderRadius: 6,
-                    backgroundColor: item.color,
+                    backgroundColor: colorMap[key],
                     marginRight: 8,
                   }}
                 />
                 <Text style={{ fontSize: 12, color: "#333" }}>
-                  {item.label} ({item.value} kWh — {item.text})
+                  {labelMap[key]} ({value} kWh)
                 </Text>
               </View>
             ))
