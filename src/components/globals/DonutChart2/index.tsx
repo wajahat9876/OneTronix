@@ -69,8 +69,8 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
       <View ref={ref} style={{ alignItems: "center", padding: 20 }}>
         <PieChart
           donut
-          radius={70}
-          innerRadius={60}
+          radius={76}
+          innerRadius={70}
           data={data.map((item) => ({
             ...item,
             labelLineConfig: {

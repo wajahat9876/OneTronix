@@ -17,7 +17,6 @@ import FilterModal from "@src/components/globals/FilterModal";
 import FormikDatePicker from "@src/components/globals/FormikDatePicker";
 import { ScrollView } from "@src/components/libraries";
 import Colors from "@src/constants/Colors";
-import { textInputUnderlinedProps } from "@src/constants/Props";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
 import { ms, vs } from "@utils/design/design";
 import dayjs from "dayjs";
@@ -168,7 +167,7 @@ export default function PanZoomPage() {
   const actionRef = React.useRef<CartesianActionsHandle>(null);
 
   // Graph Code
-  const font = useFont(inter, 10);
+  const font = useFont(inter, 8);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const { state } = useChartTransformState();
@@ -413,9 +412,18 @@ export default function PanZoomPage() {
                 formik={formik}
                 name="dateOfBirth"
                 inputProps={{
-                  ...textInputUnderlinedProps,
-                  placeholder: "Select Date",
+                  type: "underlined",
+                  backgroundColor: "transparent",
+                  selectionColor:
+                    Platform.OS === "ios"
+                      ? Colors.light.theme.black
+                      : "#D3D3D3",
+                  cursorColor: Colors.light.theme.black,
+                  borderBottomColor:
+                    Colors.light.theme.textInputBottomBorderColor,
                   placeholderTextColor: Colors.light.theme.placeholderColor,
+                  borderBottomHeight: 0,
+                  placeholder: "Select Date",
                 }}
                 datePickerProps={{
                   maxDate: moment(new Date(), "YYYY-MM-DD").toDate(),
@@ -526,17 +534,19 @@ export default function PanZoomPage() {
                   tickValues: [0, Math.round(selectedMaxY / 2), selectedMaxY],
                   tickCount: 2,
                   formatYLabel: (n: number) => `${n}kW`, // 👈 label with kW
-                  lineWidth: 1,
-                  labelOffset: 4,
-                  labelColor: "green",
+                  lineWidth: 0.3,
+                  labelOffset: 3,
+                  labelColor: "gray",
                 },
               ]}
               xAxis={{
                 enableRescaling: false,
                 font: font,
                 tickValues: ticks,
+                labelOffset: 1,
+                lineWidth: 0.3,
                 tickCount: Number(ticks?.length),
-                labelColor: "green",
+                labelColor: "gray",
                 formatXLabel: (d: number) => {
                   const hour = Math.floor(d);
                   const min = Math.round((d - hour) * 60);
@@ -838,6 +848,7 @@ export default function PanZoomPage() {
       >
         {show && (
           <MonthPicker
+            mode="number"
             onChange={onValueChange}
             okButton="OK"
             cancelButton={false}

@@ -61,7 +61,7 @@ const DatePicker = (props: DatePickerProps) => {
             name="calendar"
             size={24}
             color={Colors.light.theme.placeholderColor}
-            style={{ position: "absolute", right: 0, top: 0 }}
+            style={{ position: "absolute", right: 0, top: 0, left: 100 }}
           />
         </View>
       </TouchableOpacity>
