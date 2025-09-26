@@ -50,6 +50,7 @@ export const businessMainApi = createApi({
         url: `user/devices/summary?deviceId=${deviceId}&type=${type}&date=${date}`,
         method: "GET",
       }),
+      keepUnusedDataFor: 0,
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;

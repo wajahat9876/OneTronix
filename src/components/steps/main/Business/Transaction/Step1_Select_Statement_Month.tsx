@@ -9,6 +9,7 @@ import BottomSheet from "@gorhom/bottom-sheet";
 import { useFont } from "@shopify/react-native-skia";
 import BarGraph2 from "@src/components/commons/business/BarGraph2";
 import { GeneralToolTip } from "@src/components/commons/business/GeneralTooltip";
+import MonthYearPicker from "@src/components/commons/business/MonthYear";
 import DetailRow from "@src/components/commons/DetailRow";
 import TabButtons from "@src/components/commons/TabButton";
 import { TabButton } from "@src/components/commons/TabButton/types";
@@ -33,7 +34,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import MonthPicker from "react-native-month-year-picker";
 import {
   runOnJS,
   useAnimatedReaction,
@@ -113,20 +113,26 @@ export default function PanZoomPage() {
       ? dayjs(formik?.values?.dateOfBirth).format("YYYY-MM")
       : dayjs(formik?.values?.dateOfBirth).format("YYYY-MM-DD");
   //Api Call
+  const updatedDate =
+    selectedTab === 0
+      ? formik?.values?.dateOfBirth
+      : selectedTab === 1
+      ? formattedDate
+      : dayjs(formik?.values?.dateOfBirth).format("YYYY");
   const { data, refetch } = useGetGraphDataQuery(
     {
       deviceId: businessData?.devices?.[0]?._id,
       type: tabValues[selectedTab],
-      date: formik?.values?.dateOfBirth,
+      date: updatedDate,
     },
-    { skip: !auth_token }
+    { skip: !auth_token, refetchOnMountOrArgChange: true }
   );
   const { data: analyticsData, refetch: analyticsRefetch } =
     useGetAnalyticsDataQuery(
       {
         deviceId: businessData?.devices?.[0]?._id,
         type: tabValues[selectedTab],
-        date: formattedDate,
+        date: updatedDate,
       },
       {
         skip: !auth_token,
@@ -150,7 +156,7 @@ export default function PanZoomPage() {
       return;
     }
 
-    const mapped = data.results.map((item: any) => {
+    const mapped = data?.results.map((item: any) => {
       const time = moment.utc(item.createdAt);
       const hour = time.hour() + time.minute() / 60;
       return {
@@ -289,7 +295,7 @@ export default function PanZoomPage() {
   const chartRef =
     React.useRef<CartesianChartRef<typeof toolState | undefined>>(null);
   const selectedMaxY = React.useMemo(() => {
-    if (!selectedParams.length || !DATA.length) return 10;
+    if (!selectedParams.length || !DATA?.length) return 10;
     return Math.max(
       ...DATA.flatMap((d) => selectedParams.map((param) => d[param] ?? 0))
     );
@@ -302,29 +308,12 @@ export default function PanZoomPage() {
   ];
   // Analytics code
   const labels = ["Daily", "Monthly", "Yearly", "Net"];
-  const onValueChange = (event: any, selectedDate?: Date) => {
-    if (selectedDate) {
-      formik.setFieldValue(
-        "dateOfBirth",
-        moment(selectedDate).format("YYYY-MM-DD")
-      );
-      setDate(selectedDate);
-      setShow(false);
-      bottomSheetRef.current?.close();
-      // console.log(selectedDate, "selectedDate");
-    }
-  };
   const [show, setShow] = useState(false);
-  const [stateVisible, setBottomSheetVisible] = useState(false);
-  const showPicker = React.useCallback((value: any) => setShow(value), []);
   const bottomSheetRef = React.useRef<BottomSheet>(null);
   const openBottomSheet = () => {
-    showPicker(true);
-    setBottomSheetVisible(true);
-    bottomSheetRef.current?.expand();
+    setShow(true);
   };
   // MonthBar Graph Data
-  console.log(toolState, "toolState");
   const defaultMaxValues = React.useMemo(() => {
     if (!DATA.length) return {};
 
@@ -335,6 +324,7 @@ export default function PanZoomPage() {
     });
     return result;
   }, [DATA]);
+
   return (
     <SafeAreaView
       style={styles.safeView}
@@ -450,7 +440,7 @@ export default function PanZoomPage() {
               >
                 <Text>Select Date </Text>
                 <TouchableOpacity onPress={() => openBottomSheet()}>
-                  <Text>{moment(date).format("MM-YYYY")}</Text>
+                  <Text>{updatedDate}</Text>
                 </TouchableOpacity>
               </View>
             </>
@@ -838,27 +828,26 @@ export default function PanZoomPage() {
           </View>
         </View>
       </ScrollView>
-      <BottomSheet
-        handleIndicatorStyle={{ backgroundColor: "transparent" }}
-        style={{ backgroundColor: "transparent" }}
-        backgroundStyle={{ backgroundColor: "transparent" }}
-        ref={bottomSheetRef}
-        index={-1}
-        snapPoints={["42%"]}
-      >
-        {show && (
-          <MonthPicker
-            mode="number"
-            onChange={onValueChange}
-            okButton="OK"
-            cancelButton={false}
-            value={date}
-            minimumDate={new Date(2000, 0)}
-            maximumDate={new Date()}
-            locale="us"
-          />
-        )}
-      </BottomSheet>
+
+      {show && (
+        <MonthYearPicker
+          visible={show}
+          selectedTab={selectedTab}
+          value={date}
+          minDate={new Date(2020, 0, 1)}
+          maxDate={new Date()}
+          onCancel={() => setShow(false)}
+          onConfirm={(date) => {
+            setDate(date);
+            formik.setFieldValue(
+              "dateOfBirth",
+              moment(date).format("YYYY-MM-DD")
+            );
+            setShow(false);
+            bottomSheetRef.current?.close();
+          }}
+        />
+      )}
     </SafeAreaView>
   );
 }
