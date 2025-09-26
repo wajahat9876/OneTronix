@@ -9,6 +9,7 @@ import BottomSheet from "@gorhom/bottom-sheet";
 import { useFont } from "@shopify/react-native-skia";
 import BarGraph2 from "@src/components/commons/business/BarGraph2";
 import { GeneralToolTip } from "@src/components/commons/business/GeneralTooltip";
+import Loader from "@src/components/commons/business/LoaderOneTronix";
 import MonthYearPicker from "@src/components/commons/business/MonthYear";
 import DetailRow from "@src/components/commons/DetailRow";
 import TabButtons from "@src/components/commons/TabButton";
@@ -119,7 +120,13 @@ export default function PanZoomPage() {
       : selectedTab === 1
       ? formattedDate
       : dayjs(formik?.values?.dateOfBirth).format("YYYY");
-  const { data, refetch } = useGetGraphDataQuery(
+  const {
+    data,
+    refetch,
+    isFetching: summaryFetching,
+    error,
+    isError,
+  } = useGetGraphDataQuery(
     {
       deviceId: businessData?.devices?.[0]?._id,
       type: tabValues[selectedTab],
@@ -151,24 +158,27 @@ export default function PanZoomPage() {
   const [DATA, setDATA] = React.useState<any[]>([]);
 
   React.useEffect(() => {
-    if (!data?.results?.length) {
+    if (!data?.results?.length || summaryFetching || error || isError) {
       setDATA([]);
       return;
     }
+    if (selectedTab === 0) {
+      const mapped = data?.results.map((item: any) => {
+        const time = moment.utc(item.createdAt);
+        const hour = time.hour() + time.minute() / 60;
+        return {
+          hour,
+          ac: item.data?.ac?.watt ?? 0,
+          battery: item.data?.battery?.chargingWatt ?? 0,
+          output: item.data?.output?.watt ?? 0,
+          solar: item.data?.solar?.watt ?? 0,
+        };
+      });
 
-    const mapped = data?.results.map((item: any) => {
-      const time = moment.utc(item.createdAt);
-      const hour = time.hour() + time.minute() / 60;
-      return {
-        hour,
-        ac: item.data?.ac?.watt ?? 0,
-        battery: item.data?.battery?.chargingWatt ?? 0,
-        output: item.data?.output?.watt ?? 0,
-        solar: item.data?.solar?.watt ?? 0,
-      };
-    });
-
-    setDATA(mapped);
+      setDATA(mapped);
+    } else {
+      setDATA(data);
+    }
   }, [data, formik.values.dateOfBirth]);
   const actionRef = React.useRef<CartesianActionsHandle>(null);
 
@@ -324,7 +334,7 @@ export default function PanZoomPage() {
     });
     return result;
   }, [DATA]);
-
+  console.log("DATA", DATA);
   return (
     <SafeAreaView
       style={styles.safeView}
@@ -394,15 +404,14 @@ export default function PanZoomPage() {
                 width: "65%",
                 marginTop: vs(6),
                 marginRight: 30,
-                marginLeft: -10,
               }}
             >
               <FormikDatePicker
                 ref={dateOfBirthRef}
                 formik={formik}
+                showIcon={false}
                 name="dateOfBirth"
                 inputProps={{
-                  type: "underlined",
                   backgroundColor: "transparent",
                   selectionColor:
                     Platform.OS === "ios"
@@ -412,8 +421,6 @@ export default function PanZoomPage() {
                   borderBottomColor:
                     Colors.light.theme.textInputBottomBorderColor,
                   placeholderTextColor: Colors.light.theme.placeholderColor,
-                  borderBottomHeight: 0,
-                  placeholder: "Select Date",
                 }}
                 datePickerProps={{
                   maxDate: moment(new Date(), "YYYY-MM-DD").toDate(),
@@ -648,7 +655,7 @@ export default function PanZoomPage() {
                 selectedTab={selectedTab}
                 date={date}
                 selectedParams={selectedParams}
-                data={data?.results || []}
+                data={DATA?.results || []}
               />
             </View>
           ) : (
@@ -848,6 +855,7 @@ export default function PanZoomPage() {
           }}
         />
       )}
+      <Loader visible={summaryFetching} message="Yahoooo" />
     </SafeAreaView>
   );
 }

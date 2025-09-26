@@ -4,29 +4,37 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react-hooks/exhaustive-deps */
 // import { IPhoneInputProps } from '@stable/PhoneInput';
-import DatePicker from '@src/components/globals/DatePicker';
-import moment from 'moment';
-import React, { useMemo } from 'react';
-import { TextInput } from 'react-native';
-import { MyFormikProps } from './types';
+import DatePicker from "@src/components/globals/DatePicker";
+import moment from "moment";
+import React, { useMemo } from "react";
+import { TextInput } from "react-native";
+import { MyFormikProps } from "./types";
 
-const FormikDatePicker = React.forwardRef<TextInput, MyFormikProps>(props => {
-  const { formik, name, value, inputProps, datePickerProps, onDateConfirm } =
-    props;
+const FormikDatePicker = React.forwardRef<TextInput, MyFormikProps>((props) => {
+  const {
+    formik,
+    name,
+    value,
+    inputProps,
+    datePickerProps,
+    onDateConfirm,
+    showIcon,
+  } = props;
 
   return useMemo(() => {
     return (
       <DatePicker
         inputProps={inputProps}
+        showIcon={showIcon}
         datePickerProps={datePickerProps}
         errorText={formik.touched[name] && formik.errors[name]}
         value={value || formik.values[name]}
-        onDateConfirm={e => {
+        onDateConfirm={(e) => {
           if (e) {
             formik.handleChange({
               target: {
                 name,
-                value: moment(e).format('YYYY-MM-DD')?.replace(/\//g, '-'),
+                value: moment(e).format("YYYY-MM-DD")?.replace(/\//g, "-"),
               },
             });
           }

@@ -14,6 +14,7 @@ import {
   Keyboard,
   Pressable,
   StyleSheet,
+  Text,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
@@ -22,8 +23,14 @@ import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 import { DatePickerProps } from "./types";
 
 const DatePicker = (props: DatePickerProps) => {
-  const { onDateConfirm, errorText, value, datePickerProps, inputProps } =
-    props;
+  const {
+    onDateConfirm,
+    errorText,
+    value,
+    datePickerProps,
+    inputProps,
+    showIcon,
+  } = props;
 
   // Date Picker
   const [date, setDate] = useState<DateType>(datePickerProps.date);
@@ -48,22 +55,36 @@ const DatePicker = (props: DatePickerProps) => {
           setOpen(true);
           Keyboard.dismiss();
         }}
-        style={{ marginLeft: hs(32), marginRight: hs(16) }}
+        style={{ marginLeft: hs(2), marginRight: hs(16) }}
       >
-        <View style={{ position: "relative", width: "100%" }}>
-          <Input
-            {...inputProps}
-            errorText={errorText}
-            editable={false}
-            value={value && moment(value).format("DD/MM/YYYY")}
-          />
-          <Feather
-            name="calendar"
-            size={24}
-            color={Colors.light.theme.placeholderColor}
-            style={{ position: "absolute", right: 0, top: 0, left: 100 }}
-          />
-        </View>
+        {showIcon ? (
+          <View style={{ position: "relative", width: "100%" }}>
+            <Input
+              {...inputProps}
+              errorText={errorText}
+              editable={false}
+              value={value && moment(value).format("YYYY-MM-DD")}
+            />
+
+            <Feather
+              name="calendar"
+              size={24}
+              color={Colors.light.theme.placeholderColor}
+              style={{ position: "absolute", right: 0, top: 0, left: 100 }}
+            />
+          </View>
+        ) : (
+          <View
+            style={{
+              paddingHorizontal: 20,
+              paddingVertical: 5,
+              flexDirection: "row",
+            }}
+          >
+            <Text>Select Date </Text>
+            <Text>{value && moment(value).format("YYYY-MM-DD")}</Text>
+          </View>
+        )}
       </TouchableOpacity>
       <Portal>
         <AnimatePresence>

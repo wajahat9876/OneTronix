@@ -1,4 +1,4 @@
-import { MyTextInputProps } from '../Input/types';
+import { MyTextInputProps } from "../Input/types";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface MyFormikProps {
@@ -8,4 +8,5 @@ export interface MyFormikProps {
   inputProps?: MyTextInputProps;
   datePickerProps?: any;
   onDateConfirm?: (date: Date) => void;
+  showIcon?: boolean;
 }

@@ -1,4 +1,4 @@
-import { MyTextInputProps } from '../Input/types';
+import { MyTextInputProps } from "../Input/types";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface DatePickerProps {
@@ -8,4 +8,5 @@ export interface DatePickerProps {
   datePickerProps?: any;
   onDateConfirm: (date: any) => void;
   minDate?: any;
+  showIcon?: boolean;
 }
