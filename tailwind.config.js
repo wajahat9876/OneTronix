@@ -16,6 +16,7 @@ module.exports = {
         "poppins-light": ["poppins-light"],
         "poppins-medium": ["poppins-medium"],
         excon: ["Excon_Complete"],
+        Ranade: ["Ranade_Complete"],
       },
     },
   },

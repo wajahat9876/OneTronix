@@ -5,16 +5,16 @@ import {
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import inter from "@assets/fonts/SpaceMono-Regular.ttf";
 import FilterIcon from "@assets/icons/filter.png";
-import BottomSheet from "@gorhom/bottom-sheet";
+import { getStrokeWidth } from "@hooks/useGetStrokeWidth";
 import { useFont } from "@shopify/react-native-skia";
 import BarGraph2 from "@src/components/commons/business/BarGraph2";
 import { GeneralToolTip } from "@src/components/commons/business/GeneralTooltip";
 import Loader from "@src/components/commons/business/LoaderOneTronix";
 import MonthYearPicker from "@src/components/commons/business/MonthYear";
+import RectangularChart from "@src/components/commons/business/RectangularChart";
 import DetailRow from "@src/components/commons/DetailRow";
 import TabButtons from "@src/components/commons/TabButton";
 import { TabButton } from "@src/components/commons/TabButton/types";
-import DonutChart2 from "@src/components/globals/DonutChart2";
 import FilterModal from "@src/components/globals/FilterModal";
 import FormikDatePicker from "@src/components/globals/FormikDatePicker";
 import { ScrollView } from "@src/components/libraries";
@@ -109,17 +109,18 @@ export default function PanZoomPage() {
     },
     onSubmit: () => {},
   });
-  const formattedDate =
-    selectedTab === 1
-      ? dayjs(formik?.values?.dateOfBirth).format("YYYY-MM")
-      : dayjs(formik?.values?.dateOfBirth).format("YYYY-MM-DD");
+
   //Api Call
   const updatedDate =
     selectedTab === 0
       ? formik?.values?.dateOfBirth
       : selectedTab === 1
-      ? formattedDate
-      : dayjs(formik?.values?.dateOfBirth).format("YYYY");
+      ? dayjs(formik?.values?.dateOfBirth).format("YYYY-MM")
+      : selectedTab === 2
+      ? dayjs(formik?.values?.dateOfBirth).format("YYYY")
+      : selectedTab === 3
+      ? `${2020}-${dayjs().year()}`
+      : "";
   const {
     data,
     refetch,
@@ -211,7 +212,7 @@ export default function PanZoomPage() {
   );
   const [ticks, setTicks] = useState([0, 6, 12, 18, 24]);
   const ticksShared = useSharedValue(ticks);
-
+  console.log("Ticks", ticks);
   useAnimatedReaction(
     () => ({ k: k.value, tx: tx.value }),
     ({ k, tx }) => {
@@ -319,7 +320,7 @@ export default function PanZoomPage() {
   // Analytics code
   const labels = ["Daily", "Monthly", "Yearly", "Net"];
   const [show, setShow] = useState(false);
-  const bottomSheetRef = React.useRef<BottomSheet>(null);
+
   const openBottomSheet = () => {
     setShow(true);
   };
@@ -352,7 +353,7 @@ export default function PanZoomPage() {
           >
             <View
               style={{
-                width: "80%",
+                width: "82%",
                 marginLeft: 10,
               }}
             >
@@ -364,12 +365,12 @@ export default function PanZoomPage() {
                 setSelectedTab={(index) => setSelectedTab(index)}
               />
             </View>
-            <View style={{ marginTop: vs(8) }}>
+            <View style={{ marginTop: vs(4) }}>
               <View style={{ flexDirection: "row" }}>
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
                   <Image
                     source={FilterIcon}
-                    style={{ width: 23, height: 23, marginRight: 30 }}
+                    style={{ width: 30, height: 30, marginRight: 22 }}
                   />
                 </TouchableOpacity>
                 {/* <TouchableOpacity
@@ -566,7 +567,7 @@ export default function PanZoomPage() {
                           key={"line"}
                           points={points.ac}
                           color="red"
-                          strokeWidth={1}
+                          strokeWidth={getStrokeWidth(ticks?.length)}
                           curveType="basis"
                           connectMissingData={false}
 
@@ -588,7 +589,7 @@ export default function PanZoomPage() {
                           key={"line2"}
                           points={points.battery}
                           color="blue"
-                          strokeWidth={1}
+                          strokeWidth={getStrokeWidth(ticks?.length)}
                           curveType="basis"
                         />
                         <Area
@@ -606,7 +607,7 @@ export default function PanZoomPage() {
                           key={"line3"}
                           points={points.output}
                           color="#F7D102"
-                          strokeWidth={1}
+                          strokeWidth={getStrokeWidth(ticks?.length)}
                           curveType="basis"
                         />
                         <Area
@@ -624,7 +625,7 @@ export default function PanZoomPage() {
                           key={"line4"}
                           points={points.solar}
                           color="#8C11BA"
-                          strokeWidth={1}
+                          strokeWidth={getStrokeWidth(ticks?.length)}
                           curveType="basis"
                         />
                         <Area
@@ -642,6 +643,7 @@ export default function PanZoomPage() {
                         xVal={toolState.x.value} // data space (for HH:mm conversion)
                         chartBounds={chartBounds} // pass chart bounds
                         fontSrc={inter}
+                        ticks={ticks}
                       />
                     )}
                   </>
@@ -704,29 +706,72 @@ export default function PanZoomPage() {
           )}
         </View>
 
-        <View style={{ paddingHorizontal: 12 }}>
-          {/* Production Section */}
-          <View style={styles.dailyProduction}>
-            <Text
-              style={styles.txtProduction}
-            >{`${labels[selectedTab]} Production`}</Text>
-            <DonutChart2
-              load={analyticsData?.results?.consumption?.dailyConsumption || 0}
-              grid={0}
-              battery={analyticsData?.results?.battery?.dailyCharging || 0}
-            />
-          </View>
+        <View style={{ paddingHorizontal: 8 }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            {/* Production Section */}
+            <View style={styles.dailyProduction}>
+              <View style={{ flexDirection: "row" }}>
+                <Text style={{ fontFamily: "Ranade-Medium", fontSize: ms(33) }}>
+                  {Number(
+                    analyticsData?.results?.production?.dailyProduction
+                  ).toFixed(1)}
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "Ranade-Medium",
+                    fontSize: ms(13),
+                    marginTop: 20,
+                    marginLeft: 5,
+                    color: "#5F5F60",
+                  }}
+                >
+                  kWh
+                </Text>
+              </View>
+              <Text
+                style={styles.txtProduction}
+              >{`${labels[selectedTab]} Production`}</Text>
+              <RectangularChart
+                load={
+                  analyticsData?.results?.consumption?.dailyConsumption || 0
+                }
+                battery={analyticsData?.results?.battery?.dailyCharging || 0}
+                grid={0}
+              />
+            </View>
 
-          {/* Consumption Section */}
-          <View style={styles.dailyProduction}>
-            <Text style={styles.txtProduction}>
-              {`${labels[selectedTab]} Consumption`}
-            </Text>
-            <DonutChart2
-              solar={0}
-              grid={analyticsData?.results?.grid?.dailyPurchase || 0}
-              battery={analyticsData?.results?.battery?.dailyDischarging || 0}
-            />
+            {/* Consumption Section */}
+            <View style={styles.dailyProduction}>
+              <View style={{ flexDirection: "row" }}>
+                <Text style={{ fontFamily: "Ranade-Medium", fontSize: ms(33) }}>
+                  {Number(
+                    analyticsData?.results?.consumption?.dailyConsumption
+                  ).toFixed(1)}
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "Ranade-Medium",
+                    fontSize: ms(13),
+                    marginTop: 20,
+                    marginLeft: 5,
+                    color: "#5F5F60",
+                  }}
+                >
+                  kWh
+                </Text>
+              </View>
+              <Text style={styles.txtProduction}>
+                {`${labels[selectedTab]} Consumption`}
+              </Text>
+              <RectangularChart
+                type={"consumption"}
+                solar={0}
+                grid={analyticsData?.results?.grid?.dailyPurchase || 0}
+                battery={analyticsData?.results?.battery?.dailyDischarging || 0}
+              />
+            </View>
           </View>
           {/* Current Cycle */}
           <View style={styles.currentCycle}>
@@ -851,7 +896,6 @@ export default function PanZoomPage() {
               moment(date).format("YYYY-MM-DD")
             );
             setShow(false);
-            bottomSheetRef.current?.close();
           }}
         />
       )}
@@ -894,11 +938,13 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   dailyProduction: {
-    alignItems: "center",
+    // alignItems: "center",
     marginBottom: 20,
     backgroundColor: "transparent",
-    padding: 10,
+    padding: 3,
+    marginLeft: 5,
     borderRadius: 10,
+    width: "49%",
   },
   currentCycle: {
     // alignItems: "center",
@@ -908,7 +954,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   txtProduction: {
-    fontSize: 14,
+    fontSize: 13,
+    fontFamily: "Excon-Regular",
     fontWeight: "600",
     color: "#111",
     marginBottom: 8,

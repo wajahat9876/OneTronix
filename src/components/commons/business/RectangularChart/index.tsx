@@ -1,0 +1,214 @@
+import ArrowUp from "@assets/icons/arrow.png";
+import GreenArrowDown from "@assets/icons/arrows.png";
+import React from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
+import Svg, { Line, Rect, Text as SvgText } from "react-native-svg";
+type Props = {
+  load?: number;
+  solar?: number;
+  battery?: number;
+  grid?: number;
+  height?: number;
+  width?: number;
+  type?: "production" | "consumption";
+};
+
+const RectangularChart: React.FC<Props> = ({
+  load = 0,
+  solar = 0,
+  battery = 0,
+  grid = 0,
+  height = 120,
+  width = 60,
+  type,
+}) => {
+  const total = load + solar + battery + grid;
+
+  if (total === 0) {
+    return (
+      <View style={styles.container}>
+        <Text>No data available</Text>
+      </View>
+    );
+  }
+
+  const data = [
+    {
+      raw: battery,
+      value: (battery / total) * 100,
+      color: "#DCDCDD",
+      label: "to Battery",
+      detail: `${battery} W`,
+      textColor: "black",
+    },
+    {
+      raw: grid,
+      value: (grid / total) * 100,
+      color: "#CDCDCE",
+      label: "to Grid",
+      detail: `${grid} kWh`,
+      textColor: "red",
+    },
+    {
+      raw: load,
+      value: (load / total) * 100,
+      color: "#26C83F",
+      label: "to Load",
+      detail: `${load} Wh`,
+      textColor: "white",
+    },
+    {
+      raw: solar,
+      value: (solar / total) * 100,
+      color: "#FF5F57",
+      label: "to Solar",
+      detail: `${solar} Wh`,
+      textColor: "white",
+    },
+  ].filter((item) => item.raw && item.raw > 0);
+
+  let offset = 0;
+
+  return (
+    <View style={styles.container}>
+      {/* ✅ Bar with % inside */}
+      <View style={{ borderRadius: 10, overflow: "hidden", height, width }}>
+        <Svg height={height} width={width}>
+          {data.map((item, index) => {
+            const rectHeight = (item.value / 100) * height;
+            const y = offset;
+            const midY = y + rectHeight / 2;
+            offset += rectHeight;
+
+            return (
+              <React.Fragment key={index}>
+                {/* Slice */}
+                <Rect
+                  x={0}
+                  y={y}
+                  width={width}
+                  height={rectHeight}
+                  fill={item.color}
+                />
+
+                {/* % inside slice */}
+                {rectHeight > 10 && (
+                  <SvgText
+                    x={width / 2}
+                    y={midY + 2}
+                    fontFamily="Ranade-Medium"
+                    fontSize={Math.max(8, Math.min(14, rectHeight * 0.4))} // ✅ dynamic font
+                    fill={item.textColor}
+                    textAnchor="middle"
+                    fontWeight="bold"
+                  >
+                    {item.value.toFixed(1)}%
+                  </SvgText>
+                )}
+              </React.Fragment>
+            );
+          })}
+        </Svg>
+      </View>
+
+      {/* ✅ Lines (not clipped) */}
+      {/* ✅ Lines at slice boundaries */}
+      <Svg
+        height={height}
+        width={20}
+        style={{ position: "absolute", left: width }}
+      >
+        {(() => {
+          let offset2 = 0;
+          return data.map((item, index) => {
+            const rectHeight = (item.value / 100) * height;
+            const startY = offset2;
+            const endY = startY + rectHeight;
+            const midY = startY + rectHeight / 2;
+            offset2 += rectHeight;
+
+            return (
+              <Line
+                key={index}
+                x1={0}
+                y1={midY} // ✅ bottom of slice
+                x2={20}
+                y2={midY}
+                stroke={"gray"}
+                strokeWidth={0.8}
+              />
+            );
+          });
+        })()}
+      </Svg>
+
+      {/* ✅ External Labels with ↓ arrow */}
+      <View style={[StyleSheet.absoluteFill, { left: width + 25 }]}>
+        {(() => {
+          let offset3 = 0;
+          return data.map((item, index) => {
+            const rectHeight = (item.value / 100) * height;
+            const y = offset3;
+            const midY = y + rectHeight / 2;
+            offset3 += rectHeight;
+
+            return (
+              <View
+                key={index}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  position: "absolute",
+                  top: midY - 15, // center block
+                }}
+              >
+                {/* Arrow */}
+
+                <Image
+                  source={type === "consumption" ? ArrowUp : GreenArrowDown}
+                  style={{ width: 12, height: 12, marginRight: 6 }}
+                  resizeMode="contain"
+                />
+
+                {/* Texts stacked (value + label) */}
+                <View style={{ flexDirection: "column" }}>
+                  <Text
+                    style={{
+                      fontSize: 9,
+                      color: "black",
+                      fontWeight: "600",
+                      marginBottom: 2,
+                      fontFamily: "Ranade-Medium",
+                    }}
+                  >
+                    {item.detail}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 9,
+                      color: "#818283",
+                      fontWeight: "600",
+                      fontFamily: "Excon-medium",
+                    }}
+                  >
+                    {item.label}
+                  </Text>
+                </View>
+              </View>
+            );
+          });
+        })()}
+      </View>
+    </View>
+  );
+};
+
+export default RectangularChart;
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    margin: 20,
+  },
+});

@@ -14,6 +14,7 @@ export default function Loader({ visible, message }: LoaderProps) {
       animationType="fade"
       visible={visible}
       statusBarTranslucent
+      onRequestClose={() => {}} // Required for Android
     >
       <View style={styles.overlay}>
         <View style={styles.container}>
@@ -38,10 +39,12 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
+    minWidth: 120,
   },
   text: {
     marginTop: 10,
     fontSize: 14,
     color: "#333",
+    textAlign: "center",
   },
 });

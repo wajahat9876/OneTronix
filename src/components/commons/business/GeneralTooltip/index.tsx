@@ -6,13 +6,24 @@ export function GeneralToolTip({
   xVal,
   chartBounds,
   fontSrc,
+  ticks,
 }: {
   xPos: SharedValue<number>; // pixel space
   xVal: SharedValue<number>; // data space (hour float)
   chartBounds: { top: number; bottom: number }; // chart height range
   fontSrc: any;
+  ticks?: any;
 }) {
-  const font = useFont(fontSrc, 8);
+  const font = useFont(
+    fontSrc,
+    ticks?.length === 5
+      ? 8
+      : ticks?.length === 9
+      ? 6
+      : ticks?.length === 13
+      ? 8
+      : 4
+  );
 
   // 🕒 format hour:min
   const label = useDerivedValue(() => {
@@ -30,14 +41,14 @@ export function GeneralToolTip({
           y: chartBounds.bottom,
         }))}
         color="rgba(31,41,55,0.85)"
-        strokeWidth={0.5}
+        strokeWidth={0.3}
       />
       {/* time label (top of line) */}
       <Text
         x={useDerivedValue(() => xPos.value + 5)}
         y={chartBounds.top + 8}
         text={label}
-        color="gray"
+        color="red"
         font={font}
       />
     </>

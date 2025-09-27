@@ -89,7 +89,11 @@ export default function MonthYearPicker({
   if (!visible) return null;
 
   return (
-    <Modal transparent animationType="slide" visible={visible}>
+    <Modal
+      transparent
+      animationType="slide"
+      visible={selectedTab === 1 || selectedTab === 2 ? visible : false}
+    >
       <View style={styles.overlay}>
         <View style={styles.container}>
           {/* Header */}
