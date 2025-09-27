@@ -79,7 +79,7 @@ export default function PanZoomPage() {
     data: businessData,
     inverterData,
   } = useAppSelector(useBusinessDetails);
-  // console.log(inverterData, "InverterData");
+
   // Tab Button Code
   const [selectedTab, setSelectedTab] = useState(0);
 
@@ -164,7 +164,7 @@ export default function PanZoomPage() {
       refetchOnMountOrArgChange: true,
     }
   );
-  // console.log(data, data);
+
   React.useEffect(() => {
     refetch();
     analyticsRefetch();
@@ -229,7 +229,7 @@ export default function PanZoomPage() {
   );
   const [ticks, setTicks] = useState([0, 6, 12, 18, 24]);
   const ticksShared = useSharedValue(ticks);
-  console.log("Ticks", ticks);
+
   useAnimatedReaction(
     () => ({ k: k.value, tx: tx.value }),
     ({ k, tx }) => {
@@ -366,7 +366,7 @@ export default function PanZoomPage() {
     });
     return result;
   }, [DATA]);
-  console.log("DATA", DATA);
+
   return (
     <SafeAreaView
       style={styles.safeView}
