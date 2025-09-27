@@ -4,10 +4,16 @@ import {
 } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import inter from "@assets/fonts/SpaceMono-Regular.ttf";
+import BulbIcon from "@assets/icons/ExchangeIcons/Bulb.png";
+import FlashIcon from "@assets/icons/ExchangeIcons/flash.png";
+import HomeIcon from "@assets/icons/ExchangeIcons/Home.png";
+import SunIcon from "@assets/icons/ExchangeIcons/sun.png";
 import FilterIcon from "@assets/icons/filter.png";
 import { getStrokeWidth } from "@hooks/useGetStrokeWidth";
+import { useFocusEffect } from "@react-navigation/native";
 import { useFont } from "@shopify/react-native-skia";
 import BarGraph2 from "@src/components/commons/business/BarGraph2";
+import ExchangeBlock from "@src/components/commons/business/ExchangeBlock";
 import { GeneralToolTip } from "@src/components/commons/business/GeneralTooltip";
 import Loader from "@src/components/commons/business/LoaderOneTronix";
 import MonthYearPicker from "@src/components/commons/business/MonthYear";
@@ -147,6 +153,17 @@ export default function PanZoomPage() {
         refetchOnMountOrArgChange: true,
       }
     );
+  const { data: totalData, refetch: totalRefetch } = useGetAnalyticsDataQuery(
+    {
+      deviceId: businessData?.devices?.[0]?._id,
+      type: "total",
+      date: updatedDate,
+    },
+    {
+      skip: !auth_token,
+      refetchOnMountOrArgChange: true,
+    }
+  );
   // console.log(data, data);
   React.useEffect(() => {
     refetch();
@@ -289,10 +306,24 @@ export default function PanZoomPage() {
     }
   );
   // const maxY = Math.max(...DATA.map((d) => d.solarPower));
-  React.useEffect(() => {
-    refetch();
-    analyticsRefetch();
-  }, [selectedTab]);
+  // React.useEffect(() => {
+  //   refetch();
+  //   analyticsRefetch();
+  //   totalRefetch();
+  // }, [selectedTab]);
+  useFocusEffect(
+    React.useCallback(() => {
+      // 🔥 run these when screen gets focus
+      refetch();
+      analyticsRefetch();
+      totalRefetch();
+
+      // optional cleanup when screen loses focus
+      return () => {
+        console.log("Screen lost focus");
+      };
+    }, [selectedTab]) // also runs again if selectedTab changes
+  );
   // Ref
   const dateOfBirthRef = React.useRef() as React.MutableRefObject<TextInput>;
   const { state: toolState, isActive } = useChartPressState<{
@@ -712,8 +743,13 @@ export default function PanZoomPage() {
           >
             {/* Production Section */}
             <View style={styles.dailyProduction}>
-              <View style={{ flexDirection: "row" }}>
-                <Text style={{ fontFamily: "Ranade-Medium", fontSize: ms(33) }}>
+              <View style={{ flexDirection: "row", alignSelf: "center" }}>
+                <Text
+                  style={{
+                    fontFamily: "Ranade-Medium",
+                    fontSize: ms(33),
+                  }}
+                >
                   {Number(
                     analyticsData?.results?.production?.dailyProduction
                   ).toFixed(1)}
@@ -744,7 +780,7 @@ export default function PanZoomPage() {
 
             {/* Consumption Section */}
             <View style={styles.dailyProduction}>
-              <View style={{ flexDirection: "row" }}>
+              <View style={{ flexDirection: "row", alignSelf: "center" }}>
                 <Text style={{ fontFamily: "Ranade-Medium", fontSize: ms(33) }}>
                   {Number(
                     analyticsData?.results?.consumption?.dailyConsumption
@@ -773,6 +809,36 @@ export default function PanZoomPage() {
               />
             </View>
           </View>
+          {/* //Home Echange */}
+          <ExchangeBlock
+            title="Home Exchange"
+            icon1={SunIcon}
+            icon2={BulbIcon}
+            label1={"Solar Energy Produced"}
+            value1={Number(
+              totalData?.results?.production?.totalProduction || 0
+            ).toFixed(1)}
+            unit1={"MWh"}
+            label2={"Energy Consumed"}
+            value2={Number(
+              totalData?.results?.consumption?.totalConsumption || 0
+            ).toFixed(1)}
+            unit2={"kWh"}
+          />
+          {/* //Grid Exchange */}
+          <ExchangeBlock
+            icon1={FlashIcon}
+            icon2={HomeIcon}
+            title="Grid Exchange"
+            label1={"Energy Export"}
+            value1={Number(0).toFixed(1)}
+            unit1={"MWh"}
+            label2={"Energy Purchased"}
+            value2={Number(
+              totalData?.results?.grid?.totalPurchase || 0
+            ).toFixed(1)}
+            unit2={"kWh"}
+          />
           {/* Current Cycle */}
           <View style={styles.currentCycle}>
             <Text style={[styles.txtProduction, { alignSelf: "center" }]}>
@@ -783,44 +849,53 @@ export default function PanZoomPage() {
               <DetailRow
                 label="Ampare"
                 value={inverterData?.inverterData?.data?.ac?.amp}
+                unit={"A"}
               />
               <DetailRow
                 label="Frequency"
                 value={inverterData?.inverterData?.data?.ac?.freq}
+                unit={"Hz"}
               />
               <DetailRow
                 label="Voltage"
                 value={inverterData?.inverterData?.data?.ac?.voltage}
+                unit={"VOLTAGE"}
               />
               <DetailRow
                 label="Watt"
                 value={inverterData?.inverterData?.data?.ac?.watt}
+                unit={"kWh"}
               />
             </View>
             <View style={{ marginTop: 10 }}>
               <Text style={styles.txtCycle}>Battery</Text>
               <DetailRow
-                label="Charging Ampare"
+                label="Charging Current"
                 value={inverterData?.inverterData?.data?.battery?.chargingAmp}
+                unit={"A"}
               />
               <DetailRow
-                label="Charging Watt"
+                label="Charging Power"
                 value={inverterData?.inverterData?.data?.battery?.chargingWatt}
+                unit={"W"}
               />
               <DetailRow
-                label="Discharging Watt"
+                label="Discharging"
                 value={
                   inverterData?.inverterData?.data?.battery?.dischargingWatt
                 }
+                unit={"W"}
               />
               <DetailRow
-                label="Inverter Ampare"
+                label="Inverter Current"
                 value={inverterData?.inverterData?.data?.battery?.inverterAmp}
+                unit={"A"}
               />
 
               <DetailRow
                 label="Voltage"
                 value={inverterData?.inverterData?.data?.battery?.voltage}
+                unit={"V"}
               />
             </View>
             <View style={{ marginTop: 10 }}>
@@ -829,37 +904,44 @@ export default function PanZoomPage() {
               <DetailRow
                 label="Voltage"
                 value={inverterData?.inverterData?.data?.hvdc?.voltage}
+                unit={"V"}
               />
             </View>
             <View style={{ marginTop: 10 }}>
               <Text style={styles.txtCycle}>OutPut</Text>
               <DetailRow
-                label="Load Ampare"
+                label="Load Current"
                 value={inverterData?.inverterData?.data?.output?.loadAmp}
+                unit={"A"}
               />
               <DetailRow
-                label="Watt"
+                label="Power"
                 value={inverterData?.inverterData?.data?.output?.watt}
+                unit={"W"}
               />
 
               <DetailRow
                 label="Voltage"
                 value={inverterData?.inverterData?.data?.output?.voltage}
+                unit={"V"}
               />
             </View>
             <View style={{ marginTop: 10 }}>
               <Text style={styles.txtCycle}>Solar</Text>
               <DetailRow
-                label="Ampare"
-                value={inverterData?.inverterData?.data?.solar?.loadAmp}
-              />
-              <DetailRow
-                label="Watt"
-                value={inverterData?.inverterData?.data?.solar?.watt}
-              />
-              <DetailRow
                 label="Voltage"
                 value={inverterData?.inverterData?.data?.solar?.voltage}
+                unit={"V"}
+              />
+              <DetailRow
+                label="Current"
+                value={inverterData?.inverterData?.data?.solar?.loadAmp}
+                unit={"A"}
+              />
+              <DetailRow
+                label="Power"
+                value={inverterData?.inverterData?.data?.solar?.watt}
+                unit={"W"}
               />
             </View>
             <View style={{ marginTop: 10 }}>
@@ -867,14 +949,17 @@ export default function PanZoomPage() {
               <DetailRow
                 label="Booster"
                 value={inverterData?.inverterData?.data?.temperature?.booster}
+                unit={"℃"}
               />
               <DetailRow
                 label="Inverter"
                 value={inverterData?.inverterData?.data?.temperature?.inverter}
+                unit={"℃"}
               />
               <DetailRow
                 label="MPPT"
                 value={inverterData?.inverterData?.data?.temperature?.mppt}
+                unit={"℃"}
               />
             </View>
           </View>
@@ -959,10 +1044,12 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#111",
     marginBottom: 8,
+    alignSelf: "center",
   },
   txtCycle: {
+    fontFamily: "Excon-medium",
     paddingHorizontal: 12,
-    fontSize: ms(13),
+    fontSize: ms(14),
     fontWeight: "600",
     color: "#111",
     marginBottom: 8,
