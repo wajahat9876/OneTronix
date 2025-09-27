@@ -751,7 +751,7 @@ export default function PanZoomPage() {
                   }}
                 >
                   {Number(
-                    analyticsData?.results?.production?.dailyProduction
+                    analyticsData?.results?.production?.dailyProduction || 0.0
                   ).toFixed(1)}
                 </Text>
                 <Text
@@ -783,7 +783,7 @@ export default function PanZoomPage() {
               <View style={{ flexDirection: "row", alignSelf: "center" }}>
                 <Text style={{ fontFamily: "Ranade-Medium", fontSize: ms(33) }}>
                   {Number(
-                    analyticsData?.results?.consumption?.dailyConsumption
+                    analyticsData?.results?.consumption?.dailyConsumption || 0.0
                   ).toFixed(1)}
                 </Text>
                 <Text
