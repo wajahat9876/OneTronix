@@ -738,40 +738,18 @@ export default function PanZoomPage() {
         </View>
 
         <View style={{ paddingHorizontal: 8 }}>
+          {/* 🚀🔥 RectAngular Chart-----------------------------*/}
           <View style={{ flexDirection: "row" }}>
             {/* Production Section */}
             <View style={styles.dailyProduction}>
-              <View style={{ alignSelf: "center" }}>
-                <View style={{ flexDirection: "row" }}>
-                  <Text
-                    style={{
-                      fontFamily: "Ranade-Medium",
-                      fontSize: ms(33),
-                      lineHeight: ms(38),
-                    }}
-                  >
-                    {Number(
-                      analyticsData?.results?.production?.dailyProduction || 0.0
-                    ).toFixed(1)}
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: "Ranade-Medium",
-                      fontSize: ms(13),
-                      marginTop: 20,
-                      marginLeft: 5,
-                      color: "#5F5F60",
-                    }}
-                  >
-                    kWh
-                  </Text>
-                </View>
-                <Text
-                  style={styles.txtProduction}
-                >{`${labels[selectedTab]} Production`}</Text>
-              </View>
               <View style={{ marginLeft: 15 }}>
                 <RectangularChart
+                  type="Production"
+                  totalValue={
+                    analyticsData?.results?.production?.dailyProduction
+                  }
+                  selectedTab={selectedTab}
+                  unit="kWh"
                   load={
                     analyticsData?.results?.consumption?.dailyConsumption || 0
                   }
@@ -783,39 +761,14 @@ export default function PanZoomPage() {
 
             {/* Consumption Section */}
             <View style={styles.dailyProduction}>
-              <View style={{ alignSelf: "center" }}>
-                <View style={{ flexDirection: "row" }}>
-                  <Text
-                    style={{
-                      fontFamily: "Ranade-Medium",
-                      fontSize: ms(33),
-                      lineHeight: ms(38),
-                    }}
-                  >
-                    {Number(
-                      analyticsData?.results?.consumption?.dailyConsumption ||
-                        0.0
-                    ).toFixed(1)}
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: "Ranade-Medium",
-                      fontSize: ms(13),
-                      marginTop: 20,
-                      marginLeft: 5,
-                      color: "#5F5F60",
-                    }}
-                  >
-                    kWh
-                  </Text>
-                </View>
-                <Text style={styles.txtProduction}>
-                  {`${labels[selectedTab]} Consumption`}
-                </Text>
-              </View>
               <View style={{ marginLeft: 10 }}>
                 <RectangularChart
-                  type={"consumption"}
+                  type={"Consumption"}
+                  totalValue={
+                    analyticsData?.results?.consumption?.dailyConsumption || 0
+                  }
+                  selectedTab={selectedTab}
+                  unit="kWh"
                   solar={0}
                   grid={analyticsData?.results?.grid?.dailyPurchase || 0}
                   battery={

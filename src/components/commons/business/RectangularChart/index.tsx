@@ -1,5 +1,6 @@
 import ArrowUp from "@assets/icons/arrow.png";
 import GreenArrowDown from "@assets/icons/arrows.png";
+import { ms } from "@utils/design/design";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import Svg, { Line, Rect, Text as SvgText } from "react-native-svg";
@@ -10,7 +11,10 @@ type Props = {
   grid?: number;
   height?: number;
   width?: number;
-  type?: "production" | "consumption";
+  type?: "Production" | "Consumption";
+  totalValue: Number | 0;
+  selectedTab: any;
+  unit: string;
 };
 
 const RectangularChart: React.FC<Props> = ({
@@ -21,6 +25,9 @@ const RectangularChart: React.FC<Props> = ({
   height = 115,
   width = 76,
   type,
+  totalValue,
+  selectedTab,
+  unit,
 }) => {
   const total = load + solar + battery + grid;
 
@@ -37,7 +44,7 @@ const RectangularChart: React.FC<Props> = ({
       raw: battery,
       value: (battery / total) * 100,
       color: "#DCDCDD",
-      label: type === "consumption" ? "from Battery" : "to Battery",
+      label: type === "Consumption" ? "from Battery" : "to Battery",
       detail: `${battery} W`,
       textColor: "black",
     },
@@ -45,7 +52,7 @@ const RectangularChart: React.FC<Props> = ({
       raw: grid,
       value: (grid / total) * 100,
       color: "#CDCDCE",
-      label: type === "consumption" ? "from Grid" : "to Grid",
+      label: type === "Consumption" ? "from Grid" : "to Grid",
       detail: `${grid} kWh`,
       textColor: "red",
     },
@@ -61,16 +68,45 @@ const RectangularChart: React.FC<Props> = ({
       raw: solar,
       value: (solar / total) * 100,
       color: "#FF5F57",
-      label: type === "consumption" ? "from Solar" : "to Solar",
+      label: type === "Consumption" ? "from Solar" : "to Solar",
       detail: `${solar} Wh`,
       textColor: "white",
     },
   ].filter((item) => item.raw && item.raw > 0);
 
   let offset = 0;
-
+  const labels = ["Daily", "Monthly", "Yearly", "Net"];
   return (
     <View style={{ flex: 1 }}>
+      {/* Text Summary */}
+      <View style={{ alignSelf: "flex-start", marginLeft: 10 }}>
+        <View style={{ flexDirection: "row" }}>
+          <Text
+            style={{
+              fontFamily: "Ranade-Medium",
+              fontSize: ms(33),
+              lineHeight: ms(38),
+            }}
+          >
+            {Number(totalValue || 0.0).toFixed(0)}
+          </Text>
+          <Text
+            style={{
+              fontFamily: "Ranade-Medium",
+              fontSize: ms(13),
+              marginTop: 20,
+              marginLeft: 5,
+              color: "#5F5F60",
+            }}
+          >
+            {unit}
+          </Text>
+        </View>
+        <Text style={styles.txtProduction}>
+          {`${labels[selectedTab]} ${type}`}
+        </Text>
+      </View>
+      {/* Main content  */}
       <View style={styles.container}>
         {/* ✅ Bar with % inside */}
         <View style={{ borderRadius: 10, overflow: "hidden", height, width }}>
@@ -183,7 +219,7 @@ const RectangularChart: React.FC<Props> = ({
                   {/* Arrow */}
 
                   <Image
-                    source={type === "consumption" ? ArrowUp : GreenArrowDown}
+                    source={type === "Consumption" ? ArrowUp : GreenArrowDown}
                     style={{ width: 12, height: 12, marginRight: 6 }}
                     resizeMode="contain"
                   />
@@ -230,5 +266,13 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     marginVertical: 20,
     marginHorizontal: 10,
+  },
+  txtProduction: {
+    fontSize: 13,
+    fontFamily: "Excon-Regular",
+    fontWeight: "600",
+    color: "#111",
+    marginBottom: 8,
+    // alignSelf: "center",s
   },
 });
