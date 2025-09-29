@@ -11,7 +11,7 @@ import SunIcon from "@assets/icons/ExchangeIcons/sun.png";
 import FilterIcon from "@assets/icons/filter.png";
 import { getStrokeWidth } from "@hooks/useGetStrokeWidth";
 import { useFocusEffect } from "@react-navigation/native";
-import { useFont } from "@shopify/react-native-skia";
+import { DashPathEffect, useFont } from "@shopify/react-native-skia";
 import BarGraph2 from "@src/components/commons/business/BarGraph2";
 import ExchangeBlock from "@src/components/commons/business/ExchangeBlock";
 import { GeneralToolTip } from "@src/components/commons/business/GeneralTooltip";
@@ -376,7 +376,6 @@ export default function PanZoomPage() {
         <View style={{ flex: 1 }}>
           <View
             style={{
-              flexDirection: "row",
               marginTop: vs(20),
               marginBottom: vs(10),
               justifyContent: "space-between",
@@ -384,8 +383,10 @@ export default function PanZoomPage() {
           >
             <View
               style={{
-                width: "82%",
-                marginLeft: 10,
+                width: "95%",
+                // marginLeft: 10,
+
+                alignSelf: "center",
               }}
             >
               <TabButtons
@@ -396,12 +397,71 @@ export default function PanZoomPage() {
                 setSelectedTab={(index) => setSelectedTab(index)}
               />
             </View>
-            <View style={{ marginTop: vs(4) }}>
+          </View>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            {selectedTab === 0 ? (
+              <View
+                style={{
+                  width: "60%",
+                  marginTop: vs(6),
+                }}
+              >
+                <FormikDatePicker
+                  ref={dateOfBirthRef}
+                  formik={formik}
+                  showIcon={false}
+                  name="dateOfBirth"
+                  inputProps={{
+                    backgroundColor: "transparent",
+                    selectionColor:
+                      Platform.OS === "ios"
+                        ? Colors.light.theme.black
+                        : "#D3D3D3",
+                    cursorColor: Colors.light.theme.black,
+                    borderBottomColor:
+                      Colors.light.theme.textInputBottomBorderColor,
+                    placeholderTextColor: Colors.light.theme.placeholderColor,
+                  }}
+                  datePickerProps={{
+                    maxDate: moment(new Date(), "YYYY-MM-DD").toDate(),
+                    date:
+                      formik.values.dateOfBirth &&
+                      moment(formik.values.dateOfBirth, "YYYY-MM-DD").toDate(),
+                    onChange: (selectedDate: any) => {
+                      formik.setFieldValue(
+                        "dateOfBirth",
+                        moment(selectedDate).format("YYYY-MM-DD")
+                      );
+                    },
+                  }}
+                />
+              </View>
+            ) : (
+              <>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    paddingHorizontal: 20,
+                    paddingVertical: 10,
+
+                    marginLeft: 10,
+                  }}
+                >
+                  <Text>Select Date </Text>
+                  <TouchableOpacity onPress={() => openBottomSheet()}>
+                    <Text>{updatedDate}</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            )}
+            <View style={{ marginTop: vs(10), marginRight: 40 }}>
               <View style={{ flexDirection: "row" }}>
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
                   <Image
                     source={FilterIcon}
-                    style={{ width: 30, height: 30, marginRight: 22 }}
+                    style={{ width: 20, height: 20 }}
                   />
                 </TouchableOpacity>
                 {/* <TouchableOpacity
@@ -420,7 +480,6 @@ export default function PanZoomPage() {
                   <Image source={ResetIcon} style={{ width: 23, height: 23 }} />
                 </TouchableOpacity> */}
               </View>
-
               <FilterModal
                 visible={modalVisible}
                 onClose={() => setModalVisible(false)}
@@ -430,60 +489,6 @@ export default function PanZoomPage() {
               />
             </View>
           </View>
-          {selectedTab === 0 ? (
-            <View
-              style={{
-                width: "65%",
-                marginTop: vs(6),
-                marginRight: 30,
-              }}
-            >
-              <FormikDatePicker
-                ref={dateOfBirthRef}
-                formik={formik}
-                showIcon={false}
-                name="dateOfBirth"
-                inputProps={{
-                  backgroundColor: "transparent",
-                  selectionColor:
-                    Platform.OS === "ios"
-                      ? Colors.light.theme.black
-                      : "#D3D3D3",
-                  cursorColor: Colors.light.theme.black,
-                  borderBottomColor:
-                    Colors.light.theme.textInputBottomBorderColor,
-                  placeholderTextColor: Colors.light.theme.placeholderColor,
-                }}
-                datePickerProps={{
-                  maxDate: moment(new Date(), "YYYY-MM-DD").toDate(),
-                  date:
-                    formik.values.dateOfBirth &&
-                    moment(formik.values.dateOfBirth, "YYYY-MM-DD").toDate(),
-                  onChange: (selectedDate: any) => {
-                    formik.setFieldValue(
-                      "dateOfBirth",
-                      moment(selectedDate).format("YYYY-MM-DD")
-                    );
-                  },
-                }}
-              />
-            </View>
-          ) : (
-            <>
-              <View
-                style={{
-                  flexDirection: "row",
-                  paddingHorizontal: 20,
-                  paddingVertical: 10,
-                }}
-              >
-                <Text>Select Date </Text>
-                <TouchableOpacity onPress={() => openBottomSheet()}>
-                  <Text>{updatedDate}</Text>
-                </TouchableOpacity>
-              </View>
-            </>
-          )}
         </View>
         {selectedTab === 0 && DATA.length ? (
           <View
@@ -554,6 +559,9 @@ export default function PanZoomPage() {
               padding={{ top: 10, bottom: 10 }}
               xKey="hour"
               yKeys={["ac", "battery", "output", "solar"]}
+              frame={{
+                lineWidth: { top: 0, bottom: 1, left: 1, right: 0 },
+              }}
               yAxis={[
                 {
                   font: font,
@@ -563,9 +571,10 @@ export default function PanZoomPage() {
                   tickValues: [0, Math.round(selectedMaxY / 2), selectedMaxY],
                   tickCount: 2,
                   formatYLabel: (n: number) => `${n}kW`, // 👈 label with kW
-                  lineWidth: 0.3,
+                  lineWidth: 0.2,
                   labelOffset: 3,
                   labelColor: "gray",
+                  linePathEffect: <DashPathEffect intervals={[6, 4]} />,
                 },
               ]}
               xAxis={{
@@ -576,6 +585,7 @@ export default function PanZoomPage() {
                 lineWidth: 0.3,
                 tickCount: Number(ticks?.length),
                 labelColor: "gray",
+                linePathEffect: <DashPathEffect intervals={[6, 4]} />,
                 formatXLabel: (d: number) => {
                   const hour = Math.floor(d);
                   const min = Math.round((d - hour) * 60);
@@ -608,7 +618,7 @@ export default function PanZoomPage() {
                           points={points.ac}
                           y0={chartBounds.bottom}
                           color="red"
-                          opacity={0.3}
+                          opacity={0.2}
                           curveType="basis"
                         />
                       </>
@@ -627,7 +637,7 @@ export default function PanZoomPage() {
                           points={points.battery}
                           y0={chartBounds.bottom}
                           color="blue"
-                          opacity={0.3}
+                          opacity={0.2}
                           curveType="basis"
                         />
                       </>

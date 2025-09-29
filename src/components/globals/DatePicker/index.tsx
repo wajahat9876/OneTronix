@@ -182,6 +182,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  txt: {
+    color: "white",
+  },
   subContainer: {
     backgroundColor: "transparent",
     pointerEvents: "none",
