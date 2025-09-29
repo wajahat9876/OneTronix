@@ -738,110 +738,140 @@ export default function PanZoomPage() {
         </View>
 
         <View style={{ paddingHorizontal: 8 }}>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
+          <View style={{ flexDirection: "row" }}>
             {/* Production Section */}
             <View style={styles.dailyProduction}>
-              <View style={{ flexDirection: "row", alignSelf: "center" }}>
+              <View style={{ alignSelf: "center" }}>
+                <View style={{ flexDirection: "row" }}>
+                  <Text
+                    style={{
+                      fontFamily: "Ranade-Medium",
+                      fontSize: ms(33),
+                      lineHeight: ms(38),
+                    }}
+                  >
+                    {Number(
+                      analyticsData?.results?.production?.dailyProduction || 0.0
+                    ).toFixed(1)}
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "Ranade-Medium",
+                      fontSize: ms(13),
+                      marginTop: 20,
+                      marginLeft: 5,
+                      color: "#5F5F60",
+                    }}
+                  >
+                    kWh
+                  </Text>
+                </View>
                 <Text
-                  style={{
-                    fontFamily: "Ranade-Medium",
-                    fontSize: ms(33),
-                  }}
-                >
-                  {Number(
-                    analyticsData?.results?.production?.dailyProduction || 0.0
-                  ).toFixed(1)}
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: "Ranade-Medium",
-                    fontSize: ms(13),
-                    marginTop: 20,
-                    marginLeft: 5,
-                    color: "#5F5F60",
-                  }}
-                >
-                  kWh
-                </Text>
+                  style={styles.txtProduction}
+                >{`${labels[selectedTab]} Production`}</Text>
               </View>
-              <Text
-                style={styles.txtProduction}
-              >{`${labels[selectedTab]} Production`}</Text>
-              <RectangularChart
-                load={
-                  analyticsData?.results?.consumption?.dailyConsumption || 0
-                }
-                battery={analyticsData?.results?.battery?.dailyCharging || 0}
-                grid={0}
-              />
+              <View style={{ marginLeft: 15 }}>
+                <RectangularChart
+                  load={
+                    analyticsData?.results?.consumption?.dailyConsumption || 0
+                  }
+                  battery={analyticsData?.results?.battery?.dailyCharging || 0}
+                  grid={0}
+                />
+              </View>
             </View>
 
             {/* Consumption Section */}
             <View style={styles.dailyProduction}>
-              <View style={{ flexDirection: "row", alignSelf: "center" }}>
-                <Text style={{ fontFamily: "Ranade-Medium", fontSize: ms(33) }}>
-                  {Number(
-                    analyticsData?.results?.consumption?.dailyConsumption || 0.0
-                  ).toFixed(1)}
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: "Ranade-Medium",
-                    fontSize: ms(13),
-                    marginTop: 20,
-                    marginLeft: 5,
-                    color: "#5F5F60",
-                  }}
-                >
-                  kWh
+              <View style={{ alignSelf: "center" }}>
+                <View style={{ flexDirection: "row" }}>
+                  <Text
+                    style={{
+                      fontFamily: "Ranade-Medium",
+                      fontSize: ms(33),
+                      lineHeight: ms(38),
+                    }}
+                  >
+                    {Number(
+                      analyticsData?.results?.consumption?.dailyConsumption ||
+                        0.0
+                    ).toFixed(1)}
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "Ranade-Medium",
+                      fontSize: ms(13),
+                      marginTop: 20,
+                      marginLeft: 5,
+                      color: "#5F5F60",
+                    }}
+                  >
+                    kWh
+                  </Text>
+                </View>
+                <Text style={styles.txtProduction}>
+                  {`${labels[selectedTab]} Consumption`}
                 </Text>
               </View>
-              <Text style={styles.txtProduction}>
-                {`${labels[selectedTab]} Consumption`}
-              </Text>
-              <RectangularChart
-                type={"consumption"}
-                solar={0}
-                grid={analyticsData?.results?.grid?.dailyPurchase || 0}
-                battery={analyticsData?.results?.battery?.dailyDischarging || 0}
-              />
+              <View style={{ marginLeft: 10 }}>
+                <RectangularChart
+                  type={"consumption"}
+                  solar={0}
+                  grid={analyticsData?.results?.grid?.dailyPurchase || 0}
+                  battery={
+                    analyticsData?.results?.battery?.dailyDischarging || 0
+                  }
+                />
+              </View>
             </View>
           </View>
           {/* //Home Echange */}
-          <ExchangeBlock
-            title="Home Exchange"
-            icon1={SunIcon}
-            icon2={BulbIcon}
-            label1={"Solar Energy Produced"}
-            value1={Number(
-              totalData?.results?.production?.totalProduction || 0
-            ).toFixed(1)}
-            unit1={"MWh"}
-            label2={"Energy Consumed"}
-            value2={Number(
-              totalData?.results?.consumption?.totalConsumption || 0
-            ).toFixed(1)}
-            unit2={"kWh"}
-          />
-          {/* //Grid Exchange */}
-          <ExchangeBlock
-            icon1={FlashIcon}
-            icon2={HomeIcon}
-            title="Grid Exchange"
-            label1={"Energy Export"}
-            value1={Number(0).toFixed(1)}
-            unit1={"MWh"}
-            label2={"Energy Purchased"}
-            value2={Number(
-              totalData?.results?.grid?.totalPurchase || 0
-            ).toFixed(1)}
-            unit2={"kWh"}
-          />
+          <View
+            style={{
+              backgroundColor: "#F5F4F4",
+              marginBottom: 10,
+              padding: 10,
+              borderRadius: 10,
+            }}
+          >
+            <ExchangeBlock
+              title="Home Exchange"
+              icon1={SunIcon}
+              icon2={BulbIcon}
+              label1={"Solar Energy Produced"}
+              value1={Number(
+                totalData?.results?.production?.totalProduction || 0
+              ).toFixed(1)}
+              unit1={"MWh"}
+              label2={"Energy Consumed"}
+              value2={Number(
+                totalData?.results?.consumption?.totalConsumption || 0
+              ).toFixed(1)}
+              unit2={"kWh"}
+            />
+            {/* //Grid Exchange */}
+            <ExchangeBlock
+              icon1={FlashIcon}
+              icon2={HomeIcon}
+              title="Grid Exchange"
+              label1={"Energy Export"}
+              value1={Number(0).toFixed(1)}
+              unit1={"MWh"}
+              label2={"Energy Purchased"}
+              value2={Number(
+                totalData?.results?.grid?.totalPurchase || 0
+              ).toFixed(1)}
+              unit2={"kWh"}
+            />
+          </View>
           {/* Current Cycle */}
           <View style={styles.currentCycle}>
-            <Text style={[styles.txtProduction, { alignSelf: "center" }]}>
+            <Text
+              style={[
+                styles.txtProduction,
+                { alignSelf: "flex-start", padding: 10 },
+              ]}
+            >
               Current Cycle
             </Text>
             <View>
@@ -859,7 +889,7 @@ export default function PanZoomPage() {
               <DetailRow
                 label="Voltage"
                 value={inverterData?.inverterData?.data?.ac?.voltage}
-                unit={"VOLTAGE"}
+                unit={"V"}
               />
               <DetailRow
                 label="Watt"
@@ -1027,9 +1057,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: "transparent",
     padding: 3,
-    marginLeft: 5,
+    // marginLeft: 5,
     borderRadius: 10,
-    width: "49%",
+    width: "50%",
   },
   currentCycle: {
     // alignItems: "center",
@@ -1044,7 +1074,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#111",
     marginBottom: 8,
-    alignSelf: "center",
+    // alignSelf: "center",s
   },
   txtCycle: {
     fontFamily: "Excon-medium",

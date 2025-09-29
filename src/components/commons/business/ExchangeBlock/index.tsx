@@ -31,8 +31,9 @@ const ExchangeBlock: React.FC<Props> = ({
       <View style={styles.row}>
         <View style={styles.header}>
           {icon1 && <Image source={icon1} style={styles.icon} />}
+
           <Text style={styles.label}>{label1}</Text>
-          <View style={{ flexDirection: "row", paddingHorizontal: 10 }}>
+          <View style={{ flexDirection: "row" }}>
             <Text style={styles.value}>{value1}</Text>
             <Text style={styles.unit}>{unit1}</Text>
           </View>
@@ -40,7 +41,7 @@ const ExchangeBlock: React.FC<Props> = ({
         <View style={styles.header}>
           {icon2 && <Image source={icon2} style={styles.icon} />}
           <Text style={styles.label}> {label2}</Text>
-          <View style={{ flexDirection: "row", paddingHorizontal: 10 }}>
+          <View style={{ flexDirection: "row" }}>
             <Text style={styles.value}>{value2}</Text>
             <Text style={styles.unit}>{unit2}</Text>
           </View>
@@ -54,21 +55,26 @@ export default ExchangeBlock;
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 20,
-    backgroundColor: "#F5F4F4",
+    marginBottom: 10,
+    backgroundColor: "transparent",
     padding: 10,
     borderRadius: 10,
   },
   header: {
     width: "50%",
-    backgroundColor: "#E4E5E8",
+    backgroundColor: "#EDEDED",
     paddingHorizontal: 10,
     paddingVertical: 20,
     borderRadius: 10,
   },
   label: { fontFamily: "Excon-medium", fontSize: ms(9) },
   value: { fontFamily: "Ranade-Medium", fontSize: ms(33) },
-  unit: { fontFamily: "Ranade-Medium", fontSize: ms(13), marginTop: 20 },
+  unit: {
+    fontFamily: "Ranade-Medium",
+    fontSize: ms(13),
+    marginTop: 20,
+    color: "#5A5B5B",
+  },
   row: {
     flexDirection: "row",
     gap: 5,
@@ -85,7 +91,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "excon-regular",
     fontSize: ms(13),
-    marginBottom: 4,
+    marginBottom: 15,
   },
   value1: {
     fontSize: ms(12),
