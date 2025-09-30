@@ -546,7 +546,7 @@ export default function PanZoomPage() {
             <CartesianChart
               chartPressState={toolState}
               actionsRef={actionRef}
-              ref={chartRef}
+              // ref={chartRef}
               key={`${formik.values.dateOfBirth}-${selectedTab}-${
                 data?.results?.length || 0
               }`}
