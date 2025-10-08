@@ -61,10 +61,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   header: {
-    width: "50%",
-    backgroundColor: "#EDEDED",
-    paddingHorizontal: 10,
-    paddingVertical: 20,
+    width: "49%",
+    backgroundColor: "#F3F3F3",
+    padding: 20,
     borderRadius: 10,
   },
   label: { fontFamily: "Excon-medium", fontSize: ms(9) },
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: "row",
-    gap: 5,
+    gap: 20,
     justifyContent: "space-between",
     // alignItems: "center",
   },

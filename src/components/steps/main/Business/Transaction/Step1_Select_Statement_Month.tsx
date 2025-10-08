@@ -804,7 +804,7 @@ export default function PanZoomPage() {
           {/* //Home Echange */}
           <View
             style={{
-              backgroundColor: "#F5F4F4",
+              backgroundColor: "#FAFAFA",
               marginBottom: 10,
               padding: 10,
               borderRadius: 10,
@@ -1040,22 +1040,22 @@ const styles = StyleSheet.create({
   currentCycle: {
     // alignItems: "center",
     marginBottom: 20,
-    backgroundColor: "#F5F4F4",
+    backgroundColor: "white",
     padding: 10,
     borderRadius: 10,
   },
   txtProduction: {
-    fontSize: 13,
-    fontFamily: "Excon-Regular",
+    fontSize: ms(14),
+    fontFamily: "Excon-Medium",
     fontWeight: "600",
-    color: "#111",
+
     marginBottom: 8,
     // alignSelf: "center",s
   },
   txtCycle: {
     fontFamily: "Excon-medium",
     paddingHorizontal: 12,
-    fontSize: ms(14),
+    fontSize: ms(13),
     fontWeight: "600",
     color: "#111",
     marginBottom: 8,
