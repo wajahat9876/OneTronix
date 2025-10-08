@@ -17,10 +17,10 @@ import ExchangeBlock from "@src/components/commons/business/ExchangeBlock";
 import { GeneralToolTip } from "@src/components/commons/business/GeneralTooltip";
 import Loader from "@src/components/commons/business/LoaderOneTronix";
 import MonthYearPicker from "@src/components/commons/business/MonthYear";
-import RectangularChart from "@src/components/commons/business/RectangularChart";
 import DetailRow from "@src/components/commons/DetailRow";
 import TabButtons from "@src/components/commons/TabButton";
 import { TabButton } from "@src/components/commons/TabButton/types";
+import DonutChart2 from "@src/components/globals/DonutChart2";
 import FilterModal from "@src/components/globals/FilterModal";
 import FormikDatePicker from "@src/components/globals/FormikDatePicker";
 import { ScrollView } from "@src/components/libraries";
@@ -748,10 +748,23 @@ export default function PanZoomPage() {
         </View>
 
         <View style={{ paddingHorizontal: 8 }}>
-          {/* 🚀🔥 RectAngular Chart-----------------------------*/}
-          <View style={{ flexDirection: "row" }}>
-            {/* Production Section */}
-            <View style={styles.dailyProduction}>
+          {/*  Production Section */}
+          <DonutChart2
+            type="Production"
+            load={analyticsData?.results?.consumption?.dailyConsumption || 0}
+            battery={analyticsData?.results?.battery?.dailyCharging || 0}
+            grid={0}
+          />
+          {/* Consumption Section */}
+          <DonutChart2
+            type="Consumption"
+            solar={0}
+            grid={analyticsData?.results?.grid?.dailyPurchase || 0}
+            battery={analyticsData?.results?.battery?.dailyDischarging || 0}
+          />
+          {/* <View style={{ flexDirection: "row" }}> */}
+          {/* Production Section */}
+          {/* <View style={styles.dailyProduction}>
               <View style={{ marginLeft: 15 }}>
                 <RectangularChart
                   type="Production"
@@ -767,10 +780,10 @@ export default function PanZoomPage() {
                   grid={0}
                 />
               </View>
-            </View>
+            </View> */}
 
-            {/* Consumption Section */}
-            <View style={styles.dailyProduction}>
+          {/* Consumption Section */}
+          {/* <View style={styles.dailyProduction}>
               <View style={{ marginLeft: 10 }}>
                 <RectangularChart
                   type={"Consumption"}
@@ -786,8 +799,8 @@ export default function PanZoomPage() {
                   }
                 />
               </View>
-            </View>
-          </View>
+            </View> */}
+          {/* </View> */}
           {/* //Home Echange */}
           <View
             style={{

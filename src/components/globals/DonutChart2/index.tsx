@@ -1,3 +1,4 @@
+import { ms } from "@utils/design/design";
 import React, { forwardRef } from "react";
 import { Text, View } from "react-native";
 import { PieChart } from "react-native-gifted-charts";
@@ -8,22 +9,23 @@ type DonutChartProps = {
   grid?: number;
   battery?: number;
   solar?: number;
+  type?: "Production" | "Consumption";
 };
 
 const DonutChart2 = forwardRef<View, DonutChartProps>(
-  ({ load, grid, battery, solar }, ref) => {
+  ({ load, grid, battery, solar, type }, ref) => {
     const labelMap: Record<string, string> = {
-      load: "To Load",
-      grid: "Grid",
-      battery: "Battery",
-      solar: "Solar",
+      load: type === "Production" ? "to Load" : "from Load",
+      grid: type === "Production" ? "to Grid" : "from Grid",
+      battery: type === "Production" ? "to Battery" : "from Battery",
+      solar: type === "Production" ? "to Solar" : "from Solar",
     };
 
     const colorMap: Record<string, string> = {
-      load: "#F5192C",
-      grid: "#3b82f6",
-      battery: "#AF1520",
-      solar: "#F7D102",
+      load: "#27c840",
+      grid: "#ff2e24",
+      battery: "#787878",
+      solar: "#27c840",
     };
 
     const entries = Object.entries({ load, grid, battery, solar }).filter(
@@ -33,8 +35,8 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
     const total = entries.reduce((sum, [, v]) => sum + (v || 0), 0);
 
     // control gap size here
-    const gapRatio = 0.3; // 15% gap
-    const gapValue = total * gapRatio || 1;
+    const gapRatio = 0.0; // 0% gap for 15% use 0.3
+    const gapValue = total * gapRatio || 0;
 
     const data =
       total === 0
@@ -69,8 +71,8 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
       <View ref={ref} style={{ alignItems: "center", padding: 20 }}>
         <PieChart
           donut
-          radius={76}
-          innerRadius={70}
+          radius={85}
+          innerRadius={68}
           data={data.map((item) => ({
             ...item,
             labelLineConfig: {
@@ -103,42 +105,98 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
             ) : null
           }
           centerLabelComponent={() => (
-            <Text
+            <View
               style={{
-                fontSize: 13,
-                fontWeight: "bold",
-                marginTop: total ? 90 : 0,
+                alignItems: "center", // 👈 horizontal center
+                justifyContent: "center", // 👈 vertical center
               }}
             >
-              {total === 0 ? "No Data" : `${total.toFixed(1)} kWh`}
-            </Text>
+              <Text
+                style={{
+                  fontSize: ms(9),
+                  textAlign: "center", // 👈 extra alignment for text
+                  fontFamily: "Excon-Regular",
+                }}
+              >
+                {type === "Production"
+                  ? "Daily Production"
+                  : "Daily Consumption"}
+              </Text>
+              <Text
+                style={{
+                  fontSize: ms(14),
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  fontFamily: "Excon-Medium",
+                }}
+              >
+                {total === 0 ? "No Data" : `${total.toFixed(1)} kWh`}
+              </Text>
+            </View>
           )}
-          initialAngle={79.29} // ✅ rotate chart so white gap is at the bottom
+          // initialAngle={79.29} // ✅ rotate chart so white gap is at the bottom
         />
 
         {/* Legend */}
-        <View style={{ marginTop: 12, alignItems: "flex-start" }}>
+        <View
+          style={{
+            marginTop: 12,
+            flexDirection: "row",
+            justifyContent: "space-around",
+            alignItems: "flex-start",
+            flexWrap: "wrap",
+          }}
+        >
           {total > 0 ? (
             entries.map(([key, value], index) => (
               <View
                 key={index}
                 style={{
-                  flexDirection: "row",
                   alignItems: "center",
-                  marginBottom: 6,
+                  marginHorizontal: 10,
+                  marginBottom: 14,
                 }}
               >
+                {/* Dot + Label in same row */}
                 <View
                   style={{
-                    width: 12,
-                    height: 12,
-                    borderRadius: 6,
-                    backgroundColor: colorMap[key],
-                    marginRight: 8,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
-                />
-                <Text style={{ fontSize: 12, color: "#333" }}>
-                  {labelMap[key]} ({value} kWh)
+                >
+                  <View
+                    style={{
+                      width: 10,
+                      height: 10,
+                      borderRadius: 5,
+                      backgroundColor: colorMap[key],
+                      marginRight: 6,
+                    }}
+                  />
+                  <Text
+                    style={{
+                      fontSize: ms(9),
+                      color: "#333",
+                      fontWeight: "500",
+                      fontFamily: "Excon-Regular",
+                    }}
+                  >
+                    {labelMap[key]}
+                  </Text>
+                </View>
+
+                {/* Value directly below label */}
+                <Text
+                  style={{
+                    fontSize: ms(11),
+                    color: "#666",
+                    marginTop: 3,
+                    marginLeft: 20,
+                    fontFamily: "Excon-Medium",
+                  }}
+                >
+                  {value} kWh
                 </Text>
               </View>
             ))
