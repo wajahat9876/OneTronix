@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-props-no-spreading */
-import Colors from '@src/constants/Colors';
-import OTPInputView from '@twotalltotems/react-native-otp-input';
-import { hs, ms, vs } from '@utils/design/design';
-import React, { useEffect } from 'react';
+import Colors from "@src/constants/Colors";
+import OTPInputView from "@twotalltotems/react-native-otp-input";
+import { hs, ms, vs } from "@utils/design/design";
+import React, { useEffect } from "react";
 
 const OTP = (props: any) => {
   const {
@@ -57,7 +57,7 @@ const OTP = (props: any) => {
       pinCount={pinCount || 6}
       style={{
         height: vs(100),
-        width: `${width}%` || '90%',
+        width: `${width}%` || "90%",
       }}
       code={otpCode || code}
       onCodeFilled={onCodeFilled}
@@ -69,8 +69,8 @@ const OTP = (props: any) => {
         borderWidth: 0,
         borderRadius: ms(10),
         color: inputTextColor || Colors.light.theme.white,
-        fontSize: ms(30),
-        fontFamily: 'poppins',
+        fontSize: ms(24),
+        fontFamily: "Ranade-Regular",
         height: vs(55),
         width: hs(50),
         backgroundColor: boxColor || Colors.light.theme.darkYellow,

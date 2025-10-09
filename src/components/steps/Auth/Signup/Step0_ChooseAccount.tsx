@@ -87,8 +87,9 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
             <Text
               style={{
                 color: "white",
-                fontSize: ms(14),
+                fontSize: ms(16),
                 marginTop: vs(10),
+                fontFamily: "Ranade-Regular",
               }}
             >
               ← Back

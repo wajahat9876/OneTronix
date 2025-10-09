@@ -29,6 +29,8 @@ const useCachedResources = () => {
           "Excon-medium": require("@assets/fonts/Excon_Complete/Fonts/OTF/Excon-Medium.otf"),
           "Excon-Black": require("@assets/fonts/Excon_Complete/Fonts/OTF/Excon-Black.otf"),
           "Ranade-Medium": require("@assets/fonts/Ranade_Complete/Fonts/OTF/Ranade-Medium.otf"),
+          "Ranade-Regular": require("@assets/fonts/Ranade_Complete/Fonts/OTF/Ranade-Regular.otf"),
+          "Ranade-Thin": require("@assets/fonts/Ranade_Complete/Fonts/OTF/Ranade-Thin.otf"),
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service

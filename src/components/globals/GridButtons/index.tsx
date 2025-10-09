@@ -1,14 +1,14 @@
 /* eslint-disable import/order */
-import { useSigninType } from '@/store/selectors/common/signin';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { Text } from '@src/components/libraries';
-import { useAppSelector } from '@src/hooks/useReduxHooks';
-import { ms, vs } from '@utils/design/design';
-import * as LocalAuthentication from 'expo-local-authentication';
-import React, { useCallback, useEffect } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { InputButton } from './input-button';
+import { useSigninType } from "@/store/selectors/common/signin";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { Text } from "@src/components/libraries";
+import { useAppSelector } from "@src/hooks/useReduxHooks";
+import { ms, vs } from "@utils/design/design";
+import * as LocalAuthentication from "expo-local-authentication";
+import React, { useCallback, useEffect } from "react";
+import { Alert, StyleSheet, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { InputButton } from "./input-button";
 // Define an array of items representing buttons in the grid
 const baseItems = [
   { label: 1 },
@@ -20,9 +20,9 @@ const baseItems = [
   { label: 7 },
   { label: 8 },
   { label: 9 },
-  { label: 'backspace' },
+  { label: "backspace" },
   { label: 0 },
-  { label: 'done' },
+  { label: "done" },
 ];
 
 // Define the props for the ButtonsGrid component
@@ -58,19 +58,19 @@ const ButtonsGrid: React.FC<ButtonsGridProps> = React.memo(
       // Base items without the done/biometric button
       const baseButtonsArray = [
         ...baseItems.slice(0, 9), // First 9 numbers
-        { label: 'backspace' },
+        { label: "backspace" },
         { label: 0 },
       ];
 
       // Add either biometric or done button based on showBiometric
       return [
         ...baseButtonsArray,
-        { label: showBiometric ? 'biometric' : 'done' },
+        { label: showBiometric ? "biometric" : "done" },
       ];
     }, [showBiometric]);
     const onTap = useCallback(
       (label: string | number | null) => {
-        if (typeof label === 'number') {
+        if (typeof label === "number") {
           const newValue = `${input}${label}`;
           // Check if the input length exceeds the limit
           if (newValue.toString().length > (maxInputLength || 11)) {
@@ -85,29 +85,29 @@ const ButtonsGrid: React.FC<ButtonsGridProps> = React.memo(
           return;
         }
         // Handle tap on the backspace button
-        if (label === 'backspace') {
+        if (label === "backspace") {
           const newValue = input.toString().slice(0, -1);
           onBackspace?.(newValue);
         }
-        if (label === 'biometric') {
+        if (label === "biometric") {
           handleBiometricAuth();
         }
       },
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [input, maxInputLength, onBackspace, onMaxReached, onUpdate],
+      [input, maxInputLength, onBackspace, onMaxReached, onUpdate]
     );
     const handleBiometricAuth = async () => {
       const hasHardware = await LocalAuthentication.hasHardwareAsync();
       const isEnrolled = await LocalAuthentication.isEnrolledAsync();
       if (!hasHardware || !isEnrolled) {
-        Alert.alert('Biometric authemtication is not available');
+        Alert.alert("Biometric authemtication is not available");
         return;
       }
       const result = await LocalAuthentication.authenticateAsync({
-        promptMessage: 'Authenticate with Biometrics',
+        promptMessage: "Authenticate with Biometrics",
         // fallbackLabel: 'Use Passcode',
-        cancelLabel: 'Cancel',
+        cancelLabel: "Cancel",
         disableDeviceFallback: true,
       });
       if (!isNetworkConnected) {
@@ -138,7 +138,7 @@ const ButtonsGrid: React.FC<ButtonsGridProps> = React.memo(
               style={styles.input}
               onLongTap={() => {
                 // Handle long tap on the backspace button
-                if (label === 'backspace') {
+                if (label === "backspace") {
                   onReset?.();
                 }
               }}
@@ -147,7 +147,7 @@ const ButtonsGrid: React.FC<ButtonsGridProps> = React.memo(
               }}
             >
               <View>
-                {label === 'biometric' && (
+                {label === "biometric" && (
                   <FontAwesome5
                     name="fingerprint"
                     size={34}
@@ -155,27 +155,28 @@ const ButtonsGrid: React.FC<ButtonsGridProps> = React.memo(
                   />
                 )}
                 {/* Render the numeric value or backspace icon based on the label */}
-                {typeof label === 'number' && (
+                {typeof label === "number" && (
                   <Text
                     style={{
-                      textAlign: 'center',
+                      textAlign: "center",
                       paddingTop: vs(8),
                       fontSize: ms(37),
-                      fontFamily: 'poppins-medium',
+                      fontFamily: "poppins-medium",
                       color: keyboardButtonsColor,
+                      padding: 15,
                     }}
                   >
                     {label}
                   </Text>
                 )}
-                {label === 'backspace' && (
+                {label === "backspace" && (
                   <FontAwesome5
                     name={label}
                     size={20}
                     color={keyboardButtonsColor}
                   />
                 )}
-                {label === 'done' && (
+                {label === "done" && (
                   <FontAwesome5
                     name="arrow-circle-right"
                     size={20}
@@ -188,7 +189,7 @@ const ButtonsGrid: React.FC<ButtonsGridProps> = React.memo(
         })}
       </GestureHandlerRootView>
     );
-  },
+  }
 );
 
 // ButtonsGrid.defaultProps = {
@@ -198,22 +199,23 @@ const ButtonsGrid: React.FC<ButtonsGridProps> = React.memo(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
   },
   input: {
-    width: '30%',
-    height: '20%',
+    width: "30%",
+    height: "15%",
     marginTop: ms(8),
+    backgroundColor: "red",
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     marginLeft: `${7 / 3}%`,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     marginBottom: `${7 / 3}%`,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

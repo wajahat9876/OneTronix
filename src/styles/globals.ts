@@ -52,7 +52,7 @@ export const globalStyle = StyleSheet.create({
     marginRight: hs(16),
   },
   keyboard: {
-    height: "50%",
+    height: "52%",
     marginTop: ms(12),
     marginLeft: ms(16),
     marginRight: ms(16),
