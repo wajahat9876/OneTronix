@@ -3,7 +3,6 @@ import {
   useGetGraphDataQuery,
 } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
-import Excon from "@assets/fonts/Excon_Complete/Fonts/OTF/Excon-Regular.otf";
 import inter from "@assets/fonts/SpaceMono-Regular.ttf";
 import BulbIcon from "@assets/icons/ExchangeIcons/Bulb.png";
 import FlashIcon from "@assets/icons/ExchangeIcons/flash.png";
@@ -202,7 +201,7 @@ export default function PanZoomPage() {
   const actionRef = React.useRef<CartesianActionsHandle>(null);
 
   // Graph Code
-  const font = useFont(Excon, 8);
+  const font = useFont(inter, 8);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const { state } = useChartTransformState();
@@ -605,6 +604,7 @@ export default function PanZoomPage() {
                 enableRescaling: false,
                 font: font,
                 tickValues: ticks,
+
                 labelOffset: 1,
                 lineWidth: 0.3,
                 tickCount: Number(ticks?.length),

@@ -20,7 +20,7 @@ const generateData = (length: number = 10) =>
     w: 5 + Math.floor(45 * Math.random()),
   }));
 
-export default function BarGroupPage() {
+export default function VictoryBar() {
   const [data] = React.useState(generateData(20));
   const font = useFont(inter, 12);
 
@@ -133,10 +133,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     backgroundColor: "#fff",
     borderRadius: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
   },
   optionsScrollView: { flex: 1 },
   options: {
