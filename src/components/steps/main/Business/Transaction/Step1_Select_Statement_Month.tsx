@@ -3,6 +3,7 @@ import {
   useGetGraphDataQuery,
 } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
+import Excon from "@assets/fonts/Excon_Complete/Fonts/OTF/Excon-Regular.otf";
 import inter from "@assets/fonts/SpaceMono-Regular.ttf";
 import BulbIcon from "@assets/icons/ExchangeIcons/Bulb.png";
 import FlashIcon from "@assets/icons/ExchangeIcons/flash.png";
@@ -201,7 +202,7 @@ export default function PanZoomPage() {
   const actionRef = React.useRef<CartesianActionsHandle>(null);
 
   // Graph Code
-  const font = useFont(inter, 8);
+  const font = useFont(Excon, 8);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const { state } = useChartTransformState();
@@ -229,12 +230,33 @@ export default function PanZoomPage() {
   );
   const [ticks, setTicks] = useState([0, 6, 12, 18, 24]);
   const ticksShared = useSharedValue(ticks);
+  // ✅ Remove previous vertical reactions and use this instead:
+
+  useAnimatedReaction(
+    () => state.matrix.value,
+    (matrix) => {
+      "worklet";
+      const vals = getTransformComponents(matrix);
+
+      // Only rebuild matrix if Y deviates — no animations, no timing (instant & smooth)
+      if (vals.translateY !== 0 || vals.scaleY !== 1) {
+        const locked = setTranslate(
+          setScale(matrix, vals.scaleX, 1),
+          vals.translateX,
+          0
+        );
+        state.matrix.value = locked;
+      }
+    },
+    [] // optional dependency array
+  );
 
   useAnimatedReaction(
     () => ({ k: k.value, tx: tx.value }),
     ({ k, tx }) => {
       const maxZoom = 5; // 🚀 max zoom in
       const minZoom = 1; // 🚀 min zoom out
+
       const clampedK = Math.max(Math.min(k, maxZoom), minZoom);
       const pointWidth = width / DATA.length;
       const totalContentWidth = pointWidth * DATA.length * clampedK; // scaled width of data
@@ -243,7 +265,7 @@ export default function PanZoomPage() {
         pointWidth * 2,
         pointWidth * Math.floor(DATA.length / 3)
       );
-      // ✅ keep last point visible instead of cutting off
+      // ✅ keep last point visible instead of cutting offs
       const maxRightTx = -(totalContentWidth - width) - rightOverscroll;
       const currentVisibleStart = -tx / (pointWidth * DATA.length * k);
       // Apply the same visible start position with new zoom
@@ -253,6 +275,7 @@ export default function PanZoomPage() {
         Math.max(targetTx, maxRightTx),
         leftOverscroll
       );
+
       // Apply the zoom and translation
       let m = setTranslate(state.matrix.value, clampedTx, 0);
       state.matrix.value = setScale(m, clampedK, 1);
@@ -305,6 +328,7 @@ export default function PanZoomPage() {
       }
     }
   );
+
   // const maxY = Math.max(...DATA.map((d) => d.solarPower));
   // React.useEffect(() => {
   //   refetch();

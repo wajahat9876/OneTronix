@@ -21,7 +21,7 @@ export function GeneralToolTip({
       : ticks?.length === 9
       ? 6
       : ticks?.length === 13
-      ? 8
+      ? 5
       : 4
   );
 

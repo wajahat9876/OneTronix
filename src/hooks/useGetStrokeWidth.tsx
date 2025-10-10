@@ -6,10 +6,10 @@ export const getStrokeWidth = (ticksLength?: number) => {
     case 9:
       return 0.8;
     case 13:
-      return 0.6;
+      return 0.7;
     case 25:
-      return 0.5;
-    default:
       return 0.4;
+    default:
+      return 0.3;
   }
 };
