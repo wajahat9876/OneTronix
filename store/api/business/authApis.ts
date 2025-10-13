@@ -24,7 +24,6 @@ import {
   IShareholderResponse,
   ISignInResponse,
   IUploadDocumentResponse,
-  IVerifySignInResponse,
   IVerifySignupEmailResponse,
   IVerifySignupPhoneResponse,
 } from "@/store/types/business/api_responses/auth";
@@ -75,12 +74,9 @@ export const businessAuthApi = createApi({
       },
     }),
 
-    businessVerifySignIn: builder.mutation<
-      IVerifySignInResponse,
-      VerifyOtpPayload
-    >({
+    verifyOtp: builder.mutation<any, VerifyOtpPayload>({
       query: (body) => ({
-        url: "auth/verifySigninOtp",
+        url: "auth/verifyOtp",
         method: "POST",
         body,
       }),
@@ -680,7 +676,7 @@ export const businessAuthApi = createApi({
 
 export const {
   useBusinessSigninMutation,
-  useBusinessVerifySignInMutation,
+  useVerifyOtpMutation,
   useBusinessAutoSignupMutation,
   useBusinessManualSignupMutation,
   useBusinessVerifyEmailSignUpMutation,

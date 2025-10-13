@@ -2,7 +2,11 @@ import inter from "@assets/fonts/SpaceMono-Regular.ttf";
 import { LinearGradient, useFont, vec } from "@shopify/react-native-skia";
 import * as React from "react";
 import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
-import { useAnimatedReaction, useSharedValue } from "react-native-reanimated";
+import {
+  runOnJS,
+  useAnimatedReaction,
+  useSharedValue,
+} from "react-native-reanimated";
 import {
   BarGroup,
   CartesianChart,
@@ -20,43 +24,128 @@ const generateData = (length: number = 10) =>
     w: 5 + Math.floor(45 * Math.random()),
   }));
 
-export default function VictoryBar() {
-  const [data] = React.useState(generateData(20));
-  const font = useFont(inter, 12);
+export default function VictoryBar({
+  selectedDate = "2025-01-01T19:00:00.000Z",
+}: {
+  selectedDate: string;
+}) {
+  const [data, setData] = React.useState<any[]>([]);
+  const [ticks, setTicks] = React.useState<number[]>([]);
 
-  const transformState = useChartTransformState({ scaleX: 1, scaleY: 1 });
+  React.useEffect(() => {
+    if (!selectedDate) return;
+
+    // 🔹 Extract year & month only (ignore time completely)
+    const [year, month] = selectedDate.split("T")[0].split("-").map(Number);
+
+    // 🔹 Get correct number of days in that month
+    const daysInMonth = new Date(year, month, 0).getDate();
+
+    // 🔹 Generate data for all days in that month
+    const generated = Array.from({ length: daysInMonth }, (_, index) => ({
+      x: index + 1,
+      y: 10 + Math.floor(40 * Math.random()),
+      z: 30 + Math.floor(20 * Math.random()),
+      w: 5 + Math.floor(45 * Math.random()),
+    }));
+
+    setData(generated);
+    setTicks(generated.map((d) => d.x));
+  }, [selectedDate]);
+
+  const font = useFont(inter, 7);
+  // const [ticks, setTicks] = React.useState([
+  //   0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30,
+  // ]);
+
+  const ticksShared = useSharedValue(ticks);
+
+  const transformState = useChartTransformState({ scaleX: 1.1, scaleY: 1 });
+  const state = transformState.state; // ✅ same instance
+
   const [width, setWidth] = React.useState(0);
 
-  const k = useSharedValue(1); // zoom
-  const tx = useSharedValue(0); // pan
+  const k = useSharedValue<any>(1);
+  const tx = useSharedValue<any>(0);
+  const ty = useSharedValue(0);
 
-  // Apply zoom/pan limits
+  // 👇 Track zoom & pan continuously (not just when gesture ends)
   useAnimatedReaction(
-    () => (width > 0 ? transformState.state.matrix.value : null),
-    (matrix) => {
-      if (!matrix) return;
-      ("worklet");
-      const vals = getTransformComponents(matrix);
+    () => {
+      const vals = getTransformComponents(state.matrix.value);
+      return { scaleX: vals.scaleX, translateX: vals.translateX };
+    },
+    ({ scaleX, translateX }) => {
+      k.value = scaleX;
+      tx.value = translateX;
+    }
+  );
 
-      const maxZoom = 5;
+  // ✅ Apply zoom/pan limits + dynamic ticks
+  useAnimatedReaction(
+    () => ({ scaleX: k.value, translateX: tx.value }),
+    ({ scaleX, translateX }) => {
+      "worklet";
+
+      const maxZoom = 6;
       const minZoom = 1;
-      const clampedK = Math.min(Math.max(vals.scaleX, minZoom), maxZoom);
+      const clampedK = Math.max(Math.min(scaleX, maxZoom), minZoom);
 
       const pointWidth = width / data.length;
       const totalContentWidth = pointWidth * data.length * clampedK;
-      const leftOverscroll = 0;
-      const maxRightTx = -(totalContentWidth - width);
 
-      const clampedTx = Math.min(
-        Math.max(vals.translateX, maxRightTx),
-        leftOverscroll
-      );
+      // ✅ overscroll padding
+      const leftOverscroll = -width * 0.1;
+      const rightOverscroll = width * 0.1;
 
-      let m = setTranslate(matrix, clampedTx, 0);
-      transformState.state.matrix.value = setScale(m, clampedK, 1);
+      const minTx = -(totalContentWidth - width) - rightOverscroll;
+      const maxTx = leftOverscroll;
 
+      // ✅ keep view centered relative to previous zoom
+      const prevK = k.value;
+      const zoomChanged = Math.abs(prevK - clampedK) > 0.001;
+
+      let newTx = translateX;
+
+      if (zoomChanged) {
+        const centerXBefore = -translateX + width / 2;
+        const scaleRatio = clampedK / prevK;
+        const centerXAfter = centerXBefore * scaleRatio;
+        newTx = -(centerXAfter - width / 2);
+      }
+
+      // ✅ clamp translation (ensure chart stays visible)
+      newTx = Math.min(Math.max(newTx, minTx), maxTx);
+
+      // ✅ apply transforms safely
+      let m = setTranslate(state.matrix.value, newTx, 0);
+      state.matrix.value = setScale(m, clampedK, 1);
+
+      // ✅ update shared values
       k.value = clampedK;
-      tx.value = clampedTx;
+      tx.value = newTx;
+
+      // ✅ dynamic ticks (optional)
+      const zoomLevel = Math.round(clampedK * 10) / 10;
+      let newTicks: number[] = [];
+      const daysInMonth = data.length;
+      console.log("zoomLevel", zoomLevel);
+      if (zoomLevel <= 1.5) {
+        console.log("hide");
+        // show fewer ticks (every 2nd day)
+        newTicks = Array.from(
+          { length: Math.ceil(daysInMonth / 2) },
+          (_, i) => i * 2 + 1
+        );
+      } else {
+        console.log("show");
+        // show all days
+        newTicks = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+      }
+      if (JSON.stringify(ticksShared.value) !== JSON.stringify(newTicks)) {
+        ticksShared.value = newTicks;
+        runOnJS(setTicks)(newTicks);
+      }
     }
   );
 
@@ -78,6 +167,18 @@ export default function VictoryBar() {
             tickCount: { y: 5, x: 6 },
             lineColor: "#d4d4d8",
             labelColor: "#000",
+          }}
+          xAxis={{
+            enableRescaling: false,
+
+            font: font,
+            tickValues: ticks,
+            labelOffset: 1,
+            lineWidth: 0.3,
+            // tickCount: Number(ticks?.length),
+            tickCount: ticks.length,
+
+            labelColor: "gray",
           }}
           transformState={transformState.state}
           transformConfig={{

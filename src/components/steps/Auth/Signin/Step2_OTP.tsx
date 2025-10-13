@@ -2,7 +2,7 @@
 /* eslint-disable import/order */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable camelcase */
-import { useBusinessVerifySignInMutation } from "@/store/api/business/authApis";
+import { useVerifyOtpMutation } from "@/store/api/business/authApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import { useConfig } from "@/store/selectors/config/config";
 import Logo from "@assets/eccLogo/oneTronixLogo.svg";
@@ -24,7 +24,7 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
   const dispatch = useAppDispatch();
   const { signInBusinessEmail } = useAppSelector(useBusinessDetails);
   const [verifyBusinessSignIn, { isLoading: businessLoading }] =
-    useBusinessVerifySignInMutation();
+    useVerifyOtpMutation();
   const router = useRouter();
   const [input, setInput] = useState<string>("");
   const [otpExpired, setOTPExpired] = useState(false);
@@ -35,14 +35,15 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
     try {
       const verifySignInData = {
         // otp: Number(enteredOtp),
-        otp: enteredOtp,
-        notificationToken: pushToken,
-        deviceOS: Platform.OS,
-        deviceModal,
-        deviceId,
-        deviceType,
-        email: signInBusinessEmail,
-        otpTypes: "SignIn",
+        otp: Number(enteredOtp),
+        otpTypes: "signin",
+
+        // notificationToken: pushToken,
+        // deviceOS: Platform.OS,
+        // deviceModal,
+        // deviceId,
+        // deviceType,
+        // email: signInBusinessEmail,
       };
       const result = await verifyBusinessSignIn(verifySignInData).unwrap();
       // if (result) {

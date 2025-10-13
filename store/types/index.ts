@@ -3,7 +3,7 @@ export interface IAPIRespone<ResultType> {
   message: string;
   success: boolean;
   type: string;
-  results: ResultType;
+  results: any;
 }
 export interface IAPIResponeData<ResultType> {
   status: number;
@@ -25,4 +25,14 @@ export interface IAPIError {
   success: boolean;
   error: boolean;
   message: string;
+}
+interface IResult {
+  user: {
+    email: string;
+    firstName: string;
+    isVerified: boolean;
+    lastName: string;
+  };
+  token?: string;
+  linkedDeviceId?: string;
 }

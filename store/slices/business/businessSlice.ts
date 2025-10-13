@@ -31,7 +31,7 @@ export interface IBusinessState {
   outgoingBusReduxData?: OutgoingTransfer;
   isInternal?: boolean;
   showIbanAccountToggle?: boolean;
-  deviceId: string;
+  deviceId: string | undefined;
   role: boolean;
   inverterData?: inverterData;
 }

@@ -31,11 +31,11 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
     try {
       const result = await businessSignIn(values).unwrap();
       // dispatch(setSigninBusinessEmail(values?.email));
-      if (result) {
-        renderToastSuccess(result.message);
+      console.log("SignIn Result", result);
+      if (result?.results?.user?.isVerified === true) {
         router.replace("/(main)/Business/Home");
-        // if (next) next?.();
-      }
+      } else next?.();
+      renderToastSuccess(result.message);
     } catch (error: any) {
       console.log(error, "error");
       renderToastError(error?.data?.message || "Something went wrong");
@@ -103,8 +103,9 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
           <View
             style={{
               alignSelf: "flex-end",
-              padding: hs(16),
-              marginTop: Platform.OS === "ios" ? vs(5) : vs(15),
+              padding: hs(15),
+              marginRight: -6,
+              marginTop: Platform.OS === "ios" ? vs(10) : vs(15),
             }}
           >
             <Logo />

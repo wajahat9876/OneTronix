@@ -40,7 +40,7 @@ export interface SignUpPayload {
 }
 
 export interface VerifyOtpPayload {
-  otp: string;
+  otp: number;
   notificationToken?: string;
   deviceOS?: any;
   deviceModal?: any;

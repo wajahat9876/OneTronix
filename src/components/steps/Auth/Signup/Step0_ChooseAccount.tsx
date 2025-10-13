@@ -42,8 +42,6 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
   };
   const snapPoints = useMemo(() => ["100%"], []);
   const [, setBottomSheetVisible] = useState(false);
-
-  console.log("selectedLanguage", selectedValue);
   const handlePress = () => {
     if (selectedValue === 1) {
       openBottomSheet();
@@ -78,7 +76,7 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
-            paddingHorizontal: hs(10),
+            paddingHorizontal: hs(15),
             paddingVertical: hs(30),
             marginTop: Platform.OS === "ios" ? vs(10) : vs(15),
           }}
@@ -106,8 +104,8 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
         <View
           style={{
             // alignItems: "flex-start",
-            marginLeft: 12,
-            marginTop: vs(32),
+            marginLeft: 14,
+            marginTop: vs(12),
           }}
         >
           <Text
@@ -115,8 +113,8 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
               color: "red",
               fontWeight: "900",
               fontSize: ms(44),
-              fontFamily: "Excon-Black",
               lineHeight: 45,
+              fontFamily: "Excon-Black",
             }}
           >
             ONE
@@ -145,10 +143,14 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
             TECHNOLOGY PARTNER
           </Text>
         </View>
-        <View style={{ height: 200 }}>
+        <View style={{ height: 250 }}>
           <Picker
+            itemHeight={45}
             pickerData={DATA}
-            textStyle={{ fontSize: 27 }}
+            textStyle={{
+              fontSize: 30,
+              fontFamily: "Excon-Regular",
+            }}
             onSelected={(item) => setSelectedValue(item?.value)}
           />
         </View>
