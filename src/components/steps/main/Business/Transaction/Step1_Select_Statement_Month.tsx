@@ -12,11 +12,11 @@ import FilterIcon from "@assets/icons/filter.png";
 import { getStrokeWidth } from "@hooks/useGetStrokeWidth";
 import { useFocusEffect } from "@react-navigation/native";
 import { DashPathEffect, useFont } from "@shopify/react-native-skia";
-import BarGraph2 from "@src/components/commons/business/BarGraph2";
 import ExchangeBlock from "@src/components/commons/business/ExchangeBlock";
 import { GeneralToolTip } from "@src/components/commons/business/GeneralTooltip";
 import Loader from "@src/components/commons/business/LoaderOneTronix";
 import MonthYearPicker from "@src/components/commons/business/MonthYear";
+import VictoryBar from "@src/components/commons/business/VictoryBar";
 import DetailRow from "@src/components/commons/DetailRow";
 import TabButtons from "@src/components/commons/TabButton";
 import { TabButton } from "@src/components/commons/TabButton/types";
@@ -717,12 +717,16 @@ export default function PanZoomPage() {
             </CartesianChart>
           ) : selectedTab === 1 || selectedTab === 2 || selectedTab === 3 ? (
             // <BarGraph segment="month" data={barData} />
-            <View style={{ marginVertical: 20 }}>
-              <BarGraph2
+            <View>
+              {/* <BarGraph2
                 selectedTab={selectedTab}
                 date={date}
                 selectedParams={selectedParams}
                 data={DATA?.results || []}
+              /> */}
+              <VictoryBar
+                selectedDate={formik?.values?.dateOfBirth}
+                selectedTab={selectedTab}
               />
             </View>
           ) : (
