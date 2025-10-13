@@ -23,13 +23,23 @@ const generateData = (length: number = 10) =>
     z: 30 + Math.floor(20 * Math.random()),
     w: 5 + Math.floor(45 * Math.random()),
   }));
-
+const barColors: Record<string, string[]> = {
+  ac: ["red", "white"],
+  battery: ["blue", "white"],
+  output: ["#F7D102", "white"],
+  solar: ["purple", "white"],
+};
 interface Props {
   selectedDate: string;
   selectedTab?: number;
+  selectedParams?: ("ac" | "battery" | "output" | "solar")[];
 }
 
-export default function VictoryBar({ selectedDate, selectedTab }: Props) {
+export default function VictoryBar({
+  selectedDate,
+  selectedTab,
+  selectedParams,
+}: Props) {
   const [data, setData] = React.useState<any[]>([]);
   const [ticks, setTicks] = React.useState<number[]>([]);
 
@@ -43,9 +53,10 @@ export default function VictoryBar({ selectedDate, selectedTab }: Props) {
       // 🔹 Generate data for all days in that month
       const generated = Array.from({ length: daysInMonth }, (_, index) => ({
         x: index + 1,
-        y: 10 + Math.floor(40 * Math.random()),
-        z: 30 + Math.floor(20 * Math.random()),
-        w: 5 + Math.floor(45 * Math.random()),
+        ac: 10 + Math.floor(40 * Math.random()),
+        battery: 30 + Math.floor(20 * Math.random()),
+        output: 5 + Math.floor(45 * Math.random()),
+        solar: 15 + Math.floor(30 * Math.random()),
       }));
 
       setData(generated);
@@ -54,9 +65,10 @@ export default function VictoryBar({ selectedDate, selectedTab }: Props) {
       // 🔹 Monthly view (months 1–12)
       const generated = Array.from({ length: 12 }, (_, index) => ({
         x: index + 1,
-        y: 10 + Math.floor(40 * Math.random()),
-        z: 30 + Math.floor(20 * Math.random()),
-        w: 5 + Math.floor(45 * Math.random()),
+        ac: 10 + Math.floor(40 * Math.random()),
+        battery: 30 + Math.floor(20 * Math.random()),
+        output: 5 + Math.floor(45 * Math.random()),
+        solar: 15 + Math.floor(30 * Math.random()),
       }));
       setData(generated);
       setTicks(generated.map((d) => d.x));
@@ -70,9 +82,10 @@ export default function VictoryBar({ selectedDate, selectedTab }: Props) {
       );
       const generated = years.map((year) => ({
         x: year,
-        y: 10 + Math.floor(40 * Math.random()),
-        z: 30 + Math.floor(20 * Math.random()),
-        w: 5 + Math.floor(45 * Math.random()),
+        ac: 10 + Math.floor(40 * Math.random()),
+        battery: 30 + Math.floor(20 * Math.random()),
+        output: 5 + Math.floor(45 * Math.random()),
+        solar: 15 + Math.floor(30 * Math.random()),
       }));
       setData(generated);
       setTicks(years);
@@ -166,20 +179,28 @@ export default function VictoryBar({ selectedDate, selectedTab }: Props) {
       let totalPoints = data.length;
 
       if (zoomLevel <= 1.5) {
-        // ✅ Show fewer ticks, but always include first and last
+        // ✅ Always include first and last tick
+        const first = data[0]?.x ?? 0;
+        const last = data[data.length - 1]?.x ?? 0;
+
+        // ✅ Create spaced mid ticks safely
         const midTicks = Array.from(
-          { length: Math.ceil(totalPoints / 3) }, // adjust density
-          (_, i) => data[i * 3]?.x
-        ).filter(Boolean);
+          { length: Math.max(1, Math.floor(totalPoints / 3)) },
+          (_, i) => {
+            const index = i * Math.floor(totalPoints / 3);
+            const value = data[index]?.x;
+            return typeof value === "number" ? value : null;
+          }
+        ).filter((v): v is number => v !== null && !isNaN(v));
 
-        const first = data[0]?.x;
-        const last = data[data.length - 1]?.x;
-
-        // ✅ Ensure first & last are always visible and unique
-        newTicks = Array.from(new Set([first, ...midTicks, last]));
+        // ✅ Combine and deduplicate while ensuring numeric type
+        newTicks = Array.from(new Set([first, ...midTicks, last])).filter(
+          (v): v is number => typeof v === "number" && !isNaN(v)
+        );
       } else {
-        // ✅ Show all ticks when zoomed in
-        newTicks = data.map((d) => d.x);
+        newTicks = data
+          .map((d) => d.x)
+          .filter((v): v is number => typeof v === "number" && !isNaN(v));
       }
 
       if (JSON.stringify(ticksShared.value) !== JSON.stringify(newTicks)) {
@@ -198,7 +219,7 @@ export default function VictoryBar({ selectedDate, selectedTab }: Props) {
         <CartesianChart
           data={data}
           xKey="x"
-          yKeys={["y", "z", "w"]}
+          yKeys={["ac", "battery", "output", "solar"]}
           domain={{ y: [0, 60] }}
           padding={{ left: 20, right: 20, bottom: 30, top: 20 }}
           domainPadding={{ left: 80, right: 40, top: 20 }}
@@ -238,27 +259,17 @@ export default function VictoryBar({ selectedDate, selectedTab }: Props) {
               withinGroupPadding={0.1}
               roundedCorners={{ topLeft: 4, topRight: 4 }}
             >
-              <BarGroup.Bar points={points.y}>
-                <LinearGradient
-                  start={vec(0, 0)}
-                  end={vec(0, 540)}
-                  colors={["#f472b6", "#be185d90"]}
-                />
-              </BarGroup.Bar>
-              <BarGroup.Bar points={points.z}>
-                <LinearGradient
-                  start={vec(0, 0)}
-                  end={vec(0, 500)}
-                  colors={["#c084fc", "#7c3aed90"]}
-                />
-              </BarGroup.Bar>
-              <BarGroup.Bar points={points.w}>
-                <LinearGradient
-                  start={vec(0, 0)}
-                  end={vec(0, 500)}
-                  colors={["#a5f3fc", "#0891b290"]}
-                />
-              </BarGroup.Bar>
+              {React.Children.toArray(
+                selectedParams?.map((param) => (
+                  <BarGroup.Bar key={param} points={points[param]}>
+                    <LinearGradient
+                      start={vec(0, 0)}
+                      end={vec(0, 540)}
+                      colors={barColors[param]}
+                    />
+                  </BarGroup.Bar>
+                ))
+              )}
             </BarGroup>
           )}
         </CartesianChart>

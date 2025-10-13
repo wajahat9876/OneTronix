@@ -727,6 +727,7 @@ export default function PanZoomPage() {
               <VictoryBar
                 selectedDate={formik?.values?.dateOfBirth}
                 selectedTab={selectedTab}
+                selectedParams={selectedParams}
               />
             </View>
           ) : (
