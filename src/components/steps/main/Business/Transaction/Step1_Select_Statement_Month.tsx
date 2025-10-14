@@ -361,9 +361,12 @@ export default function PanZoomPage() {
     React.useRef<CartesianChartRef<typeof toolState | undefined>>(null);
   const selectedMaxY = React.useMemo(() => {
     if (!selectedParams.length || !DATA?.length) return 10;
-    return Math.max(
+
+    const maxVal = Math.max(
       ...DATA.flatMap((d) => selectedParams.map((param) => d[param] ?? 0))
     );
+
+    return maxVal + 1; // ✅ add 10 padding
   }, [selectedParams, DATA]);
   //Null Handle
 

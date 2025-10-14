@@ -1,7 +1,7 @@
 import inter from "@assets/fonts/SpaceMono-Regular.ttf";
 import { LinearGradient, useFont, vec } from "@shopify/react-native-skia";
 import * as React from "react";
-import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import {
   runOnJS,
   useAnimatedReaction,
@@ -248,7 +248,6 @@ export default function VictoryBar({
       let totalPoints = data.length;
 
       if (zoomLevel <= 1.5) {
-        console.log("if");
         // ✅ Always include first and last tick
         const first = data[0]?.x ?? 0;
         const last = data[data.length - 1]?.x ?? 0;
@@ -268,7 +267,6 @@ export default function VictoryBar({
           (v): v is number => typeof v === "number" && !isNaN(v)
         );
       } else {
-        console.log("else");
         newTicks = data
           .map((d) => d.x)
           .filter((v): v is number => typeof v === "number" && !isNaN(v));
@@ -305,6 +303,40 @@ export default function VictoryBar({
         style={styles.chart}
         onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
       >
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            paddingHorizontal: 16,
+
+            marginTop: 20,
+            justifyContent: "center",
+          }}
+        >
+          {selectedParams?.map((param) => {
+            const paramColors: Record<string, string> = {
+              ac: "red",
+              battery: "blue",
+              output: "#F7D102",
+              solar: "purple",
+            };
+
+            return (
+              <View key={param} style={[styles.dotText, { marginRight: 12 }]}>
+                <View
+                  style={[
+                    styles.colorDot,
+                    { backgroundColor: paramColors[param] },
+                  ]}
+                />
+                <Text style={{ color: "#111", fontSize: 10 }}>
+                  {param.toUpperCase()}
+                </Text>
+              </View>
+            );
+          })}
+        </View>
+
         <CartesianChart
           data={data}
           xKey="x"
@@ -330,7 +362,7 @@ export default function VictoryBar({
             labelColor: "gray",
             formatXLabel: (value: any) => {
               if (selectedTab === 1) return `${value}`; // Day
-              if (selectedTab === 2) return `M${value}`; // Month
+              if (selectedTab === 2) return `${value}`; // Month
               if (selectedTab === 3) return `${value}`; // Year
               return value;
             },
@@ -388,5 +420,12 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     alignItems: "flex-start",
     justifyContent: "flex-start",
+  },
+  dotText: { flexDirection: "row", alignItems: "center", marginBottom: 4 },
+  colorDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5, // makes it a circle
+    marginRight: 6, // space between dot and text
   },
 });
