@@ -5,6 +5,7 @@
 import { useVerifyOtpMutation } from "@/store/api/business/authApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import { useConfig } from "@/store/selectors/config/config";
+import { businessLogout } from "@/store/slices/business/businessSlice";
 import Logo from "@assets/eccLogo/oneTronixLogo.svg";
 import ButtonsGrid from "@src/components/globals/GridButtons";
 import LoadingModal from "@src/components/globals/LoadingModal";
@@ -46,25 +47,7 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
         // email: signInBusinessEmail,
       };
       const result = await verifyBusinessSignIn(verifySignInData).unwrap();
-      // if (result) {
-      //   if (result?.data?.isVerified && !result?.data?.mainApplicantAddress) {
-      //     router.replace('/(auth)/UpdatedAddress');
-      //   } else if (
-      //     result?.data?.isVerified &&
-      //     result?.data?.mainApplicantAddress &&
-      //     !result?.data?.isPinSet
-      //   ) {
-      //     router.replace('/(auth)/ChoosePin/Business');
-      //   } else if (
-      //     result?.data?.isVerified &&
-      //     result?.data?.mainApplicantAddress &&
-      //     result?.data?.isPinSet
-      //   ) {
-      //     dispatch(setIsPinCodeAccepted(true));
-      //     router.replace('/(main)/Business/Home');
-      //   } else {
-      //     router.replace('/(auth)/Signup/Business');
-      //   }
+
       router.replace("/(main)/Business/Home");
       renderToastSuccess(result.message);
       setInput("");
@@ -108,6 +91,10 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
     setInput("");
   }, []);
 
+  const handleBack = () => {
+    dispatch(businessLogout());
+    router.replace("/(auth)/Signin");
+  };
   return (
     <ScrollView style={{ flex: 1 }}>
       <View
@@ -119,7 +106,7 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
           marginTop: Platform.OS === "ios" ? vs(10) : vs(15),
         }}
       >
-        <TouchableOpacity onPress={() => router.replace("/(auth)/Signin")}>
+        <TouchableOpacity onPress={() => handleBack()}>
           <Text
             style={{
               color: "white",

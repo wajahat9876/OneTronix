@@ -162,6 +162,8 @@ const businessSlice = createSlice({
       state.packageId = "";
       state.businessType = undefined;
       state.businessKycUrl = initialState.businessKycUrl;
+      state.deviceId = "";
+      state.inverterData = initialState.inverterData;
 
       // console.log('businessLogout', state);
     },
@@ -198,6 +200,13 @@ const businessSlice = createSlice({
     );
     builder.addMatcher(
       businessAuthApi.endpoints.businessSignin.matchFulfilled,
+      (state, { payload }) => {
+        console.log(payload, "businessSignin");
+        state.auth_token = payload.results?.token;
+      }
+    );
+    builder.addMatcher(
+      businessAuthApi.endpoints.verifyOtp.matchFulfilled,
       (state, { payload }) => {
         console.log(payload, "businessSignin");
         state.auth_token = payload.results?.token;
