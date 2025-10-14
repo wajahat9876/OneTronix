@@ -82,15 +82,16 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
           ...values,
           role: "68973f595f618352520c47f4",
         }).unwrap();
-        router.replace("/(main)/Business/Home");
+        next?.();
+        // router.replace("/(main)/Business/Home");
         renderToastSuccess(result?.message);
       } else {
         const result = await signupBusiness({
           ...values,
           deviceId,
         }).unwrap();
-
-        router.replace("/(main)/Business/Home");
+        next?.();
+        // router.replace("/(main)/Business/Home");
         renderToastSuccess(result?.message);
       }
     } catch (error: any) {

@@ -728,6 +728,7 @@ export default function PanZoomPage() {
                 selectedDate={formik?.values?.dateOfBirth}
                 selectedTab={selectedTab}
                 selectedParams={selectedParams}
+                datas={data}
               />
             </View>
           ) : (

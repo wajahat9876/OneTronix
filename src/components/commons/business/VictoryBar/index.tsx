@@ -33,12 +33,16 @@ interface Props {
   selectedDate: string;
   selectedTab?: number;
   selectedParams?: ("ac" | "battery" | "output" | "solar")[];
+  datas: {
+    results: any[];
+  };
 }
 
 export default function VictoryBar({
   selectedDate,
   selectedTab,
   selectedParams,
+  datas,
 }: Props) {
   const [data, setData] = React.useState<any[]>([]);
   const [ticks, setTicks] = React.useState<number[]>([]);
@@ -48,19 +52,61 @@ export default function VictoryBar({
     // 🔹 Extract year & month only (ignore time completely)
     const [year, month] = selectedDate.split("T")[0].split("-").map(Number);
     if (selectedTab === 1) {
-      // 🔹 Get correct number of days in that month
+      // ✅ 1. Number of days in the selected month
       const daysInMonth = new Date(year, month, 0).getDate();
-      // 🔹 Generate data for all days in that month
-      const generated = Array.from({ length: daysInMonth }, (_, index) => ({
-        x: index + 1,
-        ac: 10 + Math.floor(40 * Math.random()),
-        battery: 30 + Math.floor(20 * Math.random()),
-        output: 5 + Math.floor(45 * Math.random()),
-        solar: 15 + Math.floor(30 * Math.random()),
-      }));
+
+      // ✅ 2. Create a lookup from your API data
+      const apiDayMap: Record<
+        number,
+        { ac: number; battery: number; output: number; solar: number }
+      > = {};
+
+      datas?.results?.forEach((item) => {
+        if (!item.createdAtPK) return;
+        const day = new Date(item.createdAtPK).getDate();
+
+        apiDayMap[day] = {
+          ac: item?.consumption?.dailyConsumption || 0,
+          battery: item?.battery?.dailyCharging || 0,
+          output: item?.grid?.dailyPurchase || 0,
+          solar: item?.production?.dailyProduction || 0,
+        };
+      });
+
+      // ✅ 3. Generate full month data (fill missing days with 0)
+      const generated = Array.from({ length: daysInMonth }, (_, index) => {
+        const day = index + 1;
+        const dayData = apiDayMap[day] || {
+          ac: 0,
+          battery: 0,
+          output: 0,
+          solar: 0,
+        };
+        return { x: day, ...dayData };
+      });
 
       setData(generated);
-      setTicks(generated.map((d) => d.x));
+
+      // ✅ 4. Compute evenly spaced ticks for the first render
+      const totalPoints = generated.length;
+      if (totalPoints > 0) {
+        const first = generated[0].x;
+        const last = generated[generated.length - 1].x;
+
+        // Divide roughly into 4 parts → gives 1, 8, 16, 24, 31 (for 31 days)
+        const step = Math.ceil(totalPoints / 4);
+        const midTicks = Array.from({ length: 3 }, (_, i) => {
+          const index = (i + 1) * step;
+          const value = generated[index]?.x;
+          return typeof value === "number" ? value : null;
+        }).filter((v): v is number => v !== null && !isNaN(v));
+
+        const dividedTicks = Array.from(
+          new Set([first, ...midTicks, last])
+        ).filter((v): v is number => typeof v === "number" && !isNaN(v));
+
+        setTicks(dividedTicks); // ✅ nice clean spacing
+      }
     } else if (selectedTab === 2) {
       // 🔹 Monthly view (months 1–12)
       const generated = Array.from({ length: 12 }, (_, index) => ({
@@ -73,24 +119,47 @@ export default function VictoryBar({
       setData(generated);
       setTicks(generated.map((d) => d.x));
     } else if (selectedTab === 3) {
-      // 🔹 Yearly view (e.g. 2020–2025)
+      // 🔹 Yearly view (from 2020 to current year)
       const startYear = 2020;
-      const endYear = 2025;
+      const currentYear = new Date().getFullYear();
       const years = Array.from(
-        { length: endYear - startYear + 1 },
+        { length: currentYear - startYear + 1 },
         (_, index) => startYear + index
       );
-      const generated = years.map((year) => ({
-        x: year,
-        ac: 10 + Math.floor(40 * Math.random()),
-        battery: 30 + Math.floor(20 * Math.random()),
-        output: 5 + Math.floor(45 * Math.random()),
-        solar: 15 + Math.floor(30 * Math.random()),
-      }));
+
+      // ✅ Create lookup from API data by year
+      const apiYearMap: Record<
+        number,
+        { ac: number; battery: number; output: number; solar: number }
+      > = {};
+
+      datas?.results?.forEach((item) => {
+        if (!item.createdAtPK) return;
+        const year = new Date(item.createdAtPK).getFullYear();
+
+        apiYearMap[year] = {
+          ac: item?.consumption?.yearlyConsumption || 0,
+          battery: item?.battery?.yearlyCharging || 0,
+          output: item?.grid?.yearlyPurchase || 0,
+          solar: item?.production?.yearlyProduction || 0,
+        };
+      });
+
+      // ✅ Generate full year data (fill missing with 0)
+      const generated = years.map((year) => {
+        const yearData = apiYearMap[year] || {
+          ac: 0,
+          battery: 0,
+          output: 0,
+          solar: 0,
+        };
+        return { x: year, ...yearData };
+      });
+
       setData(generated);
       setTicks(years);
     }
-  }, [selectedDate, selectedTab]);
+  }, [selectedDate, selectedTab, datas]);
 
   const font = useFont(inter, 7);
   // const [ticks, setTicks] = React.useState([
@@ -179,6 +248,7 @@ export default function VictoryBar({
       let totalPoints = data.length;
 
       if (zoomLevel <= 1.5) {
+        console.log("if");
         // ✅ Always include first and last tick
         const first = data[0]?.x ?? 0;
         const last = data[data.length - 1]?.x ?? 0;
@@ -198,6 +268,7 @@ export default function VictoryBar({
           (v): v is number => typeof v === "number" && !isNaN(v)
         );
       } else {
+        console.log("else");
         newTicks = data
           .map((d) => d.x)
           .filter((v): v is number => typeof v === "number" && !isNaN(v));
@@ -209,6 +280,24 @@ export default function VictoryBar({
       }
     }
   );
+  // ✅ Find max among all values across ac, battery, output, solar
+  const selectedMaxY = React.useMemo(() => {
+    if (data.length === 0) return 10; // fallback
+
+    // Flatten all values from the 4 series
+    const allValues = data.flatMap((d) => [
+      d.ac || 0,
+      d.battery || 0,
+      d.output || 0,
+      d.solar || 0,
+    ]);
+
+    // Find the highest value
+    const maxVal = Math.max(...allValues);
+
+    // Add small padding so bars don't touch top
+    return Math.ceil(maxVal + maxVal * 0.1);
+  }, [data]);
 
   return (
     <SafeAreaView style={styles.safeView}>
@@ -220,7 +309,7 @@ export default function VictoryBar({
           data={data}
           xKey="x"
           yKeys={["ac", "battery", "output", "solar"]}
-          domain={{ y: [0, 60] }}
+          domain={{ y: [0, selectedMaxY] }}
           padding={{ left: 20, right: 20, bottom: 30, top: 20 }}
           domainPadding={{ left: 80, right: 40, top: 20 }}
           axisOptions={{

@@ -36,7 +36,7 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
       const verifySignInData = {
         // otp: Number(enteredOtp),
         otp: Number(enteredOtp),
-        otpTypes: "SignIn",
+        otpTypes: "signin",
 
         // notificationToken: pushToken,
         // deviceOS: Platform.OS,
