@@ -13,4 +13,5 @@ export interface TabButtonsProps {
   currentActive?: number;
   isWhite?: boolean;
   onPress?: () => void;
+  disabled?: boolean;
 }

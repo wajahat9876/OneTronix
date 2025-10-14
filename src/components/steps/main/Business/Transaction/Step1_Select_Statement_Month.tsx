@@ -384,7 +384,6 @@ export default function PanZoomPage() {
   // MonthBar Graph Data
   const defaultMaxValues = React.useMemo(() => {
     if (!DATA.length) return {};
-
     const result: Record<string, number> = {};
     ["ac", "battery", "output", "solar"].forEach((param) => {
       const maxVal = Math.max(...DATA.map((d) => d[param] ?? 0));
@@ -411,7 +410,6 @@ export default function PanZoomPage() {
               style={{
                 width: "95%",
                 // marginLeft: 10,
-
                 alignSelf: "center",
               }}
             >
@@ -419,6 +417,7 @@ export default function PanZoomPage() {
                 buttons={tabButtons}
                 hideMarginLeft
                 hideMarginRight
+                disabled={summaryFetching}
                 selectedTab={selectedTab}
                 setSelectedTab={(index) => setSelectedTab(index)}
               />
@@ -743,7 +742,7 @@ export default function PanZoomPage() {
               }}
               domain={{ x: [0, 24] }}
               domainPadding={{ top: 1, bottom: 1 }}
-              padding={{ top: 10, bottom: 10 }}
+              padding={{ top: 20, bottom: 10 }}
               xKey="hour"
               yKeys={["ac", "battery", "output", "solar"]}
               yAxis={[

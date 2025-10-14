@@ -20,6 +20,7 @@ const TabButtons: FC<TabButtonsProps> = ({
   currentActive,
   isWhite,
   onPress,
+  disabled,
 }) => {
   const [dimensions, setDimensions] = useState({ height: 20, width: 100 });
   const buttonWidth = dimensions.width / buttons.length;
@@ -90,6 +91,7 @@ const TabButtons: FC<TabButtonsProps> = ({
           const colorWhite = selectedTab === index ? "black" : "gray";
           return (
             <Pressable
+              disabled={disabled}
               key={button.title}
               className="flex-1"
               accessibilityRole="tab"

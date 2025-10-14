@@ -1,7 +1,7 @@
 import inter from "@assets/fonts/SpaceMono-Regular.ttf";
 import { LinearGradient, useFont, vec } from "@shopify/react-native-skia";
 import * as React from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import {
   runOnJS,
   useAnimatedReaction,
@@ -16,13 +16,6 @@ import {
   useChartTransformState,
 } from "victory-native";
 
-const generateData = (length: number = 10) =>
-  Array.from({ length }, (_, index) => ({
-    x: index + 1,
-    y: 10 + Math.floor(40 * Math.random()),
-    z: 30 + Math.floor(20 * Math.random()),
-    w: 5 + Math.floor(45 * Math.random()),
-  }));
 const barColors: Record<string, string[]> = {
   ac: ["red", "white"],
   battery: ["blue", "white"],
@@ -109,15 +102,39 @@ export default function VictoryBar({
       }
     } else if (selectedTab === 2) {
       // 🔹 Monthly view (months 1–12)
-      const generated = Array.from({ length: 12 }, (_, index) => ({
-        x: index + 1,
-        ac: 10 + Math.floor(40 * Math.random()),
-        battery: 30 + Math.floor(20 * Math.random()),
-        output: 5 + Math.floor(45 * Math.random()),
-        solar: 15 + Math.floor(30 * Math.random()),
-      }));
+      const months = Array.from({ length: 12 }, (_, index) => index + 1);
+
+      // ✅ Create lookup table from API data by month
+      const apiMonthMap: Record<
+        number,
+        { ac: number; battery: number; output: number; solar: number }
+      > = {};
+
+      datas?.results?.forEach((item) => {
+        if (!item.createdAtPK) return;
+        const month = new Date(item.createdAtPK).getMonth() + 1; // 1–12
+
+        apiMonthMap[month] = {
+          ac: item?.consumption?.monthlyConsumption || 0,
+          battery: item?.battery?.monthlyCharging || 0,
+          output: item?.grid?.monthlyPurchase || 0,
+          solar: item?.production?.monthlyProduction || 0,
+        };
+      });
+
+      // ✅ Generate complete 12-month dataset (fill missing with 0)
+      const generated = months.map((month) => {
+        const monthData = apiMonthMap[month] || {
+          ac: 0,
+          battery: 0,
+          output: 0,
+          solar: 0,
+        };
+        return { x: month, ...monthData };
+      });
+
       setData(generated);
-      setTicks(generated.map((d) => d.x));
+      setTicks(months);
     } else if (selectedTab === 3) {
       // 🔹 Yearly view (from 2020 to current year)
       const startYear = 2020;
@@ -308,8 +325,7 @@ export default function VictoryBar({
             flexDirection: "row",
             flexWrap: "wrap",
             paddingHorizontal: 16,
-
-            marginTop: 20,
+            marginTop: 10,
             justifyContent: "center",
           }}
         >
@@ -395,11 +411,6 @@ export default function VictoryBar({
           )}
         </CartesianChart>
       </View>
-
-      <ScrollView
-        style={styles.optionsScrollView}
-        contentContainerStyle={styles.options}
-      />
     </SafeAreaView>
   );
 }
@@ -421,7 +432,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "flex-start",
   },
-  dotText: { flexDirection: "row", alignItems: "center", marginBottom: 4 },
+  dotText: { flexDirection: "row", alignItems: "center" },
   colorDot: {
     width: 10,
     height: 10,
