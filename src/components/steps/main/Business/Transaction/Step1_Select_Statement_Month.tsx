@@ -182,7 +182,7 @@ export default function PanZoomPage() {
     }
     if (selectedTab === 0) {
       const mapped = data?.results.map((item: any) => {
-        const time = moment.utc(item.createdAt);
+        const time = moment.utc(item.createdAtPK);
         const hour = time.hour() + time.minute() / 60;
         return {
           hour,
@@ -398,6 +398,17 @@ export default function PanZoomPage() {
       edges={Platform.OS === "android" ? ["top"] : ["top", "bottom"]}
     >
       <ScrollView>
+        <Text
+          style={{
+            paddingHorizontal: 8,
+            paddingVertical: 5,
+            marginTop: 5,
+            fontSize: ms(20),
+            fontFamily: "Ranade-Medium",
+          }}
+        >
+          Usage & Generation
+        </Text>
         <View style={{ flex: 1 }}>
           <View
             style={{
@@ -564,7 +575,8 @@ export default function PanZoomPage() {
           style={{
             width: "100%",
             height: selectedTab != 0 ? 250 : 200,
-            paddingHorizontal: 16,
+            paddingHorizontal: 15,
+            marginLeft: -5,
           }}
         >
           {selectedTab === 0 && DATA.length ? (
@@ -585,7 +597,7 @@ export default function PanZoomPage() {
               xKey="hour"
               yKeys={["ac", "battery", "output", "solar"]}
               frame={{
-                lineWidth: { top: 0, bottom: 1, left: 1, right: 0 },
+                lineWidth: { top: 0, bottom: 1.3, left: 1.3, right: 0 },
               }}
               yAxis={[
                 {
@@ -742,7 +754,7 @@ export default function PanZoomPage() {
               }}
               domain={{ x: [0, 24] }}
               domainPadding={{ top: 1, bottom: 1 }}
-              padding={{ top: 20, bottom: 10 }}
+              padding={{ top: 30, bottom: 10 }}
               xKey="hour"
               yKeys={["ac", "battery", "output", "solar"]}
               yAxis={[
@@ -783,16 +795,16 @@ export default function PanZoomPage() {
           {/*  Production Section */}
           <DonutChart2
             type="Production"
-            load={analyticsData?.results?.consumption?.dailyConsumption || 0}
-            battery={analyticsData?.results?.battery?.dailyCharging || 0}
+            load={analyticsData?.results?.consumption?.consumption || 0}
+            battery={analyticsData?.results?.battery?.charging || 0}
             grid={0}
           />
           {/* Consumption Section */}
           <DonutChart2
             type="Consumption"
             solar={0}
-            grid={analyticsData?.results?.grid?.dailyPurchase || 0}
-            battery={analyticsData?.results?.battery?.dailyDischarging || 0}
+            grid={analyticsData?.results?.grid?.purchase || 0}
+            battery={analyticsData?.results?.battery?.discharging || 0}
           />
           {/* <View style={{ flexDirection: "row" }}> */}
           {/* Production Section */}
