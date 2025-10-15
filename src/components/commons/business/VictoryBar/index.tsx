@@ -45,19 +45,12 @@ export default function VictoryBar({
     // 🔹 Extract year & month only (ignore time completely)
     const [year, month] = selectedDate.split("T")[0].split("-").map(Number);
     if (selectedTab === 1) {
-      // ✅ 1. Number of days in the selected month
       const daysInMonth = new Date(year, month, 0).getDate();
-
-      // ✅ 2. Create a lookup from your API data
-      const apiDayMap: Record<
-        number,
-        { ac: number; battery: number; output: number; solar: number }
-      > = {};
+      const apiDayMap: Record<number, any> = {};
 
       datas?.results?.forEach((item) => {
         if (!item.createdAtPK) return;
         const day = new Date(item.createdAtPK).getDate();
-
         apiDayMap[day] = {
           ac: item?.consumption?.dailyConsumption || 0,
           battery: item?.battery?.dailyCharging || 0,
@@ -66,7 +59,7 @@ export default function VictoryBar({
         };
       });
 
-      // ✅ 3. Generate full month data (fill missing days with 0)
+      // NOTE: store x as midpoint (day + 0.5) so bars render between ticks (1 and 2)
       const generated = Array.from({ length: daysInMonth }, (_, index) => {
         const day = index + 1;
         const dayData = apiDayMap[day] || {
@@ -75,46 +68,19 @@ export default function VictoryBar({
           output: 0,
           solar: 0,
         };
-        return { x: day, ...dayData };
+        return { x: day + 0.5, day, ...dayData }; // x is midpoint, keep 'day' for labels/ticks
       });
 
       setData(generated);
-
-      // ✅ 4. Compute evenly spaced ticks for the first render
-      const totalPoints = generated.length;
-      if (totalPoints > 0) {
-        const first = generated[0].x;
-        const last = generated[generated.length - 1].x;
-
-        // Divide roughly into 4 parts → gives 1, 8, 16, 24, 31 (for 31 days)
-        const step = Math.ceil(totalPoints / 4);
-        const midTicks = Array.from({ length: 3 }, (_, i) => {
-          const index = (i + 1) * step;
-          const value = generated[index]?.x;
-          return typeof value === "number" ? value : null;
-        }).filter((v): v is number => v !== null && !isNaN(v));
-
-        const dividedTicks = Array.from(
-          new Set([first, ...midTicks, last])
-        ).filter((v): v is number => typeof v === "number" && !isNaN(v));
-
-        setTicks(dividedTicks); // ✅ nice clean spacing
-      }
+      setTicks(Array.from({ length: daysInMonth }, (_, i) => i + 1)); // ticks = integer days
     } else if (selectedTab === 2) {
-      // 🔹 Monthly view (months 1–12)
-      const months = Array.from({ length: 12 }, (_, index) => index + 1);
-
-      // ✅ Create lookup table from API data by month
-      const apiMonthMap: Record<
-        number,
-        { ac: number; battery: number; output: number; solar: number }
-      > = {};
+      const months = Array.from({ length: 12 }, (_, i) => i + 1);
+      const apiMonthMap: Record<number, any> = {};
 
       datas?.results?.forEach((item) => {
         if (!item.createdAtPK) return;
-        const month = new Date(item.createdAtPK).getMonth() + 1; // 1–12
-
-        apiMonthMap[month] = {
+        const m = new Date(item.createdAtPK).getMonth() + 1;
+        apiMonthMap[m] = {
           ac: item?.consumption?.monthlyConsumption || 0,
           battery: item?.battery?.monthlyCharging || 0,
           output: item?.grid?.monthlyPurchase || 0,
@@ -122,39 +88,27 @@ export default function VictoryBar({
         };
       });
 
-      // ✅ Generate complete 12-month dataset (fill missing with 0)
-      const generated = months.map((month) => {
-        const monthData = apiMonthMap[month] || {
-          ac: 0,
-          battery: 0,
-          output: 0,
-          solar: 0,
-        };
-        return { x: month, ...monthData };
-      });
+      const generated = months.map((m) => ({
+        x: m + 0.5, // midpoint between 1–2, 2–3, ...
+        label: m,
+        ...(apiMonthMap[m] || { ac: 0, battery: 0, output: 0, solar: 0 }),
+      }));
 
       setData(generated);
       setTicks(months);
     } else if (selectedTab === 3) {
-      // 🔹 Yearly view (from 2020 to current year)
       const startYear = 2020;
       const currentYear = new Date().getFullYear();
       const years = Array.from(
         { length: currentYear - startYear + 1 },
-        (_, index) => startYear + index
+        (_, i) => startYear + i
       );
-
-      // ✅ Create lookup from API data by year
-      const apiYearMap: Record<
-        number,
-        { ac: number; battery: number; output: number; solar: number }
-      > = {};
+      const apiYearMap: Record<number, any> = {};
 
       datas?.results?.forEach((item) => {
         if (!item.createdAtPK) return;
-        const year = new Date(item.createdAtPK).getFullYear();
-
-        apiYearMap[year] = {
+        const y = new Date(item.createdAtPK).getFullYear();
+        apiYearMap[y] = {
           ac: item?.consumption?.yearlyConsumption || 0,
           battery: item?.battery?.yearlyCharging || 0,
           output: item?.grid?.yearlyPurchase || 0,
@@ -162,23 +116,18 @@ export default function VictoryBar({
         };
       });
 
-      // ✅ Generate full year data (fill missing with 0)
-      const generated = years.map((year) => {
-        const yearData = apiYearMap[year] || {
-          ac: 0,
-          battery: 0,
-          output: 0,
-          solar: 0,
-        };
-        return { x: year, ...yearData };
-      });
+      const generated = years.map((y) => ({
+        x: y + 0.5, // midpoint between years
+        label: y,
+        ...(apiYearMap[y] || { ac: 0, battery: 0, output: 0, solar: 0 }),
+      }));
 
       setData(generated);
       setTicks(years);
     }
   }, [selectedDate, selectedTab, datas]);
 
-  const font = useFont(inter, 7);
+  const font = useFont(inter, 6);
   // const [ticks, setTicks] = React.useState([
   //   0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30,
   // ]);
@@ -208,7 +157,7 @@ export default function VictoryBar({
   // 🔹 Reset zoom & pan when tab changes
   React.useEffect(() => {
     // Reset zoom and translation
-    k.value = 1;
+    k.value = 1.1;
     tx.value = 0;
 
     // Reset chart matrix to its default position
@@ -264,30 +213,29 @@ export default function VictoryBar({
       let newTicks: number[] = [];
       let totalPoints = data.length;
 
-      if (zoomLevel <= 1.5) {
-        // ✅ Always include first and last tick
-        const first = data[0]?.x ?? 0;
-        const last = data[data.length - 1]?.x ?? 0;
+      // if (zoomLevel <= 1.5) {
+      //   // ✅ Always include first and last tick
+      //   const first = data[0]?.x ?? 0;
+      //   const last = data[data.length - 1]?.x ?? 0;
 
-        // ✅ Create spaced mid ticks safely
-        const midTicks = Array.from(
-          { length: Math.max(1, Math.floor(totalPoints / 3)) },
-          (_, i) => {
-            const index = i * Math.floor(totalPoints / 3);
-            const value = data[index]?.x;
-            return typeof value === "number" ? value : null;
-          }
-        ).filter((v): v is number => v !== null && !isNaN(v));
+      //   // ✅ Create spaced mid ticks safely
+      //   const midTicks = Array.from(
+      //     { length: Math.max(1, Math.floor(totalPoints / 3)) },
+      //     (_, i) => {
+      //       const index = i * Math.floor(totalPoints / 3);
+      //       const value = data[index]?.x;
+      //       return typeof value === "number" ? value : null;
+      //     }
+      //   ).filter((v): v is number => v !== null && !isNaN(v));
 
-        // ✅ Combine and deduplicate while ensuring numeric type
-        newTicks = Array.from(new Set([first, ...midTicks, last])).filter(
-          (v): v is number => typeof v === "number" && !isNaN(v)
-        );
-      } else {
-        newTicks = data
-          .map((d) => d.x)
-          .filter((v): v is number => typeof v === "number" && !isNaN(v));
-      }
+      //   // ✅ Combine and deduplicate while ensuring numeric type
+      //   newTicks = Array.from(new Set([first, ...midTicks, last])).filter(
+      //     (v): v is number => typeof v === "number" && !isNaN(v)
+      //   );
+      // } else {
+      newTicks = data
+        .map((d) => d.x)
+        .filter((v): v is number => typeof v === "number" && !isNaN(v));
 
       if (JSON.stringify(ticksShared.value) !== JSON.stringify(newTicks)) {
         ticksShared.value = newTicks;
@@ -359,23 +307,33 @@ export default function VictoryBar({
           yKeys={["ac", "battery", "output", "solar"]}
           domain={{ y: [0, selectedMaxY] }}
           padding={{ left: 20, right: 20, bottom: 30, top: 20 }}
-          domainPadding={{ left: 80, right: 40, top: 20 }}
+          domainPadding={{ left: 50, right: 20, top: 20 }}
           axisOptions={{
             font,
             tickCount: { y: 5, x: 6 },
             lineColor: "#d4d4d8",
             labelColor: "#000",
           }}
+          yAxis={[
+            {
+              font: font,
+              lineWidth: 0,
+              labelOffset: 3,
+              labelColor: "gray",
+            },
+          ]}
           xAxis={{
             enableRescaling: false,
 
             font: font,
             tickValues: ticks,
             labelOffset: 1,
-            lineWidth: 0.3,
+
+            lineWidth: 0.5,
             // tickCount: Number(ticks?.length),
             tickCount: ticks.length,
             labelColor: "gray",
+
             formatXLabel: (value: any) => {
               if (selectedTab === 1) return `${value}`; // Day
               if (selectedTab === 2) return `${value}`; // Month

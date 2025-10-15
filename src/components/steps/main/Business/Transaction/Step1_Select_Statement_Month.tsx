@@ -11,7 +11,7 @@ import SunIcon from "@assets/icons/ExchangeIcons/sun.png";
 import FilterIcon from "@assets/icons/filter.png";
 import { getStrokeWidth } from "@hooks/useGetStrokeWidth";
 import { useFocusEffect } from "@react-navigation/native";
-import { DashPathEffect, useFont } from "@shopify/react-native-skia";
+import { useFont } from "@shopify/react-native-skia";
 import ExchangeBlock from "@src/components/commons/business/ExchangeBlock";
 import { GeneralToolTip } from "@src/components/commons/business/GeneralTooltip";
 import Loader from "@src/components/commons/business/LoaderOneTronix";
@@ -391,7 +391,7 @@ export default function PanZoomPage() {
     });
     return result;
   }, [DATA]);
-  console.log(selectedTab, "selectedTab");
+
   return (
     <SafeAreaView
       style={styles.safeView}
@@ -597,7 +597,7 @@ export default function PanZoomPage() {
               xKey="hour"
               yKeys={["ac", "battery", "output", "solar"]}
               frame={{
-                lineWidth: { top: 0, bottom: 1.3, left: 1.3, right: 0 },
+                lineWidth: { top: 1, bottom: 1.3, left: 1.3, right: 1 },
               }}
               yAxis={[
                 {
@@ -608,10 +608,9 @@ export default function PanZoomPage() {
                   tickValues: [0, Math.round(selectedMaxY / 2), selectedMaxY],
                   tickCount: 2,
                   formatYLabel: (n: number) => `${n}kW`, // 👈 label with kW
-                  lineWidth: 0.2,
+                  lineWidth: 0,
                   labelOffset: 3,
                   labelColor: "gray",
-                  linePathEffect: <DashPathEffect intervals={[6, 4]} />,
                 },
               ]}
               xAxis={{
@@ -620,10 +619,10 @@ export default function PanZoomPage() {
                 tickValues: ticks,
 
                 labelOffset: 1,
-                lineWidth: 0.3,
+                lineWidth: 0.6,
                 tickCount: Number(ticks?.length),
                 labelColor: "gray",
-                linePathEffect: <DashPathEffect intervals={[6, 4]} />,
+
                 formatXLabel: (d: number) => {
                   const hour = Math.floor(d);
                   const min = Math.round((d - hour) * 60);
