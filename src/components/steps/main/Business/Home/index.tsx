@@ -100,6 +100,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
   //   }, [])
   // );
   const { formatDate, formatTime } = useFormatDate();
+
   return (
     <Animated.View {...pageTransitionAnimation} key="home" className="flex-1">
       <StatusBar
@@ -170,8 +171,8 @@ const Index = ({ goTo }: MultiStepFormProps) => {
               <Text style={styles.txt}>Daily Production</Text>
               <Text style={styles.txtStyle}>
                 {Number(
-                  result?.results?.dailySummary?.production?.dailyProduction
-                    ?.$numberDecimal ?? 0
+                  result?.results?.dailySummary?.production?.dailyProduction ??
+                    0
                 ).toFixed(2)}
                 <Text style={styles.unitTxt}> kWh</Text>
               </Text>
@@ -180,8 +181,8 @@ const Index = ({ goTo }: MultiStepFormProps) => {
               <Text style={styles.txt}>Daily Consumption</Text>
               <Text style={styles.txtStyle}>
                 {Number(
-                  result?.results?.dailySummary?.consumption?.dailyConsumption
-                    ?.$numberDecimal || 0
+                  result?.results?.dailySummary?.consumption
+                    ?.dailyConsumption || 0
                 ).toFixed(2)}{" "}
                 <Text style={styles.unitTxt}> kWh</Text>
               </Text>
@@ -200,8 +201,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
               </Text>
               <Text style={styles.dailyTxt}>
                 {Number(
-                  result?.results?.dailySummary?.grid?.dailyPurchase
-                    ?.$numberDecimal || 0
+                  result?.results?.dailySummary?.grid?.dailyPurchase || 0
                 ).toFixed(2)}{" "}
                 <Text style={styles.unitTxt}> kWh</Text>
               </Text>
@@ -210,8 +210,8 @@ const Index = ({ goTo }: MultiStepFormProps) => {
               <Text style={styles.txt}>Total Production</Text>
               <Text style={styles.txtStyle}>
                 {Number(
-                  result?.results?.dailySummary?.consumption?.dailyConsumption
-                    ?.$numberDecimal || 0
+                  result?.results?.dailySummary?.consumption
+                    ?.dailyConsumption || 0
                 ).toFixed(2)}{" "}
                 <Text style={styles.unitTxt}> kWh</Text>
               </Text>

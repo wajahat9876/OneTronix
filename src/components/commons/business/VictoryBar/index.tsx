@@ -376,9 +376,9 @@ export default function VictoryBar({
 const styles = StyleSheet.create({
   safeView: { flex: 1, backgroundColor: "#fafafa" },
   chart: {
-    height: 280,
+    height: 270,
     marginHorizontal: 10,
-    backgroundColor: "#fff",
+    backgroundColor: "transparent",
     borderRadius: 12,
     width: 360,
     marginLeft: -8,
