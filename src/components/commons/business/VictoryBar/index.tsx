@@ -1,5 +1,6 @@
 import inter from "@assets/fonts/SpaceMono-Regular.ttf";
 import { LinearGradient, useFont, vec } from "@shopify/react-native-skia";
+import { ms } from "@utils/design/design";
 import * as React from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import {
@@ -13,8 +14,10 @@ import {
   getTransformComponents,
   setScale,
   setTranslate,
+  useChartPressState,
   useChartTransformState,
 } from "victory-native";
+import { BarToolTip } from "../GeneralTooltip/VictorBarTooltip";
 
 const barColors: Record<string, string[]> = {
   ac: ["red", "white"],
@@ -138,7 +141,13 @@ export default function VictoryBar({
   const state = transformState.state; // ✅ same instance
 
   const [width, setWidth] = React.useState(0);
-
+  const { state: toolState, isActive } = useChartPressState<{
+    x: number;
+    y: Record<"ac" | "battery" | "output" | "solar", number>;
+  }>({
+    x: 0,
+    y: { ac: 0, battery: 0, output: 0, solar: 0 },
+  });
   const k = useSharedValue<any>(1);
   const tx = useSharedValue<any>(0);
   const ty = useSharedValue(0);
@@ -261,7 +270,17 @@ export default function VictoryBar({
     // Add small padding so bars don't touch top
     return Math.ceil(maxVal + maxVal * 0.1);
   }, [data]);
-
+  const yTicks = React.useMemo(() => {
+    if (selectedMaxY <= 0) return [0, 1, 2, 3]; // fallback
+    const step = selectedMaxY / 4;
+    return [
+      Math.round(step), // first tick above 0
+      Math.round(step * 2),
+      Math.round(step * 3),
+      Math.round(selectedMaxY), // max value
+    ];
+  }, [selectedMaxY]);
+  console.log(toolState);
   return (
     <SafeAreaView style={styles.safeView}>
       <View
@@ -272,7 +291,7 @@ export default function VictoryBar({
           style={{
             flexDirection: "row",
             flexWrap: "wrap",
-            paddingHorizontal: 16,
+            paddingHorizontal: 1,
             marginTop: 10,
             justifyContent: "center",
           }}
@@ -284,17 +303,30 @@ export default function VictoryBar({
               output: "#F7D102",
               solar: "purple",
             };
+            const raw = toolState?.y?.[param]?.value;
+            const value = isActive
+              ? raw?.value !== undefined
+                ? Number(raw.value).toFixed(1)
+                : "0.0" // placeholder ensures fixed width
+              : "0.0";
 
             return (
-              <View key={param} style={[styles.dotText, { marginRight: 12 }]}>
+              <View key={param} style={[styles.dotText, { marginRight: 6 }]}>
                 <View
                   style={[
                     styles.colorDot,
                     { backgroundColor: paramColors[param] },
                   ]}
                 />
-                <Text style={{ color: "#111", fontSize: 10 }}>
-                  {param.toUpperCase()}
+                <Text
+                  style={{
+                    color: "#111",
+                    fontSize: ms(9),
+                    fontFamily: "monospace", // ensures equal width
+                    minWidth: 40, // reserve enough width for numbers
+                  }}
+                >
+                  {param.toUpperCase()}: {value}
                 </Text>
               </View>
             );
@@ -303,11 +335,17 @@ export default function VictoryBar({
 
         <CartesianChart
           data={data}
+          chartPressState={toolState}
           xKey="x"
           yKeys={["ac", "battery", "output", "solar"]}
           domain={{ y: [0, selectedMaxY] }}
           padding={{ left: 20, right: 20, bottom: 30, top: 20 }}
-          domainPadding={{ left: 50, right: 20, top: 20 }}
+          domainPadding={{
+            left: 45,
+            right: selectedTab === 1 ? -5 : 20,
+            top: 20,
+            bottom: 0,
+          }}
           axisOptions={{
             font,
             tickCount: { y: 5, x: 6 },
@@ -316,19 +354,21 @@ export default function VictoryBar({
           }}
           yAxis={[
             {
+              domain: [yTicks[0], selectedMaxY], // start domain at first tick
+              tickValues: yTicks, // explicitly show these 4 values
               font: font,
               lineWidth: 0,
               labelOffset: 3,
               labelColor: "gray",
+              tickCount: 4,
+              formatYLabel: (n: number) => `${n}kW`,
             },
           ]}
           xAxis={{
             enableRescaling: false,
-
             font: font,
             tickValues: ticks,
             labelOffset: 1,
-
             lineWidth: 0.5,
             // tickCount: Number(ticks?.length),
             tickCount: ticks.length,
@@ -348,24 +388,38 @@ export default function VictoryBar({
           }}
         >
           {({ points, chartBounds }) => (
-            <BarGroup
-              chartBounds={chartBounds}
-              betweenGroupPadding={0.4}
-              withinGroupPadding={0.1}
-              roundedCorners={{ topLeft: 4, topRight: 4 }}
-            >
-              {React.Children.toArray(
-                selectedParams?.map((param) => (
-                  <BarGroup.Bar key={param} points={points[param]}>
-                    <LinearGradient
-                      start={vec(0, 0)}
-                      end={vec(0, 540)}
-                      colors={barColors[param]}
-                    />
-                  </BarGroup.Bar>
-                ))
+            <>
+              <BarGroup
+                chartBounds={chartBounds}
+                betweenGroupPadding={0.4}
+                withinGroupPadding={0.1}
+                roundedCorners={{ topLeft: 4, topRight: 4 }}
+              >
+                {React.Children.toArray(
+                  selectedParams?.map((param) => (
+                    <BarGroup.Bar key={param} points={points[param]}>
+                      <LinearGradient
+                        start={vec(0, 0)}
+                        end={vec(0, 540)}
+                        colors={barColors[param]}
+                      />
+                    </BarGroup.Bar>
+                  ))
+                )}
+              </BarGroup>
+              {isActive && (
+                <BarToolTip
+                  width={1}
+                  chartTop={chartBounds.top}
+                  // chartBottom={chartBounds.bottom}
+                  xPos={toolState.x.position} // pixel space
+                  // xVal={toolState.x.value} // data space (for HH:mm conversion)
+                  // chartBounds={chartBounds} // pass chart bounds
+                  // fontSrc={inter}
+                  // ticks={ticks}
+                />
               )}
-            </BarGroup>
+            </>
           )}
         </CartesianChart>
       </View>

@@ -537,7 +537,6 @@ export default function PanZoomPage() {
                 flexDirection: "row",
                 flexWrap: "wrap",
                 paddingHorizontal: 16,
-
                 marginTop: 20,
                 justifyContent: "center",
               }}
@@ -562,7 +561,7 @@ export default function PanZoomPage() {
                 return (
                   <View
                     key={param}
-                    style={[styles.dotText, { marginRight: 12 }]}
+                    style={[styles.dotText, { marginRight: 6 }]}
                   >
                     <View
                       style={[
@@ -570,7 +569,7 @@ export default function PanZoomPage() {
                         { backgroundColor: paramColors[param] },
                       ]}
                     />
-                    <Text style={{ color: "#111", fontSize: 10 }}>
+                    <Text style={{ color: "#111", fontSize: ms(9) }}>
                       {param.toUpperCase()}: {value}
                     </Text>
                   </View>
