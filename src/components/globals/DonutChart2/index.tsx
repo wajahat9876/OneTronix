@@ -10,10 +10,11 @@ type DonutChartProps = {
   battery?: number;
   solar?: number;
   type?: "Production" | "Consumption";
+  selectedTab?: number;
 };
 
 const DonutChart2 = forwardRef<View, DonutChartProps>(
-  ({ load, grid, battery, solar, type }, ref) => {
+  ({ load, grid, battery, solar, type, selectedTab }, ref) => {
     const labelMap: Record<string, string> = {
       load: type === "Production" ? "to Load" : "from Load",
       grid: type === "Production" ? "to Grid" : "from Grid",
@@ -111,17 +112,46 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
                 justifyContent: "center", // 👈 vertical center
               }}
             >
-              <Text
-                style={{
-                  fontSize: ms(9),
-                  textAlign: "center", // 👈 extra alignment for text
-                  fontFamily: "Excon-Regular",
-                }}
-              >
-                {type === "Production"
-                  ? "Daily Production"
-                  : "Daily Consumption"}
-              </Text>
+              {type === "Production" ? (
+                <Text
+                  style={{
+                    fontSize: ms(9),
+                    textAlign: "center", // 👈 extra alignment for text
+                    fontFamily: "Excon-Regular",
+                  }}
+                >
+                  {selectedTab === 0
+                    ? "Daily Production"
+                    : selectedTab === 1
+                    ? "Monthly Production"
+                    : selectedTab === 2
+                    ? "Yearly Production"
+                    : selectedTab === 3
+                    ? "Total Production"
+                    : ""}
+                </Text>
+              ) : type === "Consumption" ? (
+                <Text
+                  style={{
+                    fontSize: ms(9),
+                    textAlign: "center", // 👈 extra alignment for text
+                    fontFamily: "Excon-Regular",
+                  }}
+                >
+                  {selectedTab === 0
+                    ? "Daily Consumption"
+                    : selectedTab === 1
+                    ? "Monthly Consumption"
+                    : selectedTab === 2
+                    ? "Yearly Consumption"
+                    : selectedTab === 3
+                    ? "Total Consumption"
+                    : ""}
+                </Text>
+              ) : (
+                ""
+              )}
+
               <Text
                 style={{
                   fontSize: ms(14),

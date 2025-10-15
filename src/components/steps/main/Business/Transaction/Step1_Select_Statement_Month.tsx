@@ -391,7 +391,7 @@ export default function PanZoomPage() {
     });
     return result;
   }, [DATA]);
-
+  console.log(selectedTab, "selectedTab");
   return (
     <SafeAreaView
       style={styles.safeView}
@@ -795,6 +795,7 @@ export default function PanZoomPage() {
           {/*  Production Section */}
           <DonutChart2
             type="Production"
+            selectedTab={selectedTab}
             load={analyticsData?.results?.consumption?.consumption || 0}
             battery={analyticsData?.results?.battery?.charging || 0}
             grid={0}
@@ -802,6 +803,7 @@ export default function PanZoomPage() {
           {/* Consumption Section */}
           <DonutChart2
             type="Consumption"
+            selectedTab={selectedTab}
             solar={0}
             grid={analyticsData?.results?.grid?.purchase || 0}
             battery={analyticsData?.results?.battery?.discharging || 0}
