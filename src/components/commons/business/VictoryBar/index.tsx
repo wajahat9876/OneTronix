@@ -280,7 +280,7 @@ export default function VictoryBar({
       Math.round(selectedMaxY), // max value
     ];
   }, [selectedMaxY]);
-  console.log(toolState);
+
   return (
     <SafeAreaView style={styles.safeView}>
       <View

@@ -15,7 +15,6 @@ export function BarToolTip({
   chartBottom,
   width = 20,
 }: TooltipHoverProps) {
-  console.log(chartBottom);
   return (
     <Rect
       x={xPos} // x position in pixels
