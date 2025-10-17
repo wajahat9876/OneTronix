@@ -36,7 +36,7 @@
       },
       "channel": "preview",
       "ios": {
-        "cocoapods": "1.14.0"
+         "image": "sdk-52"
       }
     },
     "production": {

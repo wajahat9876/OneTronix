@@ -276,7 +276,7 @@ export default function VictoryBar({
       Math.round(selectedMaxY), // max value
     ];
   }, [selectedMaxY]);
-  console.log(k.value);
+
   return (
     <SafeAreaView style={styles.safeView}>
       <View
@@ -443,7 +443,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     backgroundColor: "transparent",
     borderRadius: 12,
-    width: 380,
+    width: 370,
     marginLeft: -8,
   },
   optionsScrollView: { flex: 1 },
