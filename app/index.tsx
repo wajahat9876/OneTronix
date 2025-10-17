@@ -97,7 +97,7 @@ const Index = () => {
     registerNotifications();
   }, []);
   if (!rootNavigationState?.key) return null;
-  if (businessData?.auth_token) {
+  if (businessData?.auth_token && businessData?.data?.isVerified === true) {
     return <Redirect href="/(main)/Business/Home" />;
   }
   return <Redirect href="/(auth)/Welcome" />;

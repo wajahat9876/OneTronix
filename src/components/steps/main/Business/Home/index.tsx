@@ -62,7 +62,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
     }
   };
   useEffect(() => {
-    if (!deviceId) return;
+    // if (!deviceId) return;
 
     // Run immediately on mount
     handleTrigger();

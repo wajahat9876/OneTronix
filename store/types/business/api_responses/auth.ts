@@ -67,6 +67,7 @@ export interface VerifySignIn {
   auth_token: string;
   email: string;
   firstName: string;
+  isVerified: boolean;
   isBlocked: boolean;
   lastName: string;
   devices: any[];

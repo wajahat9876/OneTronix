@@ -129,9 +129,9 @@ export const businessAuthApi = createApi({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
+          // dispatch(
+          //   businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
+          // );
         } catch (data: ICurrentResponse | any) {
           // handleLogout(data, { dispatch });
         } finally {

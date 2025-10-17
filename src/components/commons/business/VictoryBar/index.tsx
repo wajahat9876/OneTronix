@@ -130,7 +130,7 @@ export default function VictoryBar({
     }
   }, [selectedDate, selectedTab, datas]);
 
-  const font = useFont(inter, 6);
+  const font = useFont(inter, 6.5);
   // const [ticks, setTicks] = React.useState([
   //   0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30,
   // ]);
@@ -359,7 +359,7 @@ export default function VictoryBar({
               font: font,
               lineWidth: 0,
               labelOffset: 3,
-              labelColor: "gray",
+              labelColor: "black",
               tickCount: 4,
               formatYLabel: (n: number) => `${n}kW`,
             },
@@ -372,7 +372,7 @@ export default function VictoryBar({
             lineWidth: 0.5,
             // tickCount: Number(ticks?.length),
             tickCount: ticks.length,
-            labelColor: "gray",
+            labelColor: "black",
 
             formatXLabel: (value: any) => {
               if (selectedTab === 1) return `${value}`; // Day

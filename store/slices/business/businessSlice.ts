@@ -91,6 +91,7 @@ const initialState: IBusinessState = {
   },
 
   data: {
+    isVerified: false,
     auth_token: "",
     email: "",
     firstName: "",
@@ -203,6 +204,8 @@ const businessSlice = createSlice({
       (state, { payload }) => {
         console.log(payload, "businessSignin");
         state.auth_token = payload.results?.token;
+        state.data.isVerified = payload.results?.user?.isVerified;
+        console.log(payload.results?.user?.isVerified, "state.data.isVerified");
       }
     );
     builder.addMatcher(

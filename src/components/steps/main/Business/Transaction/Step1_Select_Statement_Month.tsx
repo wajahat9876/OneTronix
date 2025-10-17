@@ -614,21 +614,20 @@ export default function PanZoomPage() {
                     // tickValues: [0, Number(maxY.toFixed(0))],
                     tickValues: [0, Math.round(selectedMaxY / 2), selectedMaxY],
                     tickCount: 2,
-                    formatYLabel: (n: number) => `${n}kW`, // 👈 label with kW
+                    formatYLabel: (n: number) => `${n.toFixed(0)}kW`, // 👈 label with kW
                     lineWidth: 0,
                     labelOffset: 3,
-                    labelColor: "gray",
+                    labelColor: "black",
                   },
                 ]}
                 xAxis={{
                   enableRescaling: false,
                   font: font,
                   tickValues: ticks,
-
                   labelOffset: 1,
                   lineWidth: 0.6,
                   tickCount: Number(ticks?.length),
-                  labelColor: "gray",
+                  labelColor: "black",
 
                   formatXLabel: (d: number) => {
                     const hour = Math.floor(d);
@@ -868,12 +867,12 @@ export default function PanZoomPage() {
               icon2={BulbIcon}
               label1={"Solar Energy Produced"}
               value1={Number(
-                totalData?.results?.production?.totalProduction || 0
+                totalData?.results?.production?.production || 0
               ).toFixed(1)}
               unit1={"MWh"}
               label2={"Energy Consumed"}
               value2={Number(
-                totalData?.results?.consumption?.totalConsumption || 0
+                totalData?.results?.consumption?.consumption || 0
               ).toFixed(1)}
               unit2={"kWh"}
             />
@@ -886,9 +885,9 @@ export default function PanZoomPage() {
               value1={Number(0).toFixed(1)}
               unit1={"MWh"}
               label2={"Energy Purchased"}
-              value2={Number(
-                totalData?.results?.grid?.totalPurchase || 0
-              ).toFixed(1)}
+              value2={Number(totalData?.results?.grid?.purchase || 0).toFixed(
+                1
+              )}
               unit2={"kWh"}
             />
           </View>
