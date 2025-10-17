@@ -34,6 +34,7 @@ export interface IBusinessState {
   deviceId: string | undefined;
   role: boolean;
   inverterData?: inverterData;
+  isVerifiedEmail?: boolean;
 }
 const initialState: IBusinessState = {
   role: false,
@@ -165,6 +166,7 @@ const businessSlice = createSlice({
       state.businessKycUrl = initialState.businessKycUrl;
       state.deviceId = "";
       state.inverterData = initialState.inverterData;
+      state.isVerifiedEmail = initialState.isVerifiedEmail;
 
       // console.log('businessLogout', state);
     },
@@ -204,7 +206,7 @@ const businessSlice = createSlice({
       (state, { payload }) => {
         console.log(payload, "businessSignin");
         state.auth_token = payload.results?.token;
-        state.data.isVerified = payload.results?.user?.isVerified;
+        state.isVerifiedEmail = payload.results?.user?.isVerified;
         console.log(payload.results?.user?.isVerified, "state.data.isVerified");
       }
     );
@@ -221,7 +223,6 @@ const businessSlice = createSlice({
       (state) => {
         console.log("Business Signout");
         state.auth_token = "";
-
         state.data = initialState.data;
       }
     );

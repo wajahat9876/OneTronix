@@ -280,7 +280,7 @@ export default function VictoryBar({
       Math.round(selectedMaxY), // max value
     ];
   }, [selectedMaxY]);
-
+  console.log(k.value);
   return (
     <SafeAreaView style={styles.safeView}>
       <View
@@ -341,8 +341,16 @@ export default function VictoryBar({
           domain={{ y: [0, selectedMaxY] }}
           padding={{ left: 20, right: 20, bottom: 30, top: 20 }}
           domainPadding={{
-            left: 45,
-            right: selectedTab === 1 ? -5 : 20,
+            left: 40,
+            right:
+              selectedTab === 1
+                ? -38 + k.value * 10 // gradually decreases negative padding as k.value increases
+                : selectedTab === 2
+                ? -20 + k.value * 8 // slightly different scaling for tab 2
+                : selectedTab === 3
+                ? 20 + k.value * 5 // even smaller shift for tab 3
+                : 0,
+
             top: 20,
             bottom: 0,
           }}

@@ -33,6 +33,7 @@ const Index = () => {
     ]);
   }, []);
   const businessData = useAppSelector(useBusinessDetails);
+  const { isVerifiedEmail } = useAppSelector(useBusinessDetails);
   const rootNavigationState = useRootNavigationState();
   const dispatch = useAppDispatch();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -96,8 +97,9 @@ const Index = () => {
     };
     registerNotifications();
   }, []);
+  console.log(isVerifiedEmail, businessData?.auth_token, "BusinessData");
   if (!rootNavigationState?.key) return null;
-  if (businessData?.auth_token && businessData?.data?.isVerified === true) {
+  if (businessData?.auth_token && isVerifiedEmail) {
     return <Redirect href="/(main)/Business/Home" />;
   }
   return <Redirect href="/(auth)/Welcome" />;
