@@ -5,7 +5,7 @@ import { useGetCurrentBusinessQuery } from "@/store/api/business/businessCurrent
 import { useLazyGetInverterDataQuery } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import BottomSheet from "@gorhom/bottom-sheet";
-import FlowDiagram from "@src/components/globals/FlowDiagram";
+import HouseDiagram from "@src/components/commons/main/HouseDiagram";
 import { PortalBottomSheetRef } from "@src/components/globals/PortalBottomSheet/types";
 import ScreenAuth from "@src/components/globals/ScreenAuth";
 import { StyleSheet } from "@src/components/libraries";
@@ -146,14 +146,24 @@ const Index = ({ goTo }: MultiStepFormProps) => {
             />
           }
         >
-          <FlowDiagram
+          <HouseDiagram
+            solar={result?.results?.inverterData?.data?.solar?.watt ?? 0}
+            grid={result?.results?.inverterData?.data?.grid?.watt ?? 0}
+            home={result?.results?.inverterData?.data?.output?.watt ?? 0}
+            battery={result?.results?.inverterData?.data?.battery?.watt ?? 0}
+          />
+          {/* <Image
+            source={Diagram}
+            style={{ width: 369, height: 360, alignSelf: "center" }}
+          /> */}
+          {/* <FlowDiagram
             solar={result?.results?.inverterData?.data?.solar?.watt}
             grid={99}
             consumption={result?.results?.inverterData?.data?.output?.watt}
             battery={result?.results?.inverterData?.data?.battery?.watt}
             batteryWatt={result?.results?.inverterData?.data?.battery?.watt}
             batteryStatus={result?.results?.inverterData?.data?.battery?.status}
-          />
+          /> */}
           <Text
             style={{
               textAlign: "center",
