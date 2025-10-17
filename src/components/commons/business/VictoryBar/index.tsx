@@ -3,11 +3,7 @@ import { LinearGradient, useFont, vec } from "@shopify/react-native-skia";
 import { ms } from "@utils/design/design";
 import * as React from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import {
-  runOnJS,
-  useAnimatedReaction,
-  useSharedValue,
-} from "react-native-reanimated";
+import { useAnimatedReaction, useSharedValue } from "react-native-reanimated";
 import {
   BarGroup,
   CartesianChart,
@@ -242,14 +238,14 @@ export default function VictoryBar({
       //     (v): v is number => typeof v === "number" && !isNaN(v)
       //   );
       // } else {
-      newTicks = data
-        .map((d) => d.x)
-        .filter((v): v is number => typeof v === "number" && !isNaN(v));
+      // newTicks = data
+      //   .map((d) => d.x)
+      //   .filter((v): v is number => typeof v === "number" && !isNaN(v));
 
-      if (JSON.stringify(ticksShared.value) !== JSON.stringify(newTicks)) {
-        ticksShared.value = newTicks;
-        runOnJS(setTicks)(newTicks);
-      }
+      // if (JSON.stringify(ticksShared.value) !== JSON.stringify(newTicks)) {
+      //   ticksShared.value = newTicks;
+      //   runOnJS(setTicks)(newTicks);
+      // }
     }
   );
   // ✅ Find max among all values across ac, battery, output, solar
@@ -344,7 +340,9 @@ export default function VictoryBar({
             left: 40,
             right:
               selectedTab === 1
-                ? -38 + k.value * 10 // gradually decreases negative padding as k.value increases
+                ? k.value < 1.5
+                  ? -55 * (1.5 - k.value) // gives slight space when zoomed out
+                  : -5 * (k.value - 1.5)
                 : selectedTab === 2
                 ? -20 + k.value * 8 // slightly different scaling for tab 2
                 : selectedTab === 3
@@ -372,6 +370,9 @@ export default function VictoryBar({
               formatYLabel: (n: number) => `${n}kW`,
             },
           ]}
+          frame={{
+            lineWidth: { top: 0.7, bottom: 0.7, left: 0.7, right: 0.7 },
+          }}
           xAxis={{
             enableRescaling: false,
             font: font,
@@ -442,7 +443,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     backgroundColor: "transparent",
     borderRadius: 12,
-    width: 360,
+    width: 380,
     marginLeft: -8,
   },
   optionsScrollView: { flex: 1 },
