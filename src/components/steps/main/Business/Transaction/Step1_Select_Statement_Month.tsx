@@ -70,8 +70,8 @@ export default function PanZoomPage() {
   const [modalVisible, setModalVisible] = useState(false);
   const [date, setDate] = useState(new Date());
   const [selectedParams, setSelectedParams] = useState<
-    ("ac" | "battery" | "output" | "solar")[]
-  >(["ac", "battery"]);
+    ("ac" | "output" | "battery" | "solar")[]
+  >(["ac", "output"]);
 
   //Api define
   const {
@@ -410,7 +410,12 @@ export default function PanZoomPage() {
         >
           Usage & Generation
         </Text>
-        <View style={{ backgroundColor: "#FAFAFA" }}>
+        <View
+          style={{
+            backgroundColor: "#FAFAFA",
+            paddingHorizontal: 10,
+          }}
+        >
           <View style={{ flex: 1 }}>
             <View
               style={{
@@ -524,8 +529,8 @@ export default function PanZoomPage() {
                 <FilterModal
                   visible={modalVisible}
                   onClose={() => setModalVisible(false)}
-                  options={["ac", "battery", "output", "solar"]}
-                  defaultSelected={["ac", "battery"]}
+                  options={["ac", "output", "battery", "solar"]}
+                  defaultSelected={["ac", "output"]}
                   onConfirm={(selected: any) => setSelectedParams(selected)}
                 />
               </View>
@@ -580,10 +585,11 @@ export default function PanZoomPage() {
 
           <View
             style={{
-              width: "100%",
-              height: selectedTab != 0 ? 250 : 200,
+              width: "102%",
+              height: selectedTab != 0 ? 290 : 280,
               paddingHorizontal: 15,
-              marginLeft: -5,
+              marginLeft: -4,
+              // backgroundColor: "red",
             }}
           >
             {selectedTab === 0 && DATA.length ? (
@@ -613,7 +619,7 @@ export default function PanZoomPage() {
                     domain: [0, selectedMaxY], //graph ma 0 0r max value show krne k lie Yaxis ki
                     // tickValues: [0, Number(maxY.toFixed(0))],
                     tickValues: [0, Math.round(selectedMaxY / 2), selectedMaxY],
-                    tickCount: 2,
+                    tickCount: 1.1,
                     formatYLabel: (n: number) => `${n.toFixed(0)}kW`, // 👈 label with kW
                     lineWidth: 0,
                     labelOffset: 3,
@@ -736,7 +742,7 @@ export default function PanZoomPage() {
               </CartesianChart>
             ) : selectedTab === 1 || selectedTab === 2 || selectedTab === 3 ? (
               // <BarGraph segment="month" data={barData} />
-              <View>
+              <View style={{ height: 310, width: 340 }}>
                 {/* <BarGraph2
                 selectedTab={selectedTab}
                 date={date}
@@ -751,67 +757,116 @@ export default function PanZoomPage() {
                 />
               </View>
             ) : (
-              <CartesianChart
-                key={`dsadsa`}
-                data={NullData}
-                axisOptions={{
-                  axisScales: { xAxisScale: "linear", yAxisScale: "linear" },
-                }}
-                domain={{ x: [0, 24] }}
-                domainPadding={{ top: 1, bottom: 1 }}
-                padding={{ top: 30, bottom: 10 }}
-                xKey="hour"
-                yKeys={["ac", "battery", "output", "solar"]}
-                yAxis={[
-                  {
+              <View style={{ height: 290 }}>
+                <CartesianChart
+                  key={`dsadsa`}
+                  data={NullData}
+                  axisOptions={{
+                    axisScales: { xAxisScale: "linear", yAxisScale: "linear" },
+                  }}
+                  frame={{
+                    lineWidth: { top: 1, bottom: 1.3, left: 1.3, right: 1 },
+                  }}
+                  domain={{ x: [0, 24] }}
+                  domainPadding={{ top: 1, bottom: 1 }}
+                  padding={{ top: 40, bottom: 10 }}
+                  xKey="hour"
+                  yKeys={["ac", "battery", "output", "solar"]}
+                  yAxis={[
+                    {
+                      font: font,
+                      enableRescaling: false, // prevent auto-scaling
+                      domain: [0, selectedMaxY], //graph ma 0 0r max value show krne k lie Yaxis ki
+                      // tickValues: [0, Number(maxY.toFixed(0))],
+                      tickValues: [
+                        0,
+                        Math.round(selectedMaxY / 2),
+                        selectedMaxY,
+                      ],
+                      tickCount: 1.1,
+                      lineWidth: 0,
+                    },
+                  ]}
+                  xAxis={{
+                    enableRescaling: false,
                     font: font,
-                    enableRescaling: false, // prevent auto-scaling
-                    domain: [0, selectedMaxY], //graph ma 0 0r max value show krne k lie Yaxis ki
-                    // tickValues: [0, Number(maxY.toFixed(0))],
-                    tickValues: [0, Math.round(selectedMaxY / 2), selectedMaxY],
-                    tickCount: 3,
-                  },
-                ]}
-                xAxis={{
-                  enableRescaling: false,
-                  font: font,
-                  tickValues: ticks,
-                  tickCount: 6,
-                  formatXLabel: (d: number) => {
-                    const hour = Math.floor(d);
-                    const min = Math.round((d - hour) * 60);
-                    return `${hour}:${min.toString().padStart(2, "0")}`;
-                  },
-                }}
-                // transformState={state}
-                onChartBoundsChange={({ top, left, right, bottom }) => {
-                  setWidth(right - left);
-                  setHeight(bottom - top);
-                }}
-              >
-                {({ points, chartBounds }) => {
-                  return <></>;
-                }}
-              </CartesianChart>
+                    tickValues: ticks,
+                    tickCount: 6,
+                    lineWidth: 0.6,
+                    formatXLabel: (d: number) => {
+                      const hour = Math.floor(d);
+                      const min = Math.round((d - hour) * 60);
+                      return `${hour}:${min.toString().padStart(2, "0")}`;
+                    },
+                  }}
+                  // transformState={state}
+                  onChartBoundsChange={({ top, left, right, bottom }) => {
+                    setWidth(right - left);
+                    setHeight(bottom - top);
+                  }}
+                >
+                  {({ points, chartBounds }) => {
+                    return <></>;
+                  }}
+                </CartesianChart>
+              </View>
             )}
           </View>
         </View>
-        <View style={{ paddingHorizontal: 8 }}>
+        <View style={{ paddingHorizontal: 8, marginTop: 35 }}>
           {/*  Production Section */}
           <DonutChart2
             type="Production"
             selectedTab={selectedTab}
-            load={analyticsData?.results?.consumption?.consumption || 0}
-            battery={analyticsData?.results?.battery?.charging || 0}
-            grid={0}
+            totalValue={parseFloat(
+              (analyticsData?.results?.production?.production || 0).toFixed(2)
+            )}
+            load={parseFloat(
+              Math.max(
+                0,
+                (analyticsData?.results?.production?.production || 0) -
+                  ((analyticsData?.results?.battery?.charging || 0) +
+                    (analyticsData?.results?.grid?.export || 0))
+              ).toFixed(2)
+            )}
+            battery={parseFloat(
+              (analyticsData?.results?.battery?.charging || 0).toFixed(2)
+            )}
+            grid={parseFloat(
+              (analyticsData?.results?.grid?.export || 0).toFixed(2)
+            )}
           />
           {/* Consumption Section */}
           <DonutChart2
             type="Consumption"
             selectedTab={selectedTab}
-            solar={0}
-            grid={analyticsData?.results?.grid?.purchase || 0}
-            battery={analyticsData?.results?.battery?.discharging || 0}
+            totalValue={parseFloat(
+              (analyticsData?.results?.consumption.consumption || 0).toFixed(2)
+            )}
+            solar={parseFloat(
+              Math.max(
+                0,
+                (analyticsData?.results?.production?.production || 0) -
+                  (analyticsData?.results?.battery?.charging || 0) -
+                  (analyticsData?.results?.grid?.export || 0)
+              ).toFixed(2)
+            )}
+            grid={parseFloat(
+              Math.max(
+                0,
+                (analyticsData?.results?.consumption?.consumption || 0) -
+                  (Math.max(
+                    0,
+                    (analyticsData?.results?.production?.production || 0) -
+                      (analyticsData?.results?.battery?.charging || 0) -
+                      (analyticsData?.results?.grid?.export || 0)
+                  ) +
+                    (analyticsData?.results?.battery?.discharging || 0))
+              ).toFixed(2)
+            )}
+            battery={parseFloat(
+              (analyticsData?.results?.battery?.discharging || 0).toFixed(2)
+            )}
           />
           {/* <View style={{ flexDirection: "row" }}> */}
           {/* Production Section */}

@@ -11,10 +11,11 @@ type DonutChartProps = {
   solar?: number;
   type?: "Production" | "Consumption";
   selectedTab?: number;
+  totalValue: number;
 };
 
 const DonutChart2 = forwardRef<View, DonutChartProps>(
-  ({ load, grid, battery, solar, type, selectedTab }, ref) => {
+  ({ load, grid, battery, solar, type, selectedTab, totalValue }, ref) => {
     const labelMap: Record<string, string> = {
       load: type === "Production" ? "to Load" : "from Load",
       grid: type === "Production" ? "to Grid" : "from Grid",
@@ -33,14 +34,12 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
       ([, v]) => v !== undefined
     );
 
-    const total = entries.reduce((sum, [, v]) => sum + (v || 0), 0);
-
     // control gap size here
     const gapRatio = 0.0; // 0% gap for 15% use 0.3
-    const gapValue = total * gapRatio || 0;
+    const gapValue = totalValue * gapRatio || 0;
 
     const data =
-      total === 0
+      totalValue === 0
         ? [
             {
               value: 1,
@@ -52,7 +51,7 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
         : [
             ...entries.map(([key, value]) => {
               const val = value || 0;
-              const percentage = (val / total) * 100;
+              const percentage = (val / totalValue) * 100;
               return {
                 value: val,
                 color: colorMap[key],
@@ -160,7 +159,7 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
                   fontFamily: "Excon-Medium",
                 }}
               >
-                {total === 0 ? "No Data" : `${total.toFixed(1)} kWh`}
+                {totalValue === 0 ? "No Data" : `${totalValue.toFixed(1)} kWh`}
               </Text>
             </View>
           )}
@@ -177,7 +176,7 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
             flexWrap: "wrap",
           }}
         >
-          {total > 0 ? (
+          {totalValue > 0 ? (
             entries.map(([key, value], index) => (
               <View
                 key={index}

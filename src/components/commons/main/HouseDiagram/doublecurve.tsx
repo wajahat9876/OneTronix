@@ -98,47 +98,60 @@ const HouseDiagram = (props: HouseDiagramProps) => {
   const solarPos = { x: 260, y: 110 };
   const batteryPos = { x: 260, y: 200 };
   const gridPos = { x: 360, y: 160 };
-  const homePos = { x: 152, y: 190 };
+  const homePos = { x: 160, y: 180 };
 
-  const GAP = 18; // simple fixed pixel offset from inverter
-  const makeElbowLeft = (
-    from: { x: number; y: number },
-    to: { x: number; y: number },
-    elbowLength = 60,
-    curveRadius = 20
+  const GAP = 10; // simple fixed pixel offset from inverter
+  const makeDoubleLeftTurnPath = (
+    from: { x: number; y: number }, // inverter
+    to: { x: number; y: number }, // home
+    upLength = 40, // how far it goes up
+    firstLeftLength = 40, // first horizontal left segment
+    secondLeftLength = 80, // second longer left segment
+    downOffset = 20, // small offset for downward turn
+    curveRadius = 20 // smoothness of corners
   ) => {
-    // how far to go left from inverter before turning
-    const elbowX = from.x - elbowLength;
+    const upY = from.y - upLength;
+    const firstLeftX = from.x - firstLeftLength;
+    const secondLeftX = from.x - firstLeftLength - secondLeftLength;
 
     return (
       `M ${from.x} ${from.y} ` + // start at inverter
-      `L ${elbowX} ${from.y} ` + // go left
-      `Q ${elbowX - curveRadius} ${from.y} ${elbowX - curveRadius} ${
-        from.y + curveRadius
-      } ` + // make a rounded left-down turn
-      `L ${elbowX - curveRadius} ${to.y} ` + // straight down after the curve
-      `L ${to.x} ${to.y}` // finally to the battery
+      `L ${from.x} ${upY} ` + // go up
+      `Q ${from.x} ${upY - curveRadius} ${from.x - curveRadius} ${
+        upY - curveRadius
+      } ` + // small curve to start left turn
+      `L ${firstLeftX} ${upY - curveRadius} ` + // go left
+      `L ${secondLeftX} ${upY - curveRadius} ` + // keep going left
+      `Q ${secondLeftX - curveRadius} ${upY - curveRadius} ${
+        secondLeftX - curveRadius
+      } ${upY} ` + // smooth curve downward
+      `L ${secondLeftX - curveRadius} ${to.y} ` + // go down
+      `L ${to.x} ${to.y}` // final straight to home
     );
   };
-  const elbowLength = 70;
 
   const solarEnd = { x: inverter.x, y: inverter.y - GAP };
   const batteryStart = { x: inverter.x, y: inverter.y + GAP + 6 };
-  const homeEnd = { x: inverter.x - GAP, y: inverter.y - 18 };
-  // const gridStart = { x: inverter.x + GAP, y: inverter.y };
-  const homeMidPoint = {
-    x: homeEnd.x - elbowLength / 2, // half the elbow distance from the home line start
-    y: homeEnd.y, // same y as home line start
-  };
+  const homeEnd = { x: inverter.x - GAP, y: inverter.y };
+  const gridStart = { x: inverter.x + GAP, y: inverter.y };
+
   const makePath = (from: { x: any; y: any }, to: { x: any; y: any }) =>
     `M ${from.x} ${from.y} L ${to.x} ${to.y}`;
 
   const solarPath = makePath(solarPos, solarEnd);
   const batteryPath = makePath(batteryStart, batteryPos);
-  const homePath = makeElbowLeft(homeEnd, homePos, 70, 20);
-  const gridPath = `M ${homeMidPoint.x} ${homeMidPoint.y} L ${homeMidPoint.x} ${gridPos.y}`;
+  const inverterShortened = { x: inverter.x - 5, y: inverter.y - 20 };
+  const homePath = makeDoubleLeftTurnPath(
+    inverterShortened,
+    homePos,
+    -8,
+    25,
+    60,
+    100,
+    10
+  );
 
-  //
+  const gridPath = makePath(gridStart, gridPos);
 
   return (
     <View style={styles.container} onLayout={onLayout}>

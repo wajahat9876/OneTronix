@@ -2,7 +2,10 @@
 /* eslint-disable import/order */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable camelcase */
-import { useVerifyOtpMutation } from "@/store/api/business/authApis";
+import {
+  useVerifyOtpInstallerMutation,
+  useVerifyOtpMutation,
+} from "@/store/api/business/authApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import { useConfig } from "@/store/selectors/config/config";
 import { businessLogout } from "@/store/slices/business/businessSlice";
@@ -23,9 +26,11 @@ import { Platform, ScrollView, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
 const Step2_OTP = ({ back }: MultiStepFormProps) => {
   const dispatch = useAppDispatch();
-  const { signInBusinessEmail } = useAppSelector(useBusinessDetails);
+  const { signInBusinessEmail, role } = useAppSelector(useBusinessDetails);
   const [verifyBusinessSignIn, { isLoading: businessLoading }] =
     useVerifyOtpMutation();
+  const [verifyInstallerOtp, { isLoading: installerLoading }] =
+    useVerifyOtpInstallerMutation();
   const router = useRouter();
   const [input, setInput] = useState<string>("");
   const [otpExpired, setOTPExpired] = useState(false);
@@ -37,7 +42,7 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
       const verifySignInData = {
         // otp: Number(enteredOtp),
         otp: Number(enteredOtp),
-        otpTypes: "verifyEmail",
+        otpType: "verifyEmail",
 
         // notificationToken: pushToken,
         // deviceOS: Platform.OS,
@@ -46,10 +51,16 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
         // deviceType,
         // email: signInBusinessEmail,
       };
-      const result = await verifyBusinessSignIn(verifySignInData).unwrap();
+      if (role) {
+        const result = await verifyInstallerOtp(verifySignInData).unwrap();
+        router.replace("/(auth)/Welcome");
+        renderToastSuccess(result.message);
+      } else {
+        const result = await verifyBusinessSignIn(verifySignInData).unwrap();
+        renderToastSuccess(result.message);
+        router.replace("/(main)/Business/Home");
+      }
 
-      router.replace("/(main)/Business/Home");
-      renderToastSuccess(result.message);
       setInput("");
     } catch (error: any) {
       renderToastError(error.data.message);

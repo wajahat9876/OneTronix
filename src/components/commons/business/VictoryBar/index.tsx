@@ -366,7 +366,7 @@ export default function VictoryBar({
               lineWidth: 0,
               labelOffset: 3,
               labelColor: "black",
-              tickCount: 4,
+              tickCount: 3,
               formatYLabel: (n: number) => `${n}kW`,
             },
           ]}
@@ -437,14 +437,14 @@ export default function VictoryBar({
 }
 
 const styles = StyleSheet.create({
-  safeView: { flex: 1, backgroundColor: "#fafafa" },
+  safeView: { flex: 1, backgroundColor: "transparent" },
   chart: {
-    height: 270,
+    height: 300,
     marginHorizontal: 10,
-    backgroundColor: "transparent",
+    // backgroundColor: "red",
     borderRadius: 12,
     width: 370,
-    marginLeft: -8,
+    marginLeft: -22,
   },
   optionsScrollView: { flex: 1 },
   options: {

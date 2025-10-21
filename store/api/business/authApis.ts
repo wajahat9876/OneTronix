@@ -76,7 +76,7 @@ export const businessAuthApi = createApi({
 
     verifyOtp: builder.mutation<any, VerifyOtpPayload>({
       query: (body) => ({
-        url: "auth/verifyOtp",
+        url: "user/auth/verifyOtp",
         method: "POST",
         body,
       }),
@@ -144,7 +144,27 @@ export const businessAuthApi = createApi({
       any
     >({
       query: (body) => ({
-        url: "user/auth/createInstaller",
+        url: "installer/auth/signup",
+        method: "POST",
+        body,
+      }),
+
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
+          );
+        } catch (data: ICurrentResponse | any) {
+          // handleLogout(data, { dispatch });
+        } finally {
+          // do nothing
+        }
+      },
+    }),
+    verifyOtpInstaller: builder.mutation<any, any>({
+      query: (body) => ({
+        url: "installer/auth/verifyOTP",
         method: "POST",
         body,
       }),
@@ -706,6 +726,7 @@ export const {
   useBuisnessSignoutMutation,
   useUpdateAddressMutation,
   useBusinessSignupInstallerMutation,
+  useVerifyOtpInstallerMutation,
   // Unused Api
   useTransactionAlertMutation,
   useUpdateBusinessPhoneNumberMutation,

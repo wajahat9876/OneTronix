@@ -151,6 +151,8 @@ const Index = ({ goTo }: MultiStepFormProps) => {
             grid={result?.results?.inverterData?.data?.grid?.watt ?? 0}
             home={result?.results?.inverterData?.data?.output?.watt ?? 0}
             battery={result?.results?.inverterData?.data?.battery?.watt ?? 0}
+            batteryWatt={result?.results?.inverterData?.data?.battery?.watt}
+            batteryStatus={result?.results?.inverterData?.data?.battery?.status}
           />
           {/* <Image
             source={Diagram}
