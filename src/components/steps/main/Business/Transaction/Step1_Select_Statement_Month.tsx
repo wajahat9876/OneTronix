@@ -847,8 +847,8 @@ export default function PanZoomPage() {
               Math.max(
                 0,
                 (analyticsData?.results?.production?.production || 0) -
-                  (analyticsData?.results?.battery?.charging || 0) -
-                  (analyticsData?.results?.grid?.export || 0)
+                  ((analyticsData?.results?.battery?.charging || 0) +
+                    (analyticsData?.results?.grid?.export || 0))
               ).toFixed(2)
             )}
             grid={parseFloat(

@@ -1,4 +1,5 @@
 import Diagram from "@assets/icons/diagram.png";
+import { hs, vs } from "@utils/design/design";
 import React, { useEffect, useRef, useState } from "react";
 import { Animated, Image, StyleSheet, Text, View } from "react-native";
 import Svg, { Defs, Marker, Path } from "react-native-svg";
@@ -8,7 +9,7 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 const AnimatedLinePath = ({
   d,
-  color = "#27ae60",
+  color = "green",
   active = false,
   direction = "forward",
 }) => {
@@ -45,8 +46,8 @@ const AnimatedLinePath = ({
       {/* Gray base line */}
       <Path
         d={d}
-        stroke="lightgray"
-        strokeWidth={2}
+        stroke="#0D111E"
+        strokeWidth={3}
         fill="none"
         strokeLinecap="round"
       />
@@ -55,7 +56,7 @@ const AnimatedLinePath = ({
       <AnimatedPath
         d={d}
         stroke={color}
-        strokeWidth={2}
+        strokeWidth={1}
         fill="none"
         strokeDasharray="120,80"
         strokeDashoffset={dashOffset}
@@ -97,8 +98,8 @@ const HouseDiagram = (props: HouseDiagramProps) => {
   const inverter = { x: 260, y: 160 };
   const solarPos = { x: 260, y: 110 };
   const batteryPos = { x: 260, y: 200 };
-  const gridPos = { x: 360, y: 160 };
-  const homePos = { x: 152, y: 190 };
+  const gridPos = { x: 300, y: 250 };
+  const homePos = { x: 120, y: 149 };
 
   const GAP = 18; // simple fixed pixel offset from inverter
   const makeElbowLeft = (
@@ -124,7 +125,7 @@ const HouseDiagram = (props: HouseDiagramProps) => {
 
   const solarEnd = { x: inverter.x, y: inverter.y - GAP };
   const batteryStart = { x: inverter.x, y: inverter.y + GAP + 6 };
-  const homeEnd = { x: inverter.x - GAP, y: inverter.y - 18 };
+  const homeEnd = { x: inverter.x - GAP, y: inverter.y - 15 };
   // const gridStart = { x: inverter.x + GAP, y: inverter.y };
   const homeMidPoint = {
     x: homeEnd.x - elbowLength / 2, // half the elbow distance from the home line start
@@ -133,12 +134,33 @@ const HouseDiagram = (props: HouseDiagramProps) => {
   const makePath = (from: { x: any; y: any }, to: { x: any; y: any }) =>
     `M ${from.x} ${from.y} L ${to.x} ${to.y}`;
 
-  const solarPath = makePath(solarPos, solarEnd);
+  // const solarPath = makePath(solarPos, solarEnd);
   const batteryPath = makePath(batteryStart, batteryPos);
-  const homePath = makeElbowLeft(homeEnd, homePos, 70, 20);
-  const gridPath = `M ${homeMidPoint.x} ${homeMidPoint.y} L ${homeMidPoint.x} ${gridPos.y}`;
+  const homePath = makeElbowLeft(homeEnd, homePos, 110, 12);
+  // const gridPath = `M ${homeMidPoint.x} ${homeMidPoint.y} L ${homeMidPoint.x} ${gridPos.y}`;
+  const totalY = gridPos.y - homeMidPoint.y;
+  const bendStartY = homeMidPoint.y + totalY * 0.78; // 70% point
+  const bendDepth = 40; // how deep the curve bends (adjust this)
+  const bendMidY = bendStartY + bendDepth / 2;
 
-  //
+  // Build the multi-segment path
+  const gridPath = `
+  M ${homeMidPoint.x} ${homeMidPoint.y}
+  L ${homeMidPoint.x} ${bendStartY}
+  Q ${homeMidPoint.x + 40} ${bendMidY}, ${homeMidPoint.x + 80} ${
+    bendStartY + bendDepth
+  }
+  L ${gridPos.x - 10} ${gridPos.y + 18}
+`;
+
+  //solar curve
+  const curveDepth = 10; // how much to bend
+  const curveY = solarPos.y - curveDepth;
+
+  const solarPath = `
+  M ${solarEnd.x} ${solarEnd.y}
+  Q ${solarEnd.x + 5} ${curveY + 10}, ${solarPos.x - 5} ${solarPos.y - 2}
+`;
 
   return (
     <View style={styles.container} onLayout={onLayout}>
@@ -201,22 +223,22 @@ const HouseDiagram = (props: HouseDiagramProps) => {
       )}
 
       {/* Labels */}
-      <View style={[styles.label, { top: 10, left: 280 }]}>
+      <View style={[styles.label, { top: vs(35), left: hs(270) }]}>
         <Text style={styles.labelTitle}>Solar</Text>
         <Text style={styles.labelValue}>{solar} kW</Text>
       </View>
 
-      <View style={[styles.label, { top: 220, left: 130 }]}>
+      <View style={[styles.label, { top: vs(130), left: hs(65) }]}>
         <Text style={styles.labelTitle}>Home</Text>
         <Text style={styles.labelValue}>{home} kW</Text>
       </View>
 
-      <View style={[styles.label, { bottom: 20, left: 60 }]}>
+      <View style={[styles.label, { bottom: vs(155), left: hs(280) }]}>
         <Text style={styles.labelTitle}>Battery</Text>
         <Text style={styles.labelValue}>{battery} kW</Text>
       </View>
 
-      <View style={[styles.label, { bottom: 20, right: 30 }]}>
+      <View style={[styles.label, { bottom: vs(70), right: hs(140) }]}>
         <Text style={styles.labelTitle}>Grid</Text>
         <Text style={styles.labelValue}>{grid} kW</Text>
       </View>
@@ -242,7 +264,7 @@ const styles = StyleSheet.create({
   labelTitle: {
     fontSize: 13,
     fontWeight: "600",
-    color: "green",
+    color: "black",
   },
   labelValue: {
     fontSize: 12,
