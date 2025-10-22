@@ -50,8 +50,13 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
           ]
         : [
             ...entries.map(([key, value]) => {
-              const val = value || 0;
-              const percentage = (val / totalValue) * 100;
+              const val = Math.max(0, value || 0); // prevent negative
+              let percentage = (val / totalValue) * 100;
+
+              // clamp between 0–100
+              if (percentage > 100) percentage = 100;
+              if (percentage < 0) percentage = 0;
+
               return {
                 value: val,
                 color: colorMap[key],
@@ -59,12 +64,6 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
                 label: labelMap[key],
               };
             }),
-            {
-              value: gapValue,
-              color: "#ffffff", // bottom space always white
-              label: "Gap",
-              text: "",
-            },
           ];
 
     return (

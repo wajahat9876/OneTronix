@@ -347,6 +347,21 @@ export default function PanZoomPage() {
       };
     }, [selectedTab]) // also runs again if selectedTab changes
   );
+  React.useEffect(() => {
+    refetch();
+    analyticsRefetch();
+    totalRefetch();
+
+    const interval = setInterval(() => {
+      console.log("⏳ Refreshing in background...");
+      refetch();
+      analyticsRefetch();
+      totalRefetch();
+    }, 300000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   // Ref
   const dateOfBirthRef = React.useRef() as React.MutableRefObject<TextInput>;
   const { state: toolState, isActive } = useChartPressState<{

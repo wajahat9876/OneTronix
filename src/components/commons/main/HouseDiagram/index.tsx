@@ -2,14 +2,14 @@ import Diagram from "@assets/icons/diagram.png";
 import { hs, vs } from "@utils/design/design";
 import React, { useEffect, useRef, useState } from "react";
 import { Animated, Image, StyleSheet, Text, View } from "react-native";
-import Svg, { Defs, Marker, Path } from "react-native-svg";
+import Svg, { Circle, Defs, Marker, Path } from "react-native-svg";
 
 // --- Animated Line Path Component ---
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 const AnimatedLinePath = ({
   d,
-  color = "green",
+  color = "#04B9F5",
   active = false,
   direction = "forward",
 }) => {
@@ -98,15 +98,15 @@ const HouseDiagram = (props: HouseDiagramProps) => {
   const inverter = { x: 260, y: 160 };
   const solarPos = { x: 260, y: 110 };
   const batteryPos = { x: 260, y: 200 };
-  const gridPos = { x: 300, y: 250 };
-  const homePos = { x: 120, y: 149 };
+  const gridPos = { x: 235, y: 245 };
+  const homePos = { x: 115, y: 150 };
 
   const GAP = 18; // simple fixed pixel offset from inverter
   const makeElbowLeft = (
     from: { x: number; y: number },
     to: { x: number; y: number },
     elbowLength = 60,
-    curveRadius = 20
+    curveRadius = 30
   ) => {
     // how far to go left from inverter before turning
     const elbowX = from.x - elbowLength;
@@ -114,7 +114,7 @@ const HouseDiagram = (props: HouseDiagramProps) => {
     return (
       `M ${from.x} ${from.y} ` + // start at inverter
       `L ${elbowX} ${from.y} ` + // go left
-      `Q ${elbowX - curveRadius} ${from.y} ${elbowX - curveRadius} ${
+      `Q ${elbowX + 10 - curveRadius} ${from.y} ${elbowX - curveRadius} ${
         from.y + curveRadius
       } ` + // make a rounded left-down turn
       `L ${elbowX - curveRadius} ${to.y} ` + // straight down after the curve
@@ -136,21 +136,22 @@ const HouseDiagram = (props: HouseDiagramProps) => {
 
   // const solarPath = makePath(solarPos, solarEnd);
   const batteryPath = makePath(batteryStart, batteryPos);
-  const homePath = makeElbowLeft(homeEnd, homePos, 110, 12);
+  const homePath = makeElbowLeft(homeEnd, homePos, 117, 10);
+
+  // Grid Path with Bezier curve
   // const gridPath = `M ${homeMidPoint.x} ${homeMidPoint.y} L ${homeMidPoint.x} ${gridPos.y}`;
   const totalY = gridPos.y - homeMidPoint.y;
-  const bendStartY = homeMidPoint.y + totalY * 0.78; // 70% point
-  const bendDepth = 40; // how deep the curve bends (adjust this)
-  const bendMidY = bendStartY + bendDepth / 2;
+  const bendStartY = homeMidPoint.y + totalY * 0.38;
+  const bendDepth = 35; // increase for smoother wide curve
+  const bendX = homeMidPoint.x;
 
-  // Build the multi-segment path
   const gridPath = `
   M ${homeMidPoint.x} ${homeMidPoint.y}
-  L ${homeMidPoint.x} ${bendStartY}
-  Q ${homeMidPoint.x + 40} ${bendMidY}, ${homeMidPoint.x + 80} ${
-    bendStartY + bendDepth
-  }
-  L ${gridPos.x - 10} ${gridPos.y + 18}
+  C ${homeMidPoint.x} ${bendStartY + 40},
+    ${homeMidPoint.x} ${bendStartY + bendDepth / 1.8},
+    ${bendX} ${bendStartY + bendDepth}
+  S ${bendX} ${bendStartY + bendDepth + 10},
+    ${gridPos.x} ${gridPos.y}
 `;
 
   //solar curve
@@ -190,7 +191,13 @@ const HouseDiagram = (props: HouseDiagramProps) => {
           <AnimatedLinePath
             d={solarPath}
             active={solar > 0}
-            direction="forward"
+            direction="backward"
+          />
+          <Circle
+            cx={solarPos.x - 5}
+            cy={solarPos.y - 2}
+            r={3}
+            fill={solar > 0 ? "#05B1F2" : "#05B1F2"}
           />
 
           {/* 🔋 Inverter ↔ Battery */}
@@ -212,12 +219,33 @@ const HouseDiagram = (props: HouseDiagramProps) => {
             active={home > 0}
             direction="forward"
           />
+          <Circle
+            cx={homePos.x}
+            cy={homePos.y}
+            r={3}
+            fill={home > 0 ? "#04B9F5" : "#05B1F2"}
+          />
 
           {/* ⚡ Inverter ↔ Grid */}
           <AnimatedLinePath
             d={gridPath}
             active={grid !== 0}
             direction={grid > 0 ? "forward" : "backward"}
+          />
+          <Circle
+            cx={homeMidPoint.x}
+            cy={homeMidPoint.y}
+            r={2}
+            stroke="white"
+            strokeWidth={1.5}
+            fill="transparent"
+          />
+          {/* Dot at end of grid line */}
+          <Circle
+            cx={gridPos.x}
+            cy={gridPos.y}
+            r={3}
+            fill={grid !== 0 ? "#05B1F2" : "#05B1F2"}
           />
         </Svg>
       )}
