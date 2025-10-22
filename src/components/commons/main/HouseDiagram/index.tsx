@@ -1,7 +1,14 @@
 import Diagram from "@assets/icons/diagram.png";
 import { hs, vs } from "@utils/design/design";
 import React, { useEffect, useRef, useState } from "react";
-import { Animated, Image, StyleSheet, Text, View } from "react-native";
+import {
+  Animated,
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import Svg, { Circle, Defs, Marker, Path } from "react-native-svg";
 
 // --- Animated Line Path Component ---
@@ -12,6 +19,7 @@ const AnimatedLinePath = ({
   color = "#04B9F5",
   active = false,
   direction = "forward",
+  strokeDasharray = "120,80",
 }) => {
   const dashOffset = useRef(new Animated.Value(0)).current;
   const animRef = useRef<Animated.CompositeAnimation | null>(null);
@@ -58,7 +66,7 @@ const AnimatedLinePath = ({
         stroke={color}
         strokeWidth={1}
         fill="none"
-        strokeDasharray="120,80"
+        strokeDasharray={strokeDasharray}
         strokeDashoffset={dashOffset}
         opacity={active ? 1 : 0}
         strokeLinecap="round"
@@ -99,7 +107,7 @@ const HouseDiagram = (props: HouseDiagramProps) => {
   const solarPos = { x: 260, y: 110 };
   const batteryPos = { x: 260, y: 200 };
   const gridPos = { x: 235, y: 245 };
-  const homePos = { x: 115, y: 150 };
+  const homePos = { x: 117, y: 150 };
 
   const GAP = 18; // simple fixed pixel offset from inverter
   const makeElbowLeft = (
@@ -121,6 +129,34 @@ const HouseDiagram = (props: HouseDiagramProps) => {
       `L ${to.x} ${to.y}` // finally to the battery
     );
   };
+  const makeDoubleLeftTurnPath = (
+    from: { x: number; y: number }, // inverter
+    to: { x: number; y: number }, // home
+    upLength = 40, // how far it goes up
+    firstLeftLength = 40, // first horizontal left segment
+    secondLeftLength = 80, // second longer left segment
+    downOffset = 20, // small offset for downward turn
+    curveRadius = 40 // smoothness of corners
+  ) => {
+    const upY = from.y - upLength;
+    const firstLeftX = from.x - firstLeftLength;
+    const secondLeftX = from.x - firstLeftLength - secondLeftLength;
+
+    return (
+      `M ${from.x} ${from.y + 1} ` + // start at inverter
+      `L ${from.x} ${upY - 9.5} ` + // go up
+      `Q ${from.x} ${upY - curveRadius} ${from.x - curveRadius} ${
+        upY - curveRadius
+      } ` + // small curve to start left turn
+      `L ${firstLeftX} ${upY - curveRadius} ` + // go left
+      `L ${secondLeftX} ${upY - curveRadius} ` + // keep going left
+      `Q ${secondLeftX - curveRadius + 10} ${upY - curveRadius} ${
+        secondLeftX - curveRadius
+      } ${upY} ` + // smooth curve downward
+      `L ${secondLeftX - curveRadius} ${to.y} ` + // go down
+      `L ${to.x} ${to.y}` // final straight to home
+    );
+  };
   const elbowLength = 70;
 
   const solarEnd = { x: inverter.x, y: inverter.y - GAP };
@@ -136,7 +172,16 @@ const HouseDiagram = (props: HouseDiagramProps) => {
 
   // const solarPath = makePath(solarPos, solarEnd);
   const batteryPath = makePath(batteryStart, batteryPos);
-  const homePath = makeElbowLeft(homeEnd, homePos, 117, 10);
+  const inverterShortened = { x: inverter.x - 10, y: inverter.y - 17 };
+  const homePath = makeDoubleLeftTurnPath(
+    inverterShortened,
+    homePos,
+    -6.5,
+    65,
+    62,
+    100,
+    10
+  );
 
   // Grid Path with Bezier curve
   // const gridPath = `M ${homeMidPoint.x} ${homeMidPoint.y} L ${homeMidPoint.x} ${gridPos.y}`;
@@ -146,7 +191,7 @@ const HouseDiagram = (props: HouseDiagramProps) => {
   const bendX = homeMidPoint.x;
 
   const gridPath = `
-  M ${homeMidPoint.x} ${homeMidPoint.y}
+  M ${homeMidPoint.x} ${homeMidPoint.y - 4}
   C ${homeMidPoint.x} ${bendStartY + 40},
     ${homeMidPoint.x} ${bendStartY + bendDepth / 1.8},
     ${bendX} ${bendStartY + bendDepth}
@@ -159,7 +204,7 @@ const HouseDiagram = (props: HouseDiagramProps) => {
   const curveY = solarPos.y - curveDepth;
 
   const solarPath = `
-  M ${solarEnd.x} ${solarEnd.y}
+  M ${solarEnd.x} ${solarEnd.y + 2}
   Q ${solarEnd.x + 5} ${curveY + 10}, ${solarPos.x - 5} ${solarPos.y - 2}
 `;
 
@@ -192,6 +237,7 @@ const HouseDiagram = (props: HouseDiagramProps) => {
             d={solarPath}
             active={solar > 0}
             direction="backward"
+            strokeDasharray="30,70"
           />
           <Circle
             cx={solarPos.x - 5}
@@ -204,6 +250,7 @@ const HouseDiagram = (props: HouseDiagramProps) => {
           <AnimatedLinePath
             d={batteryPath}
             active={batteryWatt > 0 && batteryStatus !== "ONHOLD"}
+            strokeDasharray="20,80"
             direction={
               batteryStatus === "CHARGING"
                 ? "forward"
@@ -234,8 +281,8 @@ const HouseDiagram = (props: HouseDiagramProps) => {
           />
           <Circle
             cx={homeMidPoint.x}
-            cy={homeMidPoint.y}
-            r={2}
+            cy={homeMidPoint.y - 5.5}
+            r={2.3}
             stroke="white"
             strokeWidth={1.5}
             fill="transparent"
@@ -256,12 +303,22 @@ const HouseDiagram = (props: HouseDiagramProps) => {
         <Text style={styles.labelValue}>{solar} kW</Text>
       </View>
 
-      <View style={[styles.label, { top: vs(130), left: hs(65) }]}>
+      <View
+        style={[
+          styles.label,
+          { top: Platform.OS === "ios" ? vs(130) : vs(120), left: hs(65) },
+        ]}
+      >
         <Text style={styles.labelTitle}>Home</Text>
         <Text style={styles.labelValue}>{home} kW</Text>
       </View>
 
-      <View style={[styles.label, { bottom: vs(155), left: hs(280) }]}>
+      <View
+        style={[
+          styles.label,
+          { bottom: Platform.OS === "ios" ? vs(160) : vs(160), left: hs(280) },
+        ]}
+      >
         <Text style={styles.labelTitle}>Battery</Text>
         <Text style={styles.labelValue}>{battery} kW</Text>
       </View>
