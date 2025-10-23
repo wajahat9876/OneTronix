@@ -35,6 +35,7 @@ export interface IBusinessState {
   role: boolean;
   inverterData?: inverterData;
   isVerifiedEmail?: boolean;
+  isDarkMode?: boolean;
 }
 const initialState: IBusinessState = {
   role: false,
@@ -44,6 +45,7 @@ const initialState: IBusinessState = {
   outgoingBusReduxData: { amount: "", transferReasonId: "", description: "" },
   signInBusinessEmail: "",
   businessPhone: "",
+  isDarkMode: false,
   selectedBenefBankDetails: [],
   lastSelectedBusinessBenefDetails: {
     isFirstTransfer: false,
@@ -128,6 +130,9 @@ const businessSlice = createSlice({
     setBusinessKycUrl(state, action) {
       state.businessKycUrl = action.payload.Url;
     },
+    setDarkMode(state, action) {
+      state.isDarkMode = action.payload;
+    },
     resetPackageId(state) {
       state.packageId = "";
     },
@@ -167,6 +172,7 @@ const businessSlice = createSlice({
       state.deviceId = "";
       state.inverterData = initialState.inverterData;
       state.isVerifiedEmail = initialState.isVerifiedEmail;
+      state.isDarkMode = initialState.isDarkMode;
 
       // console.log('businessLogout', state);
     },
@@ -246,6 +252,7 @@ const businessSlice = createSlice({
 export const {
   setPackageId,
   resetPackageId,
+  setDarkMode,
   setBusinessCategory,
   setBusinessType,
   businessLogout,

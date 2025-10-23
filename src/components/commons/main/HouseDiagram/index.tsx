@@ -1,3 +1,4 @@
+import DiagramDark from "@assets/icons/darkHouse.png";
 import Diagram from "@assets/icons/diagram.png";
 import { hs, vs } from "@utils/design/design";
 import React, { useEffect, useRef, useState } from "react";
@@ -83,6 +84,7 @@ interface HouseDiagramProps {
   battery?: number; // kW
   batteryStatus?: "CHARGING" | "DISCHARGING" | "ONHOLD";
   batteryWatt?: number; // current battery watt
+  schema?: "light" | "dark";
 }
 const HouseDiagram = (props: HouseDiagramProps) => {
   const {
@@ -92,9 +94,11 @@ const HouseDiagram = (props: HouseDiagramProps) => {
     battery = 0,
     batteryStatus = "ONHOLD",
     batteryWatt = 0,
+    schema,
   } = props;
   const [layout, setLayout] = useState({ width: 0, height: 0 });
-
+  const isDark = schema === "dark";
+  const textColor = isDark ? "white" : "black";
   const onLayout = (e: any) => {
     const { width, height } = e.nativeEvent.layout;
     setLayout({ width, height });
@@ -202,7 +206,6 @@ const HouseDiagram = (props: HouseDiagramProps) => {
   //solar curve
   const curveDepth = 10; // how much to bend
   const curveY = solarPos.y - curveDepth;
-
   const solarPath = `
   M ${solarEnd.x} ${solarEnd.y + 2}
   Q ${solarEnd.x + 5} ${curveY + 10}, ${solarPos.x - 5} ${solarPos.y - 2}
@@ -210,7 +213,11 @@ const HouseDiagram = (props: HouseDiagramProps) => {
 
   return (
     <View style={styles.container} onLayout={onLayout}>
-      <Image source={Diagram} style={styles.image} resizeMode="contain" />
+      {schema === "dark" ? (
+        <Image source={DiagramDark} style={styles.image} resizeMode="contain" />
+      ) : (
+        <Image source={Diagram} style={styles.image} resizeMode="contain" />
+      )}
 
       {ready && (
         <Svg
@@ -299,7 +306,7 @@ const HouseDiagram = (props: HouseDiagramProps) => {
 
       {/* Labels */}
       <View style={[styles.label, { top: vs(35), left: hs(270) }]}>
-        <Text style={styles.labelTitle}>Solar</Text>
+        <Text style={[styles.labelTitle, { color: textColor }]}>Solar</Text>
         <Text style={styles.labelValue}>{solar} kW</Text>
       </View>
 
@@ -309,7 +316,7 @@ const HouseDiagram = (props: HouseDiagramProps) => {
           { top: Platform.OS === "ios" ? vs(130) : vs(120), left: hs(65) },
         ]}
       >
-        <Text style={styles.labelTitle}>Home</Text>
+        <Text style={[styles.labelTitle, { color: textColor }]}>Home</Text>
         <Text style={styles.labelValue}>{home} kW</Text>
       </View>
 
@@ -319,12 +326,12 @@ const HouseDiagram = (props: HouseDiagramProps) => {
           { bottom: Platform.OS === "ios" ? vs(160) : vs(160), left: hs(280) },
         ]}
       >
-        <Text style={styles.labelTitle}>Battery</Text>
+        <Text style={[styles.labelTitle, { color: textColor }]}>Battery</Text>
         <Text style={styles.labelValue}>{battery} kW</Text>
       </View>
 
       <View style={[styles.label, { bottom: vs(70), right: hs(140) }]}>
-        <Text style={styles.labelTitle}>Grid</Text>
+        <Text style={[styles.labelTitle, { color: textColor }]}>Grid</Text>
         <Text style={styles.labelValue}>{grid} kW</Text>
       </View>
     </View>
@@ -349,7 +356,6 @@ const styles = StyleSheet.create({
   labelTitle: {
     fontSize: 13,
     fontWeight: "600",
-    color: "black",
   },
   labelValue: {
     fontSize: 12,

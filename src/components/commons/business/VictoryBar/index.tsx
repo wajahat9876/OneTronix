@@ -183,7 +183,7 @@ export default function VictoryBar({
       const totalContentWidth = pointWidth * data.length * clampedK;
 
       // ✅ overscroll padding
-      const leftOverscroll = -width * 0.1;
+      const leftOverscroll = -width * 0.09;
       const rightOverscroll = width * 0.1;
 
       const minTx = -(totalContentWidth - width) - rightOverscroll;

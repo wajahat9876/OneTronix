@@ -827,6 +827,66 @@ export default function PanZoomPage() {
               </View>
             )}
           </View>
+          {/* Zoom Buttons */}
+          {/* <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              marginTop: 10,
+              gap: 20,
+            }}
+          > */}
+
+          {/* <TouchableOpacity
+              onPress={() => {
+                const prevK = k.value;
+                const newK = Math.min(k.value * 1.2, 5); // max zoom 5
+
+           
+                const zoomCenterX = width / 2;
+
+            
+                const deltaTx =
+                  zoomCenterX - (zoomCenterX - tx.value) * (newK / prevK);
+
+           
+                tx.value = deltaTx;
+                k.value = newK;
+              }}
+              style={{
+                backgroundColor: "#007AFF",
+                paddingHorizontal: 15,
+                paddingVertical: 8,
+                borderRadius: 8,
+              }}
+            >
+              <Text style={{ color: "white", fontWeight: "600" }}>Zoom In</Text>
+            </TouchableOpacity> */}
+
+          {/* <TouchableOpacity
+              onPress={() => {
+                const prevK = k.value;
+                const newK = Math.max(k.value / 1.2, 1); // min zoom 1
+
+                const zoomCenterX = width / 2;
+                const deltaTx =
+                  zoomCenterX - (zoomCenterX - tx.value) * (newK / prevK);
+
+                tx.value = deltaTx;
+                k.value = newK;
+              }}
+              style={{
+                backgroundColor: "#FF3B30",
+                paddingHorizontal: 15,
+                paddingVertical: 8,
+                borderRadius: 8,
+              }}
+            >
+              <Text style={{ color: "white", fontWeight: "600" }}>
+                Zoom Out
+              </Text>
+            </TouchableOpacity> */}
+          {/* </View> */}
         </View>
         <View style={{ paddingHorizontal: 8, marginTop: 35 }}>
           {/*  Production Section */}

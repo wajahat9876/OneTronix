@@ -2,11 +2,9 @@
 /* eslint-disable import/order */
 
 import { useBusinessDetails } from "@/store/selectors/business/business";
-import IconBottomTabCard from "@assets/icons/bottom-tabs/home-payment-card-icon.svg";
 // import IconBottomTabInfo from "@assets/icons/bottom-tabs/home-profile-icon.svg";
 import IconBottomTabSettings from "@assets/icons/bottom-tabs/home-setting-icon.svg";
 // import IconBottomTabSendMoney from "@assets/icons/bottom-tabs/home-transfer-money.svg";
-import IconBottomTabHome from "@assets/icons/bottom-tabs/homepage-home-icon.svg";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import Colors from "@src/constants/Colors";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
@@ -17,6 +15,12 @@ import Setting from "app/(main)/Business/Settings/index";
 // import TransferMoney from "app/(main)/Business/TransferMoney/index";
 import { Redirect } from "expo-router";
 import Transaction from "./Transaction";
+
+import HomeBlack from "@assets/icons/bottom-tabs/blackHome.svg";
+import ReportBlack from "@assets/icons/bottom-tabs/blackReport.svg";
+import HomeWhite from "@assets/icons/bottom-tabs/whiteHome.svg";
+import ReportWhite from "@assets/icons/bottom-tabs/whiteReport.svg";
+
 // Icons
 // const MainStack = createBottomTabNavigator<RootTabParamList>();
 const Layout = () => {
@@ -30,21 +34,23 @@ const Layout = () => {
   // }
   // if (!user?.data?.email) return <Redirect href="/(auth)/Welcome/" />;
   const Tab = createMaterialBottomTabNavigator();
+  const { isDarkMode } = useAppSelector(useBusinessDetails);
   return (
     <Tab.Navigator
       initialRouteName="Home"
       barStyle={{
-        backgroundColor: Colors.light.theme.white,
+        backgroundColor: isDarkMode ? "black" : Colors.light.theme.white,
         height: vs(80),
       }}
       activeIndicatorStyle={{
         borderRadius: ms(0),
         marginBottom: vs(20),
         borderTopWidth: 3,
-        borderColor: "black",
+        borderColor: isDarkMode ? "white" : "black",
       }}
+      activeColor={isDarkMode ? "white" : "black"}
       screenOptions={{
-        tabBarColor: Colors.light.theme.white,
+        tabBarColor: isDarkMode ? "black" : Colors.light.theme.white,
       }}
       keyboardHidesNavigationBar={false}
       shifting
@@ -55,7 +61,7 @@ const Layout = () => {
         name="Home"
         component={Home}
         options={{
-          tabBarIcon: () => <IconBottomTabHome />,
+          tabBarIcon: () => (isDarkMode ? <HomeWhite /> : <HomeBlack />),
         }}
       />
 
@@ -63,7 +69,7 @@ const Layout = () => {
         name="Report"
         component={Transaction}
         options={{
-          tabBarIcon: () => <IconBottomTabCard />,
+          tabBarIcon: () => (isDarkMode ? <ReportWhite /> : <ReportBlack />),
         }}
       />
 
