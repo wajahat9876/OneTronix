@@ -3,7 +3,7 @@ import {
   useGetGraphDataQuery,
 } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
-import inter from "@assets/fonts/SpaceMono-Regular.ttf";
+import inter from "@assets/fonts/Poppins/Poppins-SemiBold.ttf";
 import BulbIcon from "@assets/icons/ExchangeIcons/Bulb.png";
 import FlashIcon from "@assets/icons/ExchangeIcons/flash.png";
 import HomeIcon from "@assets/icons/ExchangeIcons/Home.png";
@@ -51,7 +51,6 @@ import {
   Area,
   CartesianActionsHandle,
   CartesianChart,
-  CartesianChartRef,
   getTransformComponents,
   Line,
   setScale,
@@ -372,8 +371,45 @@ export default function PanZoomPage() {
     y: { ac: 0, battery: 0, output: 0, solar: 0 },
   });
 
-  const chartRef =
-    React.useRef<CartesianChartRef<typeof toolState | undefined>>(null);
+  const [lastToolState, setLastToolState] = React.useState<{
+    x: { position: number; value: number };
+    y: Record<
+      "ac" | "battery" | "output" | "solar",
+      { position: number; value: number }
+    >;
+  } | null>(null);
+
+  // ✅ Save the last active state before deactivation
+  React.useEffect(() => {
+    if (isActive && toolState?.x?.value) {
+      setLastToolState({
+        x: {
+          position: toolState.x.position.value,
+          value: toolState.x.value.value,
+        },
+        y: {
+          ac: {
+            position: toolState.y.ac.position.value,
+            value: toolState.y.ac.value.value,
+          },
+          battery: {
+            position: toolState.y.battery.position.value,
+            value: toolState.y.battery.value.value,
+          },
+          output: {
+            position: toolState.y.output.position.value,
+            value: toolState.y.output.value.value,
+          },
+          solar: {
+            position: toolState.y.solar.position.value,
+            value: toolState.y.solar.value.value,
+          },
+        },
+      });
+    }
+  }, [isActive, toolState]);
+  // const chartRef =
+  //   React.useRef<CartesianChartRef<typeof toolState | undefined>>(null);
   const selectedMaxY = React.useMemo(() => {
     if (!selectedParams.length || !DATA?.length) return 10;
 
@@ -406,7 +442,8 @@ export default function PanZoomPage() {
     });
     return result;
   }, [DATA]);
-
+  const [chartHeight, setChartHeight] = useState(100);
+  console.log("chartHeight", lastToolState);
   return (
     <SafeAreaView
       style={styles.safeView}
@@ -416,7 +453,6 @@ export default function PanZoomPage() {
         <Text
           style={{
             paddingHorizontal: 12,
-
             marginTop: 20,
             marginBottom: vs(20),
             fontSize: ms(16),
@@ -427,8 +463,10 @@ export default function PanZoomPage() {
         </Text>
         <View
           style={{
-            backgroundColor: "#FAFAFA",
+            // backgroundColor: "#FAFAFA",
+            backgroundColor: "white",
             paddingHorizontal: 10,
+            paddingBottom: 10,
           }}
         >
           <View style={{ flex: 1 }}>
@@ -554,11 +592,8 @@ export default function PanZoomPage() {
           {selectedTab === 0 && DATA.length ? (
             <View
               style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
                 paddingHorizontal: 16,
-                marginTop: 20,
-                justifyContent: "center",
+                marginLeft: 10,
               }}
             >
               {selectedParams.map((param) => {
@@ -568,20 +603,22 @@ export default function PanZoomPage() {
                   output: "#F7D102",
                   solar: "purple",
                 };
+                const currentValue = isActive
+                  ? toolState?.y?.[param]?.value?.value
+                  : lastToolState?.y?.[param]?.value;
 
-                const raw = toolState?.y?.[param]?.value;
-                const value = isActive
-                  ? raw?.value !== undefined
-                    ? Number(raw.value).toFixed(2)
-                    : "--"
-                  : defaultMaxValues[param] !== undefined
-                  ? defaultMaxValues[param]!.toFixed(2)
-                  : "--";
+                const value =
+                  currentValue !== undefined
+                    ? Number(currentValue).toFixed(1)
+                    : "--";
 
                 return (
                   <View
                     key={param}
-                    style={[styles.dotText, { marginRight: 6 }]}
+                    style={[
+                      styles.dotText,
+                      { marginRight: 6, marginTop: vs(10) },
+                    ]}
                   >
                     <View
                       style={[
@@ -589,7 +626,13 @@ export default function PanZoomPage() {
                         { backgroundColor: paramColors[param] },
                       ]}
                     />
-                    <Text style={{ color: "#111", fontSize: ms(9) }}>
+                    <Text
+                      style={{
+                        color: "#111",
+                        fontSize: ms(11),
+                        fontFamily: "Ranade-Regular",
+                      }}
+                    >
                       {param.toUpperCase()}: {value}
                     </Text>
                   </View>
@@ -600,8 +643,8 @@ export default function PanZoomPage() {
 
           <View
             style={{
-              width: "102%",
-              height: selectedTab != 0 ? 290 : 280,
+              width: "100%",
+              height: selectedTab != 0 ? vs(290) : vs(320),
               paddingHorizontal: 15,
               marginLeft: -4,
               // backgroundColor: "red",
@@ -621,7 +664,7 @@ export default function PanZoomPage() {
                 }}
                 domain={{ x: [0, 24] }}
                 domainPadding={{ top: 1, bottom: 0.1 }}
-                padding={{ top: 10, bottom: 10 }}
+                padding={{ top: 10, bottom: 8 }}
                 xKey="hour"
                 yKeys={["ac", "battery", "output", "solar"]}
                 frame={{
@@ -635,9 +678,9 @@ export default function PanZoomPage() {
                     // tickValues: [0, Number(maxY.toFixed(0))],
                     tickValues: [0, Math.round(selectedMaxY / 2), selectedMaxY],
                     tickCount: 1.1,
-                    formatYLabel: (n: number) => `${n.toFixed(0)}kW`, // 👈 label with kW
+                    formatYLabel: (n: number) => `${n.toFixed(0)} kW`, // 👈 label with kW
                     lineWidth: 0,
-                    labelOffset: 3,
+                    labelOffset: 1.5,
                     labelColor: "black",
                   },
                 ]}
@@ -742,7 +785,7 @@ export default function PanZoomPage() {
                           />
                         </>
                       )}
-                      {isActive && (
+                      {lastToolState && (
                         <GeneralToolTip
                           xPos={toolState.x.position} // pixel space
                           xVal={toolState.x.value} // data space (for HH:mm conversion)
@@ -757,14 +800,14 @@ export default function PanZoomPage() {
               </CartesianChart>
             ) : selectedTab === 1 || selectedTab === 2 || selectedTab === 3 ? (
               // <BarGraph segment="month" data={barData} />
-              <View style={{ height: 310, width: 340 }}>
-                {/* <BarGraph2
-                selectedTab={selectedTab}
-                date={date}
-                selectedParams={selectedParams}
-                data={DATA?.results || []}
-              /> */}
+              <View
+                style={{
+                  height: vs(410),
+                  width: "100%",
+                }}
+              >
                 <VictoryBar
+                  setChartHeight={setChartHeight}
                   selectedDate={formik?.values?.dateOfBirth}
                   selectedTab={selectedTab}
                   selectedParams={selectedParams}
@@ -772,7 +815,7 @@ export default function PanZoomPage() {
                 />
               </View>
             ) : (
-              <View style={{ height: 290 }}>
+              <View style={{ height: vs(320), width: "100%" }}>
                 <CartesianChart
                   key={`dsadsa`}
                   data={NullData}
@@ -888,7 +931,17 @@ export default function PanZoomPage() {
             </TouchableOpacity> */}
           {/* </View> */}
         </View>
-        <View style={{ paddingHorizontal: 8, marginTop: 35 }}>
+        <View
+          style={{
+            paddingHorizontal: 8,
+            marginTop:
+              selectedTab === 0
+                ? vs(10)
+                : chartHeight
+                ? vs(chartHeight * 0.3)
+                : 35,
+          }}
+        >
           {/*  Production Section */}
           <DonutChart2
             type="Production"

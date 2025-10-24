@@ -43,6 +43,14 @@ const ReduxWrapper = () => {
 
   (TextInput as any).defaultProps = (TextInput as any).defaultProps || {};
   (TextInput as any).defaultProps.allowFontScaling = false;
+
+  //Restrict to use only app font
+  // 👇 Apply your global font
+  (Text as any).defaultProps = (Text as any).defaultProps || {};
+  (Text as any).defaultProps.style = { fontFamily: "Ranade-Regular" }; // your custom font name
+
+  (TextInput as any).defaultProps = (TextInput as any).defaultProps || {};
+  (TextInput as any).defaultProps.style = { fontFamily: "Ranade-Regular" };
   useEffect(() => {
     if (isLoadingComplete) {
       SplashScreen.hideAsync();

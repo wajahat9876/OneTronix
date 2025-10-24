@@ -1,4 +1,4 @@
-import { ms } from "@utils/design/design";
+import { ms, vs } from "@utils/design/design";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 15,
+    marginVertical: vs(10),
     marginBottom: 4,
   },
 });

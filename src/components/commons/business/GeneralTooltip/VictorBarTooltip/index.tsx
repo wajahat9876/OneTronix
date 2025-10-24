@@ -1,9 +1,8 @@
 import { LinearGradient, Rect, Skia, vec } from "@shopify/react-native-skia";
 import React from "react";
-import { SharedValue } from "react-native-reanimated";
 
 interface TooltipHoverProps {
-  xPos: SharedValue<number>;
+  xPos: any;
   chartTop: number;
   chartBottom?: number;
   width?: number;

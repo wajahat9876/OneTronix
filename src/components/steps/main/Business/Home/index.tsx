@@ -328,11 +328,17 @@ const styles = StyleSheet.create({
     fontSize: getRespValue(16),
   },
   txtTrans: { color: "black", fontWeight: "600", fontSize: getRespValue(16) },
-  txtStyle: { fontSize: ms(30), fontWeight: "600", paddingVertical: 10 },
+  txtStyle: {
+    fontSize: ms(30),
+    fontWeight: "600",
+    paddingVertical: 10,
+    fontFamily: "Ranade-Medium",
+  },
   dailyTxt: {
     fontSize: ms(30),
     fontWeight: "600",
     paddingVertical: 10,
+    fontFamily: "Ranade-Medium",
   },
   dailyCard: {
     marginLeft: 10,

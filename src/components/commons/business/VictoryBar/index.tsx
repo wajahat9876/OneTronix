@@ -1,6 +1,6 @@
-import inter from "@assets/fonts/SpaceMono-Regular.ttf";
+import inter from "@assets/fonts/Poppins/Poppins-SemiBold.ttf";
 import { LinearGradient, useFont, vec } from "@shopify/react-native-skia";
-import { ms } from "@utils/design/design";
+import { hs, ms, vs } from "@utils/design/design";
 import * as React from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useAnimatedReaction, useSharedValue } from "react-native-reanimated";
@@ -25,6 +25,7 @@ interface Props {
   selectedDate: string;
   selectedTab?: number;
   selectedParams?: ("ac" | "battery" | "output" | "solar")[];
+  setChartHeight?: (height: number) => void;
   datas: {
     results: any[];
   };
@@ -34,6 +35,7 @@ export default function VictoryBar({
   selectedDate,
   selectedTab,
   selectedParams,
+  setChartHeight,
   datas,
 }: Props) {
   const [data, setData] = React.useState<any[]>([]);
@@ -126,7 +128,8 @@ export default function VictoryBar({
     }
   }, [selectedDate, selectedTab, datas]);
 
-  const font = useFont(inter, 6.5);
+  const font = useFont(inter, 7);
+  const fontY = useFont(inter, 7);
   // const [ticks, setTicks] = React.useState([
   //   0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30,
   // ]);
@@ -137,6 +140,13 @@ export default function VictoryBar({
   const state = transformState.state; // ✅ same instance
 
   const [width, setWidth] = React.useState(0);
+  // const { state: toolState, isActive } = useChartPressState<{
+  //   x: number;
+  //   y: Record<"ac" | "battery" | "output" | "solar", number>;
+  // }>({
+  //   x: 0,
+  //   y: { ac: 0, battery: 0, output: 0, solar: 0 },
+  // });
   const { state: toolState, isActive } = useChartPressState<{
     x: number;
     y: Record<"ac" | "battery" | "output" | "solar", number>;
@@ -144,6 +154,45 @@ export default function VictoryBar({
     x: 0,
     y: { ac: 0, battery: 0, output: 0, solar: 0 },
   });
+
+  const [lastToolState, setLastToolState] = React.useState<{
+    x: { position: number; value: number };
+    y: Record<
+      "ac" | "battery" | "output" | "solar",
+      { position: number; value: number }
+    >;
+  } | null>(null);
+
+  // Save last tooltip state when active
+  React.useEffect(() => {
+    if (isActive && toolState?.x?.value) {
+      setLastToolState({
+        x: {
+          position: toolState.x.position.value,
+          value: toolState.x.value.value,
+        },
+        y: {
+          ac: {
+            position: toolState.y.ac.position.value,
+            value: toolState.y.ac.value.value,
+          },
+          battery: {
+            position: toolState.y.battery.position.value,
+            value: toolState.y.battery.value.value,
+          },
+          output: {
+            position: toolState.y.output.position.value,
+            value: toolState.y.output.value.value,
+          },
+          solar: {
+            position: toolState.y.solar.position.value,
+            value: toolState.y.solar.value.value,
+          },
+        },
+      });
+    }
+  }, [isActive, toolState]);
+
   const k = useSharedValue<any>(1);
   const tx = useSharedValue<any>(0);
   const ty = useSharedValue(0);
@@ -164,7 +213,7 @@ export default function VictoryBar({
     // Reset zoom and translation
     k.value = 1.1;
     tx.value = 0;
-
+    setLastToolState(null);
     // Reset chart matrix to its default position
     state.matrix.value = setScale(setTranslate(state.matrix.value, 0, 0), 1, 1);
   }, [selectedTab]);
@@ -271,64 +320,89 @@ export default function VictoryBar({
     const step = selectedMaxY / 4;
     return [
       Math.round(step), // first tick above 0
-      Math.round(step * 2),
-      Math.round(step * 3),
+      Math.round(step * 2.5),
+      // Math.round(step * 3),
       Math.round(selectedMaxY), // max value
     ];
   }, [selectedMaxY]);
+  React.useEffect(() => {
+    if (selectedParams) {
+      if (selectedParams.length === 1) {
+        setChartHeight?.(210);
+      } else if (selectedParams.length === 2) {
+        setChartHeight?.(250);
+      } else if (selectedParams.length === 3) {
+        setChartHeight?.(300);
+      } else if (selectedParams.length === 4) {
+        setChartHeight?.(400);
+      }
+    }
+  }, [selectedParams]);
 
   return (
     <SafeAreaView style={styles.safeView}>
+      {/* //Legend Text */}
+
+      <View
+        style={{
+          paddingHorizontal: 16,
+          marginLeft: hs(10),
+        }}
+      >
+        {selectedParams?.map((param) => {
+          const paramColors: Record<string, string> = {
+            ac: "red",
+            battery: "blue",
+            output: "#F7D102",
+            solar: "purple",
+          };
+
+          // Pick current or last value safely
+          const currentValue = isActive
+            ? toolState?.y?.[param]?.value?.value
+            : lastToolState?.y?.[param]?.value;
+
+          const value =
+            currentValue !== undefined ? Number(currentValue).toFixed(1) : "--";
+
+          return (
+            <View
+              key={param}
+              style={[
+                styles.dotText,
+                {
+                  marginRight: 6,
+                  marginTop: 10,
+                  flexDirection: "row",
+                  alignItems: "center",
+                },
+              ]}
+            >
+              <View
+                style={[
+                  styles.colorDot,
+                  { backgroundColor: paramColors[param], marginRight: 6 },
+                ]}
+              />
+              <Text
+                style={{
+                  color: "#111",
+                  fontSize: ms(11),
+                  fontFamily: "monospace",
+                  minWidth: 50,
+                }}
+              >
+                {param.toUpperCase()}: {value}
+              </Text>
+            </View>
+          );
+        })}
+      </View>
+
       <View
         style={styles.chart}
         onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
       >
-        <View
-          style={{
-            flexDirection: "row",
-            flexWrap: "wrap",
-            paddingHorizontal: 1,
-            marginTop: 10,
-            justifyContent: "center",
-          }}
-        >
-          {selectedParams?.map((param) => {
-            const paramColors: Record<string, string> = {
-              ac: "red",
-              battery: "blue",
-              output: "#F7D102",
-              solar: "purple",
-            };
-            const raw = toolState?.y?.[param]?.value;
-            const value = isActive
-              ? raw?.value !== undefined
-                ? Number(raw.value).toFixed(1)
-                : "0.0" // placeholder ensures fixed width
-              : "0.0";
-
-            return (
-              <View key={param} style={[styles.dotText, { marginRight: 6 }]}>
-                <View
-                  style={[
-                    styles.colorDot,
-                    { backgroundColor: paramColors[param] },
-                  ]}
-                />
-                <Text
-                  style={{
-                    color: "#111",
-                    fontSize: ms(9),
-                    fontFamily: "monospace", // ensures equal width
-                    minWidth: 40, // reserve enough width for numbers
-                  }}
-                >
-                  {param.toUpperCase()}: {value}
-                </Text>
-              </View>
-            );
-          })}
-        </View>
-
         <CartesianChart
           data={data}
           chartPressState={toolState}
@@ -362,12 +436,12 @@ export default function VictoryBar({
             {
               domain: [yTicks[0], selectedMaxY], // start domain at first tick
               tickValues: yTicks, // explicitly show these 4 values
-              font: font,
+              font: fontY,
               lineWidth: 0,
-              labelOffset: 3,
+              labelOffset: 1.5,
               labelColor: "black",
               tickCount: 3,
-              formatYLabel: (n: number) => `${n}kW`,
+              formatYLabel: (n: number) => `${n.toFixed(0)} kW`,
             },
           ]}
           frame={{
@@ -416,16 +490,15 @@ export default function VictoryBar({
                   ))
                 )}
               </BarGroup>
-              {isActive && (
+              {(isActive || lastToolState) && (
                 <BarToolTip
                   width={1}
                   chartTop={chartBounds.top}
-                  // chartBottom={chartBounds.bottom}
-                  xPos={toolState.x.position} // pixel space
-                  // xVal={toolState.x.value} // data space (for HH:mm conversion)
-                  // chartBounds={chartBounds} // pass chart bounds
-                  // fontSrc={inter}
-                  // ticks={ticks}
+                  xPos={
+                    isActive
+                      ? toolState.x.position.value
+                      : lastToolState?.x?.position ?? 0
+                  }
                 />
               )}
             </>
@@ -439,12 +512,13 @@ export default function VictoryBar({
 const styles = StyleSheet.create({
   safeView: { flex: 1, backgroundColor: "transparent" },
   chart: {
-    height: 300,
+    height: vs(360),
     marginHorizontal: 10,
     // backgroundColor: "red",
     borderRadius: 12,
-    width: 370,
+    width: hs(375),
     marginLeft: -22,
+    paddingBottom: vs(20),
   },
   optionsScrollView: { flex: 1 },
   options: {
