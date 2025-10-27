@@ -1,4 +1,4 @@
-import { ms, vs } from "@utils/design/design";
+import { hs, ms, vs } from "@utils/design/design";
 import { SVGRenderer, SvgChart } from "@wuba/react-native-echarts";
 import { BarChart } from "echarts/charts";
 import {
@@ -8,7 +8,7 @@ import {
 } from "echarts/components";
 import * as echarts from "echarts/core";
 import React, { useEffect, useRef, useState } from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 echarts.use([
   SVGRenderer,
@@ -32,27 +32,27 @@ export default function ZoomBarChart({
   selectedDate,
 }: BarChartProps) {
   const chartRef = useRef<any>(null);
-  const { width } = Dimensions.get("window");
+  // const { width } = Dimensions.get("window");
+  const width = 400;
   const height = 350;
   console.log(data, "===data");
   const [legendValues, setLegendValues] = useState<Record<string, number>>({});
-
   const paramColors: Record<string, { line: string; area: string[] }> = {
     ac: {
       line: "#0770FF",
-      area: ["rgba(58,77,233,0.5)", "rgba(58,77,233,0.1)"],
+      area: ["#0A84FF", "#0055CC"], // vivid blue gradient
     },
     output: {
       line: "#F7D102",
-      area: ["rgba(247,209,2,0.2)", "rgba(247,209,2,0.05)"],
+      area: ["#FFD700", "#C8A200"], // bright yellow/golden
     },
     battery: {
       line: "#F2597F",
-      area: ["rgba(213,72,120,0.5)", "rgba(213,72,120,0.1)"],
+      area: ["#FF4F81", "#C71B5C"], // stronger pink gradient
     },
     solar: {
-      line: "purple",
-      area: ["rgba(128,0,128,0.2)", "rgba(128,0,128,0.05)"],
+      line: "#A020F0",
+      area: ["#C44DFF", "#7A00CC"], // rich purple gradient
     },
   };
 
@@ -174,27 +174,94 @@ export default function ZoomBarChart({
       });
     });
   }
+  let maxY = 0;
 
+  // For each selected param, find its max from seriesData
+  selectedParams.forEach((param) => {
+    const localMax = Math.max(...seriesData[param]);
+    if (localMax > maxY) {
+      maxY = localMax;
+    }
+  });
+
+  // Optionally round maxY to a clean value (like nearest 5, 10, etc.)
+  if (maxY > 0) {
+    const magnitude = Math.pow(10, Math.floor(Math.log10(maxY)));
+    maxY = Math.ceil(maxY / magnitude) * magnitude; // e.g. 234 → 300
+  }
   // Now series for ECharts
   const option = {
     backgroundColor: "#fff",
-    grid: { top: 20, left: 0, right: 20, bottom: 40, containLabel: true },
+    animation: false,
+    progressive: 2,
+    progressiveThreshold: 1000,
+    grid: { top: 20, left: -5, right: hs(50), bottom: 40, containLabel: true },
     xAxis: {
       type: "category",
       data: xAxisData,
-      axisLine: { lineStyle: { color: "#888" } },
+      axisLine: { lineStyle: { color: "#888", width: 1 } },
+      axisLabel: {
+        showMinLabel: true, // 👈 always show day 1
+        showMaxLabel: true, // 👈 always show last day
+      },
+      splitLine: { show: true },
     },
-    yAxis: { type: "value", axisLine: { lineStyle: { color: "#888" } } },
-    tooltip: { show: false },
+    yAxis: {
+      type: "value",
+      min: 0,
+      max: maxY,
+      axisLine: {
+        show: true,
+        lineStyle: { color: "#888", width: 1 },
+      },
+      axisTick: {
+        show: true,
+        lineStyle: { color: "#888" },
+        length: 1,
+      },
+      splitLine: { show: false },
+      axisLabel: {
+        fontSize: ms(10),
+        color: "#333",
+        formatter: (value: number) => {
+          if (value === 0) return "0 kW";
+          if (value === maxY) return `${value.toFixed(0)} kW`;
+          return "";
+        },
+      },
+      position: "left",
+    },
+
+    tooltip: {
+      trigger: "axis",
+      triggerOn: "mousemove|hold",
+      show: false, // still true, tooltip works internally
+      showDelay: 2000, // show after 2 seconds of hold
+      hideDelay: 10,
+      enterable: false,
+
+      // Hide tooltip box completely
+      backgroundColor: "transparent",
+      borderWidth: 0,
+      padding: 0,
+      textStyle: { color: "transparent" }, // hides text
+
+      // Hide vertical bar or area highlight
+      axisPointer: {
+        type: "none", // fully disables the shadow highlight line
+      },
+    },
+
     dataZoom: [
       {
         show: false,
-        start: 0,
+        start: selectTab === 1 ? 0 : 0, // full view for daily
         end: 100,
+        minValueSpan: selectTab === 3 ? 1.3 : 3,
       },
       {
         type: "inside",
-        start: 94,
+        start: selectTab === 1 ? 0 : 0,
         end: 100,
       },
       {
@@ -207,10 +274,11 @@ export default function ZoomBarChart({
         left: "93%",
       },
     ],
+
     series: selectedParams.map((param) => ({
       name: param,
       type: "bar",
-      barWidth: 12,
+      barWidth: 9,
       itemStyle: {
         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
           { offset: 0, color: paramColors[param].area[0] },
@@ -221,17 +289,51 @@ export default function ZoomBarChart({
       data: seriesData[param],
     })),
   };
-
   useEffect(() => {
-    if (chartRef.current) {
-      const chart = echarts.init(chartRef.current, "light", {
+    // Ensure the chart container is mounted before initializing
+    if (!chartRef.current) return;
+
+    let chart: any;
+
+    try {
+      chart = echarts.init(chartRef.current, "light", {
         renderer: "svg",
         width,
         height,
       });
+
       chart.setOption(option);
-      return () => chart.dispose();
+
+      // Listen for tooltip updates
+      chart.on("showTip", (params) => {
+        if (!params || params.dataIndex == null) return;
+        const dataIndex = params.dataIndex;
+        const values: Record<string, number> = {};
+
+        selectedParams.forEach((param) => {
+          values[param] = seriesData[param][dataIndex] || 0;
+        });
+
+        setLegendValues(values);
+      });
+
+      chart.on("hideTip", () => {
+        setLegendValues({});
+      });
+    } catch (err) {
+      console.log("Chart init error:", err);
     }
+
+    // Cleanup to avoid memory leaks
+    return () => {
+      if (chart && !chart.isDisposed()) {
+        try {
+          chart.dispose();
+        } catch (e) {
+          console.log("Dispose error:", e);
+        }
+      }
+    };
   }, [width, data, selectedParams, selectTab]);
 
   return (

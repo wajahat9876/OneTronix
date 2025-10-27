@@ -100,7 +100,7 @@ const HouseDiagram = (props: HouseDiagramProps) => {
     inverter: { x: 260, y: 160 },
     solarPos: { x: 260, y: 110 },
     batteryPos: { x: 260, y: 200 },
-    gridPos: { x: 255, y: 260 },
+    gridPos: { x: 270, y: 260 },
     homePos: { x: 117, y: 150 },
     image: { width: 390, height: 352 },
   };
@@ -166,7 +166,7 @@ const HouseDiagram = (props: HouseDiagramProps) => {
     y: inverter.y - scale(10),
   };
   const homeEnd = { x: inverter.x - GAP, y: inverter.y - scale(15) };
-  const homeMidPoint = { x: homeEnd.x - elbowLength / 2, y: homeEnd.y };
+  const homeMidPoint = { x: homeEnd.x - elbowLength / 6 + 20, y: homeEnd.y };
 
   const batteryPath = makePath(batteryStart, batteryPos);
   const homePath = makeDoubleLeftTurnPath(inverterShortened, homePos);

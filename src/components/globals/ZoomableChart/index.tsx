@@ -65,12 +65,12 @@ export default function ZoomChart({
       area: ["rgba(128,0,128,0.2)", "rgba(128,0,128,0.05)"],
     },
   };
-  const dataMin = Math.min(...data.map((d) => d.hour));
-  const dataMax = Math.max(...data.map((d) => d.hour));
+  // const dataMin = Math.min(...data.map((d) => d.hour));
+  // const dataMax = Math.max(...data.map((d) => d.hour));
 
   const option = {
     backgroundColor: "#fff",
-    animation: false,
+    animation: true,
     grid: {
       top: 20,
       left: 0,
@@ -119,18 +119,42 @@ export default function ZoomChart({
         },
       },
     },
+    // dataZoom: [
+    //   {
+    //     type: "inside",
+    //     startValue: 0, // start at first hour
+    //     // endValue: 100,
+    //     minValueSpan: 0.5,
+    //     zoomOnMouseWheel: true,
+    //     moveOnMouseMove: true,
+    //     moveOnMouseWheel: true,
+    //     filterMode: "none",
+    //     // throttle: 5,
+    //     zoomLock: false, // allow pinch to zoom freely
+    //   },
+    // ],
     dataZoom: [
       {
-        type: "inside",
-        startValue: dataMin, // start at first hour
-        endValue: dataMax,
+        show: false,
+        start: 0, // full view for daily
+        end: 100,
         minValueSpan: 0.5,
-        zoomOnMouseWheel: true,
-        moveOnMouseMove: true,
-        moveOnMouseWheel: true,
         filterMode: "none",
-        throttle: 30,
-        zoomLock: false, // allow pinch to zoom freely
+      },
+      {
+        type: "inside",
+        start: 0,
+        end: 100,
+        minValueSpan: 0.5,
+      },
+      {
+        show: false,
+        yAxisIndex: 0,
+        filterMode: "empty",
+        // width: "100%",
+        // height: "80%",
+        showDataShadow: false,
+        left: "93%",
       },
     ],
     tooltip: {
@@ -138,7 +162,7 @@ export default function ZoomChart({
       trigger: "axis",
       axisPointer: {
         type: "line",
-        lineStyle: { color: "#888", width: 1 },
+        lineStyle: { color: "#888", width: 0 },
         label: { show: false },
       },
       formatter: (params: any) => {

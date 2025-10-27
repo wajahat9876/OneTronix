@@ -48,7 +48,7 @@ const Index = ({ navigation }: any) => {
   return (
     <View
       className="flex-1"
-      style={{ backgroundColor: isDarkMode ? "black" : "white" }}
+      style={{ backgroundColor: isDarkMode ? "#252525" : "white" }}
     >
       {step}
     </View>

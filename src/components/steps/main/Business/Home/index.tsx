@@ -26,15 +26,15 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Platform, RefreshControl, ScrollView, Text, View } from "react-native";
+import { RefreshControl, ScrollView, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 
 const Index = ({ goTo }: MultiStepFormProps) => {
   const scheme = useColorScheme();
   const isDark = scheme === "dark";
   const textColor = isDark ? "white" : "black";
-  const bgColor = isDark ? "black" : "white";
-  const cardBg = isDark ? "#1E1E1E" : "white";
+  const bgColor = isDark ? "#252525" : "white";
+  const cardBg = isDark ? "#333333" : "#F2F2F2";
 
   const [result, setResult] = useState<any>(null);
   const { auth_token, data: businessData } = useAppSelector(useBusinessDetails);
@@ -142,8 +142,8 @@ const Index = ({ goTo }: MultiStepFormProps) => {
           style={{
             marginTop: ms(40),
             marginLeft: ms(20),
-            fontSize: ms(20),
-            fontFamily: "Excon-Light",
+            fontSize: ms(14),
+            fontFamily: "Ranade-Medium",
             color: textColor,
           }}
         >
@@ -196,7 +196,13 @@ const Index = ({ goTo }: MultiStepFormProps) => {
               ? formatTime(result?.results?.inverterData.createdAt)
               : "-"}
           </Text>
-          <View style={{ flexDirection: "row", marginTop: 20 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              marginTop: 20,
+              justifyContent: "center",
+            }}
+          >
             <View
               style={[styles.transactionsCard, { backgroundColor: cardBg }]}
             >
@@ -226,7 +232,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
               </Text>
             </View>
           </View>
-          <View style={{ flexDirection: "row" }}>
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
             <View style={styles.dailyCard}>
               <Text
                 style={{
@@ -245,7 +251,10 @@ const Index = ({ goTo }: MultiStepFormProps) => {
               </Text>
             </View>
             <View
-              style={[styles.transactionsCard, { backgroundColor: cardBg }]}
+              style={[
+                styles.transactionsCard,
+                { backgroundColor: "transparent" },
+              ]}
             >
               <Text style={[styles.txt, { color: textColor }]}>
                 Total Production
@@ -341,34 +350,33 @@ const styles = StyleSheet.create({
     fontFamily: "Ranade-Medium",
   },
   dailyCard: {
-    marginLeft: 10,
+    marginLeft: 1,
     justifyContent: "space-between",
     backgroundColor: "red",
-    borderRadius: 15,
+    borderRadius: 5,
     // height: 50,
     padding: 20,
     width: "45%",
-    shadowColor: "#000",
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: Platform.OS === "ios" ? 2 : 2,
-    marginBottom: 10,
+    // shadowColor: "#000",
+    // shadowOffset: { width: 2, height: 2 },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 3.84,
+    // elevation: Platform.OS === "ios" ? 2 : 2,
+    marginBottom: 1,
   },
   transactionsCard: {
-    marginLeft: 10,
+    marginLeft: 1,
     justifyContent: "space-between",
-
-    borderRadius: 15,
+    borderRadius: 3,
     // height: 50,
     padding: 20,
     width: "45%",
-    shadowColor: "#000",
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: Platform.OS === "ios" ? 2 : 2,
-    marginBottom: 10,
+    // shadowColor: "#000",
+    // shadowOffset: { width: 2, height: 2 },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 3.84,
+    // elevation: Platform.OS === "ios" ? 2 : 2,
+    marginBottom: 1,
   },
   txt: {
     fontFamily: "Excon-Regular",

@@ -13,13 +13,15 @@ import Home from "app/(main)/Business/Home/index";
 // import Info from "app/(main)/Business/Info/index";
 import Setting from "app/(main)/Business/Settings/index";
 // import TransferMoney from "app/(main)/Business/TransferMoney/index";
-import { Redirect } from "expo-router";
-import Transaction from "./Transaction";
-
+import DevicesBlack from "@assets/icons/bottom-tabs/blackDevices.svg";
 import HomeBlack from "@assets/icons/bottom-tabs/blackHome.svg";
 import ReportBlack from "@assets/icons/bottom-tabs/blackReport.svg";
+import Devices from "@assets/icons/bottom-tabs/whiteDevices.svg";
 import HomeWhite from "@assets/icons/bottom-tabs/whiteHome.svg";
 import ReportWhite from "@assets/icons/bottom-tabs/whiteReport.svg";
+import Info from "app/(main)/Business/Info/index";
+import { Redirect } from "expo-router";
+import Transaction from "./Transaction";
 
 // Icons
 // const MainStack = createBottomTabNavigator<RootTabParamList>();
@@ -39,14 +41,22 @@ const Layout = () => {
     <Tab.Navigator
       initialRouteName="Home"
       barStyle={{
-        backgroundColor: isDarkMode ? "black" : Colors.light.theme.white,
+        backgroundColor: isDarkMode ? "#252525" : "#F2F2F2",
         height: vs(80),
+        marginBottom: vs(5),
       }}
       activeIndicatorStyle={{
-        borderRadius: ms(0),
-        marginBottom: vs(20),
-        borderTopWidth: 3,
-        borderColor: isDarkMode ? "white" : "black",
+        height: vs(6),
+        width: ms(30),
+        borderRadius: ms(20),
+        backgroundColor: "#ff0000", // main glow
+        shadowColor: "#ff0000", // semi-transparent glow
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 1,
+        shadowRadius: 5, // bigger glow spread
+        elevation: 20, // android
+        bottom: vs(-32),
+        position: "absolute",
       }}
       activeColor={isDarkMode ? "white" : "black"}
       screenOptions={{
@@ -62,6 +72,13 @@ const Layout = () => {
         component={Home}
         options={{
           tabBarIcon: () => (isDarkMode ? <HomeWhite /> : <HomeBlack />),
+        }}
+      />
+      <Tab.Screen
+        name="Devices"
+        component={Info}
+        options={{
+          tabBarIcon: () => (isDarkMode ? <Devices /> : <DevicesBlack />),
         }}
       />
 
