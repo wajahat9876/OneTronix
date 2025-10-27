@@ -2,25 +2,25 @@
 /* eslint-disable camelcase */
 /* eslint-disable react/jsx-pascal-case */
 
-import Settings from '@src/components/steps/main/Business/Setting';
-import { pageTransitionAnimation } from '@src/constants/Animation';
-import useMultistepForm from '@src/hooks/useMultiStepForm';
-import { useEffect, useRef } from 'react';
-import { View } from 'react-native';
-import Account from './Accounts';
-import ExchangeCuttOffTime from './ExchangeCuttOffTime';
-import Faqs from './Faqs';
-import FeeInvoice from './FeeInvoice';
-import Fee_Plan from './FeePlan';
-import Legals from './Legals';
-import AntiBriberyPolicy from './Legals/AntiBriberyPolicy';
-import CookiePolicy from './Legals/CookiePolicy';
-import PrivacyPolicy from './Legals/PrivacyPolicy';
-import TermsAndConditions from './Legals/TermsAndConditions';
-import LinkedDevices from './LinkedDevices';
-import MultiCurrency from './MultiCurrency';
-import SubAccountDeatil from './SubAccountDetail';
-
+import { useStatusBar } from "@hooks/StatusBarColor/index";
+import Settings from "@src/components/steps/main/Business/Setting";
+import { pageTransitionAnimation } from "@src/constants/Animation";
+import useMultistepForm from "@src/hooks/useMultiStepForm";
+import { useEffect, useRef } from "react";
+import { View } from "react-native";
+import Account from "./Accounts";
+import ExchangeCuttOffTime from "./ExchangeCuttOffTime";
+import Faqs from "./Faqs";
+import FeeInvoice from "./FeeInvoice";
+import Fee_Plan from "./FeePlan";
+import Legals from "./Legals";
+import AntiBriberyPolicy from "./Legals/AntiBriberyPolicy";
+import CookiePolicy from "./Legals/CookiePolicy";
+import PrivacyPolicy from "./Legals/PrivacyPolicy";
+import TermsAndConditions from "./Legals/TermsAndConditions";
+import LinkedDevices from "./LinkedDevices";
+import MultiCurrency from "./MultiCurrency";
+import SubAccountDeatil from "./SubAccountDetail";
 const Index = ({ navigation }: any) => {
   const { step, goTo } = useMultistepForm(
     [
@@ -44,9 +44,10 @@ const Index = ({ navigation }: any) => {
       animatedViewProps: {
         ...pageTransitionAnimation,
       },
-    },
+    }
   );
   const doublePressRef = useRef(false);
+  useStatusBar("dark");
   useEffect(() => {
     let timer: string | number | NodeJS.Timeout | undefined;
 
@@ -62,7 +63,7 @@ const Index = ({ navigation }: any) => {
       }
     };
 
-    const unsubscribe = navigation.addListener('tabPress', handleTabPress);
+    const unsubscribe = navigation.addListener("tabPress", handleTabPress);
 
     return () => {
       clearTimeout(timer);

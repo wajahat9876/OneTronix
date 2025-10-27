@@ -195,12 +195,13 @@ export default function ZoomBarChart({
     animation: false,
     progressive: 2,
     progressiveThreshold: 1000,
-    grid: { top: 20, left: -5, right: hs(50), bottom: 40, containLabel: true },
+    grid: { top: 20, left: 0, right: hs(50), bottom: 40, containLabel: true },
     xAxis: {
       type: "category",
       data: xAxisData,
       axisLine: { lineStyle: { color: "#888", width: 1 } },
       axisLabel: {
+        fontFamily: "Ranade-Medium",
         showMinLabel: true, // 👈 always show day 1
         showMaxLabel: true, // 👈 always show last day
       },
@@ -221,11 +222,23 @@ export default function ZoomBarChart({
       },
       splitLine: { show: false },
       axisLabel: {
-        fontSize: ms(10),
+        fontFamily: "Ranade-Medium",
         color: "#333",
+        rich: {
+          value: {
+            fontSize: ms(10),
+            lineHeight: 14,
+            color: "#333",
+          },
+          unit: {
+            fontSize: ms(8),
+            lineHeight: 10,
+            color: "#666",
+          },
+        },
         formatter: (value: number) => {
-          if (value === 0) return "0 kW";
-          if (value === maxY) return `${value.toFixed(0)} kW`;
+          if (value === 0) return `{unit|kW}\n{value|${value}}`;
+          if (value === maxY) return `{unit|kW}\n{value|${value.toFixed(0)}}`;
           return "";
         },
       },
@@ -267,7 +280,7 @@ export default function ZoomBarChart({
       {
         show: false,
         yAxisIndex: 0,
-        filterMode: "empty",
+        filterMode: "none",
         width: 30,
         height: "80%",
         showDataShadow: false,
@@ -278,7 +291,7 @@ export default function ZoomBarChart({
     series: selectedParams.map((param) => ({
       name: param,
       type: "bar",
-      barWidth: 9,
+      barWidth: 7,
       itemStyle: {
         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
           { offset: 0, color: paramColors[param].area[0] },

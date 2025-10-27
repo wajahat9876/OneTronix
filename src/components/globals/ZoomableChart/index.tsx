@@ -81,12 +81,25 @@ export default function ZoomChart({
     xAxis: {
       type: "value",
       boundaryGap: false,
+      min: 0,
+      max: 24,
       axisLine: { show: true, lineStyle: { color: "#888", width: 1 } },
       axisTick: { show: true, lineStyle: { color: "#888" }, length: 3 },
       splitLine: { show: false },
-      min: 0,
-      max: 24,
+      // 🔒 Prevent floating precision & auto-rounding when zooming
+      scale: false,
+      // 👇 Fix axis coordinate rounding issues that cause movement
       axisLabel: {
+        fontFamily: "Ranade-Medium",
+        showMinLabel: true,
+        showMaxLabel: true,
+        interval: 0,
+        margin: 6,
+        hideOverlap: false,
+        rich: {
+          time: { fontSize: 8, color: "#333" },
+          period: { fontSize: 6, color: "#777", padding: [0, 0, 0, 2] },
+        },
         formatter: (val: number) => {
           let hours = Math.floor(val);
           let minutes = Math.round((val - hours) * 60);
@@ -94,14 +107,15 @@ export default function ZoomChart({
           let displayHour = hours % 12;
           if (displayHour === 0) displayHour = 12;
           const period = isPM ? "PM" : "AM";
-          return `${displayHour}:${minutes
+          return `{time|${displayHour}:${minutes
             .toString()
-            .padStart(2, "0")} {period|${period}}`;
+            .padStart(2, "0")}} {period|${period}}`;
         },
-        textStyle: { fontSize: 11, color: "#333", fontFamily: "Excon-Regular" },
-        rich: { period: { fontSize: 6, color: "#777", padding: [0, 0, 0, 2] } },
       },
+      // 🧱 Prevent x-axis from expanding when zooming
+      axisPointer: { snap: true },
     },
+
     yAxis: {
       type: "value",
       min: 0,
@@ -110,15 +124,31 @@ export default function ZoomChart({
       axisTick: { show: true, lineStyle: { color: "#888" }, length: 3 },
       splitLine: { show: false },
       axisLabel: {
-        fontSize: 11,
+        fontFamily: "Ranade-Medium",
         color: "#333",
+
+        padding: [0, 0, 5, 0],
+        rich: {
+          value: {
+            fontSize: 11,
+            lineHeight: 14,
+            color: "#333",
+          },
+          unit: {
+            fontSize: 8,
+            lineHeight: 10,
+            color: "#666",
+          },
+        },
         formatter: (value: number) => {
-          if (value === 0) return "0 kW";
-          if (value === maxY) return `${value.toFixed(0)} kW`;
-          return ""; // hide intermediate values
+          if (value === 0) return "{unit|kW}\n{value|" + value + "}";
+          if (value === maxY)
+            return "{unit|kW}\n{value|" + value.toFixed(0) + "}";
+          return "";
         },
       },
     },
+
     // dataZoom: [
     //   {
     //     type: "inside",

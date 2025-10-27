@@ -9,13 +9,13 @@ import { hs, ms } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
 import { useRouter } from "expo-router";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { useStatusBar } from "@hooks/StatusBarColor/index";
 import React from "react";
 import { Platform, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
-
 const Info = () => {
   const { data: businessData } = useAppSelector(useBusinessDetails);
-
+  useStatusBar("dark");
   const { capitalizeFirstWord } = useCapitalizeFirstWord();
   const { getCurrencyCode } = useCurrencyFlag();
   const { extractSortCode } = useExtractSortCode();

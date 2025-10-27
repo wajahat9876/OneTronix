@@ -3,13 +3,13 @@
 /* eslint-disable react/jsx-pascal-case */
 import { useGetCurrentBusinessQuery } from "@/store/api/business/businessCurrent";
 import { useBusinessDetails } from "@/store/selectors/business/business";
+import { useStatusBar } from "@hooks/StatusBarColor/index";
 import Home from "@src/components/steps/main/Business/Home";
 import { pageTransitionAnimation } from "@src/constants/Animation";
 import useMultistepForm from "@src/hooks/useMultiStepForm";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
 import { useEffect, useRef } from "react";
 import { View } from "react-native";
-
 const Index = ({ navigation }: any) => {
   const { auth_token, isDarkMode } = useAppSelector(useBusinessDetails);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,6 +22,7 @@ const Index = ({ navigation }: any) => {
       ...pageTransitionAnimation,
     },
   });
+  useStatusBar(isDarkMode ? "light" : "dark");
   const doublePressRef = useRef(false);
   useEffect(() => {
     let timer: string | number | NodeJS.Timeout | undefined;
@@ -45,6 +46,7 @@ const Index = ({ navigation }: any) => {
       unsubscribe();
     };
   }, [goTo, navigation]);
+
   return (
     <View
       className="flex-1"
