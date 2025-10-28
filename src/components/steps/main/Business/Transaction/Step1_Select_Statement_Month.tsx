@@ -3,13 +3,11 @@ import {
   useGetGraphDataQuery,
 } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
-import inter from "@assets/fonts/Poppins/Poppins-SemiBold.ttf";
 import BulbIcon from "@assets/icons/ExchangeIcons/Bulb.png";
 import FlashIcon from "@assets/icons/ExchangeIcons/flash.png";
 import HomeIcon from "@assets/icons/ExchangeIcons/Home.png";
 import SunIcon from "@assets/icons/ExchangeIcons/sun.png";
 import FilterIcon from "@assets/icons/filter.png";
-import { useFont } from "@shopify/react-native-skia";
 import ExchangeBlock from "@src/components/commons/business/ExchangeBlock";
 import Loader from "@src/components/commons/business/LoaderOneTronix";
 import MonthYearPicker from "@src/components/commons/business/MonthYear";
@@ -19,9 +17,9 @@ import { TabButton } from "@src/components/commons/TabButton/types";
 import DonutChart2 from "@src/components/globals/DonutChart2";
 import FilterModal from "@src/components/globals/FilterModal";
 import FormikDatePicker from "@src/components/globals/FormikDatePicker";
-import ZoomChart from "@src/components/globals/ZoomableChart";
+import PinchZoomLineChart from "@src/components/globals/ResponsiveChart";
+import EmptyChart from "@src/components/globals/ResponsiveChart/EmptyChartResponsive";
 import ZoomBarChart from "@src/components/globals/ZoomableChart/barChart";
-import EmptyZoomChart from "@src/components/globals/ZoomableChart/EmptyLineChart";
 import { ScrollView } from "@src/components/libraries";
 import Colors from "@src/constants/Colors";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
@@ -42,9 +40,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useSharedValue } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { CartesianActionsHandle, useChartTransformState } from "victory-native";
 export enum SelectMethod {
   Daily = "daily",
   Monthly = "monthly", //bad ma theek krna ha
@@ -54,11 +50,21 @@ export enum SelectMethod {
 export default function PanZoomPage() {
   //Filter Modal  code
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedTab, setSelectedTab] = useState(0);
   const [date, setDate] = useState(new Date());
   const [chartHeight, setChartHeight] = useState(100);
-  const [selectedParams, setSelectedParams] = useState<
-    ("ac" | "output" | "battery" | "solar")[]
-  >(["ac", "output"]);
+  const [selectedParams, setSelectedParams] = useState<any[]>([]);
+  const [modalDefaultSelected, setModalDefaultSelected] = useState<any[]>([]);
+
+  // Update selectedParams whenever the tab changes
+  React.useEffect(() => {
+    const defaults =
+      selectedTab === 0
+        ? ["Purchase", "Consumption"]
+        : ["Energy Purchased", "Energy Consumed"];
+    setSelectedParams(defaults); // Update chart state
+    setModalDefaultSelected(defaults); // Update modal default selection
+  }, [selectedTab]);
 
   //Api define
   const {
@@ -68,7 +74,6 @@ export default function PanZoomPage() {
   } = useAppSelector(useBusinessDetails);
 
   // Tab Button Code
-  const [selectedTab, setSelectedTab] = useState(0);
 
   const tabButtons: TabButton[] = [
     {
@@ -152,176 +157,6 @@ export default function PanZoomPage() {
     }
   );
 
-  // React.useEffect(() => {
-  //   refetch();
-  //   analyticsRefetch();
-  //   totalRefetch();
-  // }, [
-  //   formik.values.dateOfBirth,
-  //   tabValues[selectedTab],
-  //   businessData?.devices?.[0]?._id,
-  // ]);
-  // const [DATA, setDATA] = React.useState<any[]>([]);
-
-  // React.useEffect(() => {
-  //   if (!data?.results?.length || summaryFetching || error || isError) {
-  //     setDATA([]);
-  //     return;
-  //   }
-  //   if (selectedTab === 0) {
-  //     const mapped = data?.results.map((item: any) => {
-  //       const time = moment.utc(item.createdAtPK);
-  //       const hour = time.hour() + time.minute() / 60;
-  //       return {
-  //         hour,
-  //         ac: item.data?.ac?.watt ?? 0,
-  //         battery: item.data?.battery?.chargingWatt ?? 0,
-  //         output: item.data?.output?.watt ?? 0,
-  //         solar: item.data?.solar?.watt ?? 0,
-  //       };
-  //     });
-
-  //     setDATA(mapped);
-  //   } else {
-  //     setDATA(data);
-  //   }
-  // }, [data, formik.values.dateOfBirth]);
-  const actionRef = React.useRef<CartesianActionsHandle>(null);
-
-  // Graph Code
-  const font = useFont(inter, 8);
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
-  const { state } = useChartTransformState();
-
-  const k = useSharedValue<any>(1);
-  const tx = useSharedValue<any>(0);
-  const ty = useSharedValue(0);
-  // const onePointOffset = width / DATA?.length;
-  // useAnimatedReaction(
-  //   () => {
-  //     return state.panActive.value || state.zoomActive.value;
-  //   },
-  //   (cv, pv) => {
-  //     if (!cv && pv) {
-  //       const vals = getTransformComponents(state.matrix.value);
-  //       k.value = vals.scaleX;
-  //       tx.value = vals.translateX;
-  //       ty.value = vals.translateY;
-
-  //       // k.value = withTiming(1);
-  //       // tx.value = withTiming(0);
-  //       // ty.value = withTiming(0);
-  //     }
-  //   }
-  // );
-  const [ticks, setTicks] = useState([0, 6, 12, 18, 24]);
-  const ticksShared = useSharedValue(ticks);
-  // ✅ Remove previous vertical reactions and use this instead:
-
-  // useAnimatedReaction(
-  //   () => state.matrix.value,
-  //   (matrix) => {
-  //     "worklet";
-  //     const vals = getTransformComponents(matrix);
-
-  //     // Only rebuild matrix if Y deviates — no animations, no timing (instant & smooth)
-  //     if (vals.translateY !== 0 || vals.scaleY !== 1) {
-  //       const locked = setTranslate(
-  //         setScale(matrix, vals.scaleX, 1),
-  //         vals.translateX,
-  //         0
-  //       );
-  //       state.matrix.value = locked;
-  //     }
-  //   },
-  //   [] // optional dependency array
-  // );
-
-  // useAnimatedReaction(
-  //   () => ({ k: k.value, tx: tx.value }),
-  //   ({ k, tx }) => {
-  //     const maxZoom = 5; // 🚀 max zoom in
-  //     const minZoom = 1; // 🚀 min zoom out
-
-  //     const clampedK = Math.max(Math.min(k, maxZoom), minZoom);
-  //     const pointWidth = width / DATA.length;
-  //     const totalContentWidth = pointWidth * DATA.length * clampedK; // scaled width of data
-  //     const leftOverscroll = pointWidth * 0; // adjust as you like
-  //     const rightOverscroll = Math.max(
-  //       pointWidth * 2,
-  //       pointWidth * Math.floor(DATA.length / 3)
-  //     );
-  //     // ✅ keep last point visible instead of cutting offs
-  //     const maxRightTx = -(totalContentWidth - width) - rightOverscroll;
-  //     const currentVisibleStart = -tx / (pointWidth * DATA.length * k);
-  //     // Apply the same visible start position with new zoom
-  //     let targetTx = -currentVisibleStart * pointWidth * DATA.length * clampedK;
-  //     // Make sure we don't scroll too far
-  //     const clampedTx = Math.min(
-  //       Math.max(targetTx, maxRightTx),
-  //       leftOverscroll
-  //     );
-
-  //     // Apply the zoom and translation
-  //     let m = setTranslate(state.matrix.value, clampedTx, 0);
-  //     state.matrix.value = setScale(m, clampedK, 1);
-  //     // Lock zoom and update translation if needed
-  //     if (k !== clampedK) {
-  //       k.value = clampedK;
-  //       // FIX: Also update the translation to maintain position
-  //       tx.value = clampedTx;
-  //     }
-
-  //     const value = Math.round(clampedK * 10) / 10;
-  //     if (selectedTab === 0) {
-  //       let newTicks: number[] = [];
-  //       if (value > 0.5 && value <= 1.5) {
-  //         // 6h → 0,6,12,18,24
-  //         newTicks = [0, 6, 12, 18, 24];
-  //       } else if (value > 1.5 && value <= 2.5) {
-  //         // 3h → 0,3,6,...24
-  //         newTicks = [0, 3, 6, 9, 12, 15, 18, 21, 24];
-  //       } else if (value > 2.5 && value <= 3.5) {
-  //         // 2h → 0,2,4,...24
-  //         newTicks = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24];
-  //       } else if (value > 3.5 && value <= 4.5) {
-  //         // 1h → 0,1,2,...24
-  //         newTicks = [
-  //           0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
-  //           19, 20, 21, 22, 23, 24,
-  //         ];
-  //       } else if (value > 4.5 && value <= 5.5) {
-  //         // 30 min → 0,0.5,1,1.5,...24
-  //         newTicks = [
-  //           0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8,
-  //           8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14, 14.5, 15,
-  //           15.5, 16, 16.5, 17, 17.5, 18, 18.5, 19, 19.5, 20, 20.5, 21, 21.5,
-  //           22, 22.5, 23, 23.5, 24,
-  //         ];
-  //       } else {
-  //         // 5 min → 0,0.0833,0.1666,...24
-  //         newTicks = [
-  //           0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8,
-  //           8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14, 14.5, 15,
-  //           15.5, 16, 16.5, 17, 17.5, 18, 18.5, 19, 19.5, 20, 20.5, 21, 21.5,
-  //           22, 22.5, 23, 23.5, 24,
-  //         ];
-  //       }
-  //       if (JSON.stringify(ticksShared.value) !== JSON.stringify(newTicks)) {
-  //         ticksShared.value = newTicks;
-  //         runOnJS(setTicks)(newTicks);
-  //       }
-  //     }
-  //   }
-  // );
-
-  // const maxY = Math.max(...DATA.map((d) => d.solarPower));
-  // React.useEffect(() => {
-  //   refetch();
-  //   analyticsRefetch();
-  //   totalRefetch();
-  // }, [selectedTab]);
   useFocusEffect(
     React.useCallback(() => {
       // 🔥 run these when screen gets focus
@@ -341,26 +176,19 @@ export default function PanZoomPage() {
   );
   React.useEffect(() => {
     if (selectedParams.length === 1) {
-      setChartHeight(200);
+      setChartHeight(150);
     }
     if (selectedParams.length === 2) {
-      setChartHeight(250);
+      setChartHeight(180);
     }
     if (selectedParams.length === 3) {
-      setChartHeight(300);
+      setChartHeight(250);
     }
     if (selectedParams.length === 4) {
-      setChartHeight(400);
+      setChartHeight(250);
     }
   }, [selectedParams]);
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     // optional cleanup when screen loses focus
-  //     return () => {
-  //       console.log("Screen lost focus");
-  //     };
-  //   }, [selectedTab]) // also runs again if selectedTab changes
-  // );
+
   React.useEffect(() => {
     refetch();
     analyticsRefetch();
@@ -378,85 +206,12 @@ export default function PanZoomPage() {
 
   // Ref
   const dateOfBirthRef = React.useRef() as React.MutableRefObject<TextInput>;
-  // const { state: toolState, isActive } = useChartPressState<{
-  //   x: number;
-  //   y: Record<"ac" | "battery" | "output" | "solar", number>;
-  // }>({
-  //   x: 0,
-  //   y: { ac: 0, battery: 0, output: 0, solar: 0 },
-  // });
 
-  // const [lastToolState, setLastToolState] = React.useState<{
-  //   x: { position: number; value: number };
-  //   y: Record<
-  //     "ac" | "battery" | "output" | "solar",
-  //     { position: number; value: number }
-  //   >;
-  // } | null>(null);
-
-  // ✅ Save the last active state before deactivation
-  // React.useEffect(() => {
-  //   if (isActive && toolState?.x?.value) {
-  //     setLastToolState({
-  //       x: {
-  //         position: toolState.x.position.value,
-  //         value: toolState.x.value.value,
-  //       },
-  //       y: {
-  //         ac: {
-  //           position: toolState.y.ac.position.value,
-  //           value: toolState.y.ac.value.value,
-  //         },
-  //         battery: {
-  //           position: toolState.y.battery.position.value,
-  //           value: toolState.y.battery.value.value,
-  //         },
-  //         output: {
-  //           position: toolState.y.output.position.value,
-  //           value: toolState.y.output.value.value,
-  //         },
-  //         solar: {
-  //           position: toolState.y.solar.position.value,
-  //           value: toolState.y.solar.value.value,
-  //         },
-  //       },
-  //     });
-  //   }
-  // }, [isActive, toolState]);
-  // const chartRef =
-  //   React.useRef<CartesianChartRef<typeof toolState | undefined>>(null);
-  // const selectedMaxY = React.useMemo(() => {
-  //   if (!selectedParams.length || !DATA?.length) return 10;
-
-  //   const maxVal = Math.max(
-  //     ...DATA.flatMap((d) => selectedParams.map((param) => d[param] ?? 0))
-  //   );
-
-  //   return maxVal + 1; // ✅ add 10 padding
-  // }, [selectedParams, DATA]);
-  //Null Handle
-
-  // const NullData = [
-  //   { hour: 0, ac: 5, battery: null, output: null, solar: null },
-  //   { hour: 24, ac: null, battery: null, output: null, solar: null },
-  // ];
-  // // Analytics code
-  // const labels = ["Daily", "Monthly", "Yearly", "Net"];
   const [show, setShow] = useState(false);
 
   const openBottomSheet = () => {
     setShow(true);
   };
-  // MonthBar Graph Data
-  // const defaultMaxValues = React.useMemo(() => {
-  //   if (!DATA.length) return {};
-  //   const result: Record<string, number> = {};
-  //   ["ac", "battery", "output", "solar"].forEach((param) => {
-  //     const maxVal = Math.max(...DATA.map((d) => d[param] ?? 0));
-  //     result[param] = maxVal;
-  //   });
-  //   return result;
-  // }, [DATA]);
 
   const mapped = React.useMemo(() => {
     if (!data?.results?.length) return [];
@@ -466,14 +221,15 @@ export default function PanZoomPage() {
       const hour = time.hour() + time.minute() / 60;
       return {
         hour,
-        ac: item.data?.ac?.watt ?? 0,
-        battery: item.data?.battery?.chargingWatt ?? 0,
-        output: item.data?.output?.watt ?? 0,
-        solar: item.data?.solar?.watt ?? 0,
+        Purchase: item.data?.ac?.watt ?? 0,
+        Charging: item.data?.battery?.chargingWatt ?? 0,
+        Discharging: item.data?.battery?.dischargingWatt ?? 0,
+        Consumption: item.data?.output?.watt ?? 0,
+        Solar: item.data?.solar?.watt ?? 0,
       };
     });
   }, [data?.results]);
-
+  console.log(selectedTab);
   return (
     <SafeAreaView
       style={styles.safeView}
@@ -594,27 +350,29 @@ export default function PanZoomPage() {
                       style={{ width: 20, height: 20 }}
                     />
                   </TouchableOpacity>
-                  {/* <TouchableOpacity
-                  onPress={() => {
-                    // Reset scale and translation
-                    state.matrix.value = setScale(
-                      setTranslate(state.matrix.value, 0, 0),
-                      1
-                    );
-                    // Also reset your shared values to keep useAnimatedReaction in sync
-                    k.value = 1;
-                    tx.value = 0;
-                    ty.value = 0;
-                  }}
-                >
-                  <Image source={ResetIcon} style={{ width: 23, height: 23 }} />
-                </TouchableOpacity> */}
                 </View>
                 <FilterModal
+                  key={selectedTab}
                   visible={modalVisible}
                   onClose={() => setModalVisible(false)}
-                  options={["ac", "output", "battery", "solar"]}
-                  defaultSelected={["ac", "output"]}
+                  options={
+                    selectedTab === 0
+                      ? [
+                          "Purchase",
+                          "Consumption",
+                          "Charging",
+                          "Discharging",
+                          "Solar",
+                        ]
+                      : [
+                          "Energy Purchased",
+                          "Energy Consumed",
+                          "Energy Charged",
+                          "Energy Discharged",
+                          "Solar Production",
+                        ]
+                  }
+                  defaultSelected={modalDefaultSelected}
                   onConfirm={(selected: any) => setSelectedParams(selected)}
                 />
               </View>
@@ -636,12 +394,16 @@ export default function PanZoomPage() {
             }
           >
             {selectedTab === 0 && data?.results?.length ? (
-              <ZoomChart
+              <PinchZoomLineChart
                 data={mapped}
                 selectedParams={selectedParams}
-                ticks={ticks}
+                selectTab={selectedTab}
               />
-            ) : selectedTab === 1 || selectedTab === 2 || selectedTab === 3 ? (
+            ) : //   data={mapped}
+            //   selectedParams={selectedParams}
+            //   ticks={ticks}
+            // />
+            selectedTab === 1 || selectedTab === 2 || selectedTab === 3 ? (
               // <BarGraph segment="month" data={barData} />
               <View>
                 <ZoomBarChart
@@ -659,11 +421,7 @@ export default function PanZoomPage() {
                 /> */}
               </View>
             ) : (
-              <EmptyZoomChart
-                data={[]}
-                selectedParams={selectedParams}
-                ticks={ticks}
-              />
+              <EmptyChart selectedParams={selectedParams} />
             )}
           </View>
         </View>

@@ -20,7 +20,13 @@ echarts.use([
 
 type BarChartProps = {
   data: { results: any[] };
-  selectedParams: ("output" | "ac" | "battery" | "solar")[];
+  selectedParams: (
+    | "Energy Purchased"
+    | "Energy Consumed"
+    | "Energy Charged"
+    | "Energy Discharged"
+    | "Solar Production"
+  )[];
   selectTab: 1 | 2 | 3;
   selectedDate?: string; // For tab 1 daily mode
 };
@@ -35,22 +41,26 @@ export default function ZoomBarChart({
   const { width } = useWindowDimensions();
   // const width = 400;
   const height = 350;
-  console.log(data, "===data");
+
   const [legendValues, setLegendValues] = useState<Record<string, number>>({});
   const paramColors: Record<string, { line: string; area: string[] }> = {
-    ac: {
+    "Energy Purchased": {
       line: "#0770FF",
       area: ["#0A84FF", "#0055CC"], // vivid blue gradient
     },
-    output: {
+    "Energy Consumed": {
       line: "#F7D102",
       area: ["#FFD700", "#C8A200"], // bright yellow/golden
     },
-    battery: {
+    "Energy Charged": {
       line: "#F2597F",
       area: ["#FF4F81", "#C71B5C"], // stronger pink gradient
     },
-    solar: {
+    "Energy Discharged": {
+      line: "gray",
+      area: ["gray", "gray"], // rich purple gradient
+    },
+    "Solar Energy": {
       line: "#A020F0",
       area: ["#C44DFF", "#7A00CC"], // rich purple gradient
     },
@@ -79,13 +89,15 @@ export default function ZoomBarChart({
 
         selectedParams.forEach((param) => {
           const value =
-            param === "ac"
+            param === "Energy Purchased"
               ? entry?.consumption?.dailyConsumption ?? 0
-              : param === "output"
+              : param === "Energy Consumed"
               ? entry?.production?.dailyProduction ?? 0
-              : param === "battery"
+              : param === "Energy Charged"
               ? entry?.battery?.dailyCharging ?? 0
-              : param === "solar"
+              : param === "Energy Discharged"
+              ? entry?.battery?.dailyDischarging ?? 0
+              : param === "Solar Production"
               ? entry?.grid?.dailyPurchase ?? 0
               : 0;
           resultSeries[param].push(value);
@@ -99,13 +111,15 @@ export default function ZoomBarChart({
         );
         selectedParams.forEach((param) => {
           const value =
-            param === "ac"
+            param === "Energy Purchased"
               ? entry?.consumption?.monthlyConsumption ?? 0
-              : param === "output"
+              : param === "Energy Consumed"
               ? entry?.production?.monthlyProduction ?? 0
-              : param === "battery"
+              : param === "Energy Charged"
               ? entry?.battery?.monthlyCharging ?? 0
-              : param === "solar"
+              : param === "Energy Discharged"
+              ? entry?.battery?.monthlyDischarging ?? 0
+              : param === "Solar Production"
               ? entry?.grid?.monthlyPurchase ?? 0
               : 0;
           resultSeries[param].push(value);
@@ -121,13 +135,15 @@ export default function ZoomBarChart({
         );
         selectedParams.forEach((param) => {
           const value =
-            param === "ac"
+            param === "Energy Purchased"
               ? entry?.consumption?.yearlyConsumption ?? 0
-              : param === "output"
+              : param === "Energy Consumed"
               ? entry?.production?.yearlyProduction ?? 0
-              : param === "battery"
+              : param === "Energy Charged"
               ? entry?.battery?.yearlyCharging ?? 0
-              : param === "solar"
+              : param === "Energy Discharged"
+              ? entry?.battery?.yearlyDischarging ?? 0
+              : param === "Solar Production"
               ? entry?.grid?.yearlyPurchase ?? 0
               : 0;
           resultSeries[param].push(value);
@@ -151,6 +167,7 @@ export default function ZoomBarChart({
       maxY: resultMaxY,
     };
   }, [data, selectedParams, selectTab, selectedDate]);
+  console.log(xAxisData);
   // Now series for ECharts
   const option = useMemo(
     () => ({
@@ -195,9 +212,9 @@ export default function ZoomBarChart({
             },
           },
           formatter: (value: number) => {
-            if (value === 0) return "{unit|kW}\n{value|" + value + "}";
+            if (value === 0) return "{value|" + value + "} {unit|kWh}";
             if (value === maxY)
-              return "{unit|kW}\n{value|" + value.toFixed(0) + "}";
+              return "{value|" + value.toFixed(0) + "} {unit|kWh}";
             return "";
           },
         },
@@ -210,7 +227,6 @@ export default function ZoomBarChart({
         showDelay: 2000, // show after 2 seconds of hold
         hideDelay: 10,
         enterable: false,
-
         // Hide tooltip box completely
         backgroundColor: "transparent",
         borderWidth: 0,
@@ -252,11 +268,11 @@ export default function ZoomBarChart({
         barWidth: 7,
         itemStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: paramColors[param].area[0] },
-            { offset: 1, color: paramColors[param].area[1] },
+            { offset: 0, color: paramColors[param]?.area[0] },
+            { offset: 1, color: paramColors[param]?.area[1] },
           ]),
         },
-        emphasis: { itemStyle: { color: paramColors[param].line } },
+        emphasis: { itemStyle: { color: paramColors[param]?.line } },
         data: seriesData[param],
       })),
     }),
@@ -322,7 +338,7 @@ export default function ZoomBarChart({
               <View
                 style={[
                   styles.colorDot,
-                  { backgroundColor: paramColors[param].line },
+                  { backgroundColor: paramColors[param]?.line },
                 ]}
               />
               <Text

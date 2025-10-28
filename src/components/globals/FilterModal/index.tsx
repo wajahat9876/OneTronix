@@ -13,7 +13,7 @@ interface FilterModalProps {
   visible: boolean;
   onClose: () => void;
   options: string[];
-  defaultSelected?: string[];
+  defaultSelected?: any[];
   onConfirm: (selected: string[]) => void;
 }
 
@@ -26,6 +26,9 @@ const FilterModal: React.FC<FilterModalProps> = ({
 }) => {
   const [selected, setSelected] = useState<string[]>(defaultSelected);
 
+  React.useEffect(() => {
+    setSelected(defaultSelected);
+  }, [defaultSelected]);
   const toggleSelection = (item: string) => {
     setSelected((prev) =>
       prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
