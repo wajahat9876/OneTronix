@@ -196,76 +196,84 @@ const Index = ({ goTo }: MultiStepFormProps) => {
               ? formatTime(result?.results?.inverterData.createdAt)
               : "-"}
           </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              marginTop: 20,
-              justifyContent: "center",
-            }}
-          >
+          <View>
             <View
-              style={[styles.transactionsCard, { backgroundColor: cardBg }]}
+              style={{
+                flexDirection: "row",
+                marginTop: 20,
+                justifyContent: "center",
+              }}
             >
-              <Text style={[styles.txt, { color: textColor }]}>
-                Daily Production
-              </Text>
-              <Text style={[styles.txtStyle, { color: textColor }]}>
-                {Number(
-                  result?.results?.dailySummary?.production?.dailyProduction ??
-                    0
-                ).toFixed(2)}
-                <Text style={[styles.unitTxt, { color: textColor }]}> kWh</Text>
-              </Text>
-            </View>
-            <View
-              style={[styles.transactionsCard, { backgroundColor: cardBg }]}
-            >
-              <Text style={[styles.txt, { color: textColor }]}>
-                Daily Consumption
-              </Text>
-              <Text style={[styles.txtStyle, { color: textColor }]}>
-                {Number(
-                  result?.results?.dailySummary?.consumption
-                    ?.dailyConsumption || 0
-                ).toFixed(2)}{" "}
-                <Text style={[styles.unitTxt, { color: textColor }]}> kWh</Text>
-              </Text>
-            </View>
-          </View>
-          <View style={{ flexDirection: "row", justifyContent: "center" }}>
-            <View style={styles.dailyCard}>
-              <Text
-                style={{
-                  color: "white",
-                  fontFamily: "Excon-Regular",
-                  fontSize: ms(13),
-                }}
+              <View
+                style={[styles.transactionsCard, { backgroundColor: cardBg }]}
               >
-                Daily Purchase
-              </Text>
-              <Text style={[styles.dailyTxt, { color: "white" }]}>
-                {Number(
-                  result?.results?.dailySummary?.grid?.dailyPurchase || 0
-                ).toFixed(2)}{" "}
-                <Text style={styles.unitTxt}> kWh</Text>
-              </Text>
+                <Text style={[styles.txt, { color: textColor }]}>
+                  Daily Production
+                </Text>
+                <Text style={[styles.txtStyle, { color: textColor }]}>
+                  {Number(
+                    result?.results?.dailySummary?.production
+                      ?.dailyProduction ?? 0
+                  ).toFixed(2)}
+                  <Text style={[styles.unitTxt, { color: textColor }]}>
+                    {" "}
+                    kWh
+                  </Text>
+                </Text>
+              </View>
+              <View
+                style={[styles.transactionsCard, { backgroundColor: cardBg }]}
+              >
+                <Text style={[styles.txt, { color: textColor }]}>
+                  Daily Consumption
+                </Text>
+                <Text style={[styles.txtStyle, { color: textColor }]}>
+                  {Number(
+                    result?.results?.dailySummary?.consumption
+                      ?.dailyConsumption || 0
+                  ).toFixed(2)}{" "}
+                  <Text style={[styles.unitTxt, { color: textColor }]}>
+                    {" "}
+                    kWh
+                  </Text>
+                </Text>
+              </View>
             </View>
-            <View
-              style={[
-                styles.transactionsCard,
-                { backgroundColor: "transparent" },
-              ]}
-            >
-              <Text style={[styles.txt, { color: textColor }]}>
-                Total Production
-              </Text>
-              <Text style={[styles.txtStyle, { color: textColor }]}>
-                {Number(
-                  result?.results?.dailySummary?.consumption
-                    ?.dailyConsumption || 0
-                ).toFixed(2)}{" "}
-                <Text style={styles.unitTxt}> kWh</Text>
-              </Text>
+            <View style={{ flexDirection: "row", justifyContent: "center" }}>
+              <View style={styles.dailyCard}>
+                <Text
+                  style={{
+                    color: "white",
+                    fontFamily: "Excon-Regular",
+                    fontSize: ms(13),
+                  }}
+                >
+                  Daily Purchase
+                </Text>
+                <Text style={[styles.dailyTxt, { color: "white" }]}>
+                  {Number(
+                    result?.results?.dailySummary?.grid?.dailyPurchase || 0
+                  ).toFixed(2)}{" "}
+                  <Text style={styles.unitTxt}> kWh</Text>
+                </Text>
+              </View>
+              <View
+                style={[
+                  styles.transactionsCard,
+                  { backgroundColor: "transparent" },
+                ]}
+              >
+                <Text style={[styles.txt, { color: textColor }]}>
+                  Total Production
+                </Text>
+                <Text style={[styles.txtStyle, { color: textColor }]}>
+                  {Number(
+                    result?.results?.dailySummary?.consumption
+                      ?.dailyConsumption || 0
+                  ).toFixed(2)}{" "}
+                  <Text style={styles.unitTxt}> kWh</Text>
+                </Text>
+              </View>
             </View>
           </View>
         </ScrollView>

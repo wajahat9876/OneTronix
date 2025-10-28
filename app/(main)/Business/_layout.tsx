@@ -42,9 +42,9 @@ const Layout = () => {
     <Tab.Navigator
       initialRouteName="Home"
       barStyle={{
-        backgroundColor: isDarkMode ? "#252525" : "#F2F2F2",
+        backgroundColor: isDarkMode ? "#303030" : "#F2F2F2",
         height: vs(80),
-        marginBottom: Platform.OS === "ios" ? vs(5) : vs(1),
+        marginBottom: Platform.OS === "ios" ? vs(5) : vs(0),
       }}
       activeIndicatorStyle={{
         height: vs(6),

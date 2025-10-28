@@ -149,7 +149,7 @@ export default function PinchZoomLineChart({
       </View>
     );
   }
-  console.log(viewport.size.width);
+
   const [legendValues, setLegendValues] = useState<
     Record<string, number | undefined>
   >({});
