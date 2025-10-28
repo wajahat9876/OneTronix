@@ -643,12 +643,7 @@ export default function PanZoomPage() {
               />
             ) : selectedTab === 1 || selectedTab === 2 || selectedTab === 3 ? (
               // <BarGraph segment="month" data={barData} />
-              <View
-                style={{
-                  height: vs(410),
-                  width: "100%",
-                }}
-              >
+              <View>
                 <ZoomBarChart
                   data={data}
                   selectedParams={selectedParams}

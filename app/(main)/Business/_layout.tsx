@@ -21,6 +21,7 @@ import HomeWhite from "@assets/icons/bottom-tabs/whiteHome.svg";
 import ReportWhite from "@assets/icons/bottom-tabs/whiteReport.svg";
 import Info from "app/(main)/Business/Info/index";
 import { Redirect } from "expo-router";
+import { Platform } from "react-native";
 import Transaction from "./Transaction";
 
 // Icons
@@ -43,7 +44,7 @@ const Layout = () => {
       barStyle={{
         backgroundColor: isDarkMode ? "#252525" : "#F2F2F2",
         height: vs(80),
-        marginBottom: vs(5),
+        marginBottom: Platform.OS === "ios" ? vs(5) : vs(1),
       }}
       activeIndicatorStyle={{
         height: vs(6),
