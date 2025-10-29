@@ -229,7 +229,7 @@ export default function PanZoomPage() {
       };
     });
   }, [data?.results]);
-  console.log(selectedTab);
+
   return (
     <SafeAreaView
       style={styles.safeView}

@@ -36,6 +36,7 @@ export interface IBusinessState {
   inverterData?: inverterData;
   isVerifiedEmail?: boolean;
   isDarkMode?: boolean;
+  lastSelectedDeviceData?: any[];
 }
 const initialState: IBusinessState = {
   role: false,
@@ -112,6 +113,9 @@ const businessSlice = createSlice({
     setPackageId(state, action) {
       state.packageId = action.payload;
     },
+    setLastSelectedDevice(state, action) {
+      state.lastSelectedDeviceData = action.payload;
+    },
     setRole(state, action) {
       state.role = action.payload;
     },
@@ -124,6 +128,7 @@ const businessSlice = createSlice({
     setSigninBusinessEmail(state, action) {
       state.signInBusinessEmail = action.payload;
     },
+
     businessQrSignin: (state, action) => {
       state.deviceId = action.payload;
     },
@@ -173,6 +178,7 @@ const businessSlice = createSlice({
       state.inverterData = initialState.inverterData;
       state.isVerifiedEmail = initialState.isVerifiedEmail;
       state.isDarkMode = initialState.isDarkMode;
+      state.lastSelectedDeviceData = initialState.lastSelectedDeviceData;
 
       // console.log('businessLogout', state);
     },
@@ -250,6 +256,7 @@ const businessSlice = createSlice({
 });
 
 export const {
+  setLastSelectedDevice,
   setPackageId,
   resetPackageId,
   setDarkMode,

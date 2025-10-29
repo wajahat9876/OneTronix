@@ -29,7 +29,7 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
   //   }
   // };
   const [selectedLanguage, setSelectedLanguage] = useState();
-  console.log("selectedLanguage", selectedLanguage);
+
   return (
     <Animated.View
       {...pageTransitionAnimation}

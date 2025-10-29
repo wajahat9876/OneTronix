@@ -1,12 +1,17 @@
 import { useBusinessDetails } from "@/store/selectors/business/business";
+import { setLastSelectedDevice } from "@/store/slices/business/businessSlice";
+import MenuIcon from "@assets/icons/menu.png";
 import { useStatusBar } from "@hooks/StatusBarColor/index";
+import DropdownRNE from "@src/components/globals/DropdownRNE";
 import { pageTransitionAnimation } from "@src/constants/Animation";
-import { useAppSelector } from "@src/hooks/useReduxHooks";
-import { hs, ms } from "@utils/design/design";
+import { useAppDispatch, useAppSelector } from "@src/hooks/useReduxHooks";
+import { hs, ms, vs } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   FlatList,
+  Image,
   Platform,
   StyleSheet,
   Text,
@@ -15,13 +20,12 @@ import {
 } from "react-native";
 import Animated from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 const Step0_Info = () => {
   const { data: businessData } = useAppSelector(useBusinessDetails);
   useStatusBar("dark");
-
   const [expanded, setExpanded] = useState(false);
-
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   return (
     <Animated.View
       {...pageTransitionAnimation}
@@ -66,14 +70,81 @@ const Step0_Info = () => {
                 data={businessData?.devices ?? []}
                 keyExtractor={(item) => item._id || item.name}
                 contentContainerStyle={{ paddingVertical: 10 }}
-                renderItem={({ item }) => (
-                  <View style={styles.deviceRow}>
-                    <Text style={styles.deviceTxt}>Inverter</Text>
-                    <Text style={styles.deviceTxt}>
-                      ID: {item.deviceId || "-"}
-                    </Text>
-                  </View>
-                )}
+                renderItem={({ item }) => {
+                  return (
+                    <View style={styles.mainRow}>
+                      <View style={styles.menuRow}>
+                        <View style={{ flexDirection: "row" }}>
+                          <Text style={styles.deviceTxt}>Inverter</Text>
+                          <View
+                            style={[
+                              styles.statusDot,
+                              {
+                                backgroundColor:
+                                  item.isActive || item.status === "active"
+                                    ? "#4CAF50"
+                                    : "transparent",
+                              },
+                            ]}
+                          />
+                        </View>
+                        <DropdownRNE
+                          data={[
+                            { label: "Setting", value: "Setting" },
+                            { label: "Edit", value: "Edit" },
+                          ]}
+                          dropdownType="custom"
+                          onChange={(e) => {
+                            dispatch(setLastSelectedDevice(item));
+                            if (e?.value === "Setting") {
+                              router.push("/(main)/Business/Settings");
+                            } else if (e?.value === "Edit") {
+                            }
+                          }}
+                          renderRightIcon={() => (
+                            <Image
+                              source={MenuIcon}
+                              style={{ width: 25, height: 20 }}
+                            />
+                          )}
+                          renderLeftIcon={() => {}}
+                          valueField="value"
+                          labelField="label"
+                          value={""}
+                          placeholder=""
+                          dropdownPosition="auto"
+                          style={{
+                            width: "30%",
+                            // marginTop: 10,
+                          }}
+                          selectedTextStyle={{
+                            color: "transparent",
+                          }}
+                          placeholderStyle={{
+                            color: "black",
+                            fontSize: getRespValue(20),
+                            paddingTop: 10,
+                            paddingBottom: 5,
+                          }}
+                          itemContainerStyle={{}}
+                          itemTextStyle={{
+                            fontSize: ms(11),
+                            fontFamily: "Excon-Regular",
+                          }}
+                        />
+                        {/* <TouchableOpacity onPress={() => {}}>
+                        <Image
+                          source={MenuIcon}
+                          style={{ width: 25, height: 20 }}
+                        />
+                      </TouchableOpacity> */}
+                      </View>
+                      <Text style={styles.idTxt}>
+                        ID: {item.deviceId || "-"}
+                      </Text>
+                    </View>
+                  );
+                }}
               />
             )}
           </View>
@@ -87,7 +158,7 @@ const styles = StyleSheet.create({
   safeView: { flex: 1, backgroundColor: "white" },
   container: { flex: 1, paddingHorizontal: hs(20), marginTop: 20 },
   card: {
-    backgroundColor: "#E2E1E0",
+    backgroundColor: "#F2F2F2",
     borderRadius: 10,
     paddingVertical: 18,
     paddingHorizontal: 15,
@@ -95,17 +166,42 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   subTitle: {
-    fontSize: getRespValue(25),
+    fontSize: ms(20),
     fontWeight: "600",
-    fontFamily: "Excon-Medium",
+    fontFamily: "Excon-Regular",
   },
-  deviceRow: {
-    paddingVertical: 8,
+  menuRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  mainRow: {
+    paddingVertical: 15,
+    backgroundColor: "#DDDEE0",
+    paddingHorizontal: 10,
+
+    borderRadius: 5,
   },
   deviceTxt: {
     color: "black",
-    fontSize: getRespValue(20),
+    fontSize: ms(14),
     fontFamily: "Excon-Regular",
+  },
+  idTxt: {
+    color: "gray",
+    fontSize: ms(12),
+    fontFamily: "Excon-Regular",
+  },
+  deviceLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  statusDot: {
+    width: hs(8),
+    height: vs(10),
+    borderRadius: 5,
+    marginLeft: 3,
+    marginTop: 4,
   },
 });
 

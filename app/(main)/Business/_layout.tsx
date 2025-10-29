@@ -3,7 +3,6 @@
 
 import { useBusinessDetails } from "@/store/selectors/business/business";
 // import IconBottomTabInfo from "@assets/icons/bottom-tabs/home-profile-icon.svg";
-import IconBottomTabSettings from "@assets/icons/bottom-tabs/home-setting-icon.svg";
 // import IconBottomTabSendMoney from "@assets/icons/bottom-tabs/home-transfer-money.svg";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import Colors from "@src/constants/Colors";
@@ -16,14 +15,15 @@ import Setting from "app/(main)/Business/Settings/index";
 import DevicesBlack from "@assets/icons/bottom-tabs/blackDevices.svg";
 import HomeBlack from "@assets/icons/bottom-tabs/blackHome.svg";
 import ReportBlack from "@assets/icons/bottom-tabs/blackReport.svg";
+import SettingBlack from "@assets/icons/bottom-tabs/BlackSetting.svg";
 import Devices from "@assets/icons/bottom-tabs/whiteDevices.svg";
 import HomeWhite from "@assets/icons/bottom-tabs/whiteHome.svg";
 import ReportWhite from "@assets/icons/bottom-tabs/whiteReport.svg";
+import SettingWhite from "@assets/icons/bottom-tabs/whiteSetting.svg";
 import Info from "app/(main)/Business/Info/index";
 import { Redirect } from "expo-router";
 import { Platform } from "react-native";
 import Transaction from "./Transaction";
-
 // Icons
 // const MainStack = createBottomTabNavigator<RootTabParamList>();
 const Layout = () => {
@@ -63,8 +63,9 @@ const Layout = () => {
       screenOptions={{
         tabBarColor: isDarkMode ? "black" : Colors.light.theme.white,
       }}
+      inactiveColor={isDarkMode ? "white" : "black"}
       keyboardHidesNavigationBar={false}
-      shifting
+      shifting={false}
       sceneAnimationEnabled
       sceneAnimationType="shifting"
     >
@@ -112,7 +113,7 @@ const Layout = () => {
         name="Settings"
         component={Setting}
         options={{
-          tabBarIcon: () => <IconBottomTabSettings />,
+          tabBarIcon: () => (isDarkMode ? <SettingWhite /> : <SettingBlack />),
         }}
       />
     </Tab.Navigator>

@@ -4,19 +4,19 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/no-unused-prop-types */
 /* eslint-disable react/jsx-no-useless-fragment */
-import Colors from '@src/constants/Colors';
-import { globalStyle } from '@src/styles/globals';
-import { hs, ms } from '@utils/design/design';
-import React, { forwardRef } from 'react';
-import { FlatListProps, Platform, Text, View } from 'react-native';
-import { Dropdown, IDropdownRef } from 'react-native-element-dropdown';
+import Colors from "@src/constants/Colors";
+import { globalStyle } from "@src/styles/globals";
+import { hs, ms } from "@utils/design/design";
+import React, { forwardRef } from "react";
+import { FlatListProps, Platform, Text, View } from "react-native";
+import { Dropdown, IDropdownRef } from "react-native-element-dropdown";
 
 interface Item {
   label: string;
   value: string;
 }
 export interface DropRNEProps {
-  dropdownType: 'sm' | 'lg' | 'custom' | 'currency';
+  dropdownType: "sm" | "lg" | "custom" | "currency";
   onChange: React.Dispatch<React.SetStateAction<any>>;
   data: Array<{ label: string; value: string }> | any;
   onFocus?: () => void;
@@ -26,12 +26,12 @@ export interface DropRNEProps {
   selectArrowIconStyle?: any;
   selectContainerStyle?: any;
   disabled?: boolean;
-  labelField: 'label' | 'value';
-  valueField: 'label' | 'value';
+  labelField: "label" | "value";
+  valueField: "label" | "value";
   autoScroll?: boolean;
   style?: any;
   containerStyle?: any;
-  dropdownPosition: 'auto' | 'bottom' | 'top';
+  dropdownPosition: "auto" | "bottom" | "top";
   accessibilityLabel?: string;
   search?: boolean;
   placeholderStyle?: any;
@@ -51,12 +51,13 @@ export interface DropRNEProps {
   searchPlaceholder?: string;
   activeColor?: string;
   showsVerticalScrollIndicator?: boolean;
-  mode?: 'auto' | 'default' | 'modal';
+  mode?: "auto" | "default" | "modal";
   flatListProps?: FlatListProps<Item>;
   renderLeftIcon?: () => any;
+  renderRightIcon?: () => any;
   renderItem?: (
     item: { label: string; value: string },
-    selected?: boolean | undefined,
+    selected?: boolean | undefined
   ) => JSX.Element;
   searchQuery?: (keyword: string, labelValue: string) => boolean;
   renderInputSearch?: (onSearch: (text: string) => void) => JSX.Element;
@@ -72,6 +73,7 @@ const DropdownRNE = forwardRef(
       onChange,
       renderItem,
       renderLeftIcon,
+      renderRightIcon,
       activeColor,
       itemContainerStyle,
       showsVerticalScrollIndicator,
@@ -108,7 +110,7 @@ const DropdownRNE = forwardRef(
       ...others
     } = props;
 
-    if (dropdownType === 'custom') {
+    if (dropdownType === "custom") {
       return (
         <>
           <Dropdown
@@ -145,6 +147,8 @@ const DropdownRNE = forwardRef(
             onChangeText={onChangeText}
             value={value}
             searchPlaceholder={searchPlaceholder}
+            renderLeftIcon={renderLeftIcon}
+            renderRightIcon={renderRightIcon}
           />
           {errorText && (
             <View>
@@ -163,7 +167,7 @@ const DropdownRNE = forwardRef(
       );
     }
     // this Dropdown is for UserDetails screen
-    if (dropdownType === 'sm') {
+    if (dropdownType === "sm") {
       return (
         <>
           <Dropdown
@@ -193,10 +197,10 @@ const DropdownRNE = forwardRef(
             search={search}
             placeholder={placeholder}
             placeholderStyle={{
-              fontFamily: 'poppins',
+              fontFamily: "poppins",
               fontSize: ms(14),
               marginLeft: hs(-6),
-              color: 'gray',
+              color: "gray",
               ...placeholderStyle,
             }}
             iconStyle={iconStyle}
@@ -206,7 +210,7 @@ const DropdownRNE = forwardRef(
             inputSearchStyle={inputSearchStyle}
             key={key}
             selectedTextStyle={{
-              fontFamily: 'poppins',
+              fontFamily: "poppins",
               fontSize: ms(14),
               marginLeft: hs(-5),
               ...selectedTextStyle,
@@ -214,7 +218,7 @@ const DropdownRNE = forwardRef(
             selectedTextProps={selectedTextProps}
             itemContainerStyle={{
               borderBottomWidth: 0.5,
-              borderColor: 'gray',
+              borderColor: "gray",
               // borderBottomLeftRadius: 15,
               // borderBottomRightRadius: 15,
               ...itemContainerStyle,
@@ -242,13 +246,13 @@ const DropdownRNE = forwardRef(
         </>
       );
     }
-    if (dropdownType === 'lg') {
+    if (dropdownType === "lg") {
       return (
         <>
           <View
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
+              flexDirection: "row",
+              alignItems: "center",
             }}
           >
             <Dropdown
@@ -300,7 +304,7 @@ const DropdownRNE = forwardRef(
                   marginTop: -10,
                   marginBottom: 10,
                   color: Colors.dark.errorText,
-                  fontWeight: Platform.OS === 'ios' ? '400' : '400',
+                  fontWeight: Platform.OS === "ios" ? "400" : "400",
                 }}
               >
                 {errorText}
@@ -312,7 +316,7 @@ const DropdownRNE = forwardRef(
     }
 
     return <></>;
-  },
+  }
 );
 
 export default DropdownRNE;
