@@ -39,7 +39,7 @@ export default function PinchZoomLineChart({
     Charging: "#F2597F",
     Discharging: "gray",
     Consumption: "#F7D102",
-    Solar: "#A020F0",
+    Solar: "black",
   };
 
   const visibleKeys = selectedParams?.filter((key) =>

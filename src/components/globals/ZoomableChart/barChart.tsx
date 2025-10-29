@@ -60,9 +60,9 @@ export default function ZoomBarChart({
       line: "gray",
       area: ["gray", "gray"], // rich purple gradient
     },
-    "Solar Energy": {
-      line: "#A020F0",
-      area: ["#C44DFF", "#7A00CC"], // rich purple gradient
+    "Solar Production": {
+      line: "black",
+      area: ["black", "black"], // rich purple gradient
     },
   };
 
