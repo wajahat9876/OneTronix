@@ -4,6 +4,7 @@ import MenuIcon from "@assets/icons/menu.png";
 import { useStatusBar } from "@hooks/StatusBarColor/index";
 import DropdownRNE from "@src/components/globals/DropdownRNE";
 import { pageTransitionAnimation } from "@src/constants/Animation";
+import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
 import { useAppDispatch, useAppSelector } from "@src/hooks/useReduxHooks";
 import { hs, ms, vs } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
@@ -20,7 +21,7 @@ import {
 } from "react-native";
 import Animated from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-const Step0_Info = () => {
+const Step0_Info = ({ goTo }: MultiStepFormProps) => {
   const { data: businessData } = useAppSelector(useBusinessDetails);
   useStatusBar("dark");
   const [expanded, setExpanded] = useState(false);
@@ -97,7 +98,7 @@ const Step0_Info = () => {
                           onChange={(e) => {
                             dispatch(setLastSelectedDevice(item));
                             if (e?.value === "Setting") {
-                              router.push("/(main)/Business/Settings");
+                              goTo?.(1);
                             } else if (e?.value === "Edit") {
                             }
                           }}
