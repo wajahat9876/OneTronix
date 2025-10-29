@@ -1,6 +1,8 @@
+import ZoomOut from "@assets/icons/Zoomout.png";
+import ZoomIn from "@assets/icons/zoomin.png";
 import { ms, vs } from "@utils/design/design";
 import React, { useMemo, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { runOnJS } from "react-native-reanimated";
 import {
@@ -10,7 +12,6 @@ import {
   Line,
   VerticalAxis,
 } from "react-native-responsive-linechart";
-
 interface PowerData {
   hour: number;
   Purchase: number;
@@ -99,7 +100,8 @@ export default function PinchZoomLineChart({
       return { ...v, origin: { x: newOrigin } };
     });
   };
-
+  const handleZoomIn = () => handleZoom(1.5);
+  const handleZoomOut = () => handleZoom(0.7);
   // ✅ Disable gestures entirely if tab != 1
   const pinchGesture = Gesture.Pinch()
     .onUpdate((e) => {
@@ -163,35 +165,54 @@ export default function PinchZoomLineChart({
   return (
     <GestureDetector gesture={composedGesture}>
       <View style={styles.container}>
-        <View style={{ paddingHorizontal: 16, marginLeft: 10 }}>
-          {selectedParams.map((param, index) => {
-            const value = legendValues[param] ?? "--";
-            const displayName = paramDisplayNames[param] ?? param;
-            return (
-              <View
-                key={`${param}-${index}`}
-                style={[styles.dotText, { marginRight: 6, marginTop: vs(10) }]}
-              >
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginRight: 20,
+          }}
+        >
+          <View style={{ paddingHorizontal: 16, marginLeft: 10 }}>
+            {selectedParams.map((param, index) => {
+              const value = legendValues[param] ?? "--";
+              const displayName = paramDisplayNames[param] ?? param;
+              return (
                 <View
+                  key={`${param}-${index}`}
                   style={[
-                    styles.colorDot,
-                    { backgroundColor: colors[param] ?? "#000" },
+                    styles.dotText,
+                    { marginRight: 6, marginTop: vs(10) },
                   ]}
-                />
-                <Text
-                  style={{
-                    color: "#111",
-                    fontSize: ms(11),
-                    fontFamily: "Ranade-Regular",
-                  }}
                 >
-                  {displayName}: {value}
-                </Text>
-              </View>
-            );
-          })}
-        </View>
+                  <View
+                    style={[
+                      styles.colorDot,
+                      { backgroundColor: colors[param] ?? "#000" },
+                    ]}
+                  />
+                  <Text
+                    style={{
+                      color: "#111",
+                      fontSize: ms(11),
+                      fontFamily: "Ranade-Regular",
+                    }}
+                  >
+                    {displayName}: {value}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
 
+          <View style={{ flexDirection: "row", alignSelf: "center", gap: 10 }}>
+            <TouchableOpacity onPress={handleZoomOut}>
+              <Image source={ZoomOut} style={{ width: 30, height: 30 }} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleZoomIn}>
+              <Image source={ZoomIn} style={{ width: 30, height: 30 }} />
+            </TouchableOpacity>
+          </View>
+        </View>
         <Chart
           style={{ height: vs(370), width: "100%" }}
           data={data?.map((d) => ({
