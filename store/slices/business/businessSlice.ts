@@ -36,7 +36,47 @@ export interface IBusinessState {
   inverterData?: inverterData;
   isVerifiedEmail?: boolean;
   isDarkMode?: boolean;
-  lastSelectedDeviceData?: any[];
+  lastSelectedDeviceData?: {
+    battery?: {
+      chargingAmp?: number;
+      floatToCutOff?: number;
+      floating?: number;
+      full?: number;
+      fullToFloat?: number;
+      low?: number;
+      typeOfBattery?: string;
+    };
+    chargingSource?: { type: string };
+    heavyLoad?: {
+      OffTime?: number;
+      OnTime?: number;
+      offLevel?: number;
+      onLevel?: number;
+    };
+    inverter?: {
+      outputVoltLevel?: number;
+      overLoad?: number;
+    };
+    misc?: {
+      buzzer?: boolean;
+      lcdBacklight?: boolean;
+    };
+    solar?: {
+      highVolts?: number;
+      lowVolts?: number;
+    };
+    utility?: {
+      overVolts?: number;
+      underVolts?: number;
+    };
+    utilityControl?: {
+      cutOffTime?: number;
+      enabled?: boolean;
+      offLevel?: number;
+      onLevel?: number;
+    };
+  };
+  lastSelectedDeviceId?: string;
 }
 const initialState: IBusinessState = {
   role: false,
@@ -116,6 +156,9 @@ const businessSlice = createSlice({
     setLastSelectedDevice(state, action) {
       state.lastSelectedDeviceData = action.payload;
     },
+    setLastSelectedDeviceId(state, action) {
+      state.lastSelectedDeviceId = action.payload;
+    },
     setRole(state, action) {
       state.role = action.payload;
     },
@@ -179,6 +222,7 @@ const businessSlice = createSlice({
       state.isVerifiedEmail = initialState.isVerifiedEmail;
       state.isDarkMode = initialState.isDarkMode;
       state.lastSelectedDeviceData = initialState.lastSelectedDeviceData;
+      state.lastSelectedDeviceId = "";
 
       // console.log('businessLogout', state);
     },
@@ -257,6 +301,7 @@ const businessSlice = createSlice({
 
 export const {
   setLastSelectedDevice,
+  setLastSelectedDeviceId,
   setPackageId,
   resetPackageId,
   setDarkMode,

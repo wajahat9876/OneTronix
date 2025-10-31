@@ -1,5 +1,8 @@
 import { useBusinessDetails } from "@/store/selectors/business/business";
-import { setLastSelectedDevice } from "@/store/slices/business/businessSlice";
+import {
+  setLastSelectedDevice,
+  setLastSelectedDeviceId,
+} from "@/store/slices/business/businessSlice";
 import MenuIcon from "@assets/icons/menu.png";
 import { useStatusBar } from "@hooks/StatusBarColor/index";
 import DropdownRNE from "@src/components/globals/DropdownRNE";
@@ -23,10 +26,12 @@ import Animated from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 const Step0_Info = ({ goTo }: MultiStepFormProps) => {
   const { data: businessData } = useAppSelector(useBusinessDetails);
+
   useStatusBar("dark");
   const [expanded, setExpanded] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
+
   return (
     <Animated.View
       {...pageTransitionAnimation}
@@ -96,7 +101,9 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
                           ]}
                           dropdownType="custom"
                           onChange={(e) => {
-                            dispatch(setLastSelectedDevice(item));
+                            dispatch(setLastSelectedDevice(item?.settings));
+                            dispatch(setLastSelectedDeviceId(item?._id));
+
                             if (e?.value === "Setting") {
                               goTo?.(1);
                             } else if (e?.value === "Edit") {

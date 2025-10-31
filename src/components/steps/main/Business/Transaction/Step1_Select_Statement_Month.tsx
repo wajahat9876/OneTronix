@@ -541,7 +541,7 @@ export default function PanZoomPage() {
               value1={Number(
                 totalData?.results?.production?.production || 0
               ).toFixed(1)}
-              unit1={"MWh"}
+              unit1={"kWh"}
               label2={"Energy Consumed"}
               value2={Number(
                 totalData?.results?.consumption?.consumption || 0
@@ -555,7 +555,7 @@ export default function PanZoomPage() {
               title="Grid Exchange"
               label1={"Energy Export"}
               value1={Number(0).toFixed(1)}
-              unit1={"MWh"}
+              unit1={"kWh"}
               label2={"Energy Purchased"}
               value2={Number(totalData?.results?.grid?.purchase || 0).toFixed(
                 1

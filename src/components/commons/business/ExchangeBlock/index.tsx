@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   title: {
-    fontFamily: "excon-regular",
+    fontFamily: "Excon-Regular",
     fontSize: ms(13),
     marginBottom: 15,
   },

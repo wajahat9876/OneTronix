@@ -1,12 +1,12 @@
-import { Text } from '@src/components/libraries';
-import Colors from '@src/constants/Colors';
-import { globalStyle } from '@src/styles/globals';
-import { hs, ms, vs } from '@utils/design/design';
-import { AnimatePresence, MotiView } from 'moti';
-import React, { useState } from 'react';
-import { TextInput } from 'react-native';
-import { TextInput as TextInputPaper } from 'react-native-paper';
-import { DefaultTextInputProps } from '../types';
+import { Text } from "@src/components/libraries";
+import Colors from "@src/constants/Colors";
+import { globalStyle } from "@src/styles/globals";
+import { hs, ms, vs } from "@utils/design/design";
+import { AnimatePresence, MotiView } from "moti";
+import React, { useState } from "react";
+import { TextInput } from "react-native";
+import { TextInput as TextInputPaper } from "react-native-paper";
+import { DefaultTextInputProps } from "../types";
 
 const DefaultInput = React.forwardRef<TextInput, DefaultTextInputProps>(
   (props, ref) => {
@@ -40,35 +40,35 @@ const DefaultInput = React.forwardRef<TextInput, DefaultTextInputProps>(
           autoCorrect={false}
           value={value}
           underlineStyle={{
-            backgroundColor: 'transparent',
+            backgroundColor: "transparent",
           }}
           contentStyle={{
             paddingLeft: hs(16),
-            fontFamily: 'poppins',
+            fontFamily: "poppins",
             fontSize: ms(14),
             ...(contentStyle as object),
           }}
           style={{
             backgroundColor: errorText
               ? backgroundColor
-              : backgroundColor || 'white',
+              : backgroundColor || "white",
             borderTopColor: errorText
               ? backgroundColor
-              : borderTopColor || 'white',
-            borderBottomColor: borderBottomColor || 'transparent',
+              : borderTopColor || "white",
+            borderBottomColor: borderBottomColor || "transparent",
             borderBottomWidth: borderBottomHeight || 0,
             height: vs(60),
             lineHeight,
             ...(style as object),
           }}
           className={`w-full rounded-${roundedRadius} text-xl ${
-            last ? 'border-b-2' : ''
+            last ? "border-b-2" : ""
           } ${className}`}
           secureTextEntry={password ? !isPasswordVisible : false}
           right={
             password && (
               <TextInputPaper.Icon
-                icon={!isPasswordVisible ? 'eye-off' : 'eye'}
+                icon={!isPasswordVisible ? "eye-off" : "eye"}
                 size={20}
                 forceTextInputFocus={false}
                 onPress={() => {
@@ -98,9 +98,9 @@ const DefaultInput = React.forwardRef<TextInput, DefaultTextInputProps>(
               //   type: 'timing',
               // }}
               style={{
-                width: '100%',
-                justifyContent: 'flex-start',
-                alignItems: 'flex-start',
+                width: "100%",
+                justifyContent: "flex-start",
+                alignItems: "flex-start",
                 paddingLeft: hs(8),
                 paddingRight: hs(8),
               }}
@@ -119,7 +119,7 @@ const DefaultInput = React.forwardRef<TextInput, DefaultTextInputProps>(
         </AnimatePresence>
       </>
     );
-  },
+  }
 );
 
 // DefaultInput.defaultProps = {

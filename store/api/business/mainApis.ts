@@ -83,6 +83,26 @@ export const businessMainApi = createApi({
       },
       keepUnusedDataFor: 0,
     }),
+    changeInverterSetting: builder.mutation<any, any>({
+      query: (body) => ({
+        url: "user/devices/",
+        method: "PATCH",
+        body,
+      }),
+
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
+          );
+        } catch (data: ICurrentResponse | any) {
+          handleLogout(data, { dispatch });
+        } finally {
+          // do nothing
+        }
+      },
+    }),
     createCurrencyAccount: builder.mutation<any, any>({
       query: (body) => ({
         url: "clearBank/multi-createAccount",
@@ -505,6 +525,7 @@ export const businessMainApi = createApi({
 });
 
 export const {
+  useChangeInverterSettingMutation,
   useLazyGetInverterDataQuery,
   useGetGraphDataQuery,
   useGetAnalyticsDataQuery,
