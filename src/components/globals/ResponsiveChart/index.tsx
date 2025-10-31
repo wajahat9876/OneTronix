@@ -228,7 +228,7 @@ export default function PinchZoomLineChart({
           <VerticalAxis
             tickValues={[0, globalMaxY > 0 ? globalMaxY : 1]}
             theme={{
-              grid: { stroke: { color: "#ccc", width: 0 } },
+              grid: { stroke: { color: "#ccc", width: 0.5 } },
               axis: { stroke: { color: "gray", width: 1 } },
               ticks: { stroke: { color: "#ccc", width: 0.3 } },
               labels: {

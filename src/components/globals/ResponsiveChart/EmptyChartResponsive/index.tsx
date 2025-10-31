@@ -92,7 +92,7 @@ export default function EmptyChart({
         <VerticalAxis
           tickValues={[0, yMax]}
           theme={{
-            grid: { stroke: { color: "#ccc", width: 0 } },
+            grid: { stroke: { color: "#ccc", width: 0.5 } },
             axis: { stroke: { color: "gray", width: 1 } },
             ticks: { stroke: { color: "#ccc", width: 0.3 } },
             labels: {

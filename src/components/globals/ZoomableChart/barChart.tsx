@@ -7,7 +7,13 @@ import {
   TooltipComponent,
 } from "echarts/components";
 import * as echarts from "echarts/core";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
 
 echarts.use([
@@ -28,7 +34,7 @@ type BarChartProps = {
     | "Solar Production"
   )[];
   selectTab: 1 | 2 | 3;
-  selectedDate?: string; // For tab 1 daily mode
+  selectedDate?: string;
 };
 
 export default function ZoomBarChart({
@@ -38,31 +44,38 @@ export default function ZoomBarChart({
   selectedDate,
 }: BarChartProps) {
   const chartRef = useRef<any>(null);
+  const chartInstanceRef = useRef<echarts.ECharts | null>(null);
   const { width } = useWindowDimensions();
-  // const width = 400;
+  const CHART_WIDTH = 400;
   const height = 350;
 
   const [legendValues, setLegendValues] = useState<Record<string, number>>({});
+  const [isChartReady, setIsChartReady] = useState(false);
+
+  // Use refs to track current data to avoid stale closures
+  const seriesDataRef = useRef<Record<string, number[]>>({});
+  const selectedParamsRef = useRef<string[]>([]);
+
   const paramColors: Record<string, { line: string; area: string[] }> = {
     "Energy Purchased": {
       line: "#0770FF",
-      area: ["#0A84FF", "#0055CC"], // vivid blue gradient
+      area: ["#0A84FF", "#0055CC"],
     },
     "Energy Consumed": {
       line: "#F7D102",
-      area: ["#FFD700", "#C8A200"], // bright yellow/golden
+      area: ["#FFD700", "#C8A200"],
     },
     "Energy Charged": {
       line: "#F2597F",
-      area: ["#FF4F81", "#C71B5C"], // stronger pink gradient
+      area: ["#FF4F81", "#C71B5C"],
     },
     "Energy Discharged": {
       line: "gray",
-      area: ["gray", "gray"], // rich purple gradient
+      area: ["gray", "gray"],
     },
     "Solar Production": {
       line: "black",
-      area: ["black", "black"], // rich purple gradient
+      area: ["black", "black"],
     },
   };
 
@@ -130,7 +143,7 @@ export default function ZoomBarChart({
         ...Array.from({ length: currentYear - 2019 }, (_, i) => 2020 + i)
       );
       resultXAxis.forEach((year) => {
-        const entry = data.results.find(
+        const entry = data?.results?.find(
           (d) => new Date(d.createdAt).getFullYear() === year
         );
         selectedParams.forEach((param) => {
@@ -161,40 +174,66 @@ export default function ZoomBarChart({
       resultMaxY = Math.ceil(resultMaxY / magnitude) * magnitude;
     }
 
+    // Update refs with current data
+    seriesDataRef.current = resultSeries;
+    selectedParamsRef.current = selectedParams;
+
     return {
       xAxisData: resultXAxis,
       seriesData: resultSeries,
       maxY: resultMaxY,
     };
   }, [data, selectedParams, selectTab, selectedDate]);
-  console.log(xAxisData);
-  // Now series for ECharts
+
+  // Create stable event handlers using useCallback
+  const handleShowTip = useCallback((params: any) => {
+    console.log("showTip", params);
+    if (!params || params.dataIndex == null) return;
+
+    const dataIndex = params.dataIndex;
+    console.log("Data index:", dataIndex);
+
+    const values: Record<string, number> = {};
+    const currentSelectedParams = selectedParamsRef.current;
+    const currentSeriesData = seriesDataRef.current;
+
+    currentSelectedParams.forEach((param) => {
+      values[param] = currentSeriesData[param]?.[dataIndex] || 0;
+    });
+
+    console.log("Legend values:", values);
+    setLegendValues(values);
+  }, []);
+
+  const handleHideTip = useCallback(() => {
+    console.log("hideTip");
+    setLegendValues({});
+  }, []);
+
   const option = useMemo(
     () => ({
       backgroundColor: "#fff",
       animation: false,
-      // progressive: 20,
-      // progressiveThreshold: 300,
-      grid: { top: 20, left: 0, right: hs(40), bottom: 40, containLabel: true },
+      grid: { top: 20, left: 0, right: hs(45), bottom: 40, containLabel: true },
       xAxis: {
         type: "category",
         data: xAxisData,
         axisLine: { lineStyle: { color: "#888", width: 1 } },
         axisLabel: {
           fontFamily: "Ranade-Medium",
-          showMinLabel: true, // 👈 always show day 1
-          showMaxLabel: true, // 👈 always show last day
+          showMinLabel: true,
+          showMaxLabel: true,
         },
         splitLine: { show: true },
       },
-
       yAxis: {
         type: "value",
         min: 0,
         max: maxY,
+        splitNumber: 1,
         axisLine: { show: true, lineStyle: { color: "#888", width: 1 } },
         axisTick: { show: true, lineStyle: { color: "#888" }, length: 3 },
-        splitLine: { show: false },
+        splitLine: { show: true },
         axisLabel: {
           fontFamily: "Ranade-Medium",
           color: "#333",
@@ -212,9 +251,9 @@ export default function ZoomBarChart({
             },
           },
           formatter: (value: number) => {
-            if (value === 0) return "{value|" + value + "} {unit|kWh}";
+            if (value === 0) return "{unit|kWh}\n{value|" + value + "}";
             if (value === maxY)
-              return "{value|" + value.toFixed(0) + "} {unit|kWh}";
+              return "{unit|kWh}\n{value|" + value.toFixed(0) + "}";
             return "";
           },
         },
@@ -222,17 +261,14 @@ export default function ZoomBarChart({
       tooltip: {
         trigger: "axis",
         triggerOn: "mousemove",
-        showDelay: 2000, // show only after holding 2s
+        showDelay: 2000,
         enterable: false,
-        // ⛔️ completely hide tooltip UI
-        formatter: () => "", // return empty string → no box rendered
+        formatter: () => "",
         backgroundColor: "transparent",
         borderWidth: 0,
         padding: 0,
         textStyle: { color: "transparent" },
-        extraCssText: "display:none;", // hide any residual DOM element
-
-        // ✅ only show the shadow highlight
+        extraCssText: "display:none;",
         axisPointer: {
           type: "shadow",
           shadowStyle: {
@@ -241,11 +277,10 @@ export default function ZoomBarChart({
           label: { show: false },
         },
       },
-
       dataZoom: [
         {
           show: false,
-          start: selectTab === 1 ? 0 : 0, // full view for daily
+          start: selectTab === 1 ? 0 : 0,
           end: 100,
           minValueSpan: selectTab === 3 ? 1.3 : 3,
         },
@@ -264,7 +299,6 @@ export default function ZoomBarChart({
           left: "93%",
         },
       ],
-
       series: selectedParams.map((param) => ({
         name: param,
         type: "bar",
@@ -279,57 +313,90 @@ export default function ZoomBarChart({
         data: seriesData[param],
       })),
     }),
-    [xAxisData, seriesData, maxY, selectedParams]
+    [xAxisData, seriesData, maxY, selectedParams, selectTab]
   );
-  useEffect(() => {
-    // Ensure the chart container is mounted before initializing
-    if (!chartRef.current) return;
 
-    let chart: any;
+  useEffect(() => {
+    // Safe initialization
+    if (!chartRef.current) {
+      console.log("Chart ref not available");
+      return;
+    }
 
     try {
-      chart = echarts.init(chartRef.current, "light", {
+      // Dispose existing chart if any
+      if (chartInstanceRef.current && !chartInstanceRef.current.isDisposed()) {
+        // Remove event listeners before disposal
+        chartInstanceRef.current.off("showTip");
+        chartInstanceRef.current.off("hideTip");
+        chartInstanceRef.current.dispose();
+        chartInstanceRef.current = null;
+      }
+
+      // Initialize new chart
+      const chart = echarts.init(chartRef.current, "light", {
         renderer: "svg",
-        width,
+        width: CHART_WIDTH,
         height,
       });
 
+      chartInstanceRef.current = chart;
       chart.setOption(option);
+      setIsChartReady(true);
 
-      // Listen for tooltip updates
-      chart.on("showTip", (params) => {
-        if (!params || params.dataIndex == null) return;
-        const dataIndex = params.dataIndex;
-        const values: Record<string, number> = {};
+      // Set up event listeners with stable callbacks
+      chart.on("showTip", handleShowTip);
+      chart.on("hideTip", handleHideTip);
 
-        selectedParams.forEach((param) => {
-          values[param] = seriesData[param][dataIndex] || 0;
-        });
-
-        setLegendValues(values);
-      });
-
-      chart.on("hideTip", () => {
-        setLegendValues({});
-      });
+      console.log("Chart initialized with params:", selectedParamsRef.current);
     } catch (err) {
       console.log("Chart init error:", err);
+      setIsChartReady(false);
     }
 
-    // Cleanup to avoid memory leaks
+    // Cleanup function
     return () => {
-      if (chart && !chart.isDisposed()) {
+      if (chartInstanceRef.current && !chartInstanceRef.current.isDisposed()) {
         try {
-          chart.dispose();
+          // Remove event listeners
+          chartInstanceRef.current.off("showTip");
+          chartInstanceRef.current.off("hideTip");
+          chartInstanceRef.current.dispose();
+          chartInstanceRef.current = null;
         } catch (e) {
-          console.log("Dispose error:", e);
+          console.log("Chart dispose error:", e);
         }
       }
+      setIsChartReady(false);
     };
-  }, [width, data, selectedParams, selectTab]);
+  }, [width, CHART_WIDTH, height, handleShowTip, handleHideTip]);
+
+  // Update chart when option changes
+  useEffect(() => {
+    if (
+      chartInstanceRef.current &&
+      !chartInstanceRef.current.isDisposed() &&
+      isChartReady
+    ) {
+      try {
+        chartInstanceRef.current.setOption(option);
+        console.log("Chart updated with new data");
+      } catch (err) {
+        console.log("Chart update error:", err);
+      }
+    }
+  }, [option, isChartReady]);
+
+  // Debug: log when seriesData changes
+  useEffect(() => {
+    console.log("Series data updated:", Object.keys(seriesData));
+    Object.keys(seriesData).forEach((param) => {
+      console.log(`${param}:`, seriesData[param]);
+    });
+  }, [seriesData]);
 
   return (
-    <View style={{ width, height, backgroundColor: "#fff" }}>
+    <View style={{ width: CHART_WIDTH, height, backgroundColor: "#fff" }}>
       <View style={{ paddingHorizontal: 16, marginLeft: 10 }}>
         {selectedParams.map((param) => {
           const value = legendValues[param] ?? "--";
@@ -357,7 +424,7 @@ export default function ZoomBarChart({
           );
         })}
       </View>
-      <SvgChart ref={chartRef} style={{ height, width }} />
+      <SvgChart ref={chartRef} style={{ height, width: CHART_WIDTH }} />
     </View>
   );
 }
@@ -366,3 +433,371 @@ const styles = StyleSheet.create({
   dotText: { flexDirection: "row", alignItems: "center", marginBottom: 4 },
   colorDot: { width: 10, height: 10, borderRadius: 5, marginRight: 6 },
 });
+// //import { hs, ms, vs } from "@utils/design/design";
+// import { SvgChart, SVGRenderer } from "@wuba/react-native-echarts";
+// import { BarChart } from "echarts/charts";
+// import {
+//   DataZoomComponent,
+//   GridComponent,
+//   TooltipComponent,
+// } from "echarts/components";
+// import * as echarts from "echarts/core";
+// import React, { useEffect, useMemo, useRef, useState } from "react";
+// import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
+
+// echarts.use([
+//   SVGRenderer,
+//   BarChart,
+//   GridComponent,
+//   DataZoomComponent,
+//   TooltipComponent,
+// ]);
+
+// type BarChartProps = {
+//   data: { results: any[] };
+//   selectedParams: (
+//     | "Energy Purchased"
+//     | "Energy Consumed"
+//     | "Energy Charged"
+//     | "Energy Discharged"
+//     | "Solar Production"
+//   )[];
+//   selectTab: 1 | 2 | 3;
+//   selectedDate?: string; // For tab 1 daily mode
+// };
+
+// export default function ZoomBarChart({
+//   data,
+//   selectedParams,
+//   selectTab,
+//   selectedDate,
+// }: BarChartProps) {
+//   const chartRef = useRef<any>(null);
+//   const { width } = useWindowDimensions();
+//   // const width = 400;
+//   const height = 350;
+
+//   const [legendValues, setLegendValues] = useState<Record<string, number>>({});
+//   const paramColors: Record<string, { line: string; area: string[] }> = {
+//     "Energy Purchased": {
+//       line: "#0770FF",
+//       area: ["#0A84FF", "#0055CC"], // vivid blue gradient
+//     },
+//     "Energy Consumed": {
+//       line: "#F7D102",
+//       area: ["#FFD700", "#C8A200"], // bright yellow/golden
+//     },
+//     "Energy Charged": {
+//       line: "#F2597F",
+//       area: ["#FF4F81", "#C71B5C"], // stronger pink gradient
+//     },
+//     "Energy Discharged": {
+//       line: "gray",
+//       area: ["gray", "gray"], // rich purple gradient
+//     },
+//     "Solar Production": {
+//       line: "black",
+//       area: ["black", "black"], // rich purple gradient
+//     },
+//   };
+
+//   // Build X-axis labels and map data
+//   const { xAxisData, seriesData, maxY } = useMemo(() => {
+//     const currentYear = new Date().getFullYear();
+//     const resultXAxis: number[] = [];
+//     const resultSeries: Record<string, number[]> = {};
+//     let resultMaxY = 0;
+
+//     selectedParams.forEach((param) => (resultSeries[param] = []));
+
+//     if (selectTab === 1 && selectedDate) {
+//       const [yearStr, monthStr] = selectedDate.split("T")[0].split("-");
+//       const year = Number(yearStr);
+//       const month = Number(monthStr);
+//       const daysInMonth = new Date(year, month, 0).getDate();
+//       resultXAxis.push(...Array.from({ length: daysInMonth }, (_, i) => i + 1));
+
+//       resultXAxis.forEach((day) => {
+//         const entry = data?.results?.find(
+//           (d) => new Date(d.createdAt).getDate() === day
+//         );
+
+//         selectedParams.forEach((param) => {
+//           const value =
+//             param === "Energy Purchased"
+//               ? entry?.consumption?.dailyConsumption ?? 0
+//               : param === "Energy Consumed"
+//               ? entry?.production?.dailyProduction ?? 0
+//               : param === "Energy Charged"
+//               ? entry?.battery?.dailyCharging ?? 0
+//               : param === "Energy Discharged"
+//               ? entry?.battery?.dailyDischarging ?? 0
+//               : param === "Solar Production"
+//               ? entry?.grid?.dailyPurchase ?? 0
+//               : 0;
+//           resultSeries[param].push(value);
+//         });
+//       });
+//     } else if (selectTab === 2) {
+//       resultXAxis.push(...Array.from({ length: 12 }, (_, i) => i + 1));
+//       resultXAxis.forEach((month) => {
+//         const entry = data?.results?.find(
+//           (d) => new Date(d.createdAt).getMonth() + 1 === month
+//         );
+//         selectedParams.forEach((param) => {
+//           const value =
+//             param === "Energy Purchased"
+//               ? entry?.consumption?.monthlyConsumption ?? 0
+//               : param === "Energy Consumed"
+//               ? entry?.production?.monthlyProduction ?? 0
+//               : param === "Energy Charged"
+//               ? entry?.battery?.monthlyCharging ?? 0
+//               : param === "Energy Discharged"
+//               ? entry?.battery?.monthlyDischarging ?? 0
+//               : param === "Solar Production"
+//               ? entry?.grid?.monthlyPurchase ?? 0
+//               : 0;
+//           resultSeries[param].push(value);
+//         });
+//       });
+//     } else if (selectTab === 3) {
+//       resultXAxis.push(
+//         ...Array.from({ length: currentYear - 2019 }, (_, i) => 2020 + i)
+//       );
+//       resultXAxis.forEach((year) => {
+//         const entry = data.results.find(
+//           (d) => new Date(d.createdAt).getFullYear() === year
+//         );
+//         selectedParams.forEach((param) => {
+//           const value =
+//             param === "Energy Purchased"
+//               ? entry?.consumption?.yearlyConsumption ?? 0
+//               : param === "Energy Consumed"
+//               ? entry?.production?.yearlyProduction ?? 0
+//               : param === "Energy Charged"
+//               ? entry?.battery?.yearlyCharging ?? 0
+//               : param === "Energy Discharged"
+//               ? entry?.battery?.yearlyDischarging ?? 0
+//               : param === "Solar Production"
+//               ? entry?.grid?.yearlyPurchase ?? 0
+//               : 0;
+//           resultSeries[param].push(value);
+//         });
+//       });
+//     }
+
+//     // calculate maxY once
+//     selectedParams.forEach((param) => {
+//       const localMax = Math.max(...resultSeries[param]);
+//       if (localMax > resultMaxY) resultMaxY = localMax;
+//     });
+//     if (resultMaxY > 0) {
+//       const magnitude = Math.pow(10, Math.floor(Math.log10(resultMaxY)));
+//       resultMaxY = Math.ceil(resultMaxY / magnitude) * magnitude;
+//     }
+
+//     return {
+//       xAxisData: resultXAxis,
+//       seriesData: resultSeries,
+//       maxY: resultMaxY,
+//     };
+//   }, [data, selectedParams, selectTab, selectedDate]);
+//   console.log(xAxisData);
+//   // Now series for ECharts
+//   const option = useMemo(
+//     () => ({
+//       backgroundColor: "#fff",
+//       animation: false,
+//       // progressive: 20,
+//       // progressiveThreshold: 300,
+//       grid: { top: 20, left: 0, right: hs(40), bottom: 40, containLabel: true },
+//       xAxis: {
+//         type: "category",
+//         data: xAxisData,
+//         axisLine: { lineStyle: { color: "#888", width: 1 } },
+//         axisLabel: {
+//           fontFamily: "Ranade-Medium",
+//           showMinLabel: true, // 👈 always show day 1
+//           showMaxLabel: true, // 👈 always show last day
+//         },
+//         splitLine: { show: true },
+//       },
+
+//       yAxis: {
+//         type: "value",
+//         min: 0,
+//         max: maxY,
+//         axisLine: { show: true, lineStyle: { color: "#888", width: 1 } },
+//         axisTick: { show: true, lineStyle: { color: "#888" }, length: 3 },
+//         splitLine: { show: false },
+//         axisLabel: {
+//           fontFamily: "Ranade-Medium",
+//           color: "#333",
+//           padding: [0, 0, 5, 0],
+//           rich: {
+//             value: {
+//               fontSize: 11,
+//               lineHeight: 14,
+//               color: "#333",
+//             },
+//             unit: {
+//               fontSize: 8,
+//               lineHeight: 10,
+//               color: "#666",
+//             },
+//           },
+//           formatter: (value: number) => {
+//             if (value === 0) return "{value|" + value + "} {unit|kWh}";
+//             if (value === maxY)
+//               return "{value|" + value.toFixed(0) + "} {unit|kWh}";
+//             return "";
+//           },
+//         },
+//       },
+//       tooltip: {
+//         trigger: "axis",
+//         triggerOn: "mousemove",
+//         showDelay: 2000, // show only after holding 2s
+//         enterable: false,
+//         // ⛔️ completely hide tooltip UI
+//         formatter: () => "", // return empty string → no box rendered
+//         backgroundColor: "transparent",
+//         borderWidth: 0,
+//         padding: 0,
+//         textStyle: { color: "transparent" },
+//         extraCssText: "display:none;", // hide any residual DOM element
+
+//         // ✅ only show the shadow highlight
+//         axisPointer: {
+//           type: "shadow",
+//           shadowStyle: {
+//             color: "rgba(0, 122, 255, 0.15)",
+//           },
+//           label: { show: false },
+//         },
+//       },
+
+//       dataZoom: [
+//         {
+//           show: false,
+//           start: selectTab === 1 ? 0 : 0, // full view for daily
+//           end: 100,
+//           minValueSpan: selectTab === 3 ? 1.3 : 3,
+//         },
+//         {
+//           type: "inside",
+//           start: selectTab === 1 ? 0 : 0,
+//           end: 100,
+//         },
+//         {
+//           show: false,
+//           yAxisIndex: 0,
+//           filterMode: "none",
+//           width: 30,
+//           height: "80%",
+//           showDataShadow: false,
+//           left: "93%",
+//         },
+//       ],
+
+//       series: selectedParams.map((param) => ({
+//         name: param,
+//         type: "bar",
+//         barWidth: 7,
+//         itemStyle: {
+//           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+//             { offset: 0, color: paramColors[param]?.area[0] },
+//             { offset: 1, color: paramColors[param]?.area[1] },
+//           ]),
+//         },
+//         emphasis: { itemStyle: { color: paramColors[param]?.line } },
+//         data: seriesData[param],
+//       })),
+//     }),
+//     [xAxisData, seriesData, maxY, selectedParams]
+//   );
+//   useEffect(() => {
+//     // Ensure the chart container is mounted before initializing
+//     if (!chartRef.current) return;
+
+//     let chart: any;
+
+//     try {
+//       chart = echarts.init(chartRef.current, "light", {
+//         renderer: "svg",
+//         width,
+//         height,
+//       });
+
+//       chart.setOption(option);
+
+//       // Listen for tooltip updates
+//       chart.on("showTip", (params) => {
+//         if (!params || params.dataIndex == null) return;
+//         const dataIndex = params.dataIndex;
+//         const values: Record<string, number> = {};
+
+//         selectedParams.forEach((param) => {
+//           values[param] = seriesData[param][dataIndex] || 0;
+//         });
+
+//         setLegendValues(values);
+//       });
+
+//       chart.on("hideTip", () => {
+//         setLegendValues({});
+//       });
+//     } catch (err) {
+//       console.log("Chart init error:", err);
+//     }
+
+//     // Cleanup to avoid memory leaks
+//     return () => {
+//       if (chart && !chart.isDisposed()) {
+//         try {
+//           chart.dispose();
+//         } catch (e) {
+//           console.log("Dispose error:", e);
+//         }
+//       }
+//     };
+//   }, [width, data, selectedParams, selectTab]);
+
+//   return (
+//     <View style={{ width, height, backgroundColor: "#fff" }}>
+//       <View style={{ paddingHorizontal: 16, marginLeft: 10 }}>
+//         {selectedParams.map((param) => {
+//           const value = legendValues[param] ?? "--";
+//           return (
+//             <View
+//               key={param}
+//               style={[styles.dotText, { marginRight: 6, marginTop: vs(10) }]}
+//             >
+//               <View
+//                 style={[
+//                   styles.colorDot,
+//                   { backgroundColor: paramColors[param]?.line },
+//                 ]}
+//               />
+//               <Text
+//                 style={{
+//                   color: "#111",
+//                   fontSize: ms(11),
+//                   fontFamily: "Ranade-Regular",
+//                 }}
+//               >
+//                 {param.toUpperCase()}: {value}
+//               </Text>
+//             </View>
+//           );
+//         })}
+//       </View>
+//       <SvgChart ref={chartRef} style={{ height, width }} />
+//     </View>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   dotText: { flexDirection: "row", alignItems: "center", marginBottom: 4 },
+//   colorDot: { width: 10, height: 10, borderRadius: 5, marginRight: 6 },
+// });
