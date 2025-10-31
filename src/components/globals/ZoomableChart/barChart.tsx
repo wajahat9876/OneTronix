@@ -219,23 +219,26 @@ export default function ZoomBarChart({
           },
         },
       },
-
       tooltip: {
         trigger: "axis",
-        triggerOn: "mousemove|hold",
-        show: false, // still true, tooltip works internally
-        showDelay: 2000, // show after 2 seconds of hold
-        hideDelay: 10,
+        triggerOn: "mousemove",
+        showDelay: 2000, // show only after holding 2s
         enterable: false,
-        // Hide tooltip box completely
+        // ⛔️ completely hide tooltip UI
+        formatter: () => "", // return empty string → no box rendered
         backgroundColor: "transparent",
         borderWidth: 0,
         padding: 0,
-        textStyle: { color: "transparent" }, // hides text
+        textStyle: { color: "transparent" },
+        extraCssText: "display:none;", // hide any residual DOM element
 
-        // Hide vertical bar or area highlight
+        // ✅ only show the shadow highlight
         axisPointer: {
-          type: "none", // fully disables the shadow highlight line
+          type: "shadow",
+          shadowStyle: {
+            color: "rgba(0, 122, 255, 0.15)",
+          },
+          label: { show: false },
         },
       },
 

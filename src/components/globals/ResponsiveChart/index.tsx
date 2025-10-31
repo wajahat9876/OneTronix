@@ -78,6 +78,7 @@ export default function PinchZoomLineChart({
   }, [globalMaxY]);
 
   // 🧩 Mounted Ref — prevents runOnJS after unmount
+  const [tooltipX, setTooltipX] = useState<number | null>(null);
 
   // --- ZOOM ---
   const handleZoom = (scale: number) => {
@@ -267,6 +268,7 @@ export default function PinchZoomLineChart({
                 }}
                 smoothing="cubic-spline"
                 onTooltipSelect={(value) => {
+                  setTooltipX(value.x);
                   setLegendValues((prev) => ({
                     ...prev,
                     [key]: value.y, // map y-value of tooltip to legend
@@ -292,6 +294,17 @@ export default function PinchZoomLineChart({
               />
             </React.Fragment>
           ))}
+          {tooltipX !== null && (
+            <Line
+              data={[
+                { x: tooltipX, y: 0 },
+                { x: tooltipX, y: globalMaxY },
+              ]}
+              theme={{
+                stroke: { color: "gray", width: 0.7 },
+              }}
+            />
+          )}
         </Chart>
       </View>
     </GestureDetector>
