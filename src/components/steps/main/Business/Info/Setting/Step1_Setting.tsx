@@ -103,8 +103,8 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
       type: String(lastSelectedDeviceData?.chargingSource?.type ?? ""),
 
       // Heavy Load
-      OffTime: String(lastSelectedDeviceData?.heavyLoad?.OffTime ?? ""),
-      OnTime: String(lastSelectedDeviceData?.heavyLoad?.OnTime ?? ""),
+      offTime: String(lastSelectedDeviceData?.heavyLoad?.offTime ?? ""),
+      onTime: String(lastSelectedDeviceData?.heavyLoad?.onTime ?? ""),
       offLevel: String(lastSelectedDeviceData?.heavyLoad?.offLevel ?? ""),
       onLevel: String(lastSelectedDeviceData?.heavyLoad?.onLevel ?? ""),
 
@@ -135,54 +135,95 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
     },
     validationSchema: Yup.object({
       //Battery Section
-      chargingAmp: Yup.string().required("Required"),
-      floatToCutOff: Yup.string().required("Required"),
-      floating: Yup.string().required("Required"),
-      full: Yup.string().required("Required"),
-      fullToFloat: Yup.string().required("Required"),
-      low: Yup.string().required("Required"),
-      typeOfBattery: Yup.string().required("Required"),
-      // Charging Source
-      type: Yup.string().required("Required"),
-      // Heavy Load
-      OffTime: Yup.string().required("Required"),
-      OnTime: Yup.string().required("Required"),
-      offLevel: Yup.string().required("Required"),
-      onLevel: Yup.string().required("Required"),
-      // Inverter
-      outputVoltLevel: Yup.string().required("Required"),
-      overLoad: Yup.string().required("Required"),
-      // Solar
-      highVolts: Yup.string().required("Required"),
-      lowVolts: Yup.string().required("Required"),
-      // Utility
-      overVolts: Yup.string().required("Required"),
-      underVolts: Yup.string().required("Required"),
-      // Utility Control
-      cutOffTime: Yup.string().required("Required"),
-      utilityControlOffLevel: Yup.string().required("Required"),
-      utilityControlOnLevel: Yup.string().required("Required"),
+      // chargingAmp: Yup.string().required("Required"),
+      // floatToCutOff: Yup.string().required("Required"),
+      // floating: Yup.string().required("Required"),
+      // full: Yup.string().required("Required"),
+      // fullToFloat: Yup.string().required("Required"),
+      // low: Yup.string().required("Required"),
+      // typeOfBattery: Yup.string().required("Required"),
+      // // Charging Source
+      // type: Yup.string().required("Required"),
+      // // Heavy Load
+      // offTime: Yup.string().required("Required"),
+      // onTime: Yup.string().required("Required"),
+      // offLevel: Yup.string().required("Required"),
+      // onLevel: Yup.string().required("Required"),
+      // // Inverter
+      // outputVoltLevel: Yup.string().required("Required"),
+      // overLoad: Yup.string().required("Required"),
+      // // Solar
+      // highVolts: Yup.string().required("Required"),
+      // lowVolts: Yup.string().required("Required"),
+      // // Utility
+      // overVolts: Yup.string().required("Required"),
+      // underVolts: Yup.string().required("Required"),
+      // // Utility Control
+      // cutOffTime: Yup.string().required("Required"),
+      // utilityControlOffLevel: Yup.string().required("Required"),
+      // utilityControlOnLevel: Yup.string().required("Required"),
     }),
     onSubmit: async (values) => {
+      console.log("values", values);
       const numericValues = Object.fromEntries(
         Object.entries(values).map(([key, value]) => {
           if (["typeOfBattery", "type"].includes(key)) {
-            return [key, value]; // keep as-is
+            return [key, value]; // keep as string
           }
-          return [key, Number(value)]; // convert others to number
+          return [key, Number(value)];
         })
       );
 
-      console.log("Converted Values:", numericValues);
+      const payload = {
+        deviceId: lastSelectedDeviceId,
+        settings: {
+          battery: {
+            low: numericValues.low,
+            full: numericValues.full,
+            floating: numericValues.floating,
+            chargingAmp: numericValues.chargingAmp,
+            typeOfBattery: numericValues.typeOfBattery,
+            fullToFloat: numericValues.fullToFloat,
+            floatToCutOff: numericValues.floatToCutOff,
+          },
+          utility: {
+            underVolts: numericValues.underVolts,
+            overVolts: numericValues.overVolts,
+          },
+          utilityControl: {
+            enabled: enable, // from your state
+            onLevel: numericValues.onLevel,
+            offLevel: numericValues.offLevel,
+            cutOffTime: numericValues.cutOffTime,
+          },
+          chargingSource: {
+            type: numericValues.type,
+          },
+          solar: {
+            highVolts: numericValues.highVolts,
+            lowVolts: numericValues.lowVolts,
+          },
+          heavyLoad: {
+            onLevel: numericValues.onLevel,
+            offLevel: numericValues.offLevel,
+            onTime: numericValues.onTime,
+            offTime: numericValues.offTime,
+          },
+          inverter: {
+            outputVoltLevel: numericValues.outputVoltLevel,
+            overLoad: numericValues.overLoad,
+          },
+          misc: {
+            buzzer,
+            lcdBacklight,
+          },
+        },
+      };
+
+      console.log("Final Payload:", payload);
 
       try {
-        const res = await changeSetting({
-          ...numericValues,
-          buzzer,
-          lcdBacklight,
-          enable,
-          deviceId: lastSelectedDeviceId,
-        }).unwrap();
+        const res = await changeSetting(payload).unwrap();
         renderToastSuccess(res.message);
       } catch (error: any) {
         renderToastError(error?.data?.message || "Something went wrong");
@@ -356,7 +397,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
             <View style={styles.txt}>
               <FormikInput
                 formik={formik}
-                name="OffTime"
+                name="offTime"
                 ref={OffTimeRef}
                 inputProps={{
                   ...textInputUnderlinedProps,
@@ -374,7 +415,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
             <View style={styles.txt}>
               <FormikInput
                 formik={formik}
-                name="OnTime"
+                name="onTime"
                 ref={OnTimeRef}
                 inputProps={{
                   ...textInputUnderlinedProps,

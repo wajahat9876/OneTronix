@@ -214,7 +214,7 @@ export default function ZoomBarChart({
     () => ({
       backgroundColor: "#fff",
       animation: false,
-      grid: { top: 20, left: 0, right: hs(45), bottom: 40, containLabel: true },
+      grid: { top: 20, left: 0, right: hs(50), bottom: 40, containLabel: true },
       xAxis: {
         type: "category",
         data: xAxisData,

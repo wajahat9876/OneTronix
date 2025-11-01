@@ -48,8 +48,8 @@ export interface IBusinessState {
     };
     chargingSource?: { type: string };
     heavyLoad?: {
-      OffTime?: number;
-      OnTime?: number;
+      offTime?: number;
+      onTime?: number;
       offLevel?: number;
       onLevel?: number;
     };
