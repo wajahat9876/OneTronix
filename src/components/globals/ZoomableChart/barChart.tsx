@@ -46,8 +46,8 @@ export default function ZoomBarChart({
   const chartRef = useRef<any>(null);
   const chartInstanceRef = useRef<echarts.ECharts | null>(null);
   const { width } = useWindowDimensions();
-  const CHART_WIDTH = 400;
-  const height = 350;
+  const CHART_WIDTH = hs(395);
+  const height = vs(420);
 
   const [legendValues, setLegendValues] = useState<Record<string, number>>({});
   const [isChartReady, setIsChartReady] = useState(false);
@@ -258,11 +258,29 @@ export default function ZoomBarChart({
           },
         },
       },
+      // tooltip: {
+      //   trigger: "axis",
+      //   triggerOn: "mousemove",
+      //   showDelay: 2000,
+      //   enterable: false,
+      //   formatter: () => "",
+      //   backgroundColor: "transparent",
+      //   borderWidth: 0,
+      //   padding: 0,
+      //   textStyle: { color: "transparent" },
+      //   extraCssText: "display:none;",
+      //   axisPointer: {
+      //     type: "shadow",
+      //     shadowStyle: {
+      //       color: "rgba(0, 122, 255, 0.15)",
+      //     },
+      //     label: { show: false },
+      //   },
+      // },
       tooltip: {
         trigger: "axis",
-        triggerOn: "mousemove",
-        showDelay: 2000,
-        enterable: false,
+        triggerOn: "mousemove|click",
+        confine: true,
         formatter: () => "",
         backgroundColor: "transparent",
         borderWidth: 0,
@@ -277,6 +295,7 @@ export default function ZoomBarChart({
           label: { show: false },
         },
       },
+
       dataZoom: [
         {
           show: false,
@@ -369,7 +388,7 @@ export default function ZoomBarChart({
       }
       setIsChartReady(false);
     };
-  }, [width, CHART_WIDTH, height, handleShowTip, handleHideTip]);
+  }, [CHART_WIDTH, height, handleShowTip, handleHideTip]);
 
   // Update chart when option changes
   useEffect(() => {

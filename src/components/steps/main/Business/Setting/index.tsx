@@ -29,7 +29,17 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
   //   }
   // };
   const [selectedLanguage, setSelectedLanguage] = useState();
+  // const scale = useSharedValue(1);
+  // const savedScale = useSharedValue(1);
 
+  // const pinchGesture = Gesture.Pinch()
+  //   .onUpdate((e) => {
+  //     console.log("e", e);
+  //     scale.value = savedScale.value * e.scale;
+  //   })
+  //   .onEnd(() => {
+  //     savedScale.value = scale.value;
+  //   });
   return (
     <Animated.View
       {...pageTransitionAnimation}

@@ -31,6 +31,7 @@ export default function ZoomChart({
 }: ZoomChartProps) {
   const chartRef = useRef<any>(null);
   const { width } = Dimensions.get("window");
+  const ChartWidth = 390;
   const height = 350;
   const hoverValuesRef = useRef<Record<string, number>>({});
   const [legendValues, setLegendValues] = useState<Record<string, number>>({});
@@ -225,16 +226,16 @@ export default function ZoomChart({
     if (chartRef.current) {
       const chart = echarts.init(chartRef.current, "light", {
         renderer: "svg",
-        width,
+        width: ChartWidth,
         height,
       });
       chart.setOption(option);
       return () => chart.dispose();
     }
-  }, [width, data, selectedParams]);
+  }, [width, ChartWidth, data, selectedParams]);
 
   return (
-    <View style={{ width, height, backgroundColor: "#fff" }}>
+    <View style={{ width: ChartWidth, height, backgroundColor: "#fff" }}>
       <StatusBar barStyle="dark-content" />
       <View style={{ paddingHorizontal: 16, marginLeft: 10 }}>
         {selectedParams.map((param) => {

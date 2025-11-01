@@ -214,6 +214,7 @@ export default function PinchZoomLineChart({
             </TouchableOpacity>
           </View>
         </View>
+
         <Chart
           style={{ height: vs(370), width: "100%" }}
           data={data?.map((d) => ({

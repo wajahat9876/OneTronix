@@ -40,6 +40,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 export enum SelectMethod {
   Daily = "daily",
@@ -394,11 +395,13 @@ export default function PanZoomPage() {
             }
           >
             {selectedTab === 0 && data?.results?.length ? (
-              <PinchZoomLineChart
-                data={mapped}
-                selectedParams={selectedParams}
-                selectTab={selectedTab}
-              />
+              <GestureHandlerRootView style={{ flex: 1 }}>
+                <PinchZoomLineChart
+                  data={mapped}
+                  selectedParams={selectedParams}
+                  selectTab={selectedTab}
+                />
+              </GestureHandlerRootView>
             ) : //   data={mapped}
             //   selectedParams={selectedParams}
             //   ticks={ticks}
