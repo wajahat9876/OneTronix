@@ -139,9 +139,14 @@ export default function ZoomBarChart({
         });
       });
     } else if (selectTab === 3) {
+      const yearsToShow = 3; // number of years to display
+      const startYear = currentYear - (yearsToShow - 1);
+
+      // Generate only the last 3 years
       resultXAxis.push(
-        ...Array.from({ length: currentYear - 2019 }, (_, i) => 2020 + i)
+        ...Array.from({ length: yearsToShow }, (_, i) => startYear + i)
       );
+
       resultXAxis.forEach((year) => {
         const entry = data?.results?.find(
           (d) => new Date(d.createdAt).getFullYear() === year
@@ -213,6 +218,8 @@ export default function ZoomBarChart({
   const option = useMemo(
     () => ({
       backgroundColor: "#fff",
+      barCategoryGap: "60%", // ⬅️ Increase this for more gap between categories (default is 20%-30%)
+      barGap: "-20%",
       animation: false,
       grid: { top: 20, left: 0, right: hs(50), bottom: 40, containLabel: true },
       xAxis: {
@@ -221,6 +228,7 @@ export default function ZoomBarChart({
         axisLine: { lineStyle: { color: "#888", width: 1 } },
         axisLabel: {
           fontFamily: "Ranade-Medium",
+          // fontFamily: "Ranade-Medium",
           showMinLabel: true,
           showMaxLabel: true,
         },
@@ -258,11 +266,31 @@ export default function ZoomBarChart({
           },
         },
       },
+      tooltip: {
+        trigger: "axis",
+        triggerOn: "mousemove|click",
+        confine: true,
+        formatter: () => "",
+        backgroundColor: "transparent",
+        borderWidth: 0,
+        padding: 0,
+        textStyle: { color: "transparent" },
+        extraCssText: "display:none;",
+        axisPointer: {
+          type: "line", // changed from "shadow" to "line"
+          lineStyle: {
+            color: "gray", // blue color
+            width: 1.5,
+            type: "dashed", // make it dashed
+          },
+          label: { show: false },
+        },
+      },
+
       // tooltip: {
       //   trigger: "axis",
-      //   triggerOn: "mousemove",
-      //   showDelay: 2000,
-      //   enterable: false,
+      //   triggerOn: "mousemove|click",
+      //   confine: true,
       //   formatter: () => "",
       //   backgroundColor: "transparent",
       //   borderWidth: 0,
@@ -277,45 +305,21 @@ export default function ZoomBarChart({
       //     label: { show: false },
       //   },
       // },
-      tooltip: {
-        trigger: "axis",
-        triggerOn: "mousemove|click",
-        confine: true,
-        formatter: () => "",
-        backgroundColor: "transparent",
-        borderWidth: 0,
-        padding: 0,
-        textStyle: { color: "transparent" },
-        extraCssText: "display:none;",
-        axisPointer: {
-          type: "shadow",
-          shadowStyle: {
-            color: "rgba(0, 122, 255, 0.15)",
-          },
-          label: { show: false },
-        },
-      },
-
       dataZoom: [
         {
-          show: false,
-          start: selectTab === 1 ? 0 : 0,
-          end: 100,
-          minValueSpan: selectTab === 3 ? 1.3 : 3,
-        },
-        {
           type: "inside",
+          zoomOnMouseWheel: false,
+          moveOnMouseMove: true,
+          moveOnMouseWheel: true,
           start: selectTab === 1 ? 0 : 0,
-          end: 100,
+          end: selectTab === 1 ? (9 / xAxisData.length) * 100 : 80, // show first 10 days
         },
         {
           show: false,
-          yAxisIndex: 0,
-          filterMode: "none",
-          width: 30,
-          height: "80%",
-          showDataShadow: false,
-          left: "93%",
+          type: "slider",
+          zoomLock: true, // disable manual zooming
+          start: selectTab === 1 ? 0 : 0,
+          end: selectTab === 1 ? (9 / xAxisData.length) * 100 : 100,
         },
       ],
       series: selectedParams.map((param) => ({
@@ -398,7 +402,9 @@ export default function ZoomBarChart({
       isChartReady
     ) {
       try {
-        chartInstanceRef.current.setOption(option);
+        // chartInstanceRef.current.setOption(option);
+        chartInstanceRef.current.setOption(option, true);
+
         console.log("Chart updated with new data");
       } catch (err) {
         console.log("Chart update error:", err);

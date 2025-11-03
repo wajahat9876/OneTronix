@@ -3,15 +3,15 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable react/require-default-props */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import ArrowBackDark from '@assets/icons/commons/icon-arrow-back-dark.svg';
-import ArrowBackLight from '@assets/icons/on-boarding/icon-arrow-back.svg';
-import { Text } from '@src/components/libraries';
-import Colors from '@src/constants/Colors';
-import { hs, ms, vs } from '@utils/design/design';
-import { memo } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import ArrowBackDark from "@assets/icons/commons/icon-arrow-back-dark.svg";
+import ArrowBackLight from "@assets/icons/on-boarding/icon-arrow-back.svg";
+import { Text } from "@src/components/libraries";
+import Colors from "@src/constants/Colors";
+import { hs, ms, vs } from "@utils/design/design";
+import { memo } from "react";
+import { TouchableOpacity, View } from "react-native";
 // import SupportButton from '../SupportButton';
-import { AppBarProps } from './types';
+import { AppBarProps } from "./types";
 
 const AppBar = (props: AppBarProps) => {
   const { title, light, rightIcon, back, label, onPress } = props;
@@ -24,12 +24,12 @@ const AppBar = (props: AppBarProps) => {
           paddingTop: vs(35),
           borderBottomLeftRadius: ms(18),
           borderBottomRightRadius: ms(18),
-          backgroundColor: 'transparent',
+          backgroundColor: "transparent",
         }}
       >
         {back ? (
           <View className="flex-row justify-between">
-            <View style={{ width: '20%' }}>
+            <View style={{ width: "20%" }}>
               <TouchableOpacity
                 style={{ width: 50 }}
                 onPress={() => {
@@ -44,7 +44,7 @@ const AppBar = (props: AppBarProps) => {
                 {light ? <ArrowBackDark /> : <ArrowBackLight />}
               </TouchableOpacity>
             </View>
-            <View style={{ width: '60%' }}>
+            <View style={{ width: "60%" }}>
               <Text
                 style={{
                   fontSize: 16,
@@ -64,10 +64,10 @@ const AppBar = (props: AppBarProps) => {
             {rightIcon ? (
               <View
                 style={{
-                  width: '20%',
-                  flexDirection: 'row',
+                  width: "20%",
+                  flexDirection: "row",
                   gap: ms(10),
-                  justifyContent: 'center',
+                  justifyContent: "center",
                   marginLeft: 10,
                 }}
               >
@@ -85,17 +85,17 @@ const AppBar = (props: AppBarProps) => {
             ) : (
               <View
                 style={{
-                  flexDirection: 'row',
-                  width: '20%',
+                  flexDirection: "row",
+                  width: "20%",
                   gap: ms(10),
-                  justifyContent: 'center',
+                  justifyContent: "center",
                 }}
               />
             )}
           </View>
         ) : (
           <View className="flex-row justify-between">
-            <View style={{ width: '20%' }}>
+            <View style={{ width: "20%" }}>
               <TouchableOpacity
                 style={{ width: 50 }}
                 onPress={() => {
@@ -106,7 +106,7 @@ const AppBar = (props: AppBarProps) => {
                 {light ? <ArrowBackDark /> : <ArrowBackLight />}
               </TouchableOpacity>
             </View>
-            <View style={{ width: '60%' }}>
+            <View style={{ width: "60%" }}>
               <Text
                 style={{
                   fontSize: 16,
@@ -126,10 +126,10 @@ const AppBar = (props: AppBarProps) => {
             {rightIcon ? (
               <View
                 style={{
-                  width: '20%',
-                  flexDirection: 'row',
+                  width: "20%",
+                  flexDirection: "row",
                   gap: ms(10),
-                  justifyContent: 'center',
+                  justifyContent: "center",
                 }}
               >
                 {/* <SupportButton light={light} /> */}
@@ -144,10 +144,10 @@ const AppBar = (props: AppBarProps) => {
             ) : (
               <View
                 style={{
-                  width: '20%',
-                  flexDirection: 'row',
+                  width: "20%",
+                  flexDirection: "row",
                   gap: ms(10),
-                  justifyContent: 'center',
+                  justifyContent: "center",
                 }}
               />
             )}

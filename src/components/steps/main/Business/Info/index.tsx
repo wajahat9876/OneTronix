@@ -6,6 +6,7 @@ import {
 import MenuIcon from "@assets/icons/menu.png";
 import { useStatusBar } from "@hooks/StatusBarColor/index";
 import DropdownRNE from "@src/components/globals/DropdownRNE";
+import HeaderMain from "@src/components/globals/HeaderMain";
 import { pageTransitionAnimation } from "@src/constants/Animation";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
 import { useAppDispatch, useAppSelector } from "@src/hooks/useReduxHooks";
@@ -16,14 +17,12 @@ import React, { useState } from "react";
 import {
   FlatList,
   Image,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import Animated from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
 const Step0_Info = ({ goTo }: MultiStepFormProps) => {
   const { data: businessData } = useAppSelector(useBusinessDetails);
 
@@ -38,9 +37,20 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
       key="transfer_money"
       style={{ flex: 1, backgroundColor: "white" }}
     >
-      <SafeAreaView
-        style={styles.safeView}
-        edges={Platform.OS === "android" ? ["top"] : ["top", "bottom"]}
+      <HeaderMain
+        title=""
+        style={{
+          backgroundColor: "transparent",
+        }}
+        topColor=""
+        bottomColor={"transparent"}
+        darkStatus={true}
+        disableTopSafeArea
+        appBarProps={{
+          light: false,
+        }}
+        // disableAppBar
+        back={() => {}}
       >
         <View style={styles.container}>
           <Text
@@ -157,7 +167,7 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
             )}
           </View>
         </View>
-      </SafeAreaView>
+      </HeaderMain>
     </Animated.View>
   );
 };
@@ -170,7 +180,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 18,
     paddingHorizontal: 15,
-    marginTop: 20,
+    marginTop: 10,
     width: "100%",
   },
   subTitle: {

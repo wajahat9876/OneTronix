@@ -1,5 +1,7 @@
+import { useBusinessDetails } from "@/store/selectors/business/business";
 import DiagramDark from "@assets/icons/darkHouse.png";
 import Diagram from "@assets/icons/diagram.png";
+import { useAppSelector } from "@src/hooks/useReduxHooks";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
@@ -17,7 +19,6 @@ interface HouseDiagramProps {
   battery?: number; // kW
   batteryStatus?: "CHARGING" | "DISCHARGING" | "ONHOLD";
   batteryWatt?: number; // current battery watt
-  schema?: "light" | "dark";
 }
 // --- Responsive helpers ---
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -88,14 +89,12 @@ const HouseDiagram = (props: HouseDiagramProps) => {
     battery = 0,
     batteryStatus = "ONHOLD",
     batteryWatt = 0,
-    schema,
   } = props;
   const [layout, setLayout] = useState({ width: 0, height: 0 });
+  const { isDarkMode } = useAppSelector(useBusinessDetails);
   const onLayout = (e: any) => setLayout(e.nativeEvent.layout);
-  const isDark = schema === "dark";
-  const textColor = isDark ? "white" : "black";
+  const textColor = isDarkMode ? "white" : "black";
   const ready = layout.width > 0 && layout.height > 0;
-  const isDarkMode = schema === "dark";
   const original = {
     inverter: { x: 260, y: 160 },
     solarPos: { x: 260, y: 110 },
@@ -191,7 +190,7 @@ const HouseDiagram = (props: HouseDiagramProps) => {
 
   return (
     <View style={styles.container} onLayout={onLayout}>
-      {schema === "dark" ? (
+      {isDarkMode ? (
         <Image
           source={DiagramDark}
           style={{

@@ -83,6 +83,26 @@ export const businessMainApi = createApi({
       },
       keepUnusedDataFor: 0,
     }),
+    changeActiveInverter: builder.mutation<any, any>({
+      query: (body) => ({
+        url: "user/devices/change-device",
+        method: "POST",
+        body,
+      }),
+
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
+          );
+        } catch (data: ICurrentResponse | any) {
+          handleLogout(data, { dispatch });
+        } finally {
+          // do nothing
+        }
+      },
+    }),
     changeInverterSetting: builder.mutation<any, any>({
       query: (body) => ({
         url: "user/devices/",
@@ -525,6 +545,7 @@ export const businessMainApi = createApi({
 });
 
 export const {
+  useChangeActiveInverterMutation,
   useChangeInverterSettingMutation,
   useLazyGetInverterDataQuery,
   useGetGraphDataQuery,

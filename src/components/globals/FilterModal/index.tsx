@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  GestureResponderEvent,
   Modal,
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { Checkbox } from "react-native-paper";
@@ -13,7 +13,7 @@ interface FilterModalProps {
   visible: boolean;
   onClose: () => void;
   options: string[];
-  defaultSelected?: any[];
+  defaultSelected?: string[];
   onConfirm: (selected: string[]) => void;
 }
 
@@ -26,53 +26,75 @@ const FilterModal: React.FC<FilterModalProps> = ({
 }) => {
   const [selected, setSelected] = useState<string[]>(defaultSelected);
 
-  React.useEffect(() => {
+  // Keep defaultSelected in sync when props change
+  useEffect(() => {
     setSelected(defaultSelected);
   }, [defaultSelected]);
+
   const toggleSelection = (item: string) => {
     setSelected((prev) =>
       prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
     );
   };
 
-  const restoreDefault = () => {
-    setSelected(defaultSelected);
-  };
-
-  const handleConfirm = (e: GestureResponderEvent) => {
+  const handleConfirm = () => {
     onConfirm(selected);
     onClose();
   };
 
+  const handleBackgroundPress = () => {
+    onClose();
+  };
+
+  const restoreDefault = () => {
+    setSelected(defaultSelected);
+  };
+
   return (
-    <Modal visible={visible} transparent animationType="fade">
-      <View style={styles.modalBg}>
-        <View style={styles.modalBox}>
-          <Text style={styles.title}>Parameter selection</Text>
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
+      {/* Outer background (detect press outside modal) */}
+      <TouchableWithoutFeedback onPress={handleBackgroundPress}>
+        <View style={styles.modalBg}>
+          {/* Inner box stops background press */}
+          <TouchableWithoutFeedback>
+            <View style={styles.modalBox}>
+              <Text style={styles.title}>Parameter Selection</Text>
 
-          {options.map((item) => (
-            <TouchableOpacity
-              key={item}
-              style={styles.row}
-              onPress={() => toggleSelection(item)}
-            >
-              <Checkbox
-                status={selected.includes(item) ? "checked" : "unchecked"}
-                onPress={() => toggleSelection(item)}
-              />
-              <Text>{item}</Text>
-            </TouchableOpacity>
-          ))}
+              {options.map((item) => (
+                <TouchableOpacity
+                  key={item}
+                  style={styles.row}
+                  onPress={() => toggleSelection(item)}
+                  activeOpacity={0.8}
+                >
+                  <Checkbox
+                    status={selected.includes(item) ? "checked" : "unchecked"}
+                    onPress={() => toggleSelection(item)}
+                  />
+                  <Text>{item}</Text>
+                </TouchableOpacity>
+              ))}
 
-          <TouchableOpacity style={styles.confirmBtn} onPress={handleConfirm}>
-            <Text style={{ color: "white" }}>Confirm</Text>
-          </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.confirmBtn}
+                onPress={handleConfirm}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.confirmText}>Confirm</Text>
+              </TouchableOpacity>
 
-          <TouchableOpacity onPress={restoreDefault}>
-            <Text style={styles.restoreText}>Restore Default</Text>
-          </TouchableOpacity>
+              <TouchableOpacity onPress={restoreDefault}>
+                <Text style={styles.restoreText}>Restore Default</Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };
@@ -88,23 +110,37 @@ const styles = StyleSheet.create({
   },
   modalBox: {
     width: "80%",
-    backgroundColor: "white",
+    backgroundColor: "#fff",
     borderRadius: 10,
     padding: 20,
+    elevation: 5,
   },
-  title: { fontSize: 16, fontWeight: "bold", marginBottom: 10 },
-  row: { flexDirection: "row", alignItems: "center", marginVertical: 4 },
+  title: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 5,
+  },
   confirmBtn: {
     marginTop: 15,
-    backgroundColor: "blue",
-    padding: 10,
+    backgroundColor: "#007AFF",
+    paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
+  },
+  confirmText: {
+    color: "#fff",
+    fontWeight: "600",
   },
   restoreText: {
     textAlign: "center",
     marginTop: 10,
-    color: "blue",
+    color: "#007AFF",
     textDecorationLine: "underline",
   },
 });

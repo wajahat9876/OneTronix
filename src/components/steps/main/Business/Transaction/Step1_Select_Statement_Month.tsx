@@ -17,6 +17,7 @@ import { TabButton } from "@src/components/commons/TabButton/types";
 import DonutChart2 from "@src/components/globals/DonutChart2";
 import FilterModal from "@src/components/globals/FilterModal";
 import FormikDatePicker from "@src/components/globals/FormikDatePicker";
+import HeaderMain from "@src/components/globals/HeaderMain";
 import PinchZoomLineChart from "@src/components/globals/ResponsiveChart";
 import EmptyChart from "@src/components/globals/ResponsiveChart/EmptyChartResponsive";
 import ZoomBarChart from "@src/components/globals/ZoomableChart/barChart";
@@ -41,7 +42,6 @@ import {
   View,
 } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
 export enum SelectMethod {
   Daily = "daily",
   Monthly = "monthly", //bad ma theek krna ha
@@ -232,9 +232,20 @@ export default function PanZoomPage() {
   }, [data?.results]);
 
   return (
-    <SafeAreaView
-      style={styles.safeView}
-      edges={Platform.OS === "android" ? ["top"] : ["top", "bottom"]}
+    <HeaderMain
+      title=""
+      style={{
+        backgroundColor: "white",
+      }}
+      topColor=""
+      bottomColor={"transparent"}
+      darkStatus={true}
+      disableTopSafeArea
+      appBarProps={{
+        light: false,
+      }}
+      // disableAppBar
+      back={() => {}}
     >
       <StatusBar barStyle={"dark-content"} />
       <ScrollView>
@@ -345,7 +356,9 @@ export default function PanZoomPage() {
               )}
               <View style={{ marginTop: vs(10), marginRight: 40 }}>
                 <View style={{ flexDirection: "row" }}>
-                  <TouchableOpacity onPress={() => setModalVisible(true)}>
+                  <TouchableOpacity
+                    onPress={() => setModalVisible((prev) => !prev)}
+                  >
                     <Image
                       source={FilterIcon}
                       style={{ width: 20, height: 20 }}
@@ -717,7 +730,7 @@ export default function PanZoomPage() {
         />
       )}
       <Loader visible={summaryFetching} message="Yahoooo" />
-    </SafeAreaView>
+    </HeaderMain>
   );
 }
 

@@ -2,10 +2,7 @@
 /* eslint-disable react/jsx-pascal-case */
 
 import { useStatusBar } from "@hooks/StatusBarColor/index";
-import Step0_TransactionHistory from "@src/components/steps/main/Business/Transaction/Step0_TransactionHistory";
 import Step1_Select_Statement_Month from "@src/components/steps/main/Business/Transaction/Step1_Select_Statement_Month";
-import Step2_Enter_Passcode from "@src/components/steps/main/Business/Transaction/Step2_Enter_Passcode";
-import Step3_Bank_Statement from "@src/components/steps/main/Business/Transaction/Step3_Bank_Statement";
 import { pageTransitionAnimation } from "@src/constants/Animation";
 import useMultistepForm, {
   MultiStepFormProps,
@@ -15,22 +12,13 @@ import { View } from "react-native";
 const Transaction = (props: MultiStepFormProps) => {
   useStatusBar("dark");
   const { goTo: parentGoto } = props;
-  const { step } = useMultistepForm(
-    [
-      <Step1_Select_Statement_Month />,
-      <Step0_TransactionHistory />,
-      <Step1_Select_Statement_Month />,
-      <Step2_Enter_Passcode />,
-      <Step3_Bank_Statement />,
-    ],
-    {
-      parentGoto,
-      newHook: true,
-      animatedViewProps: {
-        ...pageTransitionAnimation,
-      },
-    }
-  );
+  const { step } = useMultistepForm([<Step1_Select_Statement_Month />], {
+    parentGoto,
+    newHook: true,
+    animatedViewProps: {
+      ...pageTransitionAnimation,
+    },
+  });
 
   return <View className="flex-1">{step}</View>;
 };

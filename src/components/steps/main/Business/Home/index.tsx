@@ -7,35 +7,48 @@ import { useBusinessDetails } from "@/store/selectors/business/business";
 import { setDarkMode } from "@/store/slices/business/businessSlice";
 import BottomSheet from "@gorhom/bottom-sheet";
 import HouseDiagram from "@src/components/commons/main/HouseDiagram";
+import HeaderMainHome from "@src/components/globals/HeaderMainHome";
 import { PortalBottomSheetRef } from "@src/components/globals/PortalBottomSheet/types";
-import ScreenAuth from "@src/components/globals/ScreenAuth";
 import { StyleSheet } from "@src/components/libraries";
 import { pageTransitionAnimation } from "@src/constants/Animation";
-import useColorScheme from "@src/hooks/useColorScheme";
 import useFormatDate from "@src/hooks/useFormatDate";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
 import { useAppDispatch, useAppSelector } from "@src/hooks/useReduxHooks";
 import { renderToastError } from "@src/hooks/useToasty";
 import { ms } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
-import { useFocusEffect } from "expo-router";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import moment from "moment";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { RefreshControl, ScrollView, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 
 const Index = ({ goTo }: MultiStepFormProps) => {
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const [isDark, setIsDark] = useState(false);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const checkTimeForDarkMode = () => {
+      const currentHour = moment().hour(); // e.g. 22 for 10 PM
+      // Enable dark mode between 8 PM and 5 AM
+      if (currentHour >= 20 || currentHour < 5) {
+        setIsDark(true);
+        dispatch(setDarkMode(true));
+      } else {
+        setIsDark(false);
+        dispatch(setDarkMode(false));
+      }
+    };
+    // Check immediately on mount
+    checkTimeForDarkMode();
+    // Recheck every 15 minutes (optional)
+    const interval = setInterval(checkTimeForDarkMode, 15 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [dispatch]);
+
+  // Use it everywhere below instead of scheme
   const textColor = isDark ? "white" : "black";
   const bgColor = isDark ? "#252525" : "white";
   const cardBg = isDark ? "#333333" : "#F2F2F2";
-
   const [result, setResult] = useState<any>(null);
   const { auth_token, data: businessData } = useAppSelector(useBusinessDetails);
 
@@ -69,11 +82,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
     }
   };
   useEffect(() => {
-    // if (!deviceId) return;
-
-    // Run immediately on mount
     handleTrigger();
-
     // Run every 5 seconds
     const interval = setInterval(() => {
       handleTrigger();
@@ -96,38 +105,16 @@ const Index = ({ goTo }: MultiStepFormProps) => {
     currencyModalRef.current?.close();
   };
   const currencyPoints = useMemo(() => ["70%"], []);
+  const { formatTime } = useFormatDate();
 
-  // To show only active Curre
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     StatusBar.setBarStyle("light-content", false);
-  //     return () => {
-  //       StatusBar.setBarStyle("dark-content", true);
-  //     };
-  //   }, [])
-  // );
-  const { formatDate, formatTime } = useFormatDate();
-  const dispatch = useAppDispatch();
-  //used for TAbBottom Icons colors
-  useFocusEffect(
-    useCallback(() => {
-      if (scheme === "dark") {
-        dispatch(setDarkMode(true));
-      } else {
-        dispatch(setDarkMode(false));
-      }
-
-      // Cleanup (runs when screen loses focus)
-      return () => dispatch(setDarkMode(false));
-    }, [scheme])
-  );
   return (
     <Animated.View {...pageTransitionAnimation} key="home" className="flex-1">
-      <ScreenAuth
+      <HeaderMainHome
         title=""
         style={{
           backgroundColor: bgColor,
         }}
+        backColorLight={isDark ? false : true}
         topColor=""
         bottomColor={"transparent"}
         darkStatus={isDark ? false : true}
@@ -135,12 +122,12 @@ const Index = ({ goTo }: MultiStepFormProps) => {
         appBarProps={{
           light: false,
         }}
-        disableAppBar
+        // disableAppBar
         back={() => {}}
       >
-        <Text
+        {/* <Text
           style={{
-            marginTop: ms(40),
+            marginTop: ms(10),
             marginLeft: ms(20),
             fontSize: ms(14),
             fontFamily: "Ranade-Medium",
@@ -148,9 +135,10 @@ const Index = ({ goTo }: MultiStepFormProps) => {
           }}
         >
           System Status
-        </Text>
+        </Text> */}
 
         <ScrollView
+          showsVerticalScrollIndicator={false}
           style={[styles.container, { backgroundColor: bgColor }]}
           contentContainerStyle={{ flexGrow: 1 }}
           refreshControl={
@@ -163,7 +151,6 @@ const Index = ({ goTo }: MultiStepFormProps) => {
           }
         >
           <HouseDiagram
-            schema={scheme}
             solar={result?.results?.inverterData?.data?.solar?.watt ?? 0}
             grid={result?.results?.inverterData?.data?.grid?.watt ?? 0}
             home={result?.results?.inverterData?.data?.output?.watt ?? 0}
@@ -300,7 +287,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
         >
         
         </PortalBottomSheet> */}
-      </ScreenAuth>
+      </HeaderMainHome>
     </Animated.View>
   );
 };

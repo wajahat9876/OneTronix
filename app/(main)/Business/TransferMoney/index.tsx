@@ -1,17 +1,17 @@
 /* eslint-disable camelcase */
 /* eslint-disable react/jsx-pascal-case */
 
-import Step0_Payee from '@src/components/steps/main/Business/AddNewPayee/Step0_Payee';
-import Step1_Payee_Details from '@src/components/steps/main/Business/AddNewPayee/Step1_Payee_Details';
-import Step2_Payment_Summary from '@src/components/steps/main/Business/AddNewPayee/Step2_Payment_Summary';
-import Step3_OTP_Verification from '@src/components/steps/main/Business/AddNewPayee/Step3_OTP_Verification';
-import Step4_Payment_Succes from '@src/components/steps/main/Business/AddNewPayee/Step4_Payment_Succes';
-import Step5_Payment_Schedule from '@src/components/steps/main/Business/AddNewPayee/Step5_Payment_Schedule';
-import { pageTransitionAnimation } from '@src/constants/Animation';
-import useMultistepForm from '@src/hooks/useMultiStepForm';
-import { useEffect, useRef } from 'react';
-import { View } from 'react-native';
-import Delete_Payee from './DeletePayee';
+import Step0_Payee from "@src/components/steps/main/Business/AddNewPayee/Step0_Payee";
+import Step1_Payee_Details from "@src/components/steps/main/Business/AddNewPayee/Step1_Payee_Details";
+import Step2_Payment_Summary from "@src/components/steps/main/Business/AddNewPayee/Step2_Payment_Summary";
+import Step3_OTP_Verification from "@src/components/steps/main/Business/AddNewPayee/Step3_OTP_Verification";
+import Step4_Payment_Succes from "@src/components/steps/main/Business/AddNewPayee/Step4_Payment_Succes";
+import Step5_Payment_Schedule from "@src/components/steps/main/Business/AddNewPayee/Step5_Payment_Schedule";
+import { pageTransitionAnimation } from "@src/constants/Animation";
+import useMultistepForm from "@src/hooks/useMultiStepForm";
+import { useEffect, useRef } from "react";
+import { View } from "react-native";
+import Delete_Payee from "./DeletePayee";
 
 const TransferMoney = ({ navigation }: any) => {
   const { step, goTo } = useMultistepForm(
@@ -29,7 +29,7 @@ const TransferMoney = ({ navigation }: any) => {
       animatedViewProps: {
         ...pageTransitionAnimation,
       },
-    },
+    }
   );
   const doublePressRef = useRef(false);
   useEffect(() => {
@@ -47,7 +47,7 @@ const TransferMoney = ({ navigation }: any) => {
       }
     };
 
-    const unsubscribe = navigation.addListener('tabPress', handleTabPress);
+    const unsubscribe = navigation.addListener("tabPress", handleTabPress);
 
     return () => {
       clearTimeout(timer);
