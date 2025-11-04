@@ -3,7 +3,6 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable react/require-default-props */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import ArrowBackDark from "@assets/icons/commons/icon-arrow-back-dark.svg";
 import ArrowBackLight from "@assets/icons/on-boarding/icon-arrow-back.svg";
 import { Text } from "@src/components/libraries";
 import Colors from "@src/constants/Colors";
@@ -11,6 +10,7 @@ import { hs, ms, vs } from "@utils/design/design";
 import { memo } from "react";
 import { TouchableOpacity, View } from "react-native";
 // import SupportButton from '../SupportButton';
+import { MaterialIcons } from "@expo/vector-icons";
 import { AppBarProps } from "./types";
 
 const AppBar = (props: AppBarProps) => {
@@ -41,7 +41,16 @@ const AppBar = (props: AppBarProps) => {
                   }
                 }}
               >
-                {light ? <ArrowBackDark /> : <ArrowBackLight />}
+                {light ? (
+                  <MaterialIcons
+                    name="arrow-back"
+                    size={ms(26)}
+                    color="#000"
+                    style={{ marginRight: hs(4), marginTop: -3 }}
+                  />
+                ) : (
+                  <ArrowBackLight />
+                )}
               </TouchableOpacity>
             </View>
             <View style={{ width: "60%" }}>
@@ -103,7 +112,16 @@ const AppBar = (props: AppBarProps) => {
                   // router.replace('(auth)/Signin');
                 }}
               >
-                {light ? <ArrowBackDark /> : <ArrowBackLight />}
+                {light ? (
+                  <MaterialIcons
+                    name="arrow-back"
+                    size={ms(26)}
+                    color="#000"
+                    style={{ marginRight: hs(4) }}
+                  />
+                ) : (
+                  <ArrowBackLight />
+                )}
               </TouchableOpacity>
             </View>
             <View style={{ width: "60%" }}>

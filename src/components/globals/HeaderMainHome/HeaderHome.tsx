@@ -6,6 +6,7 @@
 import {
   useChangeActiveInverterMutation,
   useGetNotificationsQuery,
+  useReadNotificationsMutation,
 } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import BellIcon from "@assets/icons/bell.png"; // your SVG bell icon
@@ -59,12 +60,14 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
   const { data, auth_token } = useAppSelector(useBusinessDetails);
 
   const { data: notifications } = useGetNotificationsQuery(
-    { deviceId: data?.devices?.[0]?._id },
+    { deviceId: data?.activeDevice?.[0]?._id },
     {
       skip: !auth_token,
     }
   );
   const [changeInverter, { isLoading }] = useChangeActiveInverterMutation();
+  const [readNotifications, { isLoading: readLoading }] =
+    useReadNotificationsMutation();
   const { backColorLight } = props;
 
   const [inverters, setInverters] = useState<
@@ -83,8 +86,9 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
       setInverters(mapped);
 
       // Pick default active inverter
-      const activeDevice =
-        data.devices.find((d: any) => d?.isActive) || data.devices[0];
+      const activeDevice = data?.devices.find(
+        (d: any) => d?.isActive || data?.activeDevice?.[0]?._id
+      );
 
       setActiveInverter(activeDevice?._id ?? "");
     } else {
@@ -95,8 +99,6 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
     setLoading(false);
   }, [data?.devices]);
 
-  // Handle inverter switch
-  // Handle inverter switch
   const handleChangeInverter = async (newActiveId: string) => {
     if (newActiveId === activeInverter) return;
     const currentActive = data?.devices?.find((d: any) => d?.isActive);
@@ -113,7 +115,14 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
     }
   };
   const bottomSheetRef = useRef<PortalBottomSheetRef>(null);
-
+  const handleReadNotifications = () => {
+    bottomSheetRef.current?.open();
+    try {
+      if (data?.notificationCount > 0) {
+        readNotifications({ deviceId: data?.activeDevice?.[0]?._id }).unwrap();
+      }
+    } catch (error: any) {}
+  };
   return (
     <>
       <View
@@ -172,7 +181,7 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
         <TouchableOpacity
           style={{ marginLeft: hs(30) }}
           onPress={() => {
-            bottomSheetRef.current?.open();
+            handleReadNotifications();
           }}
         >
           {backColorLight ? (
@@ -248,7 +257,7 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
               >
                 <MaterialIcons
                   name="arrow-back"
-                  size={ms(20)}
+                  size={ms(26)}
                   color="#000"
                   style={{ marginRight: hs(4) }}
                 />

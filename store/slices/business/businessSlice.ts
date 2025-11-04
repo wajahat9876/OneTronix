@@ -144,6 +144,7 @@ const initialState: IBusinessState = {
     devices: [],
     _id: "",
     notificationCount: 0,
+    activeDevice: [],
   },
 };
 

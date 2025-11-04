@@ -17,8 +17,15 @@ import { useAppDispatch, useAppSelector } from "@src/hooks/useReduxHooks";
 import { renderToastError } from "@src/hooks/useToasty";
 import { ms } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
+import { useFocusEffect } from "expo-router";
 import moment from "moment";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { RefreshControl, ScrollView, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 
@@ -26,24 +33,28 @@ const Index = ({ goTo }: MultiStepFormProps) => {
   const [isDark, setIsDark] = useState(false);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    const checkTimeForDarkMode = () => {
-      const currentHour = moment().hour(); // e.g. 22 for 10 PM
-      // Enable dark mode between 8 PM and 5 AM
-      if (currentHour >= 20 || currentHour < 5) {
-        setIsDark(true);
-        dispatch(setDarkMode(true));
-      } else {
+  useFocusEffect(
+    useCallback(() => {
+      const checkTimeForDarkMode = () => {
+        const currentHour = moment().hour(); // 0–23
+        // Enable dark mode between 8 PM (20) and 5 AM (5)
+        if (currentHour >= 18 || currentHour < 5) {
+          setIsDark(true);
+          dispatch(setDarkMode(true));
+        } else {
+          setIsDark(false);
+          dispatch(setDarkMode(false));
+        }
+      };
+      checkTimeForDarkMode();
+      const interval = setInterval(checkTimeForDarkMode, 15 * 60 * 1000);
+      return () => {
+        clearInterval(interval);
         setIsDark(false);
         dispatch(setDarkMode(false));
-      }
-    };
-    // Check immediately on mount
-    checkTimeForDarkMode();
-    // Recheck every 15 minutes (optional)
-    const interval = setInterval(checkTimeForDarkMode, 15 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, [dispatch]);
+      };
+    }, [dispatch])
+  );
 
   // Use it everywhere below instead of scheme
   const textColor = isDark ? "white" : "black";
