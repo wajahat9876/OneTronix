@@ -156,8 +156,8 @@ const Index = ({ goTo }: MultiStepFormProps) => {
             <RefreshControl
               refreshing={isLoading}
               onRefresh={handleTrigger}
-              tintColor={"#6EB482"} // spinner color (iOS)
-              colors={["#6EB482"]} // spinner color (Android)
+              tintColor={"red"} // spinner color (iOS)
+              colors={["red"]} // spinner color (Android)
             />
           }
         >

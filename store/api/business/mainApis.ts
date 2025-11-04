@@ -86,7 +86,7 @@ export const businessMainApi = createApi({
     changeActiveInverter: builder.mutation<any, any>({
       query: (body) => ({
         url: "user/devices/change-device",
-        method: "POST",
+        method: "PATCH",
         body,
       }),
 
@@ -145,6 +145,26 @@ export const businessMainApi = createApi({
       query: ({ deviceId }) => ({
         url: `user/alerts?deviceId=${deviceId}`,
         method: "PUT",
+      }),
+
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
+          );
+        } catch (data: ICurrentResponse | any) {
+          handleLogout(data, { dispatch });
+        } finally {
+          // do nothing
+        }
+      },
+    }),
+    addNewDevice: builder.mutation<any, any>({
+      query: (body) => ({
+        url: "user/devices/",
+        method: "POST",
+        body,
       }),
 
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
@@ -582,6 +602,7 @@ export const businessMainApi = createApi({
 });
 
 export const {
+  useAddNewDeviceMutation,
   useReadNotificationsMutation,
   useGetNotificationsQuery,
   useChangeActiveInverterMutation,

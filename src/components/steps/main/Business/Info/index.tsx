@@ -20,6 +20,7 @@ import React, { useMemo, useRef, useState } from "react";
 import {
   FlatList,
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -28,7 +29,6 @@ import {
 import Animated from "react-native-reanimated";
 const Step0_Info = ({ goTo }: MultiStepFormProps) => {
   const { data: businessData } = useAppSelector(useBusinessDetails);
-
   useStatusBar("dark");
   const [expanded, setExpanded] = useState(false);
   const router = useRouter();
@@ -50,6 +50,7 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
   };
   const snapPoints = useMemo(() => ["100%"], []);
   const [, setBottomSheetVisible] = useState(false);
+
   return (
     <Animated.View
       {...pageTransitionAnimation}
@@ -77,13 +78,25 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
               fontFamily: "Excon-Medium",
               fontSize: ms(20),
               alignSelf: "center",
+              marginBottom: vs(10),
             }}
           >
             Device Management
           </Text>
 
           {/* Expandable Card */}
-          <View style={styles.card}>
+          <View
+            style={[
+              styles.card,
+              {
+                height: expanded
+                  ? businessData?.devices?.length <= 3
+                    ? "auto"
+                    : "55%"
+                  : "auto",
+              },
+            ]}
+          >
             <TouchableOpacity onPress={() => setExpanded(!expanded)}>
               <View
                 style={{
@@ -104,96 +117,101 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
             </TouchableOpacity>
 
             {expanded && (
-              <FlatList
-                data={businessData?.devices ?? []}
-                keyExtractor={(item) => item._id || item.name}
-                contentContainerStyle={{ paddingVertical: 10 }}
-                renderItem={({ item }) => {
-                  return (
-                    <View style={styles.mainRow}>
-                      <View style={styles.menuRow}>
-                        <View style={{ flexDirection: "row" }}>
-                          <Text style={styles.deviceTxt}>{item?.name}</Text>
-                          <View
-                            style={[
-                              styles.statusDot,
-                              {
-                                backgroundColor:
-                                  item.isActive || item.status === "active"
-                                    ? "#4CAF50"
-                                    : "transparent",
-                              },
-                            ]}
-                          />
-                        </View>
-                        <DropdownRNE
-                          data={[
-                            { label: "Setting", value: "Setting" },
-                            { label: "Edit", value: "Edit" },
-                          ]}
-                          dropdownType="custom"
-                          onChange={(e) => {
-                            dispatch(setLastSelectedDevice(item?.settings));
-                            dispatch(setLastSelectedDeviceId(item?._id));
-
-                            if (e?.value === "Setting") {
-                              goTo?.(1);
-                            } else if (e?.value === "Edit") {
-                            }
-                          }}
-                          renderRightIcon={() => (
-                            <Image
-                              source={MenuIcon}
-                              style={{ width: 25, height: 20 }}
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <FlatList
+                  data={businessData?.devices ?? []}
+                  keyExtractor={(item) => item._id || item.name}
+                  scrollEnabled={false}
+                  contentContainerStyle={{ paddingVertical: 10 }}
+                  renderItem={({ item }) => {
+                    return (
+                      <View style={styles.mainRow}>
+                        <View style={styles.menuRow}>
+                          <View style={{ flexDirection: "row" }}>
+                            <Text style={styles.deviceTxt}>{item?.name}</Text>
+                            <View
+                              style={[
+                                styles.statusDot,
+                                {
+                                  backgroundColor:
+                                    item.isActive || item.status === "active"
+                                      ? "#4CAF50"
+                                      : "transparent",
+                                },
+                              ]}
                             />
-                          )}
-                          renderLeftIcon={() => {}}
-                          valueField="value"
-                          labelField="label"
-                          value={""}
-                          placeholder=""
-                          dropdownPosition="auto"
-                          style={{
-                            width: "30%",
-                            // marginTop: 10,
-                          }}
-                          selectedTextStyle={{
-                            color: "transparent",
-                          }}
-                          placeholderStyle={{
-                            color: "black",
-                            fontSize: getRespValue(20),
-                            paddingTop: 10,
-                            paddingBottom: 5,
-                          }}
-                          itemContainerStyle={{}}
-                          itemTextStyle={{
-                            fontSize: ms(11),
-                            fontFamily: "Excon-Regular",
-                          }}
-                        />
-                        {/* <TouchableOpacity onPress={() => {}}>
+                          </View>
+                          <DropdownRNE
+                            data={[
+                              { label: "Setting", value: "Setting" },
+                              { label: "Edit", value: "Edit" },
+                            ]}
+                            dropdownType="custom"
+                            onChange={(e) => {
+                              dispatch(setLastSelectedDevice(item?.settings));
+                              dispatch(setLastSelectedDeviceId(item?._id));
+
+                              if (e?.value === "Setting") {
+                                goTo?.(1);
+                              } else if (e?.value === "Edit") {
+                              }
+                            }}
+                            renderRightIcon={() => (
+                              <Image
+                                source={MenuIcon}
+                                style={{ width: 25, height: 20 }}
+                              />
+                            )}
+                            renderLeftIcon={() => {}}
+                            valueField="value"
+                            labelField="label"
+                            value={""}
+                            placeholder=""
+                            dropdownPosition="auto"
+                            style={{
+                              width: "30%",
+                              // marginTop: 10,
+                            }}
+                            selectedTextStyle={{
+                              color: "transparent",
+                            }}
+                            placeholderStyle={{
+                              color: "black",
+                              fontSize: getRespValue(20),
+                              paddingTop: 10,
+                              paddingBottom: 5,
+                            }}
+                            itemContainerStyle={{}}
+                            itemTextStyle={{
+                              fontSize: ms(11),
+                              fontFamily: "Excon-Regular",
+                            }}
+                          />
+                          {/* <TouchableOpacity onPress={() => {}}>
                         <Image
                           source={MenuIcon}
                           style={{ width: 25, height: 20 }}
                         />
                       </TouchableOpacity> */}
+                        </View>
+                        <Text style={styles.idTxt}>
+                          ID: {item.deviceId || "-"}
+                        </Text>
                       </View>
-                      <Text style={styles.idTxt}>
-                        ID: {item.deviceId || "-"}
-                      </Text>
-                    </View>
-                  );
-                }}
-              />
+                    );
+                  }}
+                />
+              </ScrollView>
             )}
           </View>
           <TouchableOpacity
             onPress={openBottomSheet}
-            style={{ position: "absolute", bottom: 25, alignSelf: "center" }}
+            style={styles.redCircle}
+            activeOpacity={0.8}
           >
-            <Text style={styles.createTxt}>Add New Device</Text>
+            <Text style={styles.PlusTxt}>+</Text>
           </TouchableOpacity>
+
           <AddDeviceQr
             snapPoints={snapPoints}
             bottomSheetRef={bottomSheetRef}
@@ -221,14 +239,32 @@ const styles = StyleSheet.create({
     borderColor: "#C7C7C7",
     width: "100%",
   },
+  redCircle: {
+    position: "absolute",
+    bottom: 25,
+    right: 25,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: "red",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  PlusTxt: {
+    color: "white",
+    fontSize: 30,
+    fontWeight: "bold",
+    marginBottom: 2,
+  },
   subTitle: {
     fontSize: ms(20),
     fontFamily: "Excon-Medium",
   },
-  createTxt: {
-    fontSize: ms(16),
-    fontFamily: "Excon-Medium",
-  },
+
   menuRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -237,7 +273,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     backgroundColor: "#f9f9f9",
     paddingHorizontal: 10,
-
+    marginTop: vs(10),
     borderRadius: 10,
   },
   deviceTxt: {
@@ -250,11 +286,7 @@ const styles = StyleSheet.create({
     fontSize: ms(12),
     fontFamily: "Excon-Regular",
   },
-  deviceLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
+
   statusDot: {
     width: hs(8),
     height: vs(10),
@@ -265,3 +297,68 @@ const styles = StyleSheet.create({
 });
 
 export default Step0_Info;
+export const dummyInverters = [
+  {
+    _id: "68b7d75efaf365edde9db2a2",
+    deviceId: "123489",
+    type: "hybrid",
+    model: "1kva",
+    status: "active",
+    name: "My Invdsadsaerter",
+    isActive: true,
+    settings: {
+      battery: {
+        low: 10.1,
+        full: 14.5,
+        floating: 13.65,
+        chargingAmp: 8,
+        typeOfBattery: "Lead Acid",
+        fullToFloat: 1,
+        floatToCutOff: 1,
+      },
+      utility: {
+        underVolts: 180,
+        overVolts: 260,
+      },
+      utilityControl: {
+        enabled: false,
+        onLevel: 13.8,
+        offLevel: 12.5,
+        cutOffTime: 10,
+      },
+      chargingSource: {
+        type: "Utility + Solar",
+      },
+      solar: {
+        highVolts: 450,
+        lowVolts: 180,
+      },
+      heavyLoad: {
+        onLevel: 13.8,
+        offLevel: 12.5,
+        onTime: 10,
+        offTime: 1,
+      },
+      inverter: {
+        outputVoltLevel: 230,
+        overLoad: 5,
+      },
+      misc: {
+        buzzer: true,
+        lcdBacklight: true,
+      },
+    },
+    updateStatus: {
+      applied: false,
+      lastUpdatedAt: "2025-11-04 12:42:41",
+      lastUpdateMessage: "Pending push to inverter from user",
+    },
+    createdAtPK: "2025-09-03 10:51:26",
+    createdAt: "2025-09-03T05:51:26.485Z",
+    updatedAt: "2025-11-04T07:42:41.475Z",
+    lastPacketAt: "2025-11-01 15:59:28",
+    userId: "68d77b60f13e8330e9751991",
+    installerId: "68ffd265d6bf1ae79a3c65d9",
+    __v: 0,
+  },
+];

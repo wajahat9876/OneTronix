@@ -4,6 +4,7 @@
 /* eslint-disable import/order */
 /* eslint-disable no-nested-ternary */
 import { useGetCurrentBusinessQuery } from "@/store/api/business/businessCurrent";
+import { useAddNewDeviceMutation } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import cameraOutline from "@assets/icons/user/qr/camera-outline.png";
 import { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
@@ -11,7 +12,7 @@ import Button from "@src/components/globals/Buttons";
 import PortalBottomSheet from "@src/components/globals/PortalBottomSheet";
 import SetNoPermission from "@src/components/globals/SetNoPermission";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
-import { renderToastError } from "@src/hooks/useToasty";
+import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
 import { getRespValue } from "@utils/getRespValue";
 import { Camera, CameraView } from "expo-camera";
 import { useRouter } from "expo-router";
@@ -36,11 +37,21 @@ const AddDeviceQr = React.memo((props: ScanQr) => {
   const { isLoading: currentLoading } = useGetCurrentBusinessQuery(undefined, {
     skip: !auth_token,
   });
+  const [addNewDevice] = useAddNewDeviceMutation();
+
   const dispatch = useDispatch();
   const router = useRouter();
   const requestPermissions = async () => {
     const { status } = await Camera.requestCameraPermissionsAsync();
     setHasPermission(status === "granted" ? "granted" : "denied");
+  };
+  const handleAddNewDevice = async (deviceId: string) => {
+    try {
+      const res = await addNewDevice({ deviceId }).unwrap();
+      renderToastSuccess(res?.message);
+    } catch (error: any) {
+      renderToastError(error?.data?.message || "Something went wrong");
+    }
   };
   // useEffect(() => {
   //   requestPermissions();
@@ -56,8 +67,8 @@ const AddDeviceQr = React.memo((props: ScanQr) => {
       console.log("this is onject", obj);
 
       if (obj?.deviceId) {
-        console.log(obj?.deviceId);
-
+        console.log(obj?.deviceId), "objjjjjjjj";
+        handleAddNewDevice(obj?.deviceId);
         // dispatch(setRole(false));
         // dispatch(businessQrSignin(obj?.deviceId));
         // router.replace("/(auth)/Signup");
@@ -71,6 +82,11 @@ const AddDeviceQr = React.memo((props: ScanQr) => {
       setScanned(true);
     }
   };
+  React.useEffect(() => {
+    if (active) {
+      setScanned(false);
+    }
+  }, [active]);
 
   return (
     <PortalBottomSheet

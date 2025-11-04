@@ -16,9 +16,9 @@ import Colors from "@src/constants/Colors";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
 import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
 import { hs, ms, vs } from "@utils/design/design";
-import React, { memo, useEffect, useRef, useState } from "react";
+import { useFocusEffect } from "expo-router";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import {
-  ActivityIndicator,
   FlatList,
   Image,
   StyleSheet,
@@ -58,12 +58,14 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
   const { data, auth_token } = useAppSelector(useBusinessDetails);
   const [readNotifications, { isLoading: readLoading }] =
     useReadNotificationsMutation();
-  const { data: notifications } = useGetNotificationsQuery(
-    { deviceId: data?.activeDevice?.[0]?._id },
-    {
-      skip: !auth_token,
-    }
-  );
+  const { data: notifications, refetch: notificationRefetch } =
+    useGetNotificationsQuery(
+      { deviceId: data?.activeDevice?.[0]?._id || data?.activeDevice?._id },
+      {
+        skip: !auth_token,
+      }
+    );
+
   const [inverters, setInverters] = useState<
     { label: string; value: string }[]
   >([]);
@@ -99,6 +101,7 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
         deviceId: currentActive?._id, // current active inverter
         activeDeviceId: newActiveId, // inverter to activate
       }).unwrap();
+      notificationRefetch();
       renderToastSuccess(res?.message || "Switched inverter successfully");
     } catch (error: any) {
       renderToastError(error?.data?.message || "Something went wrong");
@@ -106,14 +109,24 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
     }
   };
   const bottomSheetRef = useRef<PortalBottomSheetRef>(null);
-  const handleReadNotifications = () => {
+  const handleReadNotifications = async () => {
     bottomSheetRef.current?.open();
     try {
       if (data?.notificationCount > 0) {
-        readNotifications({ deviceId: data?.activeDevice?.[0]?._id }).unwrap();
+        await readNotifications({
+          deviceId: data?.activeDevice?.[0]?._id || data?.activeDevice?._id,
+        }).unwrap();
       }
     } catch (error: any) {}
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      // 👇 Refetch when screen gains focus
+      if (auth_token) notificationRefetch();
+    }, [])
+  );
+
   return (
     <>
       <View
@@ -130,42 +143,40 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
       >
         {/* LEFT: Dropdown */}
         <View style={{ width: "75%" }}>
-          {loading || isLoading ? (
-            <ActivityIndicator size="small" color={"red"} />
-          ) : (
-            <DropdownRNE
-              dropdownPosition="bottom"
-              dropdownType="custom"
-              data={inverters}
-              value={activeInverter}
-              labelField="label"
-              valueField="value"
-              placeholder="Select Inverter"
-              onChange={(item) => handleChangeInverter(item.value)}
-              style={{
-                width: "50%",
-                borderColor: "gray",
-                borderRadius: 8,
-                height: vs(40),
-                paddingHorizontal: hs(10),
-                backgroundColor: "transparent",
-              }}
-              selectedTextStyle={{
-                fontSize: ms(14),
-                fontFamily: "Excon-Regular",
-                color: "#000",
-              }}
-              itemTextStyle={{
-                fontSize: ms(13),
-                fontFamily: "Excon-Regular",
-                color: Colors.light.theme.black,
-              }}
-              placeholderStyle={{
-                fontFamily: "Excon-Regular",
-                color: "gray",
-              }}
-            />
-          )}
+          <DropdownRNE
+            dropdownPosition="bottom"
+            dropdownType="custom"
+            data={inverters}
+            value={activeInverter}
+            labelField="label"
+            valueField="value"
+            placeholder="Select Inverter"
+            onChange={(item) => handleChangeInverter(item.value)}
+            style={{
+              width: "50%",
+              borderColor: "gray",
+              borderRadius: 8,
+              height: vs(40),
+              paddingHorizontal: hs(10),
+              backgroundColor: "transparent",
+            }}
+            selectedTextStyle={{
+              fontSize: ms(14),
+              fontFamily: "Excon-Medium",
+              color: "#000",
+            }}
+            itemTextStyle={{
+              fontSize: ms(13),
+              fontFamily: "Excon-Regular",
+              color: Colors.light.theme.black,
+            }}
+            placeholderStyle={{
+              fontFamily: "Excon-Regular",
+              color: "gray",
+            }}
+            iconColor="black"
+            iconStyle={{ marginTop: vs(3) }}
+          />
         </View>
 
         <TouchableOpacity
