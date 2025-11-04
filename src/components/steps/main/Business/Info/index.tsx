@@ -8,13 +8,15 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useStatusBar } from "@hooks/StatusBarColor/index";
 import DropdownRNE from "@src/components/globals/DropdownRNE";
 import HeaderMain from "@src/components/globals/HeaderMain";
+import { PortalBottomSheetRef } from "@src/components/globals/PortalBottomSheet/types";
+import AddDeviceQr from "@src/components/steps/Qr/AddDeviceQr";
 import { pageTransitionAnimation } from "@src/constants/Animation";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
 import { useAppDispatch, useAppSelector } from "@src/hooks/useReduxHooks";
 import { hs, ms, vs } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import {
   FlatList,
   Image,
@@ -32,6 +34,22 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
+  //Qr Code
+  const [isActive, setActive] = useState(false);
+  const bottomSheetRef = useRef<PortalBottomSheetRef>(null);
+  const closeBottomSheet = () => {
+    setActive(false);
+    setBottomSheetVisible(false);
+    bottomSheetRef.current?.close();
+  };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const openBottomSheet = () => {
+    setActive(true);
+    setBottomSheetVisible(true);
+    bottomSheetRef.current?.open();
+  };
+  const snapPoints = useMemo(() => ["100%"], []);
+  const [, setBottomSheetVisible] = useState(false);
   return (
     <Animated.View
       {...pageTransitionAnimation}
@@ -56,7 +74,7 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
         <View style={styles.container}>
           <Text
             style={{
-              fontFamily: "Ranade-Medium",
+              fontFamily: "Excon-Medium",
               fontSize: ms(20),
               alignSelf: "center",
             }}
@@ -170,6 +188,20 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
               />
             )}
           </View>
+          <TouchableOpacity
+            onPress={openBottomSheet}
+            style={{ position: "absolute", bottom: 25, alignSelf: "center" }}
+          >
+            <Text style={styles.createTxt}>Add New Device</Text>
+          </TouchableOpacity>
+          <AddDeviceQr
+            snapPoints={snapPoints}
+            bottomSheetRef={bottomSheetRef}
+            key="dssa"
+            closeBottomSheet={closeBottomSheet}
+            active={isActive}
+            next={closeBottomSheet}
+          />
         </View>
       </HeaderMain>
     </Animated.View>
@@ -191,8 +223,11 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     fontSize: ms(20),
-    fontWeight: "600",
-    fontFamily: "Excon-Regular",
+    fontFamily: "Excon-Medium",
+  },
+  createTxt: {
+    fontSize: ms(16),
+    fontFamily: "Excon-Medium",
   },
   menuRow: {
     flexDirection: "row",

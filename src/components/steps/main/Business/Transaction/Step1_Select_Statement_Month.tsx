@@ -180,12 +180,17 @@ export default function PanZoomPage() {
       setChartHeight(150);
     }
     if (selectedParams.length === 2) {
-      setChartHeight(180);
+      setChartHeight(150);
     }
     if (selectedParams.length === 3) {
       setChartHeight(250);
     }
     if (selectedParams.length === 4) {
+      setChartHeight(300);
+    }
+    if (selectedParams.length === 5) {
+      setChartHeight(350);
+    } else {
       setChartHeight(250);
     }
   }, [selectedParams]);

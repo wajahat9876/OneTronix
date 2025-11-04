@@ -9,6 +9,7 @@ import {
 } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import BellIcon from "@assets/icons/bell.png"; // your SVG bell icon
+import { MaterialIcons } from "@expo/vector-icons";
 import { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import Colors from "@src/constants/Colors";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
@@ -32,11 +33,20 @@ interface GlobalHeaderProps {
   backColorLight?: boolean;
 }
 const NotificationItem = ({ item }: { item: any }) => {
+  console.log("item", item);
   return (
-    <View style={styles.notificationContainer}>
+    <View style={styles.card}>
       <View style={styles.row}>
         <Text style={styles.label}>Title:</Text>
         <Text style={styles.txt}>{item?.title}</Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.label}>Name:</Text>
+        <Text style={styles.txt}>{item?.deviceRef?.name}</Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.label}>Model:</Text>
+        <Text style={styles.txt}>{item?.deviceRef?.model}</Text>
       </View>
 
       {/* Optional: description or date */}
@@ -103,7 +113,7 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
     }
   };
   const bottomSheetRef = useRef<PortalBottomSheetRef>(null);
-  console.log("notifications", notifications);
+
   return (
     <>
       <View
@@ -160,6 +170,7 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
 
         {/* RIGHT: Bell Icon */}
         <TouchableOpacity
+          style={{ marginLeft: hs(30) }}
           onPress={() => {
             bottomSheetRef.current?.open();
           }}
@@ -199,7 +210,7 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
 
         <PortalBottomSheet
           ref={bottomSheetRef}
-          snapPoints={["90%"]}
+          snapPoints={["100%"]}
           handleComponent={undefined}
           enableContentPanningGesture
           enableHandlePanningGesture
@@ -218,13 +229,53 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
             />
           )}
         >
-          <FlatList
-            className="mt-4"
-            scrollEnabled
-            contentContainerStyle={{ paddingTop: vs(24) }}
-            data={notifications?.results?.alerts || []}
-            renderItem={({ item }) => <NotificationItem item={item} />}
-          />
+          <>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: vs(10),
+                paddingHorizontal: hs(20),
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  left: hs(0),
+                }}
+                onPress={() => {
+                  bottomSheetRef?.current?.close();
+                }}
+              >
+                <MaterialIcons
+                  name="arrow-back"
+                  size={ms(20)}
+                  color="#000"
+                  style={{ marginRight: hs(4) }}
+                />
+              </TouchableOpacity>
+              <View style={{ flex: 1, alignItems: "center" }}>
+                <Text
+                  style={{
+                    fontFamily: "Excon-Medium",
+                    fontSize: ms(16),
+                    textAlign: "center",
+                  }}
+                >
+                  Notifications
+                </Text>
+              </View>
+            </View>
+            <FlatList
+              className="mt-4"
+              scrollEnabled
+              ListEmptyComponent={() => (
+                <Text style={styles.empTxt}>No Data Found</Text>
+              )}
+              contentContainerStyle={{ paddingTop: vs(24) }}
+              data={notifications?.results?.alerts || []}
+              renderItem={({ item }) => <NotificationItem item={item} />}
+            />
+          </>
         </PortalBottomSheet>
       </View>
     </>
@@ -238,6 +289,11 @@ const styles = StyleSheet.create({
     paddingVertical: vs(10),
     borderBottomWidth: 1,
     borderBottomColor: "#E5E5E5",
+  },
+  empTxt: {
+    textAlign: "center",
+    fontFamily: "Excon-Regular",
+    fontSize: ms(13),
   },
   row: {
     flexDirection: "row",
@@ -255,9 +311,27 @@ const styles = StyleSheet.create({
     fontFamily: "Excon-Medium",
   },
   message: {
-    fontSize: ms(12),
+    fontSize: ms(14),
     color: "#666",
     marginTop: vs(2),
     fontFamily: "Excon-Regular",
+  },
+  card: {
+    alignSelf: "center",
+    marginLeft: 1,
+    justifyContent: "space-between",
+    borderRadius: 10,
+    borderColor: "#C7C7C7",
+    borderWidth: 0.6,
+    padding: 20,
+    width: "95%",
+    shadowColor: "#000",
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 0,
+    marginBottom: 1,
+    paddingHorizontal: hs(20),
+    paddingVertical: vs(10),
   },
 });

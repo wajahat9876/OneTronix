@@ -94,6 +94,8 @@ const HouseDiagram = (props: HouseDiagramProps) => {
   const { isDarkMode } = useAppSelector(useBusinessDetails);
   const onLayout = (e: any) => setLayout(e.nativeEvent.layout);
   const textColor = isDarkMode ? "white" : "black";
+  const labelColor = isDarkMode ? "white" : "#555";
+
   const ready = layout.width > 0 && layout.height > 0;
   const original = {
     inverter: { x: 260, y: 160 },
@@ -270,21 +272,29 @@ const HouseDiagram = (props: HouseDiagramProps) => {
       )}
 
       {/* Labels */}
-      <View style={[styles.label, { top: scale(30), left: scale(280) }]}>
+      <View style={[styles.label, { top: scale(20), left: scale(290) }]}>
         <Text style={[styles.labelTitle, { color: textColor }]}>Solar</Text>
-        <Text style={styles.labelValue}>{solar} kW</Text>
+        <Text style={[styles.labelValue, { color: labelColor }]}>
+          {solar} kW
+        </Text>
       </View>
       <View style={[styles.label, { top: scale(110), left: scale(65) }]}>
         <Text style={[styles.labelTitle, { color: textColor }]}>Home</Text>
-        <Text style={styles.labelValue}>{home} kW</Text>
+        <Text style={[styles.labelValue, { color: labelColor }]}>
+          {home} kW
+        </Text>
       </View>
       <View style={[styles.label, { bottom: scale(140), right: scale(40) }]}>
         <Text style={[styles.labelTitle, { color: textColor }]}>Battery</Text>
-        <Text style={styles.labelValue}>{battery} kW</Text>
+        <Text style={[styles.labelValue, { color: labelColor }]}>
+          {battery} kW
+        </Text>
       </View>
       <View style={[styles.label, { bottom: scale(50), right: scale(130) }]}>
         <Text style={[styles.labelTitle, { color: textColor }]}>Grid</Text>
-        <Text style={styles.labelValue}>{grid} kW</Text>
+        <Text style={[styles.labelValue, { color: labelColor }]}>
+          {grid} kW
+        </Text>
       </View>
     </View>
   );
@@ -295,6 +305,6 @@ export default HouseDiagram;
 const styles = StyleSheet.create({
   container: { alignItems: "center", justifyContent: "center" },
   label: { position: "absolute", alignItems: "center" },
-  labelTitle: { fontSize: 13, fontWeight: "600" },
-  labelValue: { fontSize: 12, color: "#555" },
+  labelTitle: { fontSize: 13, fontWeight: "600", fontFamily: "Excon-Medium" },
+  labelValue: { fontSize: 12, fontFamily: "Excon-Medium" },
 });

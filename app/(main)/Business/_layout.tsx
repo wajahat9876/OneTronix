@@ -43,19 +43,21 @@ const Layout = () => {
       initialRouteName="Home"
       barStyle={{
         backgroundColor: isDarkMode ? "#303030" : "#F2F2F2",
-        height: vs(80),
+        height: vs(85),
         marginBottom: Platform.OS === "ios" ? vs(5) : vs(0),
       }}
       activeIndicatorStyle={{
         height: vs(6),
         width: ms(30),
         borderRadius: ms(20),
-        backgroundColor: "#ff0000", // main glow
-        shadowColor: "#ff0000", // semi-transparent glow
+        backgroundColor: "#ff0000",
+        shadowColor: "#ff0000",
         shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 1,
-        shadowRadius: 5, // bigger glow spread
-        elevation: 20, // android
+        shadowOpacity: 0.9,
+        shadowRadius: 8,
+        elevation: 10,
+        borderWidth: Platform.OS === "android" ? 2 : 0,
+        borderColor: "rgba(255, 0, 0, 0.4)",
         bottom: vs(-32),
         position: "absolute",
       }}
