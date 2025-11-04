@@ -72,6 +72,7 @@ export interface VerifySignIn {
   lastName: string;
   devices: any[];
   _id: string;
+  notificationCount: number;
 }
 interface BusinessAutoSignUp {
   businessType: boolean;

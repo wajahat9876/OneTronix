@@ -4,6 +4,7 @@ import {
   setLastSelectedDeviceId,
 } from "@/store/slices/business/businessSlice";
 import MenuIcon from "@assets/icons/menu.png";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useStatusBar } from "@hooks/StatusBarColor/index";
 import DropdownRNE from "@src/components/globals/DropdownRNE";
 import HeaderMain from "@src/components/globals/HeaderMain";
@@ -75,9 +76,12 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
                 <Text style={[styles.subTitle, { marginBottom: 8 }]}>
                   Inverter
                 </Text>
-                <Text style={[styles.subTitle, { marginBottom: 8 }]}>
-                  {expanded ? "▲" : "▼"}
-                </Text>
+                <MaterialCommunityIcons
+                  name={expanded ? "chevron-up" : "chevron-down"}
+                  size={30}
+                  color="gray"
+                  style={{ marginLeft: 6 }}
+                />
               </View>
             </TouchableOpacity>
 
@@ -91,7 +95,7 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
                     <View style={styles.mainRow}>
                       <View style={styles.menuRow}>
                         <View style={{ flexDirection: "row" }}>
-                          <Text style={styles.deviceTxt}>Inverter</Text>
+                          <Text style={styles.deviceTxt}>{item?.name}</Text>
                           <View
                             style={[
                               styles.statusDot,
@@ -176,11 +180,13 @@ const styles = StyleSheet.create({
   safeView: { flex: 1, backgroundColor: "white" },
   container: { flex: 1, paddingHorizontal: hs(20), marginTop: 20 },
   card: {
-    backgroundColor: "#F2F2F2",
+    backgroundColor: "white",
     borderRadius: 10,
     paddingVertical: 18,
     paddingHorizontal: 15,
     marginTop: 10,
+    borderWidth: 0.6,
+    borderColor: "#C7C7C7",
     width: "100%",
   },
   subTitle: {
@@ -194,10 +200,10 @@ const styles = StyleSheet.create({
   },
   mainRow: {
     paddingVertical: 15,
-    backgroundColor: "#DDDEE0",
+    backgroundColor: "#f9f9f9",
     paddingHorizontal: 10,
 
-    borderRadius: 5,
+    borderRadius: 10,
   },
   deviceTxt: {
     color: "black",

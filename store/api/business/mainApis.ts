@@ -123,6 +123,24 @@ export const businessMainApi = createApi({
         }
       },
     }),
+    getNotifications: builder.query<any, any>({
+      query: ({ deviceId }) => ({
+        url: `user/alerts?deviceId=${deviceId}`,
+        method: "GET",
+      }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
+          );
+        } catch (data: ICurrentResponse | any) {
+          handleLogout(data, { dispatch });
+        } finally {
+          // do nothing
+        }
+      },
+    }),
     createCurrencyAccount: builder.mutation<any, any>({
       query: (body) => ({
         url: "clearBank/multi-createAccount",
@@ -545,6 +563,7 @@ export const businessMainApi = createApi({
 });
 
 export const {
+  useGetNotificationsQuery,
   useChangeActiveInverterMutation,
   useChangeInverterSettingMutation,
   useLazyGetInverterDataQuery,

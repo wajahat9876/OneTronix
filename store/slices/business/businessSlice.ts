@@ -143,6 +143,7 @@ const initialState: IBusinessState = {
     lastName: "",
     devices: [],
     _id: "",
+    notificationCount: 0,
   },
 };
 
