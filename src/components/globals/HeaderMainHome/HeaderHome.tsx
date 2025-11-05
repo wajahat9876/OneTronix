@@ -58,14 +58,16 @@ const NotificationItem = ({ item }: { item: any }) => {
 
 const GlobalHeader = (props: GlobalHeaderProps) => {
   const { data, auth_token } = useAppSelector(useBusinessDetails);
-
-  const { data: notifications, refetch: notificationRefetch } =
-    useGetNotificationsQuery(
-      { deviceId: data?.activeDevice?.[0]?._id || data?.activeDevice?._id },
-      {
-        skip: !auth_token,
-      }
-    );
+  const {
+    data: notifications,
+    refetch: notificationRefetch,
+    isFetching,
+  } = useGetNotificationsQuery(
+    { deviceId: data?.activeDevice?._id || data?.activeDevice?._id },
+    {
+      skip: !auth_token,
+    }
+  );
   const [changeInverter, { isLoading }] = useChangeActiveInverterMutation();
   const [readNotifications, { isLoading: readLoading }] =
     useReadNotificationsMutation();
@@ -75,7 +77,6 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
     { label: string; value: string }[]
   >([]);
   const [activeInverter, setActiveInverter] = useState<string>("");
-  const [loading, setLoading] = useState(true);
 
   // Load inverters from API (Redux)
   useEffect(() => {
@@ -86,22 +87,23 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
       }));
       setInverters(mapped);
 
-      // Pick default active inverter
-      const activeDevice = data?.devices.find(
-        (d: any) => d?.isActive || data?.activeDevice?.[0]?._id
-      );
-
-      setActiveInverter(activeDevice?._id ?? "");
+      // Always update when activeDevice changes
+      if (data?.activeDevice?._id) {
+        setActiveInverter(data?.activeDevice?._id);
+      } else {
+        const activeDevice = data?.devices.find((d: any) => d?.isActive);
+        setActiveInverter(activeDevice?._id ?? "");
+      }
     } else {
       setInverters([]);
       setActiveInverter("");
     }
-
-    setLoading(false);
-  }, [data?.devices]);
-
+  }, [data?.devices, data?.activeDevice?._id]);
+  const [isDropdownDisabled, setIsDropdownDisabled] = useState(false);
   const handleChangeInverter = async (newActiveId: string) => {
     if (newActiveId === activeInverter) return;
+    setIsDropdownDisabled(true);
+    setTimeout(() => setIsDropdownDisabled(false), 2000);
     const currentActive = data?.devices?.find((d: any) => d?.isActive);
     setActiveInverter(newActiveId);
     try {
@@ -109,7 +111,9 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
         deviceId: currentActive?._id, // current active inverter
         activeDeviceId: newActiveId, // inverter to activate
       }).unwrap();
-      notificationRefetch();
+      setTimeout(() => {
+        notificationRefetch();
+      }, 1000);
       renderToastSuccess(res?.message || "Switched inverter successfully");
     } catch (error: any) {
       renderToastError(error?.data?.message || "Something went wrong");
@@ -122,7 +126,7 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
     try {
       if (data?.notificationCount > 0) {
         await readNotifications({
-          deviceId: data?.activeDevice?.[0]?._id || data?.activeDevice?._id,
+          deviceId: data?.activeDevice?._id || data?.activeDevice?._id,
         }).unwrap();
       }
     } catch (error: any) {}
@@ -143,14 +147,16 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
           alignItems: "center",
           paddingHorizontal: hs(20),
           marginTop: vs(40),
+          height: vs(60),
           backgroundColor: "transparent",
-          borderBottomLeftRadius: ms(18),
-          borderBottomRightRadius: ms(18),
+          borderBottomLeftRadius: ms(10),
+          borderBottomRightRadius: ms(10),
         }}
       >
         {/* LEFT: Dropdown */}
         <View style={{ width: "75%" }}>
           <DropdownRNE
+            disabled={isDropdownDisabled}
             dropdownPosition="bottom"
             dropdownType="custom"
             data={inverters}
@@ -161,17 +167,17 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
             onChange={(item) => handleChangeInverter(item.value)}
             style={{
               width: "50%",
+
               borderColor: "gray",
               borderRadius: 8,
               height: vs(40),
               paddingHorizontal: hs(10),
               backgroundColor: "transparent",
             }}
-            containerStyle={{
-              backgroundColor: backColorLight ? "black" : "white",
-            }}
             selectedTextStyle={{
               fontSize: ms(14),
+              width: 1,
+              ellipsizeMode: "tail",
               fontFamily: "Excon-Medium",
               color: backColorLight ? "#000" : "#fff",
             }}
@@ -192,6 +198,7 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
         {/* RIGHT: Bell Icon */}
         <TouchableOpacity
           style={{ marginLeft: hs(30) }}
+          disabled={isLoading || isFetching}
           onPress={() => {
             handleReadNotifications();
           }}
@@ -346,11 +353,6 @@ const styles = StyleSheet.create({
     borderWidth: 0.6,
     padding: 20,
     width: "95%",
-    shadowColor: "#000",
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 0,
     marginBottom: 1,
     paddingHorizontal: hs(20),
     paddingVertical: vs(10),

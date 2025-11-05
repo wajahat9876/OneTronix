@@ -144,7 +144,14 @@ const initialState: IBusinessState = {
     devices: [],
     _id: "",
     notificationCount: 0,
-    activeDevice: [],
+    activeDevice: {
+      _id: "",
+      deviceId: "",
+      isActive: false,
+      name: "",
+      model: "",
+      type: "",
+    },
   },
 };
 

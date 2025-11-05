@@ -60,7 +60,7 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
     useReadNotificationsMutation();
   const { data: notifications, refetch: notificationRefetch } =
     useGetNotificationsQuery(
-      { deviceId: data?.activeDevice?.[0]?._id || data?.activeDevice?._id },
+      { deviceId: data?.activeDevice?._id || data?.activeDevice?._id },
       {
         skip: !auth_token,
       }
@@ -82,7 +82,7 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
       setInverters(mapped);
       // Pick default active inverter
       const activeDevice =
-        data.devices.find((d: any) => d?.isActive) || data?.activeDevice?.[0];
+        data?.devices.find((d: any) => d?.isActive) || data?.activeDevice;
       setActiveInverter(activeDevice?._id ?? "");
     } else {
       setInverters([]);
@@ -91,9 +91,12 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
 
     setLoading(false);
   }, [data?.devices]);
+  const [isDropdownDisabled, setIsDropdownDisabled] = useState(false);
 
   const handleChangeInverter = async (newActiveId: string) => {
     if (newActiveId === activeInverter) return;
+    setIsDropdownDisabled(true);
+    setTimeout(() => setIsDropdownDisabled(false), 2000);
     const currentActive = data?.devices?.find((d: any) => d?.isActive);
     setActiveInverter(newActiveId);
     try {
@@ -114,7 +117,7 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
     try {
       if (data?.notificationCount > 0) {
         await readNotifications({
-          deviceId: data?.activeDevice?.[0]?._id || data?.activeDevice?._id,
+          deviceId: data?.activeDevice?._id || data?.activeDevice?._id,
         }).unwrap();
       }
     } catch (error: any) {}
@@ -136,14 +139,16 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
           alignItems: "center",
           paddingHorizontal: hs(20),
           marginTop: vs(40),
+          height: vs(60),
           backgroundColor: "transparent",
-          borderBottomLeftRadius: ms(18),
-          borderBottomRightRadius: ms(18),
+          borderBottomLeftRadius: ms(10),
+          borderBottomRightRadius: ms(10),
         }}
       >
         {/* LEFT: Dropdown */}
         <View style={{ width: "75%" }}>
           <DropdownRNE
+            disabled={isDropdownDisabled}
             dropdownPosition="bottom"
             dropdownType="custom"
             data={inverters}

@@ -133,10 +133,9 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
                               style={[
                                 styles.statusDot,
                                 {
-                                  backgroundColor:
-                                    item.isActive || item.status === "active"
-                                      ? "#4CAF50"
-                                      : "transparent",
+                                  backgroundColor: item.isActive
+                                    ? "#4CAF50"
+                                    : "transparent",
                                 },
                               ]}
                             />
@@ -256,9 +255,10 @@ const styles = StyleSheet.create({
   },
   PlusTxt: {
     color: "white",
-    fontSize: 30,
+    fontSize: 40,
     fontWeight: "bold",
     marginBottom: 2,
+    fontFamily: "Excon-Regular",
   },
   subTitle: {
     fontSize: ms(20),
@@ -297,68 +297,3 @@ const styles = StyleSheet.create({
 });
 
 export default Step0_Info;
-export const dummyInverters = [
-  {
-    _id: "68b7d75efaf365edde9db2a2",
-    deviceId: "123489",
-    type: "hybrid",
-    model: "1kva",
-    status: "active",
-    name: "My Invdsadsaerter",
-    isActive: true,
-    settings: {
-      battery: {
-        low: 10.1,
-        full: 14.5,
-        floating: 13.65,
-        chargingAmp: 8,
-        typeOfBattery: "Lead Acid",
-        fullToFloat: 1,
-        floatToCutOff: 1,
-      },
-      utility: {
-        underVolts: 180,
-        overVolts: 260,
-      },
-      utilityControl: {
-        enabled: false,
-        onLevel: 13.8,
-        offLevel: 12.5,
-        cutOffTime: 10,
-      },
-      chargingSource: {
-        type: "Utility + Solar",
-      },
-      solar: {
-        highVolts: 450,
-        lowVolts: 180,
-      },
-      heavyLoad: {
-        onLevel: 13.8,
-        offLevel: 12.5,
-        onTime: 10,
-        offTime: 1,
-      },
-      inverter: {
-        outputVoltLevel: 230,
-        overLoad: 5,
-      },
-      misc: {
-        buzzer: true,
-        lcdBacklight: true,
-      },
-    },
-    updateStatus: {
-      applied: false,
-      lastUpdatedAt: "2025-11-04 12:42:41",
-      lastUpdateMessage: "Pending push to inverter from user",
-    },
-    createdAtPK: "2025-09-03 10:51:26",
-    createdAt: "2025-09-03T05:51:26.485Z",
-    updatedAt: "2025-11-04T07:42:41.475Z",
-    lastPacketAt: "2025-11-01 15:59:28",
-    userId: "68d77b60f13e8330e9751991",
-    installerId: "68ffd265d6bf1ae79a3c65d9",
-    __v: 0,
-  },
-];

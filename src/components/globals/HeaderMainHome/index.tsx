@@ -62,6 +62,7 @@ const HeaderMain = (props: IScreenAuthProps) => {
         {...rest}
         style={{
           flex: 1,
+
           backgroundColor: "transparent",
           ...(style as object),
         }}

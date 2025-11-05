@@ -5,12 +5,11 @@ import { useGetCurrentBusinessQuery } from "@/store/api/business/businessCurrent
 import { useLazyGetInverterDataQuery } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import { setDarkMode } from "@/store/slices/business/businessSlice";
-import BottomSheet from "@gorhom/bottom-sheet";
 import HouseDiagram from "@src/components/commons/main/HouseDiagram";
 import HeaderMainHome from "@src/components/globals/HeaderMainHome";
-import { PortalBottomSheetRef } from "@src/components/globals/PortalBottomSheet/types";
 import { StyleSheet } from "@src/components/libraries";
 import { pageTransitionAnimation } from "@src/constants/Animation";
+import { useStatusBar } from "@src/hooks/StatusBarColor";
 import useFormatDate from "@src/hooks/useFormatDate";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
 import { useAppDispatch, useAppSelector } from "@src/hooks/useReduxHooks";
@@ -19,13 +18,7 @@ import { ms } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
 import { useFocusEffect } from "expo-router";
 import moment from "moment";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { RefreshControl, ScrollView, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 
@@ -70,8 +63,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
   } = useGetCurrentBusinessQuery(undefined, {
     skip: !auth_token,
   });
-  const deviceId = businessData?.devices?.[0]?._id;
-
+  const deviceId = businessData?.activeDevice?._id;
   // 2nd API → run only if deviceId exists
   // const { data: inverterData, isFetching } = useGetInverterDataQuery(
   //   { deviceId },
@@ -81,17 +73,18 @@ const Index = ({ goTo }: MultiStepFormProps) => {
   // );
   const [trigger, { isLoading }] = useLazyGetInverterDataQuery();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleTrigger = async () => {
+  const handleTrigger = useCallback(async () => {
     try {
       if (deviceId && auth_token) {
-        const res = await trigger({ deviceId });
-        setResult(res?.data);
-        console.log("res", res);
+        const res = await trigger({ deviceId }).unwrap();
+        setResult(res);
+        console.log("Fetched for Device ID:", deviceId);
       }
     } catch (error: any) {
-      renderToastError(error?.data?.message);
+      renderToastError(error?.data?.message || "Error fetching inverter data");
     }
-  };
+  }, [deviceId, auth_token, trigger]);
+
   useEffect(() => {
     handleTrigger();
     // Run every 5 seconds
@@ -103,36 +96,22 @@ const Index = ({ goTo }: MultiStepFormProps) => {
     return () => clearInterval(interval);
   }, [deviceId]);
 
-  const bottomSheetRef = useRef<PortalBottomSheetRef>(null);
-  const openBottomSheet = () => {
-    setBottomSheetVisible(true);
-    bottomSheetRef.current?.open();
-  };
-  const [, setBottomSheetVisible] = useState(false);
   // 2ndBototmSheet for Currency
-  const currencyModalRef = useRef<BottomSheet>(null);
-  const closeCurrencySheet = () => {
-    setBottomSheetVisible(false);
-    currencyModalRef.current?.close();
-  };
-  const currencyPoints = useMemo(() => ["70%"], []);
-  const { formatTime } = useFormatDate();
 
+  const { formatTime } = useFormatDate();
+  useStatusBar(isDark ? "light" : "dark");
   return (
     <Animated.View {...pageTransitionAnimation} key="home" className="flex-1">
       <HeaderMainHome
         title=""
         style={{
-          backgroundColor: bgColor,
+          backgroundColor: "transparent",
         }}
-        backColorLight={isDark ? false : true}
-        topColor=""
-        bottomColor={"transparent"}
         darkStatus={isDark ? false : true}
+        backColorLight={isDark ? false : true}
+        topColor="white"
+        bottomColor={"transparent"}
         disableTopSafeArea
-        appBarProps={{
-          light: false,
-        }}
         // disableAppBar
         back={() => {}}
       >

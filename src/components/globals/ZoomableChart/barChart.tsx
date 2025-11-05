@@ -192,11 +192,9 @@ export default function ZoomBarChart({
 
   // Create stable event handlers using useCallback
   const handleShowTip = useCallback((params: any) => {
-    console.log("showTip", params);
     if (!params || params.dataIndex == null) return;
 
     const dataIndex = params.dataIndex;
-    console.log("Data index:", dataIndex);
 
     const values: Record<string, number> = {};
     const currentSelectedParams = selectedParamsRef.current;
@@ -206,12 +204,10 @@ export default function ZoomBarChart({
       values[param] = currentSeriesData[param]?.[dataIndex] || 0;
     });
 
-    console.log("Legend values:", values);
     setLegendValues(values);
   }, []);
 
   const handleHideTip = useCallback(() => {
-    console.log("hideTip");
     setLegendValues({});
   }, []);
 
@@ -342,7 +338,6 @@ export default function ZoomBarChart({
   useEffect(() => {
     // Safe initialization
     if (!chartRef.current) {
-      console.log("Chart ref not available");
       return;
     }
 
@@ -370,8 +365,6 @@ export default function ZoomBarChart({
       // Set up event listeners with stable callbacks
       chart.on("showTip", handleShowTip);
       chart.on("hideTip", handleHideTip);
-
-      console.log("Chart initialized with params:", selectedParamsRef.current);
     } catch (err) {
       console.log("Chart init error:", err);
       setIsChartReady(false);
@@ -404,8 +397,6 @@ export default function ZoomBarChart({
       try {
         // chartInstanceRef.current.setOption(option);
         chartInstanceRef.current.setOption(option, true);
-
-        console.log("Chart updated with new data");
       } catch (err) {
         console.log("Chart update error:", err);
       }
@@ -414,7 +405,6 @@ export default function ZoomBarChart({
 
   // Debug: log when seriesData changes
   useEffect(() => {
-    console.log("Series data updated:", Object.keys(seriesData));
     Object.keys(seriesData).forEach((param) => {
       console.log(`${param}:`, seriesData[param]);
     });

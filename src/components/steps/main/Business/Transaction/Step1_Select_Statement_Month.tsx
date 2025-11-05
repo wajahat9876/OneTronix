@@ -124,31 +124,33 @@ export default function PanZoomPage() {
     data,
     refetch,
     isFetching: summaryFetching,
-    error,
-    isError,
   } = useGetGraphDataQuery(
     {
-      deviceId: businessData?.devices?.[0]?._id,
+      deviceId: businessData?.activeDevice?._id,
       type: tabValues[selectedTab],
       date: updatedDate,
     },
     { skip: !auth_token, refetchOnMountOrArgChange: true }
   );
-  const { data: analyticsData, refetch: analyticsRefetch } =
-    useGetAnalyticsDataQuery(
-      {
-        deviceId: businessData?.devices?.[0]?._id,
-        type: tabValues[selectedTab],
-        date: updatedDate,
-      },
-      {
-        skip: !auth_token,
-        refetchOnMountOrArgChange: true,
-      }
-    );
+  const {
+    data: analyticsResult,
+    refetch: analyticsRefetch,
+    isError,
+    isSuccess,
+  } = useGetAnalyticsDataQuery(
+    {
+      deviceId: businessData?.activeDevice?._id,
+      type: tabValues[selectedTab],
+      date: updatedDate,
+    },
+    {
+      skip: !auth_token,
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const { data: totalData, refetch: totalRefetch } = useGetAnalyticsDataQuery(
     {
-      deviceId: businessData?.devices?.[0]?._id,
+      deviceId: businessData?.activeDevice?._id,
       type: "total",
       date: updatedDate,
     },
@@ -157,7 +159,15 @@ export default function PanZoomPage() {
       refetchOnMountOrArgChange: true,
     }
   );
+  const [analyticsData, setAnalyticsResult] = React.useState<any>(null);
 
+  React.useEffect(() => {
+    if (isError) {
+      setAnalyticsResult(null);
+    } else if (isSuccess) {
+      setAnalyticsResult(analyticsResult);
+    }
+  }, [isError, isSuccess, analyticsResult]);
   useFocusEffect(
     React.useCallback(() => {
       // 🔥 run these when screen gets focus
@@ -172,7 +182,7 @@ export default function PanZoomPage() {
       selectedTab,
       formik.values.dateOfBirth,
       tabValues[selectedTab],
-      businessData?.devices?.[0]?._id,
+      businessData?.activeDevice?._id,
     ]) // also runs again if selectedTab changes
   );
   React.useEffect(() => {
@@ -210,7 +220,7 @@ export default function PanZoomPage() {
     return () => clearInterval(interval);
   }, []);
 
-  // Ref
+  // Re
   const dateOfBirthRef = React.useRef() as React.MutableRefObject<TextInput>;
 
   const [show, setShow] = useState(false);
@@ -270,7 +280,7 @@ export default function PanZoomPage() {
             // backgroundColor: "#FAFAFA",
             backgroundColor: "white",
             paddingHorizontal: 10,
-            paddingBottom: 10,
+            paddingBottom: vs(5),
           }}
         >
           <View style={{ flex: 1 }}>
@@ -738,34 +748,6 @@ export default function PanZoomPage() {
     </HeaderMain>
   );
 }
-
-// const DATA = [
-//   {
-//     hour: 0,
-//     ac: 40,
-//     battery: 20,
-//   },
-//   {
-//     hour: 1,
-//     ac: 40 + 30 * Math.random(),
-//     battery: 40 + 30 * Math.random(),
-//   },
-//   {
-//     hour: 2,
-//     ac: 40 + 30 * Math.random(),
-//     battery: 40 + 30 * Math.random(),
-//   },
-//   {
-//     hour: 5,
-//     ac: 0,
-//     battery: 0,
-//   },
-//   {
-//     hour: 10,
-//     ac: 100,
-//     battery: 5,
-//   },
-// ];
 
 const styles = StyleSheet.create({
   safeView: {
