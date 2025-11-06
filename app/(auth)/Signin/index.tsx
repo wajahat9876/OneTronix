@@ -6,10 +6,10 @@ import { useBusinessDetails } from "@/store/selectors/business/business";
 import EasyEmoneyGradient from "@src/components/globals/BackgroundGradient";
 import Step1_BasicDetails from "@src/components/steps/Auth/Signin/Step1_BasicDetails";
 import Step2_OTP from "@src/components/steps/Auth/Signin/Step2_OTP";
-import { pageTransitionAnimation } from "@src/constants/Animation";
 import useMultistepForm from "@src/hooks/useMultiStepForm";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
 import { View } from "react-native";
+import { LinearTransition } from "react-native-reanimated";
 
 const Signin = () => {
   const { auth_token } = useAppSelector(useBusinessDetails);
@@ -17,9 +17,14 @@ const Signin = () => {
     skip: !auth_token,
   }); // --- IGNORE ---;
   const { step } = useMultistepForm([<Step1_BasicDetails />, <Step2_OTP />], {
-    newHook: true,
-    animatedViewProps: {
-      ...pageTransitionAnimation,
+    animated: true,
+    animatedProps: {
+      style: {
+        flex: 1,
+      },
+      // entering: FadeInUp.duration(300).delay(200),
+      // exiting: FadeOutDown.duration(300),
+      layout: LinearTransition,
     },
   });
 

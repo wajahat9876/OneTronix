@@ -4,10 +4,10 @@
 
 import { useStatusBar } from "@hooks/StatusBarColor/index";
 import Settings from "@src/components/steps/main/Business/Setting";
-import { pageTransitionAnimation } from "@src/constants/Animation";
 import useMultistepForm from "@src/hooks/useMultiStepForm";
 import { useEffect, useRef } from "react";
 import { View } from "react-native";
+import { LinearTransition } from "react-native-reanimated";
 import Account from "./Accounts";
 import ExchangeCuttOffTime from "./ExchangeCuttOffTime";
 import Faqs from "./Faqs";
@@ -40,12 +40,18 @@ const Index = ({ navigation }: any) => {
       <ExchangeCuttOffTime />, // 13
     ],
     {
-      newHook: true,
-      animatedViewProps: {
-        ...pageTransitionAnimation,
+      animated: true,
+      animatedProps: {
+        style: {
+          flex: 1,
+        },
+        // entering: FadeInUp.duration(300).delay(200),
+        // exiting: FadeOutDown.duration(300),
+        layout: LinearTransition,
       },
     }
   );
+
   const doublePressRef = useRef(false);
   useStatusBar("dark");
   useEffect(() => {

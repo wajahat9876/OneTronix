@@ -40,7 +40,7 @@ const Layout = () => {
   const { isDarkMode } = useAppSelector(useBusinessDetails);
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Report"
       barStyle={{
         backgroundColor: isDarkMode ? "#303030" : "#F2F2F2",
         height: vs(85),
@@ -68,7 +68,7 @@ const Layout = () => {
       inactiveColor={isDarkMode ? "white" : "black"}
       keyboardHidesNavigationBar={false}
       shifting={false}
-      sceneAnimationEnabled
+      sceneAnimationEnabled={false}
       sceneAnimationType="shifting"
     >
       <Tab.Screen

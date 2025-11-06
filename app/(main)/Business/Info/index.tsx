@@ -4,24 +4,26 @@
 import { useStatusBar } from "@hooks/StatusBarColor/index";
 import Step0_Info from "@src/components/steps/main/Business/Info";
 import Step1_Setting from "@src/components/steps/main/Business/Info/Setting/Step1_Setting";
-import { pageTransitionAnimation } from "@src/constants/Animation";
-import useMultistepForm, {
-  MultiStepFormProps,
-} from "@src/hooks/useMultiStepForm";
+import useMultistepForm from "@src/hooks/useMultiStepForm";
 import { View } from "react-native";
+import { LinearTransition } from "react-native-reanimated";
 
-const Info = (props: MultiStepFormProps) => {
+const Info = () => {
   useStatusBar("dark");
-  const { goTo: parentGoto } = props;
-  const { step } = useMultistepForm([<Step0_Info />, <Step1_Setting />], {
-    parentGoto,
-    newHook: true,
-    animatedViewProps: {
-      ...pageTransitionAnimation,
+
+  const { step, goTo } = useMultistepForm([<Step0_Info />, <Step1_Setting />], {
+    animated: true,
+    animatedProps: {
+      style: {
+        flex: 1,
+      },
+      // entering: FadeInUp.duration(300).delay(200),
+      // exiting: FadeOutDown.duration(300),
+      layout: LinearTransition,
     },
   });
 
-  return <View className="flex-1">{step}</View>;
+  return <View style={{ flex: 1 }}>{step}</View>;
 };
 
 export default Info;

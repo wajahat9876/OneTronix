@@ -18,7 +18,7 @@ import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
 import { hs, ms, vs } from "@utils/design/design";
 import BellIconWhite from "assets/icons/BellIconWhite.png";
 import { useFocusEffect } from "expo-router";
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import {
   FlatList,
   Image,
@@ -287,6 +287,7 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
                     fontFamily: "Excon-Medium",
                     fontSize: ms(16),
                     textAlign: "center",
+                    color: "black",
                   }}
                 >
                   Notifications
@@ -322,6 +323,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Excon-Regular",
     fontSize: ms(13),
+    color: "gray",
   },
   row: {
     flexDirection: "row",

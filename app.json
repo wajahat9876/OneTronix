@@ -104,7 +104,8 @@
           "faceIDPermission": "Allow OneTronix to use Face ID for secure and easy authentication."
         }
       ],
-      "expo-asset"
+      "expo-asset",
+ 
     ],
     "extra": {
       "router": {

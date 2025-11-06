@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
   },
-  label: { fontFamily: "Excon-medium", fontSize: ms(9) },
-  value: { fontFamily: "Ranade-Medium", fontSize: ms(33) },
+  label: { fontFamily: "Excon-medium", fontSize: ms(9), color: "black" },
+  value: { fontFamily: "Ranade-Medium", fontSize: ms(33), color: "black" },
   unit: {
     fontFamily: "Ranade-Medium",
     fontSize: ms(13),
@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     fontFamily: "Excon-Regular",
     fontSize: ms(13),
     marginBottom: 15,
+    color: "black",
   },
   value1: {
     fontSize: ms(12),

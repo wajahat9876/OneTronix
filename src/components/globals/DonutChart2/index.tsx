@@ -1,5 +1,5 @@
 import { ms } from "@utils/design/design";
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 import { Text, View } from "react-native";
 import { PieChart } from "react-native-gifted-charts";
 import { Text as SvgText } from "react-native-svg";
@@ -116,6 +116,7 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
                     fontSize: ms(9),
                     textAlign: "center", // 👈 extra alignment for text
                     fontFamily: "Excon-Regular",
+                    color: "black",
                   }}
                 >
                   {selectedTab === 0
@@ -134,6 +135,7 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
                     fontSize: ms(9),
                     textAlign: "center", // 👈 extra alignment for text
                     fontFamily: "Excon-Regular",
+                    color: "black",
                   }}
                 >
                   {selectedTab === 0
@@ -156,6 +158,7 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
                   fontWeight: "bold",
                   textAlign: "center",
                   fontFamily: "Excon-Medium",
+                  color: "black",
                 }}
               >
                 {totalValue === 0 ? "No Data" : `${totalValue.toFixed(1)} kWh`}

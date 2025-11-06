@@ -221,7 +221,8 @@ export default function PanZoomPage() {
   }, []);
 
   // Re
-  const dateOfBirthRef = React.useRef() as React.MutableRefObject<TextInput>;
+  // const dateOfBirthRef = React.useRef() as React.MutableRefObject<TextInput>;
+  const dateOfBirthRef = React.useRef<TextInput>(null);
 
   const [show, setShow] = useState(false);
 
@@ -774,7 +775,7 @@ const styles = StyleSheet.create({
     fontSize: ms(14),
     fontFamily: "Excon-Medium",
     fontWeight: "600",
-
+    color: "black",
     marginBottom: 8,
     // alignSelf: "center",s
   },

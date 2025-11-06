@@ -6,7 +6,6 @@ import FormikDropdownRNE from "@src/components/globals/DropdownRNE/FormikDropdow
 import FormikInput from "@src/components/globals/FormikInput";
 import ScreenAuth from "@src/components/globals/ScreenAuth";
 import ToggleSwitch from "@src/components/globals/ToggleSwitch";
-import { pageTransitionAnimation } from "@src/constants/Animation";
 import Colors from "@src/constants/Colors";
 import { textInputUnderlinedProps } from "@src/constants/Props";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
@@ -15,7 +14,7 @@ import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
 import { hs, vs } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
 import { useFormik } from "formik";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   Button,
   Platform,
@@ -27,7 +26,6 @@ import {
   View,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Animated from "react-native-reanimated";
 import * as Yup from "yup";
 const TABS = [
   { key: "Battery", label: "Battery" },
@@ -54,34 +52,63 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
   const [enable, setEnable] = useState(
     lastSelectedDeviceData?.utilityControl?.enabled
   );
+  const chargingAmpRef = useRef<TextInput>(null);
+  const floatToCutOffRef = useRef<TextInput>(null);
+  const floatingRef = useRef<TextInput>(null);
+  const fullRef = useRef<TextInput>(null);
+  const fullToFloatRef = useRef<TextInput>(null);
+  const lowRef = useRef<TextInput>(null);
 
-  //Battery Section
-  const chargingAmpRef = useRef() as React.MutableRefObject<TextInput>;
-  const floatToCutOffRef = useRef() as React.MutableRefObject<TextInput>;
-  const floatingRef = useRef() as React.MutableRefObject<TextInput>;
-  const fullRef = useRef() as React.MutableRefObject<TextInput>;
-  const fullToFloatRef = useRef() as React.MutableRefObject<TextInput>;
-  const lowRef = useRef() as React.MutableRefObject<TextInput>;
   // Heavy Load
-  const OffTimeRef = useRef() as React.MutableRefObject<TextInput>;
-  const OnTimeRef = useRef() as React.MutableRefObject<TextInput>;
-  const offLevelRef = useRef() as React.MutableRefObject<TextInput>;
-  const onLevelRef = useRef() as React.MutableRefObject<TextInput>;
+  const OffTimeRef = useRef<TextInput>(null);
+  const OnTimeRef = useRef<TextInput>(null);
+  const offLevelRef = useRef<TextInput>(null);
+  const onLevelRef = useRef<TextInput>(null);
+
   // Inverter
-  const outputVoltLevelRef = useRef() as React.MutableRefObject<TextInput>;
-  const overLoadRef = useRef() as React.MutableRefObject<TextInput>;
+  const outputVoltLevelRef = useRef<TextInput>(null);
+  const overLoadRef = useRef<TextInput>(null);
+
   // Solar
-  const highVoltsRef = useRef() as React.MutableRefObject<TextInput>;
-  const lowVoltsRef = useRef() as React.MutableRefObject<TextInput>;
+  const highVoltsRef = useRef<TextInput>(null);
+  const lowVoltsRef = useRef<TextInput>(null);
+
   // Utility
-  const overVoltsRef = useRef() as React.MutableRefObject<TextInput>;
-  const underVoltsRef = useRef() as React.MutableRefObject<TextInput>;
+  const overVoltsRef = useRef<TextInput>(null);
+  const underVoltsRef = useRef<TextInput>(null);
+
   // Utility Control
-  const cutOffTimeRef = useRef() as React.MutableRefObject<TextInput>;
-  const utilityControlOffLevelRef =
-    useRef() as React.MutableRefObject<TextInput>;
-  const utilityControlOnLevelRef =
-    useRef() as React.MutableRefObject<TextInput>;
+  const cutOffTimeRef = useRef<TextInput>(null);
+  const utilityControlOffLevelRef = useRef<TextInput>(null);
+  const utilityControlOnLevelRef = useRef<TextInput>(null);
+
+  // //Battery Section
+  // const chargingAmpRef = useRef() as React.MutableRefObject<TextInput>;
+  // const floatToCutOffRef = useRef() as React.MutableRefObject<TextInput>;
+  // const floatingRef = useRef() as React.MutableRefObject<TextInput>;
+  // const fullRef = useRef() as React.MutableRefObject<TextInput>;
+  // const fullToFloatRef = useRef() as React.MutableRefObject<TextInput>;
+  // const lowRef = useRef() as React.MutableRefObject<TextInput>;
+  // // Heavy Load
+  // const OffTimeRef = useRef() as React.MutableRefObject<TextInput>;
+  // const OnTimeRef = useRef() as React.MutableRefObject<TextInput>;
+  // const offLevelRef = useRef() as React.MutableRefObject<TextInput>;
+  // const onLevelRef = useRef() as React.MutableRefObject<TextInput>;
+  // // Inverter
+  // const outputVoltLevelRef = useRef() as React.MutableRefObject<TextInput>;
+  // const overLoadRef = useRef() as React.MutableRefObject<TextInput>;
+  // // Solar
+  // const highVoltsRef = useRef() as React.MutableRefObject<TextInput>;
+  // const lowVoltsRef = useRef() as React.MutableRefObject<TextInput>;
+  // // Utility
+  // const overVoltsRef = useRef() as React.MutableRefObject<TextInput>;
+  // const underVoltsRef = useRef() as React.MutableRefObject<TextInput>;
+  // // Utility Control
+  // const cutOffTimeRef = useRef() as React.MutableRefObject<TextInput>;
+  // const utilityControlOffLevelRef =
+  //   useRef() as React.MutableRefObject<TextInput>;
+  // const utilityControlOnLevelRef =
+  //   useRef() as React.MutableRefObject<TextInput>;
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -682,11 +709,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
   };
 
   return (
-    <Animated.View
-      {...pageTransitionAnimation}
-      key="transfer_money"
-      style={styles.container}
-    >
+    <>
       <ScreenAuth
         title="Inverter Setting"
         style={styles.screenAuthStyle}
@@ -748,7 +771,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
           <Button title="Save" onPress={() => formik.handleSubmit()} />
         </View>
       </ScreenAuth>
-    </Animated.View>
+    </>
   );
 };
 

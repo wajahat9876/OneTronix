@@ -4,7 +4,7 @@ import WelcomeTronixLogo from "@assets/eccLogo/WelcomeTronixLogo (1).svg";
 import EasyEmoneyGradient from "@src/components/globals/BackgroundGradient";
 import Screen from "@src/components/globals/Screen";
 import { ms } from "@utils/design/design";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, View, useWindowDimensions } from "react-native";
 import {
   Gesture,

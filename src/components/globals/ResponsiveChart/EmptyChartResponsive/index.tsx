@@ -1,11 +1,12 @@
 import { ms, vs } from "@utils/design/design";
-import React, { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import {
   Chart,
   HorizontalAxis,
   VerticalAxis,
 } from "react-native-responsive-linechart";
+
 interface PowerData {
   hour: number;
   Purchase: number;
@@ -15,8 +16,8 @@ interface PowerData {
   Solar: number;
 }
 interface EmptyChartProps {
-  xMax?: number; // optional, default 24
-  yMax?: number; // optional, default 10
+  xMax?: number;
+  yMax?: number;
   tickValues?: number[];
   selectedParams: (keyof PowerData)[];
 }
@@ -27,31 +28,40 @@ export default function EmptyChart({
   tickValues = [0, 6, 12, 18, 24],
   selectedParams,
 }: EmptyChartProps) {
-  const formatHourToAmPm = (hour: number) => {
+  // ✅ stable formatter function
+  const formatHourToAmPm = useCallback((hour: number) => {
     const hrs = Math.floor(hour) % 24;
     const suffix = hrs >= 12 ? "PM" : "AM";
     const displayHour = hrs % 12 === 0 ? 12 : hrs % 12;
     return `${displayHour} ${suffix}`;
-  };
-  const colors: Record<keyof PowerData, string> = {
-    hour: "#000000",
-    Purchase: "#0770FF",
-    Charging: "#F2597F",
-    Discharging: "gray",
-    Consumption: "#F7D102",
-    Solar: "#A020F0",
-  };
+  }, []);
 
-  const [legendValues, setLegendValues] = useState<
-    Record<string, number | undefined>
-  >({});
-  const paramDisplayNames: Record<string, string> = {
-    Purchase: "Purchasing Power",
-    Consumption: "Consumption Power",
-    Charging: "Charging Power",
-    Discharging: "Discharging Power",
-    Solar: "Solar Power",
-  };
+  // ✅ stable static objects
+  const colors = useMemo(
+    () => ({
+      hour: "#000000",
+      Purchase: "#0770FF",
+      Charging: "#F2597F",
+      Discharging: "gray",
+      Consumption: "#F7D102",
+      Solar: "#A020F0",
+    }),
+    []
+  );
+
+  const paramDisplayNames = useMemo(
+    () => ({
+      Purchase: "Purchasing Power",
+      Consumption: "Consumption Power",
+      Charging: "Charging Power",
+      Discharging: "Discharging Power",
+      Solar: "Solar Power",
+    }),
+    []
+  );
+
+  const [legendValues] = useState<Record<string, number | undefined>>({});
+
   return (
     <View style={{ flex: 1, marginTop: 5 }}>
       <View style={{ paddingHorizontal: 16, marginLeft: 10 }}>
@@ -84,7 +94,21 @@ export default function EmptyChart({
       </View>
       <Chart
         style={{ height: vs(370), width: "100%" }}
-        data={[{ x: 0, y: 0 }]} // placeholder point
+        data={[
+          { x: -2, y: 15 },
+          { x: -1, y: 10 },
+          { x: 0, y: 12 },
+          { x: 1, y: 7 },
+          { x: 2, y: 6 },
+          { x: 3, y: 8 },
+          { x: 4, y: 10 },
+          { x: 5, y: 8 },
+          { x: 6, y: 12 },
+          { x: 7, y: 14 },
+          { x: 8, y: 12 },
+          { x: 9, y: 13.5 },
+          { x: 10, y: 18 },
+        ]} // real data, not just [{x:0,y:0}]
         padding={{ left: 40, bottom: 20, right: 15, top: 20 }}
         xDomain={{ min: 0, max: xMax }}
         yDomain={{ min: 0, max: yMax }}
@@ -117,7 +141,7 @@ export default function EmptyChart({
                 fontSize: ms(10),
                 fontFamily: "Ranade-Medium",
               },
-              formatter: (v: number) => formatHourToAmPm(v),
+              formatter: formatHourToAmPm, // ✅ stable ref
             },
           }}
         />
@@ -125,6 +149,7 @@ export default function EmptyChart({
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   dotText: { flexDirection: "row", alignItems: "center", marginBottom: 4 },
   colorDot: { width: 10, height: 10, borderRadius: 5, marginRight: 6 },

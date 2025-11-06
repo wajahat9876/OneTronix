@@ -16,10 +16,7 @@ const Layout = () => {
         options={{ gestureEnabled: false }}
         name="Forgot/Business/index"
       />
-      <Stack.Screen
-        options={{ gestureEnabled: false }}
-        name="KYC/Business/index"
-      />
+
       <Stack.Screen options={{ gestureEnabled: false }} name="Signin/index" />
       <Stack.Screen
         options={{

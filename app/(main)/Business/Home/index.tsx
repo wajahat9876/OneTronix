@@ -4,24 +4,29 @@
 import { useGetCurrentBusinessQuery } from "@/store/api/business/businessCurrent";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import Home from "@src/components/steps/main/Business/Home";
-import { pageTransitionAnimation } from "@src/constants/Animation";
 import useMultistepForm from "@src/hooks/useMultiStepForm";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
 import { useEffect, useRef } from "react";
 import { View } from "react-native";
+import { LinearTransition } from "react-native-reanimated";
 const Index = ({ navigation }: any) => {
   const { auth_token, isDarkMode } = useAppSelector(useBusinessDetails);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data } = useGetCurrentBusinessQuery(undefined, {
     skip: !auth_token,
   });
+
   const { step, goTo } = useMultistepForm([<Home />], {
-    newHook: true,
-    animatedViewProps: {
-      ...pageTransitionAnimation,
+    animated: true,
+    animatedProps: {
+      style: {
+        flex: 1,
+      },
+      // entering: FadeInUp.duration(300).delay(200),
+      // exiting: FadeOutDown.duration(300),
+      layout: LinearTransition,
     },
   });
-
   const doublePressRef = useRef(false);
   useEffect(() => {
     let timer: string | number | NodeJS.Timeout | undefined;
@@ -38,11 +43,11 @@ const Index = ({ navigation }: any) => {
       }
     };
 
-    const unsubscribe = navigation.addListener("tabPress", handleTabPress);
+    // const unsubscribe = navigation.addListener("tabPress", handleTabPress);
 
     return () => {
       clearTimeout(timer);
-      unsubscribe();
+      // unsubscribe();
     };
   }, [goTo, navigation]);
 

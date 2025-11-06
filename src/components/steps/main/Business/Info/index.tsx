@@ -16,7 +16,7 @@ import { useAppDispatch, useAppSelector } from "@src/hooks/useReduxHooks";
 import { hs, ms, vs } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
 import { useRouter } from "expo-router";
-import React, { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
   FlatList,
   Image,
@@ -50,7 +50,8 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
   };
   const snapPoints = useMemo(() => ["100%"], []);
   const [, setBottomSheetVisible] = useState(false);
-
+  const [value, setValue] = useState<string>("");
+  const dropdownRef = useRef<any>(null);
   return (
     <Animated.View
       {...pageTransitionAnimation}
@@ -79,6 +80,7 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
               fontSize: ms(20),
               alignSelf: "center",
               marginBottom: vs(10),
+              color: "black",
             }}
           >
             Device Management
@@ -147,11 +149,13 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
                             ]}
                             dropdownType="custom"
                             onChange={(e) => {
+                              setValue(e?.value);
                               dispatch(setLastSelectedDevice(item?.settings));
                               dispatch(setLastSelectedDeviceId(item?._id));
-
                               if (e?.value === "Setting") {
-                                goTo?.(1);
+                                setTimeout(() => {
+                                  goTo?.(1);
+                                }, 500);
                               } else if (e?.value === "Edit") {
                               }
                             }}
@@ -164,7 +168,7 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
                             renderLeftIcon={() => {}}
                             valueField="value"
                             labelField="label"
-                            value={""}
+                            value={value}
                             placeholder=""
                             dropdownPosition="auto"
                             style={{
@@ -184,6 +188,7 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
                             itemTextStyle={{
                               fontSize: ms(11),
                               fontFamily: "Excon-Regular",
+                              color: "black",
                             }}
                           />
                           {/* <TouchableOpacity onPress={() => {}}>
@@ -263,6 +268,7 @@ const styles = StyleSheet.create({
   subTitle: {
     fontSize: ms(20),
     fontFamily: "Excon-Medium",
+    color: "black",
   },
 
   menuRow: {

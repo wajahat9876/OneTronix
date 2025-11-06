@@ -3,20 +3,25 @@
 
 import { useStatusBar } from "@hooks/StatusBarColor/index";
 import Step1_Select_Statement_Month from "@src/components/steps/main/Business/Transaction/Step1_Select_Statement_Month";
-import { pageTransitionAnimation } from "@src/constants/Animation";
 import useMultistepForm, {
   MultiStepFormProps,
 } from "@src/hooks/useMultiStepForm";
 import { View } from "react-native";
+import { LinearTransition } from "react-native-reanimated";
 
 const Transaction = (props: MultiStepFormProps) => {
   useStatusBar("dark");
   const { goTo: parentGoto } = props;
-  const { step } = useMultistepForm([<Step1_Select_Statement_Month />], {
-    parentGoto,
-    newHook: true,
-    animatedViewProps: {
-      ...pageTransitionAnimation,
+
+  const { step, goTo } = useMultistepForm([<Step1_Select_Statement_Month />], {
+    animated: true,
+    animatedProps: {
+      style: {
+        flex: 1,
+      },
+      // entering: FadeInUp.duration(300).delay(200),
+      // exiting: FadeOutDown.duration(300),
+      layout: LinearTransition,
     },
   });
 

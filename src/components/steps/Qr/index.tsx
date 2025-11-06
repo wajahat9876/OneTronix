@@ -18,9 +18,9 @@ import { renderToastError } from "@src/hooks/useToasty";
 import { getRespValue } from "@utils/getRespValue";
 import { Camera, CameraView } from "expo-camera";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import React, { useRef, useState } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+
 import "react-native-reanimated";
 import { useDispatch } from "react-redux";
 
@@ -39,6 +39,8 @@ const Step2ScanQr = React.memo((props: ScanQr) => {
   const { isLoading: currentLoading } = useGetCurrentBusinessQuery(undefined, {
     skip: !auth_token,
   });
+  const cameraRef2 = useRef<CameraView>(null);
+
   const dispatch = useDispatch();
   const router = useRouter();
   const requestPermissions = async () => {
@@ -72,7 +74,35 @@ const Step2ScanQr = React.memo((props: ScanQr) => {
       setScanned(true);
     }
   };
+  React.useEffect(() => {
+    const autoResumeCamera = async () => {
+      if (active) {
+        console.log("🔍 Checking camera permission for auto-resume...");
+        const { status } = await Camera.getCameraPermissionsAsync();
 
+        if (status === "granted") {
+          setHasPermission("granted");
+
+          // Wait a bit to ensure camera is mounted before resuming
+          setTimeout(() => {
+            if (cameraRef2.current) {
+              console.log(
+                "🎥 Auto-resuming camera because permission is already granted"
+              );
+              cameraRef2.current.resumePreview();
+            } else {
+              console.warn("Camera ref not ready yet during auto-resume");
+            }
+          }, 800);
+        } else {
+          console.log("🚫 Camera permission not granted yet");
+          setHasPermission("denied");
+        }
+      }
+    };
+
+    autoResumeCamera();
+  }, [active]);
   return (
     <BottomSheet
       handleIndicatorStyle={{ backgroundColor: "#494949" }}
@@ -83,19 +113,31 @@ const Step2ScanQr = React.memo((props: ScanQr) => {
     >
       <View style={{ justifyContent: "center" }}>
         {hasPermission === null && !scanned ? (
-          <TouchableOpacity
-            style={{ marginTop: 70 }}
-            onPress={() => requestPermissions()}
+          <Button
+            buttonType="simple"
+            buttonStyles={{
+              marginTop: 50,
+            }}
+            onPress={async () => {
+              console.log("▶️ Start QR Scan pressed");
+              const { status } = await Camera.requestCameraPermissionsAsync();
+              if (status === "granted") {
+                setHasPermission("granted");
+
+                // wait for next render + layout
+                setTimeout(() => {
+                  if (cameraRef2.current) {
+                    console.log("🎥 Resuming preview after permission granted");
+                    cameraRef2.current.resumePreview();
+                  }
+                }, 500);
+              } else {
+                setHasPermission("denied");
+              }
+            }}
           >
-            <Button
-              buttonType="simple"
-              buttonStyles={{
-                marginTop: 50,
-              }}
-            >
-              Start QR Scan
-            </Button>
-          </TouchableOpacity>
+            Start QR Scan
+          </Button>
         ) : hasPermission === "denied" ? (
           <SetNoPermission
             setHasPermission={setHasPermission}
@@ -113,6 +155,9 @@ const Step2ScanQr = React.memo((props: ScanQr) => {
                   marginTop: 70,
                   height: getRespValue(450),
                   width: getRespValue(450),
+                }}
+                onCameraReady={() => {
+                  console.log("ready");
                 }}
               >
                 <Image

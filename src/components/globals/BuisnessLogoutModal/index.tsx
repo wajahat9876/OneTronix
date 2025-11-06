@@ -6,11 +6,8 @@ import { hs, vs } from "@utils/design/design";
 import React, { useState } from "react";
 // eslint-disable-next-line prettier/prettier
 // import { useBuisnessSignoutMutation } from '@/store/api/business/authApis';
-import { useBuisnessSignoutMutation } from "@/store/api/business/authApis";
-import { businessLogout } from "@/store/slices/business/businessSlice";
 import LogoutIcon from "@assets/icons/eccLogoutIcon.svg";
 import { useAppDispatch } from "@src/hooks/useReduxHooks";
-import { renderToastError } from "@src/hooks/useToasty";
 import { getRespValue } from "@utils/getRespValue";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Button from "../Button";
@@ -59,8 +56,6 @@ const BusinessLogoutModal: React.FC<{ marginTop: number }> = ({
   const [isModalVisible, setModalVisible] = useState(false);
   const { handleBusinessLogout } = useBusinessLogout();
   const dispatch = useAppDispatch();
-  const [businessSignout, { isLoading: businessLoading }] =
-    useBuisnessSignoutMutation();
 
   const handleLogoutPress = () => {
     setModalVisible(true);
@@ -68,16 +63,6 @@ const BusinessLogoutModal: React.FC<{ marginTop: number }> = ({
 
   const handleCloseModal = () => {
     setModalVisible(false);
-  };
-
-  const handleConfirmLogout = async () => {
-    try {
-      // await businessSignout({}).unwrap();
-      dispatch(businessLogout());
-      handleBusinessLogout();
-    } catch (error: any) {
-      renderToastError(error?.data?.message || "Something went wrong");
-    }
   };
 
   return (
@@ -96,17 +81,21 @@ const BusinessLogoutModal: React.FC<{ marginTop: number }> = ({
         }}
         onPress={handleLogoutPress}
       >
-        <Text style={{ ...globalStyle.textMedium, fontSize: 15.34 }}>
+        <Text
+          style={{ ...globalStyle.textMedium, fontSize: 15.34, color: "black" }}
+        >
           Logout
         </Text>
         <MaterialIcons name="arrow-right" size={42} color="black" />
       </TouchableOpacity>
       {/* Logout confirmation modal */}
       <LogoutModal
-        isLoading={businessLoading}
+        isLoading={false}
         isVisible={isModalVisible}
         onClose={handleCloseModal}
-        onConfirm={handleConfirmLogout}
+        onConfirm={() => {
+          handleBusinessLogout();
+        }}
       />
     </View>
   );

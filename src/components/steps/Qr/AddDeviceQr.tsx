@@ -15,12 +15,10 @@ import { useAppSelector } from "@src/hooks/useReduxHooks";
 import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
 import { getRespValue } from "@utils/getRespValue";
 import { Camera, CameraView } from "expo-camera";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-reanimated";
-import { useDispatch } from "react-redux";
 
 interface ScanQr {
   bottomSheetRef: any;
@@ -38,13 +36,12 @@ const AddDeviceQr = React.memo((props: ScanQr) => {
     skip: !auth_token,
   });
   const [addNewDevice] = useAddNewDeviceMutation();
+  const cameraRef = useRef<CameraView>(null);
 
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const requestPermissions = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
-    setHasPermission(status === "granted" ? "granted" : "denied");
-  };
+  // const requestPermissions = async () => {
+  //   const { status } = await Camera.requestCameraPermissionsAsync();
+  //   setHasPermission(status === "granted" ? "granted" : "denied");
+  // };
   const handleAddNewDevice = async (deviceId: string) => {
     try {
       const res = await addNewDevice({ deviceId }).unwrap();
@@ -53,10 +50,7 @@ const AddDeviceQr = React.memo((props: ScanQr) => {
       renderToastError(error?.data?.message || "Something went wrong");
     }
   };
-  // useEffect(() => {
-  //   requestPermissions();
-  // }, [hasPermission]);
-  // const bottomSheetRef2 = useRef<BottomSheet>(null);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleBarCodeScanned = ({ data }: { type: string; data: string }) => {
     console.log(data, "Data");
@@ -69,9 +63,7 @@ const AddDeviceQr = React.memo((props: ScanQr) => {
       if (obj?.deviceId) {
         console.log(obj?.deviceId), "objjjjjjjj";
         handleAddNewDevice(obj?.deviceId);
-        // dispatch(setRole(false));
-        // dispatch(businessQrSignin(obj?.deviceId));
-        // router.replace("/(auth)/Signup");
+
         setTimeout(() => {
           next?.();
         });
@@ -86,6 +78,35 @@ const AddDeviceQr = React.memo((props: ScanQr) => {
     if (active) {
       setScanned(false);
     }
+  }, [active]);
+  React.useEffect(() => {
+    const autoResumeCamera = async () => {
+      if (active) {
+        console.log("🔍 Checking camera permission for auto-resume...");
+        const { status } = await Camera.getCameraPermissionsAsync();
+
+        if (status === "granted") {
+          setHasPermission("granted");
+
+          // Wait a bit to ensure camera is mounted before resuming
+          setTimeout(() => {
+            if (cameraRef.current) {
+              console.log(
+                "🎥 Auto-resuming camera because permission is already granted"
+              );
+              cameraRef.current.resumePreview();
+            } else {
+              console.warn("⚠️ Camera ref not ready yet during auto-resume");
+            }
+          }, 800);
+        } else {
+          console.log("🚫 Camera permission not granted yet");
+          setHasPermission("denied");
+        }
+      }
+    };
+
+    autoResumeCamera();
   }, [active]);
 
   return (
@@ -112,20 +133,43 @@ const AddDeviceQr = React.memo((props: ScanQr) => {
       )}
     >
       <View style={{ justifyContent: "center" }}>
+        {/* <Button
+          buttonType="simple"
+          buttonStyles={{
+            marginTop: 70,
+          }}
+          onPress={() => {
+            cameraRef?.current?.resumePreview();
+          }}
+        >
+          Resume
+        </Button> */}
         {hasPermission === null && !scanned ? (
-          <TouchableOpacity
-            style={{ marginTop: 70 }}
-            onPress={() => requestPermissions()}
+          <Button
+            buttonType="simple"
+            buttonStyles={{
+              marginTop: 50,
+            }}
+            onPress={async () => {
+              console.log("▶️ Start QR Scan pressed");
+              const { status } = await Camera.requestCameraPermissionsAsync();
+              if (status === "granted") {
+                setHasPermission("granted");
+
+                // wait for next render + layout
+                setTimeout(() => {
+                  if (cameraRef.current) {
+                    console.log("🎥 Resuming preview after permission granted");
+                    cameraRef.current.resumePreview();
+                  }
+                }, 500);
+              } else {
+                setHasPermission("denied");
+              }
+            }}
           >
-            <Button
-              buttonType="simple"
-              buttonStyles={{
-                marginTop: 50,
-              }}
-            >
-              Start QR Scan
-            </Button>
-          </TouchableOpacity>
+            Start QR Scan
+          </Button>
         ) : hasPermission === "denied" ? (
           <SetNoPermission
             setHasPermission={setHasPermission}
@@ -135,6 +179,7 @@ const AddDeviceQr = React.memo((props: ScanQr) => {
           <View style={styles.container}>
             {active && (
               <CameraView
+                ref={cameraRef}
                 onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
                 barcodeScannerSettings={{
                   barcodeTypes: ["qr"], // focus only on QR codes

@@ -1,5 +1,4 @@
 import { ms, vs } from "@utils/design/design";
-import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 type DataRowProps = {
@@ -11,14 +10,32 @@ type DataRowProps = {
 const DetailRow = ({ label, value, unit }: DataRowProps) => {
   return (
     <View style={styles.row}>
-      <Text style={{ fontSize: ms(13), fontFamily: "Excon-Regular" }}>
+      <Text
+        style={{
+          fontSize: ms(13),
+          fontFamily: "Excon-Regular",
+          color: "black",
+        }}
+      >
         {label}
       </Text>
       <View style={{ flexDirection: "row" }}>
-        <Text style={{ fontSize: ms(12), fontFamily: "Ranade-Medium" }}>
+        <Text
+          style={{
+            fontSize: ms(12),
+            fontFamily: "Ranade-Medium",
+            color: "#5A5B5B",
+          }}
+        >
           {value != null ? `${value} ` : "-"}
         </Text>
-        <Text style={{ fontSize: ms(12), fontFamily: "Ranade-Medium" }}>
+        <Text
+          style={{
+            fontSize: ms(12),
+            fontFamily: "Ranade-Medium",
+            color: "#5A5B5B",
+          }}
+        >
           {value != null ? `${unit}` : "-"}
         </Text>
       </View>
