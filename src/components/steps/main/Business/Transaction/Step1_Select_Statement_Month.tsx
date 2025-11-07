@@ -58,14 +58,14 @@ export default function PanZoomPage() {
   const [selectedParams, setSelectedParams] = useState<any[]>([]);
   const [modalDefaultSelected, setModalDefaultSelected] = useState<any[]>([]);
   const bottomSheetRef = React.useRef<PortalBottomSheetRef>(null);
-  // Update selectedParams whenever the tab changes
+
   React.useEffect(() => {
     const defaults =
       selectedTab === 0
-        ? ["Purchase", "Consumption"]
-        : ["Energy Purchased", "Energy Consumed"];
-    setSelectedParams(defaults); // Update chart state
-    setModalDefaultSelected(defaults); // Update modal default selection
+        ? ["Solar", "Consumption"]
+        : ["Solar Production", "Energy Consumed"];
+    setSelectedParams(defaults);
+    setModalDefaultSelected(defaults);
   }, [selectedTab]);
 
   //Api define
@@ -395,18 +395,18 @@ export default function PanZoomPage() {
                   options={
                     selectedTab === 0
                       ? [
-                          "Purchase",
+                          "Solar",
                           "Consumption",
+                          "Purchase",
                           "Charging",
                           "Discharging",
-                          "Solar",
                         ]
                       : [
-                          "Energy Purchased",
+                          "Solar Production",
                           "Energy Consumed",
+                          "Energy Purchased",
                           "Energy Charged",
                           "Energy Discharged",
-                          "Solar Production",
                         ]
                   }
                   defaultSelected={modalDefaultSelected}

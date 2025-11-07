@@ -1,4 +1,4 @@
-import { ms } from "@utils/design/design";
+import { hs, ms, vs } from "@utils/design/design";
 import { forwardRef } from "react";
 import { Text, View } from "react-native";
 import { PieChart } from "react-native-gifted-charts";
@@ -67,7 +67,14 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
           ];
 
     return (
-      <View ref={ref} style={{ alignItems: "center", padding: 20 }}>
+      <View
+        ref={ref}
+        style={{
+          alignItems: "center",
+          paddingHorizontal: hs(20),
+          paddingVertical: vs(8),
+        }}
+      >
         <PieChart
           donut
           radius={85}

@@ -1,3 +1,4 @@
+import SettingItem from "@src/components/commons/main/settings_stack/SettingItem";
 import GlobalLogout from "@src/components/globals/BuisnessLogoutModal";
 import ScreenAuth from "@src/components/globals/ScreenAuth";
 import { ScrollView, StyleSheet } from "@src/components/libraries";
@@ -64,6 +65,13 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
       >
         <View style={styles.container}>
           <ScrollView>
+            <SettingItem
+              title="Profile"
+              marginTop={vs(24)}
+              onClick={() => {
+                goTo?.(8);
+              }}
+            />
             {/* <Picker
               selectedValue={selectedLanguage}
               onValueChange={(itemValue, itemIndex) =>
