@@ -12,13 +12,7 @@ import { hs, ms, vs } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
 import { useRouter } from "expo-router";
 import { useMemo, useRef, useState } from "react";
-import {
-  Platform,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Platform, Text, TouchableOpacity, View } from "react-native";
 import Picker from "react-native-animated-wheel-picker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
@@ -27,7 +21,7 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
   const [isActive, setActive] = useState(false);
   const [selectedValue, setSelectedValue] = useState(1);
   // refs
-  const passwordRef = useRef() as React.MutableRefObject<TextInput>;
+
   const bottomSheetRef = useRef<BottomSheet>(null);
   const closeBottomSheet = () => {
     setActive(false);
@@ -76,9 +70,9 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
-            paddingHorizontal: hs(15),
+            paddingHorizontal: hs(18),
             paddingVertical: hs(30),
-            marginTop: Platform.OS === "ios" ? vs(10) : vs(15),
+            marginTop: Platform.OS === "ios" ? vs(10) : vs(10),
           }}
         >
           <TouchableOpacity onPress={() => router.replace("/(auth)/Signin")}>

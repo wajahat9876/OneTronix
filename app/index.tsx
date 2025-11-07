@@ -10,7 +10,6 @@ import {
   addNotificationReceivedListener,
   addNotificationResponseReceivedListener,
   removeNotificationSubscription,
-  setNotificationHandler,
 } from "expo-notifications";
 import { Redirect, useRootNavigationState } from "expo-router";
 import { useEffect } from "react";
@@ -77,13 +76,13 @@ const Index = () => {
   useEffect(() => {
     const registerNotifications = async () => {
       await registerForPushNotificationsAsync();
-      setNotificationHandler({
-        handleNotification: async () => ({
-          shouldShowAlert: true,
-          shouldPlaySound: true,
-          shouldSetBadge: true,
-        }),
-      });
+      // setNotificationHandler({
+      //   handleNotification: async () => ({
+      //     shouldShowAlert: true,
+      //     shouldPlaySound: true,
+      //     shouldSetBadge: true,
+      //   }),
+      // });
       const responseListener = addNotificationResponseReceivedListener(
         handleNotificationResponse
       );
@@ -98,7 +97,10 @@ const Index = () => {
     registerNotifications();
   }, []);
   console.log(isVerifiedEmail, businessData?.auth_token, "BusinessData");
-  if (!rootNavigationState?.key) return null;
+  if (!rootNavigationState?.key) {
+    // Wait for navigation to be ready
+    return null;
+  }
   if (businessData?.auth_token && isVerifiedEmail) {
     return <Redirect href="/(main)/Business/Home" />;
   }

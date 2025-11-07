@@ -61,8 +61,8 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
     },
   });
 
-  // refs
-  const passwordRef = useRef() as React.MutableRefObject<TextInput>;
+  // refsuseRef<TextInput>(null)
+  const passwordRef = useRef<TextInput>(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const closeBottomSheet = () => {
     setActive(false);
@@ -145,127 +145,127 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
                 fontFamily: "Excon-Regular",
                 letterSpacing: 1,
                 lineHeight: 18,
+                marginBottom: vs(100),
                 marginTop: -5, // small gap from TRONIX
               }}
             >
               TECHNOLOGY PARTNER
             </Text>
           </View>
-          <Text
-            style={{
-              fontSize: ms(24),
-              marginTop: vs(100),
-              textAlign: "center",
-              fontFamily: "Excon-Medium",
-            }}
-            className="text-white font-poppins-semibold"
-          >
-            Welcome!
-          </Text>
-          <Text
-            style={{
-              fontSize: ms(13),
-              textAlign: "center",
-              color: "gray",
-            }}
-            className="text-white font-extralight"
-          >
-            Sign in to your account
-          </Text>
-          <Text
-            style={{
-              fontSize: ms(16),
-              alignSelf: "flex-start",
-              marginLeft: hs(10),
-              fontFamily: "Excon-Regular",
-            }}
-            className="text-white font-poppins"
-          >
-            Email
-          </Text>
-          <FormikInput
-            formik={formik}
-            name="email"
-            autoComplete="username"
-            textContentType="username"
-            inputProps={{
-              ...textInputDefaultProps,
-              textContentType: "username",
-              autoComplete: "username",
-              placeholder: "Enter Email",
-              keyboardType: "email-address",
-              className: "mt-4",
-              returnKeyType: "next",
-              onSubmitEditing: () => {
-                if (passwordRef?.current) {
-                  passwordRef.current.focus();
-                }
-              },
-            }}
-          />
-          <Text
-            style={{
-              fontSize: ms(16),
-              alignSelf: "flex-start",
-              marginTop: vs(16),
-              marginLeft: hs(10),
-              fontFamily: "Excon-Regular",
-            }}
-            className="text-white font-poppins"
-          >
-            Password
-          </Text>
-          <FormikInput
-            formik={formik}
-            name="password"
-            ref={passwordRef}
-            autoComplete="password"
-            textContentType="password"
-            inputProps={{
-              ...textInputDefaultProps,
-              textContentType: "password",
-              placeholder: "Enter Password",
-              className: "mt-2",
-              returnKeyType: "done",
-              password: true,
-              autoComplete: "password",
-            }}
-          />
           <View
             style={{
-              alignSelf: "flex-end",
-              marginTop: vs(5),
-              marginBottom: vs(35),
+              padding: 15,
+              backgroundColor: "black",
+              borderRadius: 20,
+              width: "95%",
+              alignSelf: "center",
             }}
           >
-            {/* <Link href="/(auth)/Signup/Business" asChild> */}
+            <Text
+              style={{
+                fontSize: ms(24),
+                marginTop: vs(10),
+                textAlign: "center",
+                fontFamily: "Excon-Medium",
+              }}
+              className="text-white font-poppins-semibold"
+            >
+              Welcome!
+            </Text>
+            <Text
+              style={{
+                fontSize: ms(13),
+                textAlign: "center",
+                color: "gray",
+              }}
+              className="text-white font-extralight"
+            >
+              Sign in to your account
+            </Text>
+            <Text
+              style={{
+                fontSize: ms(16),
+                alignSelf: "flex-start",
+                marginLeft: hs(10),
+                fontFamily: "Excon-Regular",
+              }}
+              className="text-white font-poppins"
+            >
+              Email
+            </Text>
+            <FormikInput
+              formik={formik}
+              name="email"
+              autoComplete="username"
+              textContentType="username"
+              inputProps={{
+                ...textInputDefaultProps,
+                textContentType: "username",
+                autoComplete: "username",
+                placeholder: "Enter Email",
+                keyboardType: "email-address",
+                className: "mt-4",
+                returnKeyType: "next",
+                onSubmitEditing: () => {
+                  if (passwordRef?.current) {
+                    passwordRef.current.focus();
+                  }
+                },
+              }}
+            />
+            <Text
+              style={{
+                fontSize: ms(16),
+                alignSelf: "flex-start",
+                marginTop: vs(16),
+                marginLeft: hs(10),
+                fontFamily: "Excon-Regular",
+              }}
+              className="text-white font-poppins"
+            >
+              Password
+            </Text>
+            <FormikInput
+              formik={formik}
+              name="password"
+              ref={passwordRef}
+              autoComplete="password"
+              textContentType="password"
+              inputProps={{
+                ...textInputDefaultProps,
+                textContentType: "password",
+                placeholder: "Enter Password",
+                className: "mt-2",
+                returnKeyType: "done",
+                password: true,
+                autoComplete: "password",
+              }}
+            />
 
-            {/* </Link> */}
-            <TouchableOpacity
-              onPress={() => {
-                // router.push("/(auth)/Signup");
+            <View
+              style={{
+                alignSelf: "flex-end",
+                marginTop: vs(5),
+                marginBottom: vs(35),
               }}
             >
-              <Text
-                style={{ fontSize: 13 }}
-                className="text-white font-Excon-Regular"
+              {/* <Link href="/(auth)/Signup/Business" asChild> */}
+
+              {/* </Link> */}
+              <TouchableOpacity
+                onPress={() => {
+                  // router.push("/(auth)/Signup");
+                }}
               >
-                Forgot Password
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={{ alignItems: "center", paddingHorizontal: 20 }}>
-          {/* Button and Scan in a Row */}
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-              alignItems: "center",
-              width: "100%",
-            }}
-          >
-            <View style={{ width: "80%" }}>
+                <Text
+                  style={{ fontSize: 13 }}
+                  className="text-white font-Excon-Regular"
+                >
+                  Forgot Password
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ width: "80%", alignSelf: "center" }}>
               <Button
                 btnTitle="Log In"
                 disabled={isBusinessSignInLoading}
@@ -277,14 +277,17 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
                 }}
               />
             </View>
+          </View>
+        </View>
+        <View style={{ alignItems: "center", paddingHorizontal: 20 }}>
+          {/* Button and Scan in a Row */}
 
-            {/* <TouchableOpacity onPress={() => openBottomSheet()}>
+          {/* <TouchableOpacity onPress={() => openBottomSheet()}>
               <Image
                 source={WhiteOutline}
                 style={{ height: 25, width: 25, marginLeft: 10 }}
               />
             </TouchableOpacity> */}
-          </View>
 
           {/* Text below row */}
           <View style={{ flexDirection: "row", marginBottom: 40 }}>

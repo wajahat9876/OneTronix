@@ -28,16 +28,15 @@ import Transaction from "./Transaction";
 // const MainStack = createBottomTabNavigator<RootTabParamList>();
 const Layout = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { auth_token, data: businessData } = useAppSelector(useBusinessDetails);
+  const {
+    auth_token,
+    data: businessData,
+    isDarkMode,
+  } = useAppSelector(useBusinessDetails);
+  const Tab = createMaterialBottomTabNavigator();
   if (!auth_token) {
     return <Redirect href="/(auth)/Welcome" />;
   }
-  // if (auth_token && !businessData?.isPinSet) {
-  //   return <Redirect href="/(auth)/ChoosePin/Business" />;
-  // }
-  // if (!user?.data?.email) return <Redirect href="/(auth)/Welcome/" />;
-  const Tab = createMaterialBottomTabNavigator();
-  const { isDarkMode } = useAppSelector(useBusinessDetails);
   return (
     <Tab.Navigator
       initialRouteName="Report"

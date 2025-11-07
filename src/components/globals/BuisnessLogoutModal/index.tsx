@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import LogoutIcon from "@assets/icons/eccLogoutIcon.svg";
 import { useAppDispatch } from "@src/hooks/useReduxHooks";
 import { getRespValue } from "@utils/getRespValue";
+import { useRouter } from "expo-router";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Button from "../Button";
 // Global Logout Modal Component
@@ -65,6 +66,7 @@ const BusinessLogoutModal: React.FC<{ marginTop: number }> = ({
     setModalVisible(false);
   };
 
+  const router = useRouter();
   return (
     <View>
       <TouchableOpacity
@@ -95,6 +97,9 @@ const BusinessLogoutModal: React.FC<{ marginTop: number }> = ({
         onClose={handleCloseModal}
         onConfirm={() => {
           handleBusinessLogout();
+          setTimeout(() => {
+            router.replace("/(auth)/Welcome");
+          }, 500);
         }}
       />
     </View>
