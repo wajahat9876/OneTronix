@@ -183,8 +183,8 @@ const Index = ({ goTo }: MultiStepFormProps) => {
             }}
           >
             Last Updated:{" "}
-            {result?.results?.inverterData?.createdAt
-              ? formatTime(result?.results?.inverterData.createdAt)
+            {result?.results?.inverterData?.createdAtPK
+              ? formatTime(result?.results?.inverterData.createdAtPK)
               : "-"}
           </Text>
           <View>
