@@ -10,12 +10,7 @@ const Layout = () => {
       }}
       initialRouteName="index"
     >
-      <Stack.Screen name="ChangePassword/index" />
       <Stack.Screen name="Accounts/index" />
-
-      <Stack.Screen name="ForeignCurrencyExchange/index" />
-
-      <Stack.Screen name="CardApprovals/index" />
     </Stack>
   );
 };

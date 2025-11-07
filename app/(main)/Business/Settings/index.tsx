@@ -9,35 +9,11 @@ import { useEffect, useRef } from "react";
 import { View } from "react-native";
 import { LinearTransition } from "react-native-reanimated";
 import Account from "./Accounts";
-import ExchangeCuttOffTime from "./ExchangeCuttOffTime";
-import Faqs from "./Faqs";
-import FeeInvoice from "./FeeInvoice";
-import Fee_Plan from "./FeePlan";
-import Legals from "./Legals";
-import AntiBriberyPolicy from "./Legals/AntiBriberyPolicy";
-import CookiePolicy from "./Legals/CookiePolicy";
-import PrivacyPolicy from "./Legals/PrivacyPolicy";
-import TermsAndConditions from "./Legals/TermsAndConditions";
-import LinkedDevices from "./LinkedDevices";
-import MultiCurrency from "./MultiCurrency";
-import SubAccountDeatil from "./SubAccountDetail";
 const Index = ({ navigation }: any) => {
   const { step, goTo } = useMultistepForm(
     [
       <Settings />, // 0
       <Account />, // 1
-      <MultiCurrency />, // 2
-      <Legals />, // 3
-      <Faqs />, // 4
-      <TermsAndConditions />, // 5
-      <PrivacyPolicy />, // 6
-      <Fee_Plan />, // 7
-      <SubAccountDeatil />, // 8
-      <AntiBriberyPolicy />, // 9
-      <CookiePolicy />, // 10
-      <FeeInvoice />, // 11
-      <LinkedDevices />, // 12
-      <ExchangeCuttOffTime />, // 13
     ],
     {
       animated: true,
@@ -76,9 +52,7 @@ const Index = ({ navigation }: any) => {
       unsubscribe();
     };
   }, [goTo, navigation]);
-  return (
-    <View style={{ flex: 1, backgroundColor: "transparent" }}>{step}</View>
-  );
+  return <View style={{ flex: 1, backgroundColor: "white" }}>{step}</View>;
 };
 
 export default Index;

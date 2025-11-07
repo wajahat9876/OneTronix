@@ -146,7 +146,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
             home={result?.results?.inverterData?.data?.output?.watt ?? 0}
             battery={
               result?.results?.inverterData?.data?.battery?.status ===
-              "charging"
+              "CHARGING"
                 ? result?.results?.inverterData?.data?.battery?.chargingWatt ??
                   0
                 : result?.results?.inverterData?.data?.battery
@@ -154,7 +154,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
             }
             batteryWatt={
               result?.results?.inverterData?.data?.battery?.status ===
-              "charging"
+              "CHARGING"
                 ? result?.results?.inverterData?.data?.battery?.chargingWatt ??
                   0
                 : result?.results?.inverterData?.data?.battery

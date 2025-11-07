@@ -39,7 +39,7 @@ const Layout = () => {
   }
   return (
     <Tab.Navigator
-      initialRouteName="Report"
+      initialRouteName="Home"
       barStyle={{
         backgroundColor: isDarkMode ? "#303030" : "#F2F2F2",
         height: vs(85),

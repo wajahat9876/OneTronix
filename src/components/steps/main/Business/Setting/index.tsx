@@ -8,51 +8,23 @@ import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
 // import { globalStyle } from '@src/styles/globals';
 import { hs, vs } from "@utils/design/design";
 import { useRouter } from "expo-router";
-import { useState } from "react";
 import { View } from "react-native";
 import Animated from "react-native-reanimated";
 const Settings = ({ goTo }: MultiStepFormProps) => {
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (data?.alerts) {
-  //     setAlert(data?.alerts === true);
-  //   }
-  // }, [data?.alerts]);
-  // const toggleAlert = async () => {
-  //   const newAlertState = !alert;
-  //   try {
-  //     const res = await transactionAlert({ type: newAlertState }).unwrap();
-  //     setAlert(newAlertState);
-  //     renderToastSuccess(res?.message);
-  //   } catch (error: any) {
-  //     renderToastError(error?.data?.message || 'Something went wrong');
-  //   }
-  // };
-  const [selectedLanguage, setSelectedLanguage] = useState();
-  // const scale = useSharedValue(1);
-  // const savedScale = useSharedValue(1);
-
-  // const pinchGesture = Gesture.Pinch()
-  //   .onUpdate((e) => {
-  //     console.log("e", e);
-  //     scale.value = savedScale.value * e.scale;
-  //   })
-  //   .onEnd(() => {
-  //     savedScale.value = scale.value;
-  //   });
   return (
     <Animated.View
       {...pageTransitionAnimation}
       key="transfer_money"
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: "white" }}
     >
       <ScreenAuth
         title="Settings"
         style={{
-          backgroundColor: Colors.light.theme.backgroundTopCurveSection,
+          backgroundColor: "white",
         }}
-        topColor={Colors.light.theme.backgroundTopCurveSection}
+        topColor={"white"}
         bottomColor={Colors.light.theme.backgroundTopCurveSection}
         darkStatus
         appBarProps={{
@@ -69,18 +41,10 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
               title="Profile"
               marginTop={vs(24)}
               onClick={() => {
-                goTo?.(8);
+                goTo?.(1);
               }}
             />
-            {/* <Picker
-              selectedValue={selectedLanguage}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedLanguage(itemValue)
-              }
-            >
-              <Picker.Item label="Java" value="java" />
-              <Picker.Item label="JavaScript" value="js" />
-            </Picker> */}
+
             {/* <Text
               style={{
                 ...globalStyle.textMedium,
@@ -192,7 +156,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: hs(16),
     marginTop: vs(24),
-    backgroundColor: Colors.light.theme.backgroundTopCurveSection,
   },
 });
 export default Settings;

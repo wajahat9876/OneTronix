@@ -72,6 +72,7 @@ const BusinessLogoutModal: React.FC<{ marginTop: number }> = ({
       <TouchableOpacity
         style={{
           ...globalStyle.whiteRoundedCard,
+          backgroundColor: "#F2F2F2",
           flexDirection: "row",
           justifyContent: "space-between",
           paddingLeft: hs(16),

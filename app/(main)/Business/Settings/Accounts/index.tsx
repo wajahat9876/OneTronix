@@ -1,24 +1,44 @@
 /* eslint-disable camelcase */
-/* eslint-disable react/jsx-pascal-case */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable import/order */
+import { useBusinessDetails } from "@/store/selectors/business/business";
+import ScreenAuth from "@src/components/globals/ScreenAuth";
+import { pageTransitionAnimation } from "@src/constants/Animation";
+import Colors from "@src/constants/Colors";
+import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
+import { Text } from "react-native";
+import Animated from "react-native-reanimated";
+import { useSelector } from "react-redux";
 
-import CreateAccount from '@src/components/steps/main/Business/Setting/Account/CreateAccount';
-import { pageTransitionAnimation } from '@src/constants/Animation';
-import useMultistepForm, {
-  MultiStepFormProps,
-} from '@src/hooks/useMultiStepForm';
-import { View } from 'react-native';
+const CreateAccount = ({ back }: MultiStepFormProps) => {
+  const { data: businessData } = useSelector(useBusinessDetails);
 
-const Index = (props: MultiStepFormProps) => {
-  const { goTo: parentGoto } = props;
-  const { step } = useMultistepForm([<CreateAccount />], {
-    parentGoto,
-    newHook: true,
-    animatedViewProps: {
-      ...pageTransitionAnimation,
-    },
-  });
-
-  return <View className="flex-1">{step}</View>;
+  return (
+    <Animated.View
+      {...pageTransitionAnimation}
+      key="transfer_money"
+      style={{ flex: 1, backgroundColor: "white" }}
+    >
+      <ScreenAuth
+        title="Profile"
+        style={{
+          backgroundColor: "white",
+        }}
+        topColor={"white"}
+        bottomColor={Colors.light.theme.backgroundTopCurveSection}
+        darkStatus
+        appBarProps={{
+          light: true,
+          rightIcon: true,
+        }}
+        back={() => back?.()}
+      >
+        <Text style={{ color: "black", fontFamily: "Excon-Medium" }}>
+          Profile
+        </Text>
+      </ScreenAuth>
+    </Animated.View>
+  );
 };
 
-export default Index;
+export default CreateAccount;
