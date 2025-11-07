@@ -18,7 +18,7 @@ import { ms } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
 import { useFocusEffect } from "expo-router";
 import moment from "moment";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { RefreshControl, ScrollView, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 
@@ -144,8 +144,22 @@ const Index = ({ goTo }: MultiStepFormProps) => {
             solar={result?.results?.inverterData?.data?.solar?.watt ?? 0}
             grid={result?.results?.inverterData?.data?.grid?.watt ?? 0}
             home={result?.results?.inverterData?.data?.output?.watt ?? 0}
-            battery={result?.results?.inverterData?.data?.battery?.watt ?? 0}
-            batteryWatt={result?.results?.inverterData?.data?.battery?.watt}
+            battery={
+              result?.results?.inverterData?.data?.battery?.status ===
+              "charging"
+                ? result?.results?.inverterData?.data?.battery?.chargingWatt ??
+                  0
+                : result?.results?.inverterData?.data?.battery
+                    ?.dischargingWatt ?? 0
+            }
+            batteryWatt={
+              result?.results?.inverterData?.data?.battery?.status ===
+              "charging"
+                ? result?.results?.inverterData?.data?.battery?.chargingWatt ??
+                  0
+                : result?.results?.inverterData?.data?.battery
+                    ?.dischargingWatt ?? 0
+            }
             batteryStatus={result?.results?.inverterData?.data?.battery?.status}
           />
           {/* <Image

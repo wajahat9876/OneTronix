@@ -1,13 +1,10 @@
+import { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { vs } from "@utils/design/design";
 import React, { useEffect, useState } from "react";
-import {
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Checkbox } from "react-native-paper";
+import PortalBottomSheet from "../PortalBottomSheet";
+import { PortalBottomSheetRef } from "../PortalBottomSheet/types";
 
 interface FilterModalProps {
   visible: boolean;
@@ -15,6 +12,7 @@ interface FilterModalProps {
   options: string[];
   defaultSelected?: string[];
   onConfirm: (selected: string[]) => void;
+  ref: React.RefObject<PortalBottomSheetRef | null>;
 }
 
 const FilterModal: React.FC<FilterModalProps> = ({
@@ -23,6 +21,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
   options,
   defaultSelected = [],
   onConfirm,
+  ref,
 }) => {
   const [selected, setSelected] = useState<string[]>(defaultSelected);
 
@@ -42,78 +41,74 @@ const FilterModal: React.FC<FilterModalProps> = ({
     onClose();
   };
 
-  const handleBackgroundPress = () => {
-    onClose();
-  };
-
   const restoreDefault = () => {
     setSelected(defaultSelected);
   };
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="fade"
-      onRequestClose={onClose}
+    <PortalBottomSheet
+      ref={ref}
+      snapPoints={["60%"]}
+      handleComponent={undefined}
+      enableContentPanningGesture
+      enableHandlePanningGesture
+      handleIndicatorStyle={{
+        backgroundColor: "black",
+      }}
+      TouchComponent={() => <></>}
+      backdropComponent={(
+        props // Custom backdrop to handle press
+      ) => (
+        <BottomSheetBackdrop
+          {...props}
+          appearsOnIndex={0}
+          disappearsOnIndex={-1}
+          onPress={() => ref?.current?.close()}
+        />
+      )}
     >
-      {/* Outer background (detect press outside modal) */}
-      <TouchableWithoutFeedback onPress={handleBackgroundPress}>
-        <View style={styles.modalBg}>
-          {/* Inner box stops background press */}
-          <TouchableWithoutFeedback>
-            <View style={styles.modalBox}>
-              <Text style={styles.title}>Parameter Selection</Text>
+      <ScrollView style={styles.modalBox}>
+        <Text style={styles.title}>Parameter Selection</Text>
 
-              {options.map((item) => (
-                <TouchableOpacity
-                  key={item}
-                  style={styles.row}
-                  onPress={() => toggleSelection(item)}
-                  activeOpacity={0.8}
-                >
-                  <Checkbox
-                    status={selected.includes(item) ? "checked" : "unchecked"}
-                    onPress={() => toggleSelection(item)}
-                  />
-                  <Text>{item}</Text>
-                </TouchableOpacity>
-              ))}
+        {options.map((item) => (
+          <TouchableOpacity
+            key={item}
+            style={styles.row}
+            onPress={() => toggleSelection(item)}
+            activeOpacity={0.8}
+          >
+            <Checkbox
+              status={selected.includes(item) ? "checked" : "unchecked"}
+              onPress={() => toggleSelection(item)}
+            />
+            <Text>{item}</Text>
+          </TouchableOpacity>
+        ))}
 
-              <TouchableOpacity
-                style={styles.confirmBtn}
-                onPress={handleConfirm}
-                activeOpacity={0.8}
-              >
-                <Text style={styles.confirmText}>Confirm</Text>
-              </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.confirmBtn}
+          onPress={handleConfirm}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.confirmText}>Confirm</Text>
+        </TouchableOpacity>
 
-              <TouchableOpacity onPress={restoreDefault}>
-                <Text style={styles.restoreText}>Restore Default</Text>
-              </TouchableOpacity>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </TouchableWithoutFeedback>
-    </Modal>
+        <TouchableOpacity onPress={restoreDefault}>
+          <Text style={styles.restoreText}>Restore Default</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </PortalBottomSheet>
   );
 };
 
 export default FilterModal;
 
 const styles = StyleSheet.create({
-  modalBg: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
   modalBox: {
-    width: "80%",
+    flex: 1,
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 20,
-    elevation: 5,
   },
   title: {
     fontSize: 16,
@@ -127,6 +122,8 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   confirmBtn: {
+    width: "80%",
+    alignSelf: "center",
     marginTop: 15,
     backgroundColor: "#007AFF",
     paddingVertical: 10,
@@ -142,5 +139,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: "#007AFF",
     textDecorationLine: "underline",
+    marginBottom: vs(60),
   },
 });

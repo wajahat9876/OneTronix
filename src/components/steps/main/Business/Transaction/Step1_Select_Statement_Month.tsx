@@ -18,6 +18,7 @@ import DonutChart2 from "@src/components/globals/DonutChart2";
 import FilterModal from "@src/components/globals/FilterModal";
 import FormikDatePicker from "@src/components/globals/FormikDatePicker";
 import HeaderMain from "@src/components/globals/HeaderMain";
+import { PortalBottomSheetRef } from "@src/components/globals/PortalBottomSheet/types";
 import PinchZoomLineChart from "@src/components/globals/ResponsiveChart";
 import EmptyChart from "@src/components/globals/ResponsiveChart/EmptyChartResponsive";
 import ZoomBarChart from "@src/components/globals/ZoomableChart/barChart";
@@ -56,7 +57,7 @@ export default function PanZoomPage() {
   const [chartHeight, setChartHeight] = useState(100);
   const [selectedParams, setSelectedParams] = useState<any[]>([]);
   const [modalDefaultSelected, setModalDefaultSelected] = useState<any[]>([]);
-
+  const bottomSheetRef = React.useRef<PortalBottomSheetRef>(null);
   // Update selectedParams whenever the tab changes
   React.useEffect(() => {
     const defaults =
@@ -247,6 +248,10 @@ export default function PanZoomPage() {
     });
   }, [data?.results]);
 
+  const openFilterModel = () => {
+    setModalVisible(true);
+    bottomSheetRef.current?.open();
+  };
   return (
     <HeaderMain
       title=""
@@ -372,9 +377,7 @@ export default function PanZoomPage() {
               )}
               <View style={{ marginTop: vs(10), marginRight: 40 }}>
                 <View style={{ flexDirection: "row" }}>
-                  <TouchableOpacity
-                    onPress={() => setModalVisible((prev) => !prev)}
-                  >
+                  <TouchableOpacity onPress={() => openFilterModel()}>
                     <Image
                       source={FilterIcon}
                       style={{ width: 20, height: 20 }}
@@ -382,9 +385,13 @@ export default function PanZoomPage() {
                   </TouchableOpacity>
                 </View>
                 <FilterModal
+                  ref={bottomSheetRef}
                   key={selectedTab}
                   visible={modalVisible}
-                  onClose={() => setModalVisible(false)}
+                  onClose={() => {
+                    setModalVisible(false);
+                    bottomSheetRef?.current?.close();
+                  }}
                   options={
                     selectedTab === 0
                       ? [
@@ -735,6 +742,7 @@ export default function PanZoomPage() {
           }}
         />
       )}
+
       <Loader visible={summaryFetching} message="Yahoooo" />
     </HeaderMain>
   );

@@ -2,7 +2,7 @@ import { useBusinessDetails } from "@/store/selectors/business/business";
 import DiagramDark from "@assets/icons/darkHouse.png";
 import Diagram from "@assets/icons/diagram.png";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
