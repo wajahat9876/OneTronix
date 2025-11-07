@@ -137,37 +137,51 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
             TECHNOLOGY PARTNER
           </Text>
         </View>
-        <View style={{ height: 250 }}>
+        <View
+          style={{
+            height: 250,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: vs(60),
+          }}
+        >
+          {/* "I am" text */}
+          <Text
+            style={{
+              color: "gray",
+              fontSize: ms(28),
+              fontFamily: "Excon-Regular",
+              marginRight: -40,
+              marginLeft: 40,
+            }}
+          >
+            I am
+          </Text>
+
           <Picker
             itemHeight={45}
             pickerData={DATA}
             textStyle={{
-              fontSize: 30,
+              fontSize: 32,
               fontFamily: "Excon-Regular",
             }}
             onSelected={(item) => setSelectedValue(item?.value)}
           />
         </View>
-        <View style={{ alignItems: "flex-end", marginRight: 10 }}>
-          {/* Button and Scan in a Row */}
 
-          {/* <View style={{ width: "80%" }}>
-              <Button
-                disabled={!selectedValue}
-                btnTitle="Continue"
-                btnColor="#F4192C"
-                btnTitleColor="white"
-                onClick={() => {
-                  handlePress();
-                }}
-              />
-            </View> */}
+        <View
+          style={{
+            position: "absolute",
+            bottom: vs(40),
+            right: hs(20),
+          }}
+        >
           <TouchableOpacity onPress={() => handlePress()}>
             <Text
               style={{
                 color: "white",
-                fontSize: ms(14),
-                marginTop: vs(10),
+                fontSize: ms(16),
               }}
             >
               Next →

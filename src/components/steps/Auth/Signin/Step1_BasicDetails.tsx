@@ -265,7 +265,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
                 </Text>
               </TouchableOpacity>
             </View>
-            <View style={{ width: "80%", alignSelf: "center" }}>
+            <View style={{ width: "95%", alignSelf: "center" }}>
               <Button
                 btnTitle="Log In"
                 disabled={isBusinessSignInLoading}

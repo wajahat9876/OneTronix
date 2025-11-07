@@ -24,7 +24,7 @@ const Button = ({
         // width: '100%',
         alignItems: "center",
         backgroundColor: btnColor,
-        borderRadius: ms(16),
+        borderRadius: ms(10),
         paddingTop: vs(16),
         paddingBottom: vs(16),
         paddingLeft: hs(32),

@@ -4,13 +4,7 @@
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import { useConfig } from "@/store/selectors/config/config";
 import { setModal, setValue } from "@/store/slices/config/configSlice";
-import { useNotifcations } from "@src/hooks/useNotification";
 import { useAppDispatch, useAppSelector } from "@src/hooks/useReduxHooks";
-import {
-  addNotificationReceivedListener,
-  addNotificationResponseReceivedListener,
-  removeNotificationSubscription,
-} from "expo-notifications";
 import { Redirect, useRootNavigationState } from "expo-router";
 import { useEffect } from "react";
 import { LogBox } from "react-native";
@@ -67,36 +61,36 @@ const Index = () => {
     getDeviceId();
   }
   // pushnotification code
-  const {
-    registerForPushNotificationsAsync,
-    handleNotificationResponse,
-    handleNotification,
-  } = useNotifcations();
+  // const {
+  //   registerForPushNotificationsAsync,
+  //   handleNotificationResponse,
+  //   handleNotification,
+  // } = useNotifcations();
 
-  useEffect(() => {
-    const registerNotifications = async () => {
-      await registerForPushNotificationsAsync();
-      // setNotificationHandler({
-      //   handleNotification: async () => ({
-      //     shouldShowAlert: true,
-      //     shouldPlaySound: true,
-      //     shouldSetBadge: true,
-      //   }),
-      // });
-      const responseListener = addNotificationResponseReceivedListener(
-        handleNotificationResponse
-      );
-      const responseListener2 =
-        addNotificationReceivedListener(handleNotification);
-      return () => {
-        if (responseListener) removeNotificationSubscription(responseListener);
-        if (responseListener2)
-          removeNotificationSubscription(responseListener2);
-      };
-    };
-    registerNotifications();
-  }, []);
-  console.log(isVerifiedEmail, businessData?.auth_token, "BusinessData");
+  // useEffect(() => {
+  //   const registerNotifications = async () => {
+  //     await registerForPushNotificationsAsync();
+  //     // setNotificationHandler({
+  //     //   handleNotification: async () => ({
+  //     //     shouldShowAlert: true,
+  //     //     shouldPlaySound: true,
+  //     //     shouldSetBadge: true,
+  //     //   }),
+  //     // });
+  //     const responseListener = addNotificationResponseReceivedListener(
+  //       handleNotificationResponse
+  //     );
+  //     const responseListener2 =
+  //       addNotificationReceivedListener(handleNotification);
+  //     return () => {
+  //       if (responseListener) removeNotificationSubscription(responseListener);
+  //       if (responseListener2)
+  //         removeNotificationSubscription(responseListener2);
+  //     };
+  //   };
+  //   registerNotifications();
+  // }, []);
+
   if (!rootNavigationState?.key) {
     // Wait for navigation to be ready
     return null;
