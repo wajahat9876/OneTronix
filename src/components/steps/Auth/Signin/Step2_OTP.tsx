@@ -171,12 +171,12 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
         <Text style={styles.subtitle} className="text-[#D6D6D6]  ">
           Enter the verification code we sent on your email
         </Text>
-        <Animated.View className="justify-center items-center">
+        <Animated.View className="justify-center items-center ">
           <OTP
             inputTextColor={Colors.light.theme.white}
             code={input}
             onChange={(text: string) => setInput(text)}
-            width={90}
+            width={80}
             // editable={false}
             boxColor={Colors.light.theme.textInputBackgroundDark}
             onCodeFilled={handleCodeSubmit}
@@ -234,8 +234,9 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: vs(22),
+    // paddingTop: vs(22),
     paddingHorizontal: hs(8),
+    marginTop: vs(60),
   },
   title: {
     fontSize: ms(24),

@@ -122,6 +122,8 @@ const styles = StyleSheet.create({
   modalText: {
     fontSize: 18,
     marginBottom: 20,
+    fontFamily: "Excon-Regular",
+    color: "black",
   },
   buttonContainer: {
     flexDirection: "row",

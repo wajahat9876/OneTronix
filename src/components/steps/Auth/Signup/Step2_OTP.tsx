@@ -232,7 +232,7 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: vs(22),
+    marginTop: vs(60),
     paddingHorizontal: hs(8),
   },
   title: {

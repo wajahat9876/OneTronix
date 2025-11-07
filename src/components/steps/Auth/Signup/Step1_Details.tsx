@@ -8,10 +8,10 @@ import {
 } from "@/store/api/business/authApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import { setRole } from "@/store/slices/business/businessSlice";
+import Logo from "@assets/eccLogo/oneTronixLogo.svg";
 import Button from "@src/components/globals/Button";
 import FormikInput from "@src/components/globals/FormikInput";
 import DismissKeyboardView from "@src/components/globals/HideKeyboard";
-import OneTronixBrand from "@src/components/globals/OneTronixBrand";
 import { StyleSheet, Text } from "@src/components/libraries";
 import { textInputDefaultProps } from "@src/constants/Props";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
@@ -104,32 +104,103 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
 
   return (
     <>
-      <OneTronixBrand align="right" />
       <View
         style={{
-          flex: 1,
-          paddingLeft: hs(16),
-          paddingRight: hs(16),
-          paddingTop: vs(16),
-          borderTopLeftRadius: ms(20),
-          borderTopRightRadius: ms(20),
-          backgroundColor: "transparent",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingHorizontal: hs(18),
+          paddingVertical: hs(30),
+          marginTop: Platform.OS === "ios" ? vs(10) : vs(10),
         }}
       >
-        <KeyboardAwareScrollView
-          contentContainerStyle={{
-            paddingBottom: Platform.OS === "ios" ? getRespValue(10) : 20,
-            flexGrow: 1,
+        <TouchableOpacity onPress={() => router.replace("/(auth)/Signin")}>
+          <Text
+            style={{
+              color: "white",
+              fontSize: ms(16),
+              marginTop: vs(10),
+              fontFamily: "Ranade-Regular",
+            }}
+          >
+            ← Back
+          </Text>
+        </TouchableOpacity>
+        <View
+          style={{
+            alignSelf: "flex-end",
           }}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-          enableOnAndroid
-          extraScrollHeight={20}
-          enableAutomaticScroll
-          scrollEnabled
-          extraHeight={Platform.OS === "ios" ? getRespValue(300) : 180}
-          viewIsInsideTabBar
-          keyboardOpeningTime={0}
+        >
+          <Logo />
+        </View>
+      </View>
+      <KeyboardAwareScrollView
+        contentContainerStyle={{
+          paddingBottom: Platform.OS === "ios" ? getRespValue(10) : 20,
+          flexGrow: 1,
+        }}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+        enableOnAndroid
+        extraScrollHeight={20}
+        enableAutomaticScroll
+        scrollEnabled
+        extraHeight={Platform.OS === "ios" ? getRespValue(300) : 180}
+        viewIsInsideTabBar
+        keyboardOpeningTime={0}
+      >
+        <View
+          style={{
+            alignItems: "flex-start",
+            marginTop: vs(32),
+            paddingHorizontal: 10,
+          }}
+        >
+          <Text
+            style={{
+              color: "red",
+              fontWeight: "900",
+              fontSize: ms(40),
+              lineHeight: 45,
+              fontFamily: "Excon-Black",
+            }}
+          >
+            ONE
+          </Text>
+          <Text
+            style={{
+              color: "red",
+              fontSize: ms(44),
+              fontFamily: "Excon-Regular",
+              lineHeight: 45,
+              marginTop: -4, // tighten spacing between ONE and TRONIX
+            }}
+          >
+            TRONIX
+          </Text>
+          <Text
+            style={{
+              color: "white",
+              fontSize: ms(13),
+              fontFamily: "Excon-Regular",
+              letterSpacing: 1,
+              lineHeight: 18,
+
+              marginTop: -5, // small gap from TRONIX
+            }}
+          >
+            TECHNOLOGY PARTNER
+          </Text>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            paddingLeft: hs(16),
+            paddingRight: hs(16),
+            marginTop: vs(82),
+            borderTopLeftRadius: ms(20),
+            borderTopRightRadius: ms(20),
+            backgroundColor: "transparent",
+          }}
         >
           <View
             style={{
@@ -321,8 +392,8 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
               </Text>
             </TouchableOpacity>
           </View>
-        </KeyboardAwareScrollView>
-      </View>
+        </View>
+      </KeyboardAwareScrollView>
     </>
   );
 };

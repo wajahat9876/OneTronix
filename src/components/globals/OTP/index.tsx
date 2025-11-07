@@ -5,6 +5,7 @@ import Colors from "@src/constants/Colors";
 import OTPInputView from "@twotalltotems/react-native-otp-input";
 import { hs, ms, vs } from "@utils/design/design";
 import React, { useEffect } from "react";
+import { Keyboard, Platform } from "react-native";
 
 const OTP = (props: any) => {
   const {
@@ -46,8 +47,12 @@ const OTP = (props: any) => {
     //     .then(() => addListener(listenOTP))
     //     .catch(debug);
     // }
+    if (Platform.OS === "android") {
+      Keyboard.dismiss();
+    }
     return () => {
       setOtpCode(null);
+
       // removeListener();
     };
   }, []);
@@ -60,24 +65,24 @@ const OTP = (props: any) => {
         height: vs(100),
         width: `${width}%` || "90%",
       }}
-      placeholderCharacter="-"
+      placeholderCharacter={Platform.OS === "ios" ? "-" : ""}
       keyboardType="number-pad"
       keyboardAppearance="dark"
       onCodeChanged={onChange}
       code={otpCode || code}
       onCodeFilled={onCodeFilled}
       editable
-      autoFocusOnLoad
+      // autoFocusOnLoad
       secureTextEntry={secureTextEntry}
       selectionColor="white"
       codeInputFieldStyle={{
         borderWidth: 0,
         borderRadius: ms(10),
         color: inputTextColor || Colors.light.theme.white,
-        fontSize: ms(24),
+        fontSize: ms(22),
         fontFamily: "Ranade-Regular",
-        height: vs(55),
-        width: hs(50),
+        height: vs(50),
+        width: hs(45),
         backgroundColor: boxColor || Colors.light.theme.darkYellow,
       }}
     />
