@@ -16,6 +16,7 @@ const OTP = (props: any) => {
     width,
     editable,
     secureTextEntry,
+    onChange,
   } = props;
 
   const [otpCode, setOtpCode] = React.useState<string | null>();
@@ -59,10 +60,14 @@ const OTP = (props: any) => {
         height: vs(100),
         width: `${width}%` || "90%",
       }}
+      placeholderCharacter="-"
+      keyboardType="number-pad"
+      keyboardAppearance="dark"
+      onCodeChanged={onChange}
       code={otpCode || code}
       onCodeFilled={onCodeFilled}
-      editable={editable}
-      autoFocusOnLoad={false}
+      editable
+      autoFocusOnLoad
       secureTextEntry={secureTextEntry}
       selectionColor="white"
       codeInputFieldStyle={{

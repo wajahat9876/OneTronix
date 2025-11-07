@@ -7,14 +7,8 @@ import {
   TooltipComponent,
 } from "echarts/components";
 import * as echarts from "echarts/core";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
 echarts.use([
   SVGRenderer,
@@ -45,7 +39,6 @@ export default function ZoomBarChart({
 }: BarChartProps) {
   const chartRef = useRef<any>(null);
   const chartInstanceRef = useRef<echarts.ECharts | null>(null);
-  const { width } = useWindowDimensions();
   const CHART_WIDTH = hs(395);
   const height = vs(420);
 
@@ -234,7 +227,7 @@ export default function ZoomBarChart({
         type: "value",
         min: 0,
         max: maxY,
-        splitNumber: 1,
+        splitNumber: 0.1,
         axisLine: { show: true, lineStyle: { color: "#888", width: 1 } },
         axisTick: { show: true, lineStyle: { color: "#888" }, length: 3 },
         splitLine: { show: true },

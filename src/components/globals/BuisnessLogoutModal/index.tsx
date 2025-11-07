@@ -97,9 +97,6 @@ const BusinessLogoutModal: React.FC<{ marginTop: number }> = ({
         onClose={handleCloseModal}
         onConfirm={() => {
           handleBusinessLogout();
-          setTimeout(() => {
-            router.replace("/(auth)/Welcome");
-          }, 500);
         }}
       />
     </View>

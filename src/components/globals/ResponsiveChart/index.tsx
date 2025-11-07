@@ -52,7 +52,7 @@ export default function PinchZoomLineChart({
   const baseKey = visibleKeys[0] ?? "ac";
   const xMax = 24;
 
-  const globalMaxY = Math.max(
+  const yMax = Math.max(
     ...data?.flatMap((d) => [
       d.Purchase,
       d.Charging,
@@ -62,7 +62,7 @@ export default function PinchZoomLineChart({
     ]),
     0
   );
-
+  const globalMaxY = Math.ceil(yMax) + 1;
   const [viewport, setViewport] = useState({
     size: { width: 24, height: globalMaxY && globalMaxY > 0 ? globalMaxY : 10 },
     origin: { x: 0 },

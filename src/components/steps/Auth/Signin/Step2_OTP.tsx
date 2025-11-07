@@ -7,7 +7,6 @@ import { useBusinessDetails } from "@/store/selectors/business/business";
 import { useConfig } from "@/store/selectors/config/config";
 import { businessLogout } from "@/store/slices/business/businessSlice";
 import Logo from "@assets/eccLogo/oneTronixLogo.svg";
-import ButtonsGrid from "@src/components/globals/GridButtons";
 import LoadingModal from "@src/components/globals/LoadingModal";
 import OTP from "@src/components/globals/OTP";
 import { StyleSheet, Text } from "@src/components/libraries";
@@ -15,7 +14,6 @@ import Colors from "@src/constants/Colors";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm/types";
 import { useAppDispatch, useAppSelector } from "@src/hooks/useReduxHooks";
 import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
-import { globalStyle } from "@src/styles/globals";
 import { hs, ms, vs } from "@utils/design/design";
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -177,13 +175,14 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
           <OTP
             inputTextColor={Colors.light.theme.white}
             code={input}
+            onChange={(text: string) => setInput(text)}
             width={90}
-            editable={false}
+            // editable={false}
             boxColor={Colors.light.theme.textInputBackgroundDark}
-            onCodeFilled={() => {}}
+            onCodeFilled={handleCodeSubmit}
           />
         </Animated.View>
-        <View
+        {/* <View
           style={[
             globalStyle.keyboard,
             { backgroundColor: Colors.light.theme.textInputBackgroundDark },
@@ -200,7 +199,7 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
               handleCodeSubmit(otp);
             }}
           />
-        </View>
+        </View> */}
         {/* {!otpExpired ? (
           <View style={{ alignSelf: 'center' }}>
             <OTPTimer

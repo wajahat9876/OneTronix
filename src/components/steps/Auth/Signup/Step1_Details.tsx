@@ -68,11 +68,11 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
       handleBusinessSignup(values);
     },
   });
-  const firstNameRef = useRef() as React.MutableRefObject<TextInput>;
-  const lastNameRef = useRef() as React.MutableRefObject<TextInput>;
-  const emailRef = useRef() as React.MutableRefObject<TextInput>;
-  const passwordRef = useRef() as React.MutableRefObject<TextInput>;
-  const confirmPasswordRef = useRef() as React.MutableRefObject<TextInput>;
+  const firstNameRef = useRef<TextInput>(null);
+  const lastNameRef = useRef<TextInput>(null);
+  const emailRef = useRef<TextInput>(null);
+  const passwordRef = useRef<TextInput>(null);
+  const confirmPasswordRef = useRef<TextInput>(null);
 
   const handleBusinessSignup = async (values: any) => {
     Keyboard.dismiss();
@@ -127,166 +127,171 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
           extraScrollHeight={20}
           enableAutomaticScroll
           scrollEnabled
-          extraHeight={Platform.OS === "ios" ? getRespValue(250) : 180}
+          extraHeight={Platform.OS === "ios" ? getRespValue(300) : 180}
           viewIsInsideTabBar
           keyboardOpeningTime={0}
         >
-          <DismissKeyboardView>
-            <Text
-              style={{
-                fontSize: ms(24),
-                marginTop: vs(20),
-                textAlign: "center",
-                fontFamily: "Excon-Medium",
-              }}
-              className="text-white font-poppins-semibold"
-            >
-              Create an Account
-            </Text>
-            <Text
-              style={{
-                fontSize: ms(13),
-                textAlign: "center",
-                color: "gray",
-              }}
-              className="text-white font-extralight"
-            >
-              Enter details to register
-            </Text>
-          </DismissKeyboardView>
-          <DismissKeyboardView>
-            <Text style={styles.labelTxt}>First Name</Text>
-          </DismissKeyboardView>
-          <View style={styles.textInput}>
-            <FormikInput
-              formik={formik}
-              name="firstName"
-              ref={firstNameRef}
-              inputProps={{
-                ...textInputDefaultProps,
-                placeholder: "Enter first name",
-                keyboardType: "ascii-capable",
-                className: "mt-4",
-                returnKeyType: "next",
-                onSubmitEditing: () => {
-                  if (lastNameRef?.current) {
-                    lastNameRef.current.focus();
-                  }
-                },
-              }}
-            />
-          </View>
-          <DismissKeyboardView>
-            <Text style={styles.labelTxt}>Last Name</Text>
-          </DismissKeyboardView>
-          <View style={styles.textInput}>
-            <FormikInput
-              formik={formik}
-              name="lastName"
-              ref={lastNameRef}
-              inputProps={{
-                ...textInputDefaultProps,
+          <View
+            style={{
+              padding: 15,
+              backgroundColor: "black",
+              borderRadius: 20,
+              width: "100%",
+              alignSelf: "center",
+            }}
+          >
+            <DismissKeyboardView>
+              <Text
+                style={{
+                  fontSize: ms(24),
+                  marginTop: vs(20),
+                  textAlign: "center",
+                  fontFamily: "Excon-Medium",
+                }}
+                className="text-white font-poppins-semibold"
+              >
+                Create an Account
+              </Text>
+              <Text
+                style={{
+                  fontSize: ms(13),
+                  textAlign: "center",
+                  color: "gray",
+                }}
+                className="text-white font-extralight"
+              >
+                Enter details to register
+              </Text>
+            </DismissKeyboardView>
+            <DismissKeyboardView>
+              <Text style={styles.labelTxt}>First Name</Text>
+            </DismissKeyboardView>
+            <View style={styles.textInput}>
+              <FormikInput
+                formik={formik}
+                name="firstName"
+                ref={firstNameRef}
+                inputProps={{
+                  ...textInputDefaultProps,
+                  placeholder: "Enter first name",
+                  keyboardType: "ascii-capable",
+                  className: "mt-4",
+                  returnKeyType: "next",
+                  onSubmitEditing: () => {
+                    if (lastNameRef?.current) {
+                      lastNameRef.current.focus();
+                    }
+                  },
+                }}
+              />
+            </View>
+            <DismissKeyboardView>
+              <Text style={styles.labelTxt}>Last Name</Text>
+            </DismissKeyboardView>
+            <View style={styles.textInput}>
+              <FormikInput
+                formik={formik}
+                name="lastName"
+                ref={lastNameRef}
+                inputProps={{
+                  ...textInputDefaultProps,
 
-                placeholder: "Enter last name",
-                keyboardType: "ascii-capable",
-                className: "mt-4",
-                returnKeyType: "next",
-                onSubmitEditing: () => {
-                  if (emailRef?.current) {
-                    emailRef.current.focus();
-                  }
-                },
-              }}
-            />
-          </View>
-          {/* create password */}
-          <DismissKeyboardView>
-            <Text style={styles.labelTxt}>Email</Text>
-          </DismissKeyboardView>
-          <View style={styles.textInput}>
-            <FormikInput
-              formik={formik}
-              name="email"
-              ref={emailRef}
-              autoComplete="username"
-              textContentType="username"
-              inputProps={{
-                ...textInputDefaultProps,
-                textContentType: "username",
-                autoComplete: "username",
-                placeholder: "Enter Email",
-                keyboardType: "email-address",
-                className: "mt-4",
-                returnKeyType: "next",
-                onSubmitEditing: () => {
-                  if (passwordRef?.current) {
-                    passwordRef.current.focus();
-                  }
-                },
-              }}
-            />
-          </View>
-          <DismissKeyboardView>
-            <Text style={styles.labelTxt}>Password</Text>
-          </DismissKeyboardView>
-          <View style={styles.textInput}>
-            <FormikInput
-              formik={formik}
-              name="password"
-              ref={passwordRef}
-              autoComplete="password"
-              textContentType="password"
-              inputProps={{
-                ...textInputDefaultProps,
-                textContentType: "password",
-                placeholder: "Enter Password",
-                className: "mt-2",
-                returnKeyType: "done",
-                password: true,
-                autoComplete: "password",
-                onSubmitEditing: () => {
-                  if (confirmPasswordRef?.current) {
-                    confirmPasswordRef.current.focus();
-                  }
-                },
-              }}
-            />
-          </View>
-          <DismissKeyboardView>
-            <Text style={styles.labelTxt}>Confirm Password</Text>
-          </DismissKeyboardView>
-          <View style={styles.textInput}>
-            <FormikInput
-              formik={formik}
-              name="confirmPassword"
-              ref={confirmPasswordRef}
-              inputProps={{
-                ...textInputDefaultProps,
+                  placeholder: "Enter last name",
+                  keyboardType: "ascii-capable",
+                  className: "mt-4",
+                  returnKeyType: "next",
+                  onSubmitEditing: () => {
+                    if (emailRef?.current) {
+                      emailRef.current.focus();
+                    }
+                  },
+                }}
+              />
+            </View>
+            {/* create password */}
+            <DismissKeyboardView>
+              <Text style={styles.labelTxt}>Email</Text>
+            </DismissKeyboardView>
+            <View style={styles.textInput}>
+              <FormikInput
+                formik={formik}
+                name="email"
+                ref={emailRef}
+                autoComplete="username"
+                textContentType="username"
+                inputProps={{
+                  ...textInputDefaultProps,
+                  textContentType: "username",
+                  autoComplete: "username",
+                  placeholder: "Enter Email",
+                  keyboardType: "email-address",
+                  className: "mt-4",
+                  returnKeyType: "next",
+                  onSubmitEditing: () => {
+                    if (passwordRef?.current) {
+                      passwordRef.current.focus();
+                    }
+                  },
+                }}
+              />
+            </View>
+            <DismissKeyboardView>
+              <Text style={styles.labelTxt}>Password</Text>
+            </DismissKeyboardView>
+            <View style={styles.textInput}>
+              <FormikInput
+                formik={formik}
+                name="password"
+                ref={passwordRef}
+                autoComplete="password"
+                textContentType="password"
+                inputProps={{
+                  ...textInputDefaultProps,
+                  textContentType: "password",
+                  placeholder: "Enter Password",
+                  className: "mt-2",
+                  returnKeyType: "done",
+                  password: true,
+                  autoComplete: "password",
+                  onSubmitEditing: () => {
+                    if (confirmPasswordRef?.current) {
+                      confirmPasswordRef.current.focus();
+                    }
+                  },
+                }}
+              />
+            </View>
+            <DismissKeyboardView>
+              <Text style={styles.labelTxt}>Confirm Password</Text>
+            </DismissKeyboardView>
+            <View style={styles.textInput}>
+              <FormikInput
+                formik={formik}
+                name="confirmPassword"
+                ref={confirmPasswordRef}
+                inputProps={{
+                  ...textInputDefaultProps,
 
-                placeholder: "Re-enter Password",
-                className: "mt-2",
-                returnKeyType: "done",
-                password: true,
-              }}
-            />
-          </View>
+                  placeholder: "Re-enter Password",
+                  className: "mt-2",
+                  returnKeyType: "done",
+                  password: true,
+                }}
+              />
+            </View>
 
-          <View style={styles.button}>
-            <Button
-              btnTitle="Continue"
-              btnColor="#F41A2C"
-              btnTitleColor="white"
-              loading={isLoading || isLoadingInstaller}
-              // disabled={
-              //   !formik?.values?.password ||
-              //   !formik?.values?.email ||
-              //   !formik?.values?.confirmPassword
-              // }
-              onClick={() => {
-                // next?.();
-                formik.handleSubmit();
-              }}
-            />
+            <View style={styles.button}>
+              <Button
+                btnTitle="Continue"
+                btnColor="#F41A2C"
+                btnTitleColor="white"
+                loading={isLoading || isLoadingInstaller}
+                onClick={() => {
+                  // next?.();
+                  formik.handleSubmit();
+                }}
+              />
+            </View>
           </View>
           <View style={{ flexDirection: "row", alignSelf: "center" }}>
             <Text

@@ -412,17 +412,7 @@ export default function PanZoomPage() {
          //Legend Code
           ) : null} */}
 
-          <View
-            style={
-              {
-                // width: "100%",
-                // height: selectedTab != 0 ? vs(290) : vs(320),
-                // paddingHorizontal: 15,
-                // marginLeft: -4,
-                // backgroundColor: "red",
-              }
-            }
-          >
+          <View style={{}}>
             {selectedTab === 0 && data?.results?.length ? (
               <GestureHandlerRootView style={{ flex: 1 }}>
                 <PinchZoomLineChart
