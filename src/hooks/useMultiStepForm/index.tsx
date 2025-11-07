@@ -5,7 +5,6 @@ import { useCallback, useMemo, useState } from "react";
 
 import Animated, {
   LinearTransition,
-  SlideInLeft,
   SlideOutLeft,
 } from "react-native-reanimated";
 
@@ -68,8 +67,8 @@ const useMultistepForm = (
         return (
           <Animated.View
             className="flex-1"
-            entering={SlideInLeft.duration(300).delay(400)}
-            exiting={SlideOutLeft.duration(300)}
+            // entering={SlideInRight.duration(500).delay(400)}
+            exiting={SlideOutLeft.duration(500)}
             layout={LinearTransition}
             key={`${index}step`}
             {...animatedProps}

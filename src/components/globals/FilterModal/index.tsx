@@ -81,7 +81,9 @@ const FilterModal: React.FC<FilterModalProps> = ({
               status={selected.includes(item) ? "checked" : "unchecked"}
               onPress={() => toggleSelection(item)}
             />
-            <Text>{item}</Text>
+            <Text style={{ fontFamily: "Excon-Regular", color: "black" }}>
+              {item}
+            </Text>
           </TouchableOpacity>
         ))}
 
@@ -115,6 +117,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
     textAlign: "center",
+    color: "black",
   },
   row: {
     flexDirection: "row",

@@ -23,7 +23,7 @@ const Info = () => {
     },
   });
 
-  return <View style={{ flex: 1 }}>{step}</View>;
+  return <View style={{ flex: 1, backgroundColor: "white" }}>{step}</View>;
 };
 
 export default Info;

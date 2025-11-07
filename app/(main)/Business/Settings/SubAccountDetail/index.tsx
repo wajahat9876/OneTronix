@@ -1,18 +1,18 @@
 /* eslint-disable import/order */
 /* eslint-disable camelcase */
-import { useBusinessDetails } from '@/store/selectors/business/business';
-import AllDataTable from '@src/components/commons/main/All_Account_Table';
-import LoadingModal from '@src/components/globals/LoadingModal';
-import ScreenAuth from '@src/components/globals/ScreenAuth';
-import { pageTransitionAnimation } from '@src/constants/Animation';
-import Colors from '@src/constants/Colors';
-import { MultiStepFormProps } from '@src/hooks/useMultiStepForm';
-import { useAppSelector } from '@src/hooks/useReduxHooks';
-import { useGetAllAccountBalanceQuery } from '@store/api/business/mainApis';
-import { vs } from '@utils/design/design';
-import { useEffect } from 'react';
-import { View } from 'react-native';
-import Animated from 'react-native-reanimated';
+import { useBusinessDetails } from "@/store/selectors/business/business";
+import AllDataTable from "@src/components/commons/main/All_Account_Table";
+import LoadingModal from "@src/components/globals/LoadingModal";
+import ScreenAuth from "@src/components/globals/ScreenAuth";
+import { pageTransitionAnimation } from "@src/constants/Animation";
+import Colors from "@src/constants/Colors";
+import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
+import { useAppSelector } from "@src/hooks/useReduxHooks";
+import { useGetAllAccountBalanceQuery } from "@store/api/business/mainApis";
+import { vs } from "@utils/design/design";
+import { useEffect } from "react";
+import { View } from "react-native";
+import Animated from "react-native-reanimated";
 
 const Index = ({ goTo }: MultiStepFormProps) => {
   const { auth_token } = useAppSelector(useBusinessDetails);

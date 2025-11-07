@@ -76,7 +76,9 @@ const Index = ({ navigation }: any) => {
       unsubscribe();
     };
   }, [goTo, navigation]);
-  return <View className="flex-1">{step}</View>;
+  return (
+    <View style={{ flex: 1, backgroundColor: "transparent" }}>{step}</View>
+  );
 };
 
 export default Index;

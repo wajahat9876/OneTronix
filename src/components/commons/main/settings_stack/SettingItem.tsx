@@ -1,7 +1,7 @@
-import { MaterialIcons } from '@expo/vector-icons';
-import { Text, TouchableOpacity } from '@src/components/libraries';
-import { globalStyle } from '@src/styles/globals';
-import { hs, vs } from '@utils/design/design';
+import { MaterialIcons } from "@expo/vector-icons";
+import { Text, TouchableOpacity } from "@src/components/libraries";
+import { globalStyle } from "@src/styles/globals";
+import { hs, vs } from "@utils/design/design";
 
 interface ISettingItemProps {
   title: string;
@@ -15,8 +15,8 @@ const SettingItem = (props: ISettingItemProps) => {
     <TouchableOpacity
       style={{
         ...globalStyle.whiteRoundedCard,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        flexDirection: "row",
+        justifyContent: "space-between",
         paddingLeft: hs(16),
         paddingRight: hs(8),
         paddingTop: vs(8),
@@ -26,7 +26,9 @@ const SettingItem = (props: ISettingItemProps) => {
       }}
       onPress={onClick}
     >
-      <Text style={{ ...globalStyle.textMedium, fontSize: 15.34 }}>
+      <Text
+        style={{ ...globalStyle.textMedium, fontSize: 15.34, color: "black" }}
+      >
         {title}
       </Text>
       <MaterialIcons name="arrow-right" size={42} color="black" />

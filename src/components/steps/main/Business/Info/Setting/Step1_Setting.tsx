@@ -6,6 +6,7 @@ import FormikDropdownRNE from "@src/components/globals/DropdownRNE/FormikDropdow
 import FormikInput from "@src/components/globals/FormikInput";
 import ScreenAuth from "@src/components/globals/ScreenAuth";
 import ToggleSwitch from "@src/components/globals/ToggleSwitch";
+import { pageTransitionAnimation } from "@src/constants/Animation";
 import Colors from "@src/constants/Colors";
 import { textInputUnderlinedProps } from "@src/constants/Props";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
@@ -26,6 +27,7 @@ import {
   View,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Animated from "react-native-reanimated";
 import * as Yup from "yup";
 const TABS = [
   { key: "Battery", label: "Battery" },
@@ -709,7 +711,11 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
   };
 
   return (
-    <>
+    <Animated.View
+      {...pageTransitionAnimation}
+      key="transfer_money"
+      style={{ flex: 1, backgroundColor: "white" }}
+    >
       <ScreenAuth
         title="Inverter Setting"
         style={styles.screenAuthStyle}
@@ -771,7 +777,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
           <Button title="Save" onPress={() => formik.handleSubmit()} />
         </View>
       </ScreenAuth>
-    </>
+    </Animated.View>
   );
 };
 
