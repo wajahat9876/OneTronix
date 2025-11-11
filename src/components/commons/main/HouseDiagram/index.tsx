@@ -63,7 +63,7 @@ const AnimatedLinePath = ({
       <Path
         d={d}
         stroke="#0D111E"
-        strokeWidth={3}
+        strokeWidth={1.8}
         fill="none"
         strokeLinecap="round"
       />
@@ -196,27 +196,15 @@ const HouseDiagram = (props: HouseDiagramProps) => {
 
   return (
     <View style={styles.container} onLayout={onLayout}>
-      {isDarkMode ? (
-        <Image
-          source={DiagramDark}
-          style={{
-            width: layout.width + 40 || scale(440),
-            height:
-              (layout.width / original.image.width) * original.image.height,
-          }}
-          resizeMode="contain"
-        />
-      ) : (
-        <Image
-          source={Diagram}
-          style={{
-            width: layout.width + 40 || scale(440),
-            height:
-              (layout.width / original.image.width) * original.image.height,
-          }}
-          resizeMode="contain"
-        />
-      )}
+      <Image
+        key={layout.width}
+        source={isDarkMode ? DiagramDark : Diagram}
+        style={{
+          width: layout.width + 40 || scale(440),
+          height: (layout.width / original.image.width) * original.image.height,
+        }}
+        resizeMode="contain"
+      />
 
       {ready && (
         <Svg
