@@ -3,6 +3,7 @@ import {
   setLastSelectedDevice,
   setLastSelectedDeviceId,
 } from "@/store/slices/business/businessSlice";
+import PlusIcon from "@assets/icons/add.png";
 import MenuIcon from "@assets/icons/menu.png";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useStatusBar } from "@hooks/StatusBarColor/index";
@@ -213,7 +214,7 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
             style={styles.redCircle}
             activeOpacity={0.8}
           >
-            <Text style={styles.PlusTxt}>+</Text>
+            <Image source={PlusIcon} style={{ width: 60, height: 60 }} />
           </TouchableOpacity>
 
           <AddDeviceQr
@@ -250,7 +251,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: "red",
+    backgroundColor: "transparent",
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",

@@ -105,10 +105,10 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
           <Text
             style={{
               color: "red",
-              fontWeight: "900",
+              // fontWeight: "900",
               fontSize: ms(44),
               lineHeight: 45,
-              fontFamily: "Excon-Black",
+              fontFamily: "Excon-Medium",
             }}
           >
             ONE
@@ -182,6 +182,7 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
               style={{
                 color: "white",
                 fontSize: ms(16),
+                fontFamily: "Ranade-Regular",
               }}
             >
               Next →

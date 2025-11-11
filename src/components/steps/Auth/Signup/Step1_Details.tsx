@@ -161,7 +161,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
               fontWeight: "900",
               fontSize: ms(40),
               lineHeight: 45,
-              fontFamily: "Excon-Black",
+              fontFamily: "Excon-Regular",
             }}
           >
             ONE
@@ -228,6 +228,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
                   fontSize: ms(13),
                   textAlign: "center",
                   color: "gray",
+                  fontFamily: "Excon-Regular",
                 }}
                 className="text-white font-extralight"
               >
@@ -408,6 +409,8 @@ const styles = StyleSheet.create({
     marginLeft: hs(16),
     marginRight: hs(8),
     marginBottom: vs(12),
+    width: "82%",
+    alignSelf: "center",
   },
   labelTxt: {
     fontSize: ms(16),

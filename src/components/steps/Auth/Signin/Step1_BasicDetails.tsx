@@ -119,10 +119,10 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
             <Text
               style={{
                 color: "red",
-                fontWeight: "900",
+                // fontWeight: "900",
                 fontSize: ms(40),
                 lineHeight: 45,
-                fontFamily: "Excon-Black",
+                fontFamily: "Excon-Medium",
               }}
             >
               ONE
@@ -177,6 +177,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
                 fontSize: ms(13),
                 textAlign: "center",
                 color: "gray",
+                fontFamily: "Excon-Regular",
               }}
               className="text-white font-extralight"
             >
@@ -258,8 +259,8 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
                 }}
               >
                 <Text
-                  style={{ fontSize: 13 }}
-                  className="text-white font-Excon-Regular"
+                  style={{ fontSize: 13, fontFamily: "Excon-Regular" }}
+                  className="text-white "
                 >
                   Forgot Password
                 </Text>

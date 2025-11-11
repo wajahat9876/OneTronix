@@ -19,6 +19,8 @@ interface HouseDiagramProps {
   battery?: number; // kW
   batteryStatus?: "CHARGING" | "DISCHARGING" | "ONHOLD";
   batteryWatt?: number; // current battery watt
+  gridDirection?: "forward" | "backward";
+  gridStatus?: "IMPORT" | "EXPORT" | "STANDBY";
 }
 // --- Responsive helpers ---
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -89,6 +91,8 @@ const HouseDiagram = (props: HouseDiagramProps) => {
     battery = 0,
     batteryStatus = "ONHOLD",
     batteryWatt = 0,
+    gridDirection = "forward",
+    gridStatus = "STANDBY",
   } = props;
   const [layout, setLayout] = useState({ width: 0, height: 0 });
   const { isDarkMode } = useAppSelector(useBusinessDetails);
@@ -256,8 +260,8 @@ const HouseDiagram = (props: HouseDiagramProps) => {
 
           <AnimatedLinePath
             d={gridPath}
-            active={grid !== 0}
-            direction={grid > 0 ? "forward" : "backward"}
+            active={grid !== 0 && gridStatus !== "STANDBY"}
+            direction={gridDirection === "forward" ? "backward" : "forward"}
           />
           <Circle
             cx={homeMidPoint.x}

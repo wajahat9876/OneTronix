@@ -100,6 +100,23 @@ const Index = ({ goTo }: MultiStepFormProps) => {
 
   const { formatTime } = useFormatDate();
   useStatusBar(isDark ? "light" : "dark");
+
+  const gridData = result?.results?.inverterData?.data?.ac;
+
+  const gridWatt = gridData
+    ? gridData.status === "IMPORT"
+      ? gridData?.watt
+      : gridData?.exportWatt
+    : 0;
+
+  const gridDirection = gridData
+    ? gridData.status === "IMPORT"
+      ? "forward"
+      : "backward"
+    : "forward";
+
+  const gridStatus = gridData?.status ?? "STANDBY";
+
   return (
     <Animated.View {...pageTransitionAnimation} key="home" className="flex-1">
       <HeaderMainHome
@@ -142,7 +159,9 @@ const Index = ({ goTo }: MultiStepFormProps) => {
         >
           <HouseDiagram
             solar={result?.results?.inverterData?.data?.solar?.watt ?? 0}
-            grid={result?.results?.inverterData?.data?.grid?.watt ?? 0}
+            grid={gridWatt}
+            gridDirection={gridDirection}
+            gridStatus={gridStatus}
             home={result?.results?.inverterData?.data?.output?.watt ?? 0}
             battery={
               result?.results?.inverterData?.data?.battery?.status ===
@@ -222,7 +241,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                   {Number(
                     result?.results?.dailySummary?.consumption
                       ?.dailyConsumption || 0
-                  ).toFixed(2)}{" "}
+                  ).toFixed(2)}
                   <Text style={[styles.unitTxt, { color: textColor }]}>
                     {" "}
                     kWh
@@ -244,7 +263,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                 <Text style={[styles.dailyTxt, { color: "white" }]}>
                   {Number(
                     result?.results?.dailySummary?.grid?.dailyPurchase || 0
-                  ).toFixed(2)}{" "}
+                  ).toFixed(2)}
                   <Text style={styles.unitTxt}> kWh</Text>
                 </Text>
               </View>
@@ -259,10 +278,10 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                 </Text>
                 <Text style={[styles.txtStyle, { color: textColor }]}>
                   {Number(
-                    result?.results?.dailySummary?.consumption
-                      ?.dailyConsumption || 0
-                  ).toFixed(2)}{" "}
-                  <Text style={styles.unitTxt}> kWh</Text>
+                    result?.results?.totalSummary?.production
+                      ?.totalProduction || 0
+                  ).toFixed(2)}
+                  <Text style={styles.unitTxt}>kWh</Text>
                 </Text>
               </View>
             </View>
@@ -337,13 +356,13 @@ const styles = StyleSheet.create({
   },
   txtTrans: { color: "black", fontWeight: "600", fontSize: getRespValue(16) },
   txtStyle: {
-    fontSize: ms(30),
+    fontSize: ms(27),
     fontWeight: "600",
     paddingVertical: 10,
     fontFamily: "Ranade-Medium",
   },
   dailyTxt: {
-    fontSize: ms(30),
+    fontSize: ms(27),
     fontWeight: "600",
     paddingVertical: 10,
     fontFamily: "Ranade-Medium",

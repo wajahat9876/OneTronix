@@ -44,7 +44,7 @@ const DefaultInput = React.forwardRef<TextInput, DefaultTextInputProps>(
           }}
           contentStyle={{
             paddingLeft: hs(16),
-            fontFamily: "poppins",
+            fontFamily: "Excon-Regular",
             fontSize: ms(14),
             ...(contentStyle as object),
           }}

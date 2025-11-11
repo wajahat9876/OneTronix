@@ -135,10 +135,10 @@ const Welcome = () => {
                   <Text
                     style={{
                       color: "red",
-                      fontWeight: "900",
+                      // fontWeight: "bold",
                       fontSize: ms(50),
                       lineHeight: 55,
-                      fontFamily: "Excon-Black",
+                      fontFamily: "Excon-Medium",
                     }}
                   >
                     ONE
@@ -158,7 +158,7 @@ const Welcome = () => {
                     style={{
                       color: "white",
                       fontSize: ms(16.5),
-
+                      fontFamily: "Excon-Regular",
                       letterSpacing: 1,
                       lineHeight: 28,
                       marginTop: -5, // small gap from TRONIX

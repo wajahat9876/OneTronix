@@ -382,6 +382,9 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                   },
                 ]}
                 formik={formik}
+                selectedTextStyle={{ color: "black" }}
+                placeholderStyle={{ color: "black" }}
+                itemTextStyle={{ color: "black" }}
                 dropdownType="sm"
                 labelField="label"
                 valueField="value"
@@ -412,6 +415,9 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 valueField="value"
                 placeholder="Select Reason"
                 name="type"
+                selectedTextStyle={{ color: "black" }}
+                placeholderStyle={{ color: "black" }}
+                itemTextStyle={{ color: "black" }}
                 value={formik?.values?.type}
                 dropdownPosition="bottom"
                 maxHeight={220}
@@ -820,6 +826,7 @@ const styles = StyleSheet.create({
     color: "#333",
     fontSize: 14,
     fontWeight: "500",
+    fontFamily: "Excon-Regular",
   },
   activeTabText: {
     color: "white",

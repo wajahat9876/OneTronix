@@ -74,7 +74,7 @@ const UnderlinedInput = React.forwardRef<TextInput, UnderlinedTextInputProps>(
           }}
           contentStyle={{
             paddingLeft: hs(4),
-            fontFamily: "poppins",
+            fontFamily: "Excon-Regular",
             fontSize: ms(14),
             ...(contentStyle as object),
           }}

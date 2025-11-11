@@ -23,6 +23,7 @@ import SettingWhite from "@assets/icons/bottom-tabs/whiteSetting.svg";
 import Info from "app/(main)/Business/Info/index";
 import { Redirect } from "expo-router";
 import { Platform } from "react-native";
+import { MD3DarkTheme, MD3LightTheme, PaperProvider } from "react-native-paper";
 import Transaction from "./Transaction";
 // Icons
 // const MainStack = createBottomTabNavigator<RootTabParamList>();
@@ -34,66 +35,89 @@ const Layout = () => {
     isDarkMode,
   } = useAppSelector(useBusinessDetails);
   const Tab = createMaterialBottomTabNavigator();
+  const theme = {
+    ...(isDarkMode ? MD3DarkTheme : MD3LightTheme),
+    fonts: {
+      ...(isDarkMode ? MD3DarkTheme : MD3LightTheme).fonts,
+      labelLarge: {
+        fontSize: ms(12),
+        fontFamily: "Excon-Regular",
+        marginTop: vs(-3),
+      },
+      labelMedium: {
+        fontSize: ms(12),
+        fontFamily: "Excon-Regular",
+        marginTop: vs(-3),
+      },
+      labelSmall: {
+        fontSize: ms(12),
+        fontFamily: "Excon-Regular",
+        marginTop: vs(-3),
+      },
+    },
+  };
   if (!auth_token) {
     return <Redirect href="/(auth)/Welcome" />;
   }
+
   return (
-    <Tab.Navigator
-      initialRouteName="Home"
-      barStyle={{
-        backgroundColor: isDarkMode ? "#303030" : "#F2F2F2",
-        height: vs(85),
-        marginBottom: Platform.OS === "ios" ? vs(5) : vs(0),
-      }}
-      activeIndicatorStyle={{
-        height: vs(6),
-        width: ms(30),
-        borderRadius: ms(20),
-        backgroundColor: "#ff0000",
-        shadowColor: "#ff0000",
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.9,
-        shadowRadius: 8,
-        elevation: 10,
-        borderWidth: Platform.OS === "android" ? 2 : 0,
-        borderColor: "rgba(255, 0, 0, 0.4)",
-        bottom: vs(-32),
-        position: "absolute",
-      }}
-      activeColor={isDarkMode ? "white" : "black"}
-      screenOptions={{
-        tabBarColor: isDarkMode ? "black" : Colors.light.theme.white,
-      }}
-      inactiveColor={isDarkMode ? "white" : "black"}
-      keyboardHidesNavigationBar={false}
-      shifting={false}
-      sceneAnimationEnabled={false}
-      sceneAnimationType="shifting"
-    >
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          tabBarIcon: () => (isDarkMode ? <HomeWhite /> : <HomeBlack />),
+    <PaperProvider theme={theme}>
+      <Tab.Navigator
+        initialRouteName="Home"
+        barStyle={{
+          backgroundColor: isDarkMode ? "#303030" : "#F2F2F2",
+          height: vs(85),
+          marginBottom: Platform.OS === "ios" ? vs(5) : vs(0),
         }}
-      />
-      <Tab.Screen
-        name="Devices"
-        component={Info}
-        options={{
-          tabBarIcon: () => (isDarkMode ? <Devices /> : <DevicesBlack />),
+        activeIndicatorStyle={{
+          height: vs(6),
+          width: ms(30),
+          borderRadius: ms(20),
+          backgroundColor: "#ff0000",
+          shadowColor: "#ff0000",
+          shadowOffset: { width: 0, height: 0 },
+          shadowOpacity: 0.9,
+          shadowRadius: 8,
+          elevation: 10,
+          borderWidth: Platform.OS === "android" ? 2 : 0,
+          borderColor: "rgba(255, 0, 0, 0.4)",
+          bottom: vs(-32),
+          position: "absolute",
         }}
-      />
+        activeColor={isDarkMode ? "white" : "black"}
+        screenOptions={{
+          tabBarColor: isDarkMode ? "black" : Colors.light.theme.white,
+        }}
+        inactiveColor={isDarkMode ? "white" : "black"}
+        keyboardHidesNavigationBar={false}
+        shifting={false}
+        sceneAnimationEnabled={false}
+        sceneAnimationType="shifting"
+      >
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            tabBarIcon: () => (isDarkMode ? <HomeWhite /> : <HomeBlack />),
+          }}
+        />
+        <Tab.Screen
+          name="Devices"
+          component={Info}
+          options={{
+            tabBarIcon: () => (isDarkMode ? <Devices /> : <DevicesBlack />),
+          }}
+        />
 
-      <Tab.Screen
-        name="Report"
-        component={Transaction}
-        options={{
-          tabBarIcon: () => (isDarkMode ? <ReportWhite /> : <ReportBlack />),
-        }}
-      />
+        <Tab.Screen
+          name="Report"
+          component={Transaction}
+          options={{
+            tabBarIcon: () => (isDarkMode ? <ReportWhite /> : <ReportBlack />),
+          }}
+        />
 
-      {/* <Tab.Screen
+        {/* <Tab.Screen
         name="TransferMoney"
         component={TransferMoney}
         options={{
@@ -110,14 +134,16 @@ const Layout = () => {
         }}
       /> */}
 
-      <Tab.Screen
-        name="Settings"
-        component={Setting}
-        options={{
-          tabBarIcon: () => (isDarkMode ? <SettingWhite /> : <SettingBlack />),
-        }}
-      />
-    </Tab.Navigator>
+        <Tab.Screen
+          name="Settings"
+          component={Setting}
+          options={{
+            tabBarIcon: () =>
+              isDarkMode ? <SettingWhite /> : <SettingBlack />,
+          }}
+        />
+      </Tab.Navigator>
+    </PaperProvider>
   );
 };
 

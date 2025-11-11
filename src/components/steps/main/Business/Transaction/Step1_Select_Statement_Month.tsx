@@ -635,14 +635,14 @@ export default function PanZoomPage() {
               <DetailRow
                 label="Charging Power"
                 value={inverterData?.inverterData?.data?.battery?.chargingWatt}
-                unit={"W"}
+                unit={"kW"}
               />
               <DetailRow
-                label="Discharging"
+                label="Discharging Power"
                 value={
                   inverterData?.inverterData?.data?.battery?.dischargingWatt
                 }
-                unit={"W"}
+                unit={"kW"}
               />
               <DetailRow
                 label="Inverter Current"
@@ -675,7 +675,7 @@ export default function PanZoomPage() {
               <DetailRow
                 label="Power"
                 value={inverterData?.inverterData?.data?.output?.watt}
-                unit={"W"}
+                unit={"kW"}
               />
 
               <DetailRow
@@ -693,7 +693,7 @@ export default function PanZoomPage() {
               />
               <DetailRow
                 label="Current"
-                value={inverterData?.inverterData?.data?.solar?.loadAmp}
+                value={inverterData?.inverterData?.data?.solar?.amp}
                 unit={"A"}
               />
               <DetailRow

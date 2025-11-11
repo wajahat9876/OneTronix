@@ -243,7 +243,7 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
           enableContentPanningGesture
           enableHandlePanningGesture
           handleIndicatorStyle={{
-            backgroundColor: "black",
+            backgroundColor: "transparent",
           }}
           TouchComponent={() => <></>}
           backdropComponent={(
@@ -290,7 +290,7 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
                     color: "black",
                   }}
                 >
-                  Notifications
+                  Alerts
                 </Text>
               </View>
             </View>
@@ -298,7 +298,7 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
               className="mt-4"
               scrollEnabled
               ListEmptyComponent={() => (
-                <Text style={styles.empTxt}>No Data Found</Text>
+                <Text style={styles.empTxt}>No alerts found</Text>
               )}
               contentContainerStyle={{ paddingTop: vs(24) }}
               data={notifications?.results?.alerts || []}
@@ -354,6 +354,7 @@ const styles = StyleSheet.create({
     borderColor: "#C7C7C7",
     borderWidth: 0.6,
     padding: 20,
+    marginTop: vs(5),
     width: "95%",
     marginBottom: 1,
     paddingHorizontal: hs(20),
