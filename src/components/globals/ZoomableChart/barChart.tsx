@@ -398,9 +398,7 @@ export default function ZoomBarChart({
 
   // Debug: log when seriesData changes
   useEffect(() => {
-    Object.keys(seriesData).forEach((param) => {
-      console.log(`${param}:`, seriesData[param]);
-    });
+    Object.keys(seriesData).forEach((param) => {});
   }, [seriesData]);
 
   return (

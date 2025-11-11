@@ -9,6 +9,7 @@ import {
   useReadNotificationsMutation,
 } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
+import alertIcon from "@assets/icons/alerts.png";
 import BellIcon from "@assets/icons/bell.png"; // your SVG bell icon
 import { MaterialIcons } from "@expo/vector-icons";
 import { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
@@ -26,29 +27,34 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import DropdownRNE from "../DropdownRNE";
 import PortalBottomSheet from "../PortalBottomSheet";
 import { PortalBottomSheetRef } from "../PortalBottomSheet/types";
 interface GlobalHeaderProps {}
 const NotificationItem = ({ item }: { item: any }) => {
-  console.log("item", item);
   return (
     <View style={styles.card}>
-      <View style={styles.row}>
-        <Text style={styles.label}>Title:</Text>
-        <Text style={styles.txt}>{item?.title}</Text>
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.label}>Name:</Text>
-        <Text style={styles.txt}>{item?.deviceRef?.name}</Text>
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.label}>Model:</Text>
-        <Text style={styles.txt}>{item?.deviceRef?.model}</Text>
-      </View>
+      <View style={{ flexDirection: "row", gap: 5 }}>
+        <Image source={alertIcon} style={{ width: 20, height: 20 }} />
+        <View>
+          <View style={styles.row}>
+            <Text style={styles.label}>Title:</Text>
+            <Text style={styles.txt}>{item?.title}</Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>Name:</Text>
+            <Text style={styles.txt}>{item?.deviceRef?.name}</Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>Model:</Text>
+            <Text style={styles.txt}>{item?.deviceRef?.model}</Text>
+          </View>
 
-      {/* Optional: description or date */}
-      {item?.message && <Text style={styles.message}>{item.message}</Text>}
+          {/* Optional: description or date */}
+          {item?.message && <Text style={styles.message}>{item.message}</Text>}
+        </View>
+      </View>
     </View>
   );
 };
@@ -241,7 +247,7 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
             />
           )}
         >
-          <>
+          <View style={{ flex: 1 }}>
             <View
               style={{
                 flexDirection: "row",
@@ -278,17 +284,22 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
                 </Text>
               </View>
             </View>
-            <FlatList
-              className="mt-4"
-              scrollEnabled
-              ListEmptyComponent={() => (
-                <Text style={styles.empTxt}>No alerts found</Text>
-              )}
-              contentContainerStyle={{ paddingTop: vs(24) }}
-              data={notifications?.results?.alerts || []}
-              renderItem={({ item }) => <NotificationItem item={item} />}
-            />
-          </>
+            <ScrollView
+              style={{ flex: 1, marginBottom: vs(10) }}
+              showsVerticalScrollIndicator={false}
+            >
+              <FlatList
+                className="mt-4"
+                scrollEnabled={false}
+                ListEmptyComponent={() => (
+                  <Text style={styles.empTxt}>No alerts found</Text>
+                )}
+                contentContainerStyle={{ paddingTop: vs(24) }}
+                data={notifications?.results?.alerts || []}
+                renderItem={({ item }) => <NotificationItem item={item} />}
+              />
+            </ScrollView>
+          </View>
         </PortalBottomSheet>
       </View>
     </>

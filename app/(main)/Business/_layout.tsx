@@ -102,18 +102,17 @@ const Layout = () => {
           }}
         />
         <Tab.Screen
-          name="Devices"
-          component={Info}
-          options={{
-            tabBarIcon: () => (isDarkMode ? <Devices /> : <DevicesBlack />),
-          }}
-        />
-
-        <Tab.Screen
           name="Report"
           component={Transaction}
           options={{
             tabBarIcon: () => (isDarkMode ? <ReportWhite /> : <ReportBlack />),
+          }}
+        />
+        <Tab.Screen
+          name="Devices"
+          component={Info}
+          options={{
+            tabBarIcon: () => (isDarkMode ? <Devices /> : <DevicesBlack />),
           }}
         />
 

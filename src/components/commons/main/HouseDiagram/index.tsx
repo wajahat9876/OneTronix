@@ -63,7 +63,7 @@ const AnimatedLinePath = ({
       <Path
         d={d}
         stroke="#0D111E"
-        strokeWidth={3}
+        strokeWidth={1.8}
         fill="none"
         strokeLinecap="round"
       />
