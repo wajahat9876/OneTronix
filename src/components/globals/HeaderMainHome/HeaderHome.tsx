@@ -9,7 +9,6 @@ import {
   useReadNotificationsMutation,
 } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
-import alertIcon from "@assets/icons/alerts.png";
 import BellIcon from "@assets/icons/bell.png"; // your SVG bell icon
 import { MaterialIcons } from "@expo/vector-icons";
 import { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
@@ -38,26 +37,21 @@ const NotificationItem = ({ item }: { item: any }) => {
   console.log("item", item);
   return (
     <View style={styles.card}>
-      <View style={{ flexDirection: "row", gap: 5 }}>
-        <Image source={alertIcon} style={{ width: 30, height: 30 }} />
-        <View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Title:</Text>
-            <Text style={styles.txt}>{item?.title}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Name:</Text>
-            <Text style={styles.txt}>{item?.deviceRef?.name}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Model:</Text>
-            <Text style={styles.txt}>{item?.deviceRef?.model}</Text>
-          </View>
-
-          {/* Optional: description or date */}
-          {item?.message && <Text style={styles.message}>{item.message}</Text>}
-        </View>
+      <View style={styles.row}>
+        <Text style={styles.label}>Title:</Text>
+        <Text style={styles.txt}>{item?.title}</Text>
       </View>
+      <View style={styles.row}>
+        <Text style={styles.label}>Name:</Text>
+        <Text style={styles.txt}>{item?.deviceRef?.name}</Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.label}>Model:</Text>
+        <Text style={styles.txt}>{item?.deviceRef?.model}</Text>
+      </View>
+
+      {/* Optional: description or date */}
+      {item?.message && <Text style={styles.message}>{item.message}</Text>}
     </View>
   );
 };
