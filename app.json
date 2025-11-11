@@ -3,7 +3,7 @@
     "name": "OneTronix",
     "slug": "one-tronix",
     "version": "1.0.0",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "orientation": "portrait",
     "icon": "./assets/images/adaptive-icon.png",
     "scheme": "template",
