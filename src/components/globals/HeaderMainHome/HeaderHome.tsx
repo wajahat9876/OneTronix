@@ -39,7 +39,14 @@ const NotificationItem = ({ item }: { item: any }) => {
   return (
     <View style={styles.card}>
       <View style={{ flexDirection: "row", gap: 5 }}>
-        <Image source={alertIcon} style={{ width: 20, height: 20 }} />
+        <Image
+          source={alertIcon}
+          style={{
+            width: 40,
+            height: 40,
+            alignSelf: "center",
+          }}
+        />
         <View>
           <View style={styles.row}>
             <Text style={styles.label}>Title:</Text>
@@ -361,12 +368,15 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginLeft: 1,
     justifyContent: "space-between",
-    borderRadius: 10,
-    borderColor: "#C7C7C7",
+    borderRadius: 1,
+    borderColor: "black",
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    borderRightWidth: 0,
     borderWidth: 0.6,
     padding: 20,
     marginTop: vs(5),
-    width: "95%",
+    width: "99%",
     marginBottom: 1,
     paddingHorizontal: hs(20),
     paddingVertical: vs(10),
