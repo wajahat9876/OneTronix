@@ -471,7 +471,9 @@ export default function ZoomBarChart({
       });
     }
   }, [seriesData, isChartReady, selectedParams, xAxisData]);
-
+  useEffect(() => {
+    setLegendValues({});
+  }, [selectTab]);
   return (
     <View style={{ width: CHART_WIDTH, height, backgroundColor: "#fff" }}>
       <View
@@ -539,7 +541,6 @@ export default function ZoomBarChart({
             <Text
               style={{
                 padding: 8,
-                marginHorizontal: 2,
                 borderRadius: 6,
                 fontFamily: "Ranade-Medium",
               }}
@@ -573,8 +574,8 @@ export default function ZoomBarChart({
           >
             <Text
               style={{
-                padding: 8,
-                marginHorizontal: 2,
+                paddingVertical: 8,
+                paddingHorizontal: 5,
                 borderRadius: 6,
                 fontFamily: "Ranade-Medium",
               }}

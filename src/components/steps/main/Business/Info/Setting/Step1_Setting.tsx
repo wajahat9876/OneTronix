@@ -2,6 +2,7 @@
 /* eslint-disable import/order */
 import { useChangeInverterSettingMutation } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
+import Button from "@src/components/globals/Button";
 import FormikDropdownRNE from "@src/components/globals/DropdownRNE/FormikDropdownRNE";
 import FormikInput from "@src/components/globals/FormikInput";
 import ScreenAuth from "@src/components/globals/ScreenAuth";
@@ -12,13 +13,14 @@ import { textInputUnderlinedProps } from "@src/constants/Props";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
 import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
-import { hs, vs } from "@utils/design/design";
+import { hs, ms, vs } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
 import { useFormik } from "formik";
 import { useRef, useState } from "react";
 import {
-  Button,
+  Modal,
   Platform,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -83,34 +85,6 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
   const cutOffTimeRef = useRef<TextInput>(null);
   const utilityControlOffLevelRef = useRef<TextInput>(null);
   const utilityControlOnLevelRef = useRef<TextInput>(null);
-
-  // //Battery Section
-  // const chargingAmpRef = useRef() as React.MutableRefObject<TextInput>;
-  // const floatToCutOffRef = useRef() as React.MutableRefObject<TextInput>;
-  // const floatingRef = useRef() as React.MutableRefObject<TextInput>;
-  // const fullRef = useRef() as React.MutableRefObject<TextInput>;
-  // const fullToFloatRef = useRef() as React.MutableRefObject<TextInput>;
-  // const lowRef = useRef() as React.MutableRefObject<TextInput>;
-  // // Heavy Load
-  // const OffTimeRef = useRef() as React.MutableRefObject<TextInput>;
-  // const OnTimeRef = useRef() as React.MutableRefObject<TextInput>;
-  // const offLevelRef = useRef() as React.MutableRefObject<TextInput>;
-  // const onLevelRef = useRef() as React.MutableRefObject<TextInput>;
-  // // Inverter
-  // const outputVoltLevelRef = useRef() as React.MutableRefObject<TextInput>;
-  // const overLoadRef = useRef() as React.MutableRefObject<TextInput>;
-  // // Solar
-  // const highVoltsRef = useRef() as React.MutableRefObject<TextInput>;
-  // const lowVoltsRef = useRef() as React.MutableRefObject<TextInput>;
-  // // Utility
-  // const overVoltsRef = useRef() as React.MutableRefObject<TextInput>;
-  // const underVoltsRef = useRef() as React.MutableRefObject<TextInput>;
-  // // Utility Control
-  // const cutOffTimeRef = useRef() as React.MutableRefObject<TextInput>;
-  // const utilityControlOffLevelRef =
-  //   useRef() as React.MutableRefObject<TextInput>;
-  // const utilityControlOnLevelRef =
-  //   useRef() as React.MutableRefObject<TextInput>;
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -715,6 +689,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
         return null;
     }
   };
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   return (
     <Animated.View
@@ -767,21 +742,103 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
             enableOnAndroid
-            extraScrollHeight={20}
-            enableAutomaticScroll
             scrollEnabled
             resetScrollToCoords={{ x: 0, y: 0 }}
-            extraHeight={Platform.OS === "ios" ? getRespValue(250) : 180}
             viewIsInsideTabBar
+            extraHeight={0}
+            extraScrollHeight={5}
+            enableAutomaticScroll={false}
           >
-            {/* Show selected tab data inside same screen */}
             {renderContent()}
           </KeyboardAwareScrollView>
         </View>
 
-        <View style={{ position: "absolute", bottom: 1, alignSelf: "center" }}>
-          <Button title="Save" onPress={() => formik.handleSubmit()} />
+        <View
+          style={{
+            width: "50%",
+            position: "absolute",
+            bottom: vs(8),
+            alignSelf: "center",
+          }}
+        >
+          <Button
+            btnTitle="Submit"
+            btnColor="black"
+            loading={isLoading}
+            disabled={isLoading}
+            btnTitleColor="white"
+            onClick={() => setShowConfirmModal(true)}
+          />
         </View>
+        <Modal
+          visible={showConfirmModal}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setShowConfirmModal(false)}
+        >
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "rgba(0,0,0,0.5)",
+            }}
+          >
+            <View
+              style={{
+                width: "80%",
+                backgroundColor: "white",
+                padding: 20,
+                borderRadius: 12,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: ms(16),
+                  fontWeight: "600",
+                  marginBottom: 20,
+                  fontFamily: "Excon-Regular",
+                }}
+              >
+                Changes will be reflected after 5-10 minutes
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Pressable
+                  onPress={() => {
+                    setShowConfirmModal(false);
+                    formik.handleSubmit();
+                  }}
+                  style={{
+                    paddingVertical: 10,
+                    paddingHorizontal: 20,
+                    borderRadius: 8,
+                    backgroundColor: "black",
+                  }}
+                >
+                  <Text style={{ color: "white", fontFamily: "Excon-Regular" }}>
+                    Proceed
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => setShowConfirmModal(false)}
+                  style={{
+                    paddingVertical: 10,
+                    paddingHorizontal: 20,
+                    borderRadius: 8,
+                    backgroundColor: "#F8F9FE",
+                  }}
+                >
+                  <Text style={{ fontFamily: "Excon-Regular" }}>Cancel</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </ScreenAuth>
     </Animated.View>
   );
@@ -820,7 +877,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   activeTabButton: {
-    backgroundColor: "green",
+    backgroundColor: "black",
   },
   tabText: {
     color: "#333",

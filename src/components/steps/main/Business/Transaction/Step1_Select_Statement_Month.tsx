@@ -228,7 +228,9 @@ export default function PanZoomPage() {
   const [show, setShow] = useState(false);
 
   const openBottomSheet = () => {
-    setShow(true);
+    if (selectedTab != 3) {
+      setShow(true);
+    }
   };
 
   const mapped = React.useMemo(() => {
@@ -367,9 +369,18 @@ export default function PanZoomPage() {
                       marginLeft: 10,
                     }}
                   >
-                    <Text style={{ fontFamily: "Excon-Regular" }}>
-                      Select Date{" "}
-                    </Text>
+                    {selectedTab != 3 && (
+                      <Text style={{ fontFamily: "Excon-Regular" }}>
+                        Select{" "}
+                        {selectedTab === 0
+                          ? "Date"
+                          : selectedTab === 1
+                          ? "Month"
+                          : selectedTab === 2
+                          ? "Year"
+                          : " "}{" "}
+                      </Text>
+                    )}
                     <TouchableOpacity onPress={() => openBottomSheet()}>
                       <Text style={{ fontFamily: "Excon-Regular" }}>
                         {updatedDate}

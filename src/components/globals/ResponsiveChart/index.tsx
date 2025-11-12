@@ -198,7 +198,7 @@ export default function PinchZoomLineChart({
                       fontFamily: "Ranade-Regular",
                     }}
                   >
-                    {displayName}: {value}
+                    {displayName.toUpperCase()}: {value}
                   </Text>
                 </View>
               );
