@@ -8,7 +8,7 @@ import {
 } from "echarts/components";
 import * as echarts from "echarts/core";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 echarts.use([
   SVGRenderer,
@@ -317,8 +317,8 @@ export default function ZoomBarChart({
         barWidth: 7,
         itemStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: paramColors[param]?.area[0] },
-            { offset: 1, color: paramColors[param]?.area[1] },
+            { offset: 0, color: paramColors[param]?.area[0] ?? "#000" },
+            { offset: 1, color: paramColors[param]?.area[1] ?? "#000" },
           ]),
         },
         emphasis: { itemStyle: { color: paramColors[param]?.line } },
@@ -403,32 +403,115 @@ export default function ZoomBarChart({
 
   return (
     <View style={{ width: CHART_WIDTH, height, backgroundColor: "#fff" }}>
-      <View style={{ paddingHorizontal: 16, marginLeft: 10 }}>
-        {selectedParams.map((param) => {
-          const value = legendValues[param] ?? "--";
-          return (
-            <View
-              key={param}
-              style={[styles.dotText, { marginRight: 6, marginTop: vs(10) }]}
-            >
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <View style={{ paddingHorizontal: 16, marginLeft: 10 }}>
+          {selectedParams.map((param) => {
+            const value = legendValues[param] ?? "--";
+            return (
               <View
-                style={[
-                  styles.colorDot,
-                  { backgroundColor: paramColors[param]?.line },
-                ]}
-              />
-              <Text
-                style={{
-                  color: "#111",
-                  fontSize: ms(11),
-                  fontFamily: "Ranade-Regular",
-                }}
+                key={param}
+                style={[styles.dotText, { marginRight: 6, marginTop: vs(10) }]}
               >
-                {param.toUpperCase()}: {value}
-              </Text>
-            </View>
-          );
-        })}
+                <View
+                  style={[
+                    styles.colorDot,
+                    { backgroundColor: paramColors[param]?.line },
+                  ]}
+                />
+                <Text
+                  style={{
+                    color: "#111",
+                    fontSize: ms(11),
+                    fontFamily: "Ranade-Regular",
+                  }}
+                >
+                  {param.toUpperCase()}: {value}
+                </Text>
+              </View>
+            );
+          })}
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 10,
+            marginRight: hs(50),
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              const chart = chartInstanceRef.current;
+              if (chart) {
+                const zoom = (chart.getOption() as any).dataZoom?.[0];
+                if (!zoom) return;
+                const { start = 0, end = 100 } = zoom;
+                const windowSize = end - start;
+                // ⬅ Slide Left
+                if (start <= 0) return;
+                const newStart = Math.max(0, start - 10);
+                const newEnd = newStart + windowSize;
+
+                chart.dispatchAction({
+                  type: "dataZoom",
+                  start: newStart,
+                  end: newEnd,
+                });
+              }
+            }}
+          >
+            <Text
+              style={{
+                padding: 8,
+                marginHorizontal: 2,
+                borderRadius: 6,
+                fontFamily: "Ranade-Medium",
+              }}
+            >
+              ◀
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              const chart = chartInstanceRef.current;
+              if (chart) {
+                const zoom = (chart.getOption() as any).dataZoom?.[0];
+
+                if (!zoom) return;
+
+                const { start = 0, end = 100 } = zoom;
+                const windowSize = end - start;
+
+                // ▶ Slide Right
+                if (end >= 100) return; // already at end
+                const newEnd = Math.min(100, end + 10);
+                const newStart = newEnd - windowSize;
+
+                chart.dispatchAction({
+                  type: "dataZoom",
+                  start: newStart,
+                  end: newEnd,
+                });
+              }
+            }}
+          >
+            <Text
+              style={{
+                padding: 8,
+                marginHorizontal: 2,
+                borderRadius: 6,
+                fontFamily: "Ranade-Medium",
+              }}
+            >
+              ▶
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <SvgChart ref={chartRef} style={{ height, width: CHART_WIDTH }} />
     </View>
