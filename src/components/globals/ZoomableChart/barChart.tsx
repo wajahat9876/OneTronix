@@ -41,10 +41,8 @@ export default function ZoomBarChart({
   const chartInstanceRef = useRef<echarts.ECharts | null>(null);
   const CHART_WIDTH = hs(395);
   const height = vs(420);
-
   const [legendValues, setLegendValues] = useState<Record<string, number>>({});
   const [isChartReady, setIsChartReady] = useState(false);
-
   // Use refs to track current data to avoid stale closures
   const seriesDataRef = useRef<Record<string, number[]>>({});
   const selectedParamsRef = useRef<string[]>([]);
@@ -109,12 +107,17 @@ export default function ZoomBarChart({
           resultSeries[param].push(value);
         });
       });
-    } else if (selectTab === 2) {
+    } else if (selectTab === 2 && selectedDate) {
+      const [yearStr] = selectedDate.split("T")[0].split("-");
+      const year = Number(yearStr);
+
       resultXAxis.push(...Array.from({ length: 12 }, (_, i) => i + 1));
       resultXAxis.forEach((month) => {
-        const entry = data?.results?.find(
-          (d) => new Date(d.createdAt).getMonth() + 1 === month
-        );
+        const entry = data?.results?.find((d) => {
+          const date = new Date(d.createdAt);
+          return date.getFullYear() === year && date.getMonth() + 1 === month;
+        });
+
         selectedParams.forEach((param) => {
           const value =
             param === "Energy Purchased"
@@ -131,7 +134,32 @@ export default function ZoomBarChart({
           resultSeries[param].push(value);
         });
       });
-    } else if (selectTab === 3) {
+    }
+
+    // } else if (selectTab === 2) {
+    //   resultXAxis.push(...Array.from({ length: 12 }, (_, i) => i + 1));
+    //   resultXAxis.forEach((month) => {
+    //     const entry = data?.results?.find(
+    //       (d) => new Date(d.createdAt).getMonth() + 1 === month
+    //     );
+    //     selectedParams.forEach((param) => {
+    //       const value =
+    //         param === "Energy Purchased"
+    //           ? entry?.consumption?.monthlyConsumption ?? 0
+    //           : param === "Energy Consumed"
+    //           ? entry?.production?.monthlyProduction ?? 0
+    //           : param === "Energy Charged"
+    //           ? entry?.battery?.monthlyCharging ?? 0
+    //           : param === "Energy Discharged"
+    //           ? entry?.battery?.monthlyDischarging ?? 0
+    //           : param === "Solar Production"
+    //           ? entry?.grid?.monthlyPurchase ?? 0
+    //           : 0;
+    //       resultSeries[param].push(value);
+    //     });
+    //   });
+    // }
+    else if (selectTab === 3) {
       const yearsToShow = 3; // number of years to display
       const startYear = currentYear - (yearsToShow - 1);
 
@@ -400,6 +428,49 @@ export default function ZoomBarChart({
   useEffect(() => {
     Object.keys(seriesData).forEach((param) => {});
   }, [seriesData]);
+  useEffect(() => {
+    if (!chartInstanceRef.current || !isChartReady) return;
+
+    const chart = chartInstanceRef.current;
+
+    // Find the last index that has non-zero data across all selected params
+    let lastIndexWithData = 0;
+    selectedParams.forEach((param) => {
+      const series = seriesData[param];
+      if (series && series.length > 0) {
+        for (let i = series.length - 1; i >= 0; i--) {
+          if (series[i] !== 0 && series[i] != null) {
+            if (i > lastIndexWithData) lastIndexWithData = i;
+            break;
+          }
+        }
+      }
+    });
+
+    const dataZoom = (chart.getOption() as any).dataZoom?.[0];
+    if (!dataZoom) return;
+
+    const { start = 0, end = 100 } = dataZoom;
+    const windowSize = end - start;
+    const totalPoints = xAxisData.length;
+
+    // Convert last index to percentage
+    const lastDataPercent = ((lastIndexWithData + 1) / totalPoints) * 100;
+
+    // Only shift if the last data is outside the current window
+    if (lastDataPercent > end) {
+      let newEnd = lastDataPercent;
+      let newStart = newEnd - windowSize;
+      if (newStart < 0) newStart = 0;
+      if (newEnd > 100) newEnd = 100;
+
+      chart.dispatchAction({
+        type: "dataZoom",
+        start: newStart,
+        end: newEnd,
+      });
+    }
+  }, [seriesData, isChartReady, selectedParams, xAxisData]);
 
   return (
     <View style={{ width: CHART_WIDTH, height, backgroundColor: "#fff" }}>

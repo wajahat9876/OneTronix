@@ -119,7 +119,7 @@ export default function PanZoomPage() {
       : selectedTab === 2
       ? dayjs(formik?.values?.dateOfBirth).format("YYYY")
       : selectedTab === 3
-      ? `${2020}-${dayjs().year()}`
+      ? `${2023}-${dayjs().year()}`
       : "";
   const {
     data,
@@ -364,13 +364,16 @@ export default function PanZoomPage() {
                       flexDirection: "row",
                       paddingHorizontal: 20,
                       paddingVertical: 10,
-
                       marginLeft: 10,
                     }}
                   >
-                    <Text>Select Date </Text>
+                    <Text style={{ fontFamily: "Excon-Regular" }}>
+                      Select Date{" "}
+                    </Text>
                     <TouchableOpacity onPress={() => openBottomSheet()}>
-                      <Text>{updatedDate}</Text>
+                      <Text style={{ fontFamily: "Excon-Regular" }}>
+                        {updatedDate}
+                      </Text>
                     </TouchableOpacity>
                   </View>
                 </>
@@ -729,7 +732,7 @@ export default function PanZoomPage() {
           visible={show}
           selectedTab={selectedTab}
           value={date}
-          minDate={new Date(2020, 0, 1)}
+          minDate={new Date(2023, 0, 1)}
           maxDate={new Date()}
           onCancel={() => setShow(false)}
           onConfirm={(date) => {
