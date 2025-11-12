@@ -44,7 +44,7 @@ export default function EmptyChart({
       Charging: "#F2597F",
       Discharging: "gray",
       Consumption: "#F7D102",
-      Solar: "#A020F0",
+      Solar: "black",
     }),
     []
   );
@@ -86,7 +86,7 @@ export default function EmptyChart({
                   fontFamily: "Ranade-Regular",
                 }}
               >
-                {displayName}: {value}
+                {displayName.toUpperCase()}: {value}
               </Text>
             </View>
           );

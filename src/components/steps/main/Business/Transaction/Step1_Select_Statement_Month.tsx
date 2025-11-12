@@ -370,7 +370,9 @@ export default function PanZoomPage() {
                     }}
                   >
                     {selectedTab != 3 && (
-                      <Text style={{ fontFamily: "Excon-Regular" }}>
+                      <Text
+                        style={{ fontFamily: "Excon-Regular", color: "black" }}
+                      >
                         Select{" "}
                         {selectedTab === 0
                           ? "Date"
@@ -382,7 +384,9 @@ export default function PanZoomPage() {
                       </Text>
                     )}
                     <TouchableOpacity onPress={() => openBottomSheet()}>
-                      <Text style={{ fontFamily: "Excon-Regular" }}>
+                      <Text
+                        style={{ fontFamily: "Excon-Regular", color: "black" }}
+                      >
                         {updatedDate}
                       </Text>
                     </TouchableOpacity>
@@ -616,88 +620,6 @@ export default function PanZoomPage() {
             >
               Current Cycle
             </Text>
-            <View>
-              <Text style={styles.txtCycle}>AC</Text>
-              <DetailRow
-                label="Ampare"
-                value={inverterData?.inverterData?.data?.ac?.amp}
-                unit={"A"}
-              />
-              <DetailRow
-                label="Frequency"
-                value={inverterData?.inverterData?.data?.ac?.freq}
-                unit={"Hz"}
-              />
-              <DetailRow
-                label="Voltage"
-                value={inverterData?.inverterData?.data?.ac?.voltage}
-                unit={"V"}
-              />
-              <DetailRow
-                label="Watt"
-                value={inverterData?.inverterData?.data?.ac?.watt}
-                unit={"kWh"}
-              />
-            </View>
-            <View style={{ marginTop: 10 }}>
-              <Text style={styles.txtCycle}>Battery</Text>
-              <DetailRow
-                label="Charging Current"
-                value={inverterData?.inverterData?.data?.battery?.chargingAmp}
-                unit={"A"}
-              />
-              <DetailRow
-                label="Charging Power"
-                value={inverterData?.inverterData?.data?.battery?.chargingWatt}
-                unit={"kW"}
-              />
-              <DetailRow
-                label="Discharging Power"
-                value={
-                  inverterData?.inverterData?.data?.battery?.dischargingWatt
-                }
-                unit={"kW"}
-              />
-              <DetailRow
-                label="Inverter Current"
-                value={inverterData?.inverterData?.data?.battery?.inverterAmp}
-                unit={"A"}
-              />
-
-              <DetailRow
-                label="Voltage"
-                value={inverterData?.inverterData?.data?.battery?.voltage}
-                unit={"V"}
-              />
-            </View>
-            <View style={{ marginTop: 10 }}>
-              <Text style={styles.txtCycle}>HVDC</Text>
-
-              <DetailRow
-                label="Voltage"
-                value={inverterData?.inverterData?.data?.hvdc?.voltage}
-                unit={"V"}
-              />
-            </View>
-            <View style={{ marginTop: 10 }}>
-              <Text style={styles.txtCycle}>OutPut</Text>
-              <DetailRow
-                label="Load Current"
-                value={inverterData?.inverterData?.data?.output?.loadAmp}
-                unit={"A"}
-              />
-              <DetailRow
-                label="Power"
-                value={inverterData?.inverterData?.data?.output?.watt}
-                unit={"kW"}
-              />
-
-              <DetailRow
-                label="Voltage"
-                value={inverterData?.inverterData?.data?.output?.voltage}
-                unit={"V"}
-              />
-            </View>
             <View style={{ marginTop: 10 }}>
               <Text style={styles.txtCycle}>Solar</Text>
               <DetailRow
@@ -713,19 +635,99 @@ export default function PanZoomPage() {
               <DetailRow
                 label="Power"
                 value={inverterData?.inverterData?.data?.solar?.watt}
-                unit={"W"}
+                unit={"kW"}
+              />
+            </View>
+            <View>
+              <Text style={styles.txtCycle}>Grid/WAPDA</Text>
+              <DetailRow
+                label="Voltage"
+                value={inverterData?.inverterData?.data?.ac?.voltage}
+                unit={"V"}
+              />
+              <DetailRow
+                label="Current"
+                value={inverterData?.inverterData?.data?.ac?.amp}
+                unit={"A"}
+              />
+              <DetailRow
+                label="Frequency"
+                value={inverterData?.inverterData?.data?.ac?.freq}
+                unit={"Hz"}
+              />
+
+              <DetailRow
+                label="Power"
+                value={inverterData?.inverterData?.data?.ac?.watt}
+                unit={"kW"}
+              />
+            </View>
+            <View style={{ marginTop: 10 }}>
+              <Text style={styles.txtCycle}>Battery</Text>
+              <DetailRow
+                label="Voltage"
+                value={inverterData?.inverterData?.data?.battery?.voltage}
+                unit={"V"}
+              />
+              <DetailRow
+                label="Charging Current"
+                value={inverterData?.inverterData?.data?.battery?.chargingAmp}
+                unit={"A"}
+              />
+              <DetailRow
+                label="Charging Power"
+                value={inverterData?.inverterData?.data?.battery?.chargingWatt}
+                unit={"kW"}
+              />
+              <DetailRow
+                label="Discharging Current"
+                value={inverterData?.inverterData?.data?.battery?.inverterAmp}
+                unit={"A"}
+              />
+              <DetailRow
+                label="Discharging Power"
+                value={
+                  inverterData?.inverterData?.data?.battery?.dischargingWatt
+                }
+                unit={"kW"}
+              />
+            </View>
+            <View style={{ marginTop: 10 }}>
+              <Text style={styles.txtCycle}>Inverter</Text>
+              <DetailRow
+                label="Voltage"
+                value={inverterData?.inverterData?.data?.output?.voltage}
+                unit={"V"}
+              />
+              <DetailRow
+                label="Current"
+                value={inverterData?.inverterData?.data?.output?.loadAmp}
+                unit={"A"}
+              />
+              <DetailRow
+                label="Power"
+                value={inverterData?.inverterData?.data?.output?.watt}
+                unit={"kW"}
+              />
+            </View>
+            <View style={{ marginTop: 10 }}>
+              <Text style={styles.txtCycle}>HVDC Bus</Text>
+              <DetailRow
+                label="Voltage"
+                value={inverterData?.inverterData?.data?.hvdc?.voltage}
+                unit={"V"}
               />
             </View>
             <View style={{ marginTop: 10 }}>
               <Text style={styles.txtCycle}>Temperature</Text>
               <DetailRow
-                label="Booster"
-                value={inverterData?.inverterData?.data?.temperature?.booster}
+                label="Inverter"
+                value={inverterData?.inverterData?.data?.temperature?.inverter}
                 unit={"℃"}
               />
               <DetailRow
-                label="Inverter"
-                value={inverterData?.inverterData?.data?.temperature?.inverter}
+                label="Booster"
+                value={inverterData?.inverterData?.data?.temperature?.booster}
                 unit={"℃"}
               />
               <DetailRow

@@ -543,6 +543,7 @@ export default function ZoomBarChart({
                 padding: 8,
                 borderRadius: 6,
                 fontFamily: "Ranade-Medium",
+                color: "black",
               }}
             >
               ◀
@@ -578,6 +579,7 @@ export default function ZoomBarChart({
                 paddingHorizontal: 5,
                 borderRadius: 6,
                 fontFamily: "Ranade-Medium",
+                color: "black",
               }}
             >
               ▶

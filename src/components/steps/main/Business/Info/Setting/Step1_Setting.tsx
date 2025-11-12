@@ -798,6 +798,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                   fontWeight: "600",
                   marginBottom: 20,
                   fontFamily: "Excon-Regular",
+                  color: "black",
                 }}
               >
                 Changes will be reflected after 5-10 minutes
@@ -833,7 +834,9 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                     backgroundColor: "#F8F9FE",
                   }}
                 >
-                  <Text style={{ fontFamily: "Excon-Regular" }}>Cancel</Text>
+                  <Text style={{ fontFamily: "Excon-Regular", color: "black" }}>
+                    Cancel
+                  </Text>
                 </Pressable>
               </View>
             </View>

@@ -9,7 +9,7 @@ import Colors from "@src/constants/Colors";
 import { hs } from "@utils/design/design";
 import moment from "moment";
 import { AnimatePresence, MotiView } from "moti";
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   Keyboard,
   Pressable,
@@ -81,8 +81,12 @@ const DatePicker = (props: DatePickerProps) => {
               flexDirection: "row",
             }}
           >
-            <Text>Select Date </Text>
-            <Text>{value && moment(value).format("YYYY-MM-DD")}</Text>
+            <Text style={{ color: "black", fontFamily: "Excon-Regular" }}>
+              Select Date{" "}
+            </Text>
+            <Text style={{ color: "black", fontFamily: "Excon-Regular" }}>
+              {value && moment(value).format("YYYY-MM-DD")}
+            </Text>
           </View>
         )}
       </TouchableOpacity>
@@ -148,7 +152,11 @@ const DatePicker = (props: DatePickerProps) => {
                       onChange={(params) => onConfirmSingle(params)}
                       todayTextStyle={{
                         fontWeight: "bold",
+                        color: "black",
                       }}
+                      calendarTextStyle={{ color: "black" }}
+                      headerTextStyle={{ color: "black" }}
+                      selectedTextStyle={{ color: "white" }}
                       headerButtonColor="#000F6D"
                       selectedItemColor="#000F6D"
                       todayContainerStyle={{
