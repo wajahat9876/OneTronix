@@ -144,10 +144,7 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
                             />
                           </View>
                           <DropdownRNE
-                            data={[
-                              { label: "Setting", value: "Setting" },
-                              { label: "Edit", value: "Edit" },
-                            ]}
+                            data={[{ label: "Setting", value: "Setting" }]}
                             dropdownType="custom"
                             onChange={(e) => {
                               setValue(e?.value);

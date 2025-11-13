@@ -30,12 +30,14 @@ const FilterModal: React.FC<FilterModalProps> = ({
     setSelected(defaultSelected);
   }, [defaultSelected]);
 
+  // const toggleSelection = (item: string) => {
+  //   setSelected((prev) =>
+  //     prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
+  //   );
+  // };
   const toggleSelection = (item: string) => {
-    setSelected((prev) =>
-      prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
-    );
+    setSelected((prev) => (prev.includes(item) ? [] : [item]));
   };
-
   const handleConfirm = () => {
     onConfirm(selected);
     onClose();

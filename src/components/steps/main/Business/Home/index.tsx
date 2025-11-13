@@ -218,12 +218,11 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                 style={[styles.transactionsCard, { backgroundColor: cardBg }]}
               >
                 <Text style={[styles.txt, { color: textColor }]}>
-                  Daily Production
+                  Daily Purchase
                 </Text>
                 <Text style={[styles.txtStyle, { color: textColor }]}>
                   {Number(
-                    result?.results?.dailySummary?.production
-                      ?.dailyProduction ?? 0
+                    result?.results?.dailySummary?.grid?.dailyPurchase || 0
                   ).toFixed(2)}
                   <Text style={[styles.unitTxt, { color: textColor }]}>
                     {" "}
@@ -258,11 +257,12 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                     fontSize: ms(13),
                   }}
                 >
-                  Daily Purchase
+                  Daily Production
                 </Text>
                 <Text style={[styles.dailyTxt, { color: "white" }]}>
                   {Number(
-                    result?.results?.dailySummary?.grid?.dailyPurchase || 0
+                    result?.results?.dailySummary?.production
+                      ?.dailyProduction ?? 0
                   ).toFixed(2)}
                   <Text style={styles.unitTxt}> kWh</Text>
                 </Text>

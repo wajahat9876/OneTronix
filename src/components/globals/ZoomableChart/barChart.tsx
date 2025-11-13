@@ -8,7 +8,7 @@ import {
 } from "echarts/components";
 import * as echarts from "echarts/core";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 echarts.use([
   SVGRenderer,
@@ -49,24 +49,24 @@ export default function ZoomBarChart({
 
   const paramColors: Record<string, { line: string; area: string[] }> = {
     "Energy Purchased": {
-      line: "#0770FF",
-      area: ["#0A84FF", "#0055CC"],
+      line: "#ff2e24",
+      area: ["red", "#F7181A"],
     },
     "Energy Consumed": {
-      line: "#F7D102",
-      area: ["#FFD700", "#C8A200"],
+      line: "#2f2f2f",
+      area: ["#2f2f2f", "#3C3C3C"],
     },
     "Energy Charged": {
-      line: "#F2597F",
-      area: ["#FF4F81", "#C71B5C"],
+      line: "#5ac3d8",
+      area: ["#5ac3d8", "#5AC3D8"],
     },
     "Energy Discharged": {
-      line: "gray",
-      area: ["gray", "gray"],
+      line: "#de9b14",
+      area: ["#de9b14", "#EDB138"],
     },
     "Solar Production": {
-      line: "black",
-      area: ["black", "black"],
+      line: "#27c840",
+      area: ["#27c840", "#08CF03"],
     },
   };
 
@@ -204,7 +204,12 @@ export default function ZoomBarChart({
       (param) => resultSeries[param] || []
     );
     resultMaxY = Math.max(...selectedOnlyValues, 0);
-    resultMaxY += 10;
+
+    if (selectTab === 1) {
+      resultMaxY += 1;
+    } else {
+      resultMaxY += 10;
+    }
     // Update refs with current data
     seriesDataRef.current = resultSeries;
     selectedParamsRef.current = selectedParams;
@@ -253,6 +258,8 @@ export default function ZoomBarChart({
           // fontFamily: "Ranade-Medium",
           showMinLabel: true,
           showMaxLabel: true,
+          interval: 0,
+          fontSize: selectTab === 1 ? 8 : 12,
         },
         splitLine: { show: true },
       },
@@ -333,15 +340,19 @@ export default function ZoomBarChart({
           zoomOnMouseWheel: false,
           moveOnMouseMove: true,
           moveOnMouseWheel: true,
-          start: selectTab === 1 ? 0 : 0,
-          end: selectTab === 1 ? (9 / xAxisData.length) * 100 : 80, // show first 10 days
+          start: 0,
+          end: 100, // show all days
+          // start: selectTab === 1 ? 0 : 0,
+          // end: selectTab === 1 ? (9 / xAxisData.length) * 100 : 80, // show first 10 days
         },
         {
           show: false,
           type: "slider",
           zoomLock: true, // disable manual zooming
-          start: selectTab === 1 ? 0 : 0,
-          end: selectTab === 1 ? (9 / xAxisData.length) * 100 : 100,
+          start: 0,
+          end: 100, // show all days
+          // start: selectTab === 1 ? 0 : 0,
+          // end: selectTab === 1 ? (9 / xAxisData.length) * 100 : 100,
         },
       ],
       series: selectedParams.map((param) => ({
@@ -433,89 +444,82 @@ export default function ZoomBarChart({
   useEffect(() => {
     Object.keys(seriesData).forEach((param) => {});
   }, [seriesData]);
-  useEffect(() => {
-    if (!chartInstanceRef.current || !isChartReady) return;
+  // useEffect(() => {
+  //   if (!chartInstanceRef.current || !isChartReady) return;
 
-    const chart = chartInstanceRef.current;
+  //   const chart = chartInstanceRef.current;
 
-    // Find the last index that has non-zero data across all selected params
-    let lastIndexWithData = 0;
-    selectedParams.forEach((param) => {
-      const series = seriesData[param];
-      if (series && series.length > 0) {
-        for (let i = series.length - 1; i >= 0; i--) {
-          if (series[i] !== 0 && series[i] != null) {
-            if (i > lastIndexWithData) lastIndexWithData = i;
-            break;
-          }
-        }
-      }
-    });
+  //   // Find the last index that has non-zero data across all selected params
+  //   let lastIndexWithData = 0;
+  //   selectedParams.forEach((param) => {
+  //     const series = seriesData[param];
+  //     if (series && series.length > 0) {
+  //       for (let i = series.length - 1; i >= 0; i--) {
+  //         if (series[i] !== 0 && series[i] != null) {
+  //           if (i > lastIndexWithData) lastIndexWithData = i;
+  //           break;
+  //         }
+  //       }
+  //     }
+  //   });
 
-    const dataZoom = (chart.getOption() as any).dataZoom?.[0];
-    if (!dataZoom) return;
+  //   const dataZoom = (chart.getOption() as any).dataZoom?.[0];
+  //   if (!dataZoom) return;
 
-    const { start = 0, end = 100 } = dataZoom;
-    const windowSize = end - start;
-    const totalPoints = xAxisData.length;
+  //   const { start = 0, end = 100 } = dataZoom;
+  //   const windowSize = end - start;
+  //   const totalPoints = xAxisData.length;
 
-    // Convert last index to percentage
-    const lastDataPercent = ((lastIndexWithData + 1) / totalPoints) * 100;
+  //   // Convert last index to percentage
+  //   const lastDataPercent = ((lastIndexWithData + 1) / totalPoints) * 100;
 
-    // Only shift if the last data is outside the current window
-    if (lastDataPercent > end) {
-      let newEnd = lastDataPercent;
-      let newStart = newEnd - windowSize;
-      if (newStart < 0) newStart = 0;
-      if (newEnd > 100) newEnd = 100;
+  //   // Only shift if the last data is outside the current window
+  //   if (lastDataPercent > end) {
+  //     let newEnd = lastDataPercent;
+  //     let newStart = newEnd - windowSize;
+  //     if (newStart < 0) newStart = 0;
+  //     if (newEnd > 100) newEnd = 100;
 
-      chart.dispatchAction({
-        type: "dataZoom",
-        start: newStart,
-        end: newEnd,
-      });
-    }
-  }, [seriesData, isChartReady, selectedParams, xAxisData]);
+  //     chart.dispatchAction({
+  //       type: "dataZoom",
+  //       start: newStart,
+  //       end: newEnd,
+  //     });
+  //   }
+  // }, [seriesData, isChartReady, selectedParams, xAxisData]);
   useEffect(() => {
     setLegendValues({});
   }, [selectTab]);
   return (
     <View style={{ width: CHART_WIDTH, height, backgroundColor: "#fff" }}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <View style={{ paddingHorizontal: 16, marginLeft: 10 }}>
-          {selectedParams.map((param) => {
-            const value = legendValues[param] ?? "--";
-            return (
+      <View style={{ paddingHorizontal: 16, marginLeft: 10 }}>
+        {selectedParams.map((param) => {
+          const value = legendValues[param] ?? "--";
+          return (
+            <View
+              key={param}
+              style={[styles.dotText, { marginRight: 6, marginTop: vs(10) }]}
+            >
               <View
-                key={param}
-                style={[styles.dotText, { marginRight: 6, marginTop: vs(10) }]}
+                style={[
+                  styles.colorDot,
+                  { backgroundColor: paramColors[param]?.line },
+                ]}
+              />
+              <Text
+                style={{
+                  color: "#111",
+                  fontSize: ms(11),
+                  fontFamily: "Ranade-Regular",
+                }}
               >
-                <View
-                  style={[
-                    styles.colorDot,
-                    { backgroundColor: paramColors[param]?.line },
-                  ]}
-                />
-                <Text
-                  style={{
-                    color: "#111",
-                    fontSize: ms(11),
-                    fontFamily: "Ranade-Regular",
-                  }}
-                >
-                  {param.toUpperCase()}: {value}
-                </Text>
-              </View>
-            );
-          })}
-        </View>
-        <View
+                {param.toUpperCase()}: {value}
+              </Text>
+            </View>
+          );
+        })}
+      </View>
+      {/* <View
           style={{
             flexDirection: "row",
             gap: 10,
@@ -590,8 +594,8 @@ export default function ZoomBarChart({
               ▶
             </Text>
           </TouchableOpacity>
-        </View>
-      </View>
+        </View> */}
+
       <SvgChart ref={chartRef} style={{ height, width: CHART_WIDTH }} />
     </View>
   );

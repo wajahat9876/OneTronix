@@ -2,6 +2,7 @@ import { useBusinessDetails } from "@/store/selectors/business/business";
 import DiagramDark from "@assets/icons/darkHouse.png";
 import Diagram from "@assets/icons/diagram.png";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
+import { ms } from "@utils/design/design";
 import { useEffect, useRef, useState } from "react";
 import {
   Animated,
@@ -276,13 +277,13 @@ const HouseDiagram = (props: HouseDiagramProps) => {
       )}
 
       {/* Labels */}
-      <View style={[styles.label, { top: scale(20), left: scale(290) }]}>
+      <View style={[styles.label, { top: scale(28), left: scale(290) }]}>
         <Text style={[styles.labelTitle, { color: textColor }]}>Solar</Text>
         <Text style={[styles.labelValue, { color: labelColor }]}>
           {solar} kW
         </Text>
       </View>
-      <View style={[styles.label, { top: scale(110), left: scale(65) }]}>
+      <View style={[styles.label, { top: scale(115), left: scale(78) }]}>
         <Text style={[styles.labelTitle, { color: textColor }]}>Home</Text>
         <Text style={[styles.labelValue, { color: labelColor }]}>
           {home} kW
@@ -294,7 +295,7 @@ const HouseDiagram = (props: HouseDiagramProps) => {
           {battery} kW
         </Text>
       </View>
-      <View style={[styles.label, { bottom: scale(50), right: scale(130) }]}>
+      <View style={[styles.label, { bottom: scale(60), right: scale(130) }]}>
         <Text style={[styles.labelTitle, { color: textColor }]}>Grid</Text>
         <Text style={[styles.labelValue, { color: labelColor }]}>
           {grid} kW
@@ -309,6 +310,10 @@ export default HouseDiagram;
 const styles = StyleSheet.create({
   container: { alignItems: "center", justifyContent: "center" },
   label: { position: "absolute", alignItems: "center" },
-  labelTitle: { fontSize: 13, fontWeight: "600", fontFamily: "Excon-Medium" },
-  labelValue: { fontSize: 12, fontFamily: "Excon-Medium" },
+  labelTitle: {
+    fontSize: ms(11),
+    fontWeight: "600",
+    fontFamily: "Excon-Regular",
+  },
+  labelValue: { fontSize: ms(9), fontFamily: "Excon-Regular" },
 });

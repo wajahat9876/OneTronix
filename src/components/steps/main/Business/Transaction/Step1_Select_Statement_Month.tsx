@@ -60,10 +60,7 @@ export default function PanZoomPage() {
   const bottomSheetRef = React.useRef<PortalBottomSheetRef>(null);
 
   React.useEffect(() => {
-    const defaults =
-      selectedTab === 0
-        ? ["Solar", "Consumption"]
-        : ["Solar Production", "Energy Consumed"];
+    const defaults = selectedTab === 0 ? ["Solar"] : ["Solar Production"];
     setSelectedParams(defaults);
     setModalDefaultSelected(defaults);
   }, [selectedTab]);
@@ -620,7 +617,7 @@ export default function PanZoomPage() {
             >
               Current Cycle
             </Text>
-            <View style={{ marginTop: 10 }}>
+            <View style={{ marginTop: vs(10) }}>
               <Text style={styles.txtCycle}>Solar</Text>
               <DetailRow
                 label="Voltage"
@@ -638,7 +635,7 @@ export default function PanZoomPage() {
                 unit={"kW"}
               />
             </View>
-            <View>
+            <View style={{ marginTop: vs(10) }}>
               <Text style={styles.txtCycle}>Grid/WAPDA</Text>
               <DetailRow
                 label="Voltage"
@@ -662,7 +659,7 @@ export default function PanZoomPage() {
                 unit={"kW"}
               />
             </View>
-            <View style={{ marginTop: 10 }}>
+            <View style={{ marginTop: vs(10) }}>
               <Text style={styles.txtCycle}>Battery</Text>
               <DetailRow
                 label="Voltage"
@@ -692,7 +689,7 @@ export default function PanZoomPage() {
                 unit={"kW"}
               />
             </View>
-            <View style={{ marginTop: 10 }}>
+            <View style={{ marginTop: vs(10) }}>
               <Text style={styles.txtCycle}>Inverter</Text>
               <DetailRow
                 label="Voltage"
@@ -710,7 +707,7 @@ export default function PanZoomPage() {
                 unit={"kW"}
               />
             </View>
-            <View style={{ marginTop: 10 }}>
+            <View style={{ marginTop: vs(10) }}>
               <Text style={styles.txtCycle}>HVDC Bus</Text>
               <DetailRow
                 label="Voltage"
@@ -718,7 +715,7 @@ export default function PanZoomPage() {
                 unit={"V"}
               />
             </View>
-            <View style={{ marginTop: 10 }}>
+            <View style={{ marginTop: vs(10) }}>
               <Text style={styles.txtCycle}>Temperature</Text>
               <DetailRow
                 label="Inverter"

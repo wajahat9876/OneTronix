@@ -36,11 +36,11 @@ export default function PinchZoomLineChart({
 }: PinchZoomLineChartProps) {
   const colors: Record<keyof PowerData, string> = {
     hour: "#000000",
-    Purchase: "#0770FF",
-    Charging: "#F2597F",
-    Discharging: "gray",
-    Consumption: "#F7D102",
-    Solar: "black",
+    Purchase: "#ff2e24",
+    Charging: "#5ac3d8",
+    Discharging: "#de9b14",
+    Consumption: "#2f2f2f",
+    Solar: "#27c840",
   };
 
   const visibleKeys = selectedParams?.filter((key) =>
