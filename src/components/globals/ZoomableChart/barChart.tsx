@@ -191,15 +191,20 @@ export default function ZoomBarChart({
     }
 
     // calculate maxY once
-    selectedParams.forEach((param) => {
-      const localMax = Math.max(...resultSeries[param]);
-      if (localMax > resultMaxY) resultMaxY = localMax;
-    });
-    if (resultMaxY > 0) {
-      const magnitude = Math.pow(10, Math.floor(Math.log10(resultMaxY)));
-      resultMaxY = Math.ceil(resultMaxY / magnitude) * magnitude;
-    }
-
+    // selectedParams.forEach((param) => {
+    //   const localMax = Math.max(...resultSeries[param]);
+    //   if (localMax > resultMaxY) resultMaxY = localMax;
+    // });
+    // if (resultMaxY > 0) {
+    //   const magnitude = Math.pow(10, Math.floor(Math.log10(resultMaxY)));
+    //   resultMaxY = Math.ceil(resultMaxY / magnitude) * magnitude;
+    // }
+    // let resultMaxY = 0;
+    const selectedOnlyValues = selectedParams.flatMap(
+      (param) => resultSeries[param] || []
+    );
+    resultMaxY = Math.max(...selectedOnlyValues, 0);
+    resultMaxY += 10;
     // Update refs with current data
     seriesDataRef.current = resultSeries;
     selectedParamsRef.current = selectedParams;

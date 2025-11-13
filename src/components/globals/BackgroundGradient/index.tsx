@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useFocusEffect } from "@react-navigation/native";
 import {
   Blur,
   BlurMask,
@@ -13,7 +12,6 @@ import { useCallback } from "react";
 import { useWindowDimensions } from "react-native";
 import {
   Easing,
-  runOnUI,
   useSharedValue,
   withRepeat,
   withTiming,
@@ -63,19 +61,19 @@ const EasyEmoneyGradient = () => {
   //     true,
   //   );
   // };
-  useFocusEffect(
-    useCallback(() => {
-      runOnUI(animateGradient)();
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     runOnUI(animateGradient)();
 
-      return () => {
-        translateX.value = 0;
-        translateYellowX.value = 0;
-        translateY.value = 0;
-        translateYellowY.value = 0;
-        translateBlueY.value = 0;
-      };
-    }, [])
-  );
+  //     return () => {
+  //       translateX.value = 0;
+  //       translateYellowX.value = 0;
+  //       translateY.value = 0;
+  //       translateYellowY.value = 0;
+  //       translateBlueY.value = 0;
+  //     };
+  //   }, [])
+  // );
   const animateGradient = useCallback(() => {
     "worklet";
 
