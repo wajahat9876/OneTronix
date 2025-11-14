@@ -3,7 +3,7 @@
 /* eslint-disable camelcase */
 import { useBusinessSigninMutation } from "@/store/api/business/authApis";
 import { setRole } from "@/store/slices/business/businessSlice";
-import Logo from "@assets/eccLogo/oneTronixLogo.svg";
+import Logoicon from "@assets/eccLogo/one-tronix-logo.png";
 import BottomSheet from "@gorhom/bottom-sheet";
 import Button from "@src/components/globals/Button";
 import FormikInput from "@src/components/globals/FormikInput";
@@ -17,7 +17,7 @@ import { getRespValue } from "@utils/getRespValue";
 import { useRouter } from "expo-router";
 import { useFormik } from "formik";
 import { useMemo, useRef, useState } from "react";
-import { Platform, TextInput, View } from "react-native";
+import { Image, Platform, TextInput, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as Yup from "yup";
 
@@ -79,28 +79,23 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
   const [, setBottomSheetVisible] = useState(false);
   return (
     <>
-      <KeyboardAwareScrollView
-        contentContainerStyle={{
-          paddingBottom: Platform.OS === "ios" ? getRespValue(10) : 10,
-          flexGrow: 1,
+      <View
+        className="w-full justify-start flex-1"
+        style={{
+          paddingHorizontal: hs(16),
         }}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-        enableOnAndroid
-        extraScrollHeight={20}
-        enableAutomaticScroll
-        scrollEnabled
-        extraHeight={Platform.OS === "ios" ? getRespValue(250) : 80}
-        viewIsInsideTabBar
-        keyboardOpeningTime={0}
       >
-        <View
-          className="w-full justify-start flex-1"
+        <Image
+          source={Logoicon}
           style={{
-            paddingHorizontal: hs(16),
+            position: "absolute",
+            width: 140,
+            height: 170,
+            // marginTop: 20,
+            alignSelf: "flex-end",
           }}
-        >
-          <View
+        />
+        {/* <View
             style={{
               alignSelf: "flex-end",
               padding: hs(15),
@@ -109,49 +104,64 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
             }}
           >
             <Logo />
-          </View>
-          <View
+          </View> */}
+        <View
+          style={{
+            alignItems: "flex-start",
+            marginTop: vs(160),
+          }}
+        >
+          <Text
             style={{
-              alignItems: "flex-start",
-              marginTop: vs(32),
+              color: "red",
+              // fontWeight: "900",
+              fontSize: ms(40),
+              lineHeight: 45,
+              fontFamily: "Excon-Medium",
             }}
           >
-            <Text
-              style={{
-                color: "red",
-                // fontWeight: "900",
-                fontSize: ms(40),
-                lineHeight: 45,
-                fontFamily: "Excon-Medium",
-              }}
-            >
-              ONE
-            </Text>
-            <Text
-              style={{
-                color: "red",
-                fontSize: ms(44),
-                fontFamily: "Excon-Regular",
-                lineHeight: 45,
-                marginTop: -4, // tighten spacing between ONE and TRONIX
-              }}
-            >
-              TRONIX
-            </Text>
-            <Text
-              style={{
-                color: "white",
-                fontSize: ms(13),
-                fontFamily: "Excon-Regular",
-                letterSpacing: 1,
-                lineHeight: 18,
-                marginBottom: vs(100),
-                marginTop: -5, // small gap from TRONIX
-              }}
-            >
-              TECHNOLOGY PARTNER
-            </Text>
-          </View>
+            ONE
+          </Text>
+          <Text
+            style={{
+              color: "red",
+              fontSize: ms(44),
+              fontFamily: "Excon-Regular",
+              lineHeight: 45,
+              marginTop: -4, // tighten spacing between ONE and TRONIX
+            }}
+          >
+            TRONIX
+          </Text>
+          <Text
+            style={{
+              color: "white",
+              fontSize: ms(13),
+              fontFamily: "Excon-Regular",
+              letterSpacing: 1,
+              lineHeight: 18,
+              marginBottom: vs(10),
+              marginTop: -5, // small gap from TRONIX
+            }}
+          >
+            TECHNOLOGY PARTNER
+          </Text>
+        </View>
+        <KeyboardAwareScrollView
+          contentContainerStyle={{
+            paddingBottom: Platform.OS === "ios" ? getRespValue(10) : 10,
+            flexGrow: 1,
+          }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          enableOnAndroid
+          extraScrollHeight={20}
+          enableAutomaticScroll
+          scrollEnabled
+          extraHeight={Platform.OS === "ios" ? getRespValue(250) : 80}
+          viewIsInsideTabBar
+          keyboardOpeningTime={0}
+        >
           <View
             style={{
               padding: 15,
@@ -159,6 +169,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
               borderRadius: 20,
               width: "95%",
               alignSelf: "center",
+              marginTop: vs(60),
             }}
           >
             <Text
@@ -279,58 +290,58 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
               />
             </View>
           </View>
-        </View>
-        <View style={{ alignItems: "center", paddingHorizontal: 20 }}>
-          {/* Button and Scan in a Row */}
+          <View style={{ alignItems: "center", paddingHorizontal: 20 }}>
+            {/* Button and Scan in a Row */}
 
-          {/* <TouchableOpacity onPress={() => openBottomSheet()}>
+            {/* <TouchableOpacity onPress={() => openBottomSheet()}>
               <Image
                 source={WhiteOutline}
                 style={{ height: 25, width: 25, marginLeft: 10 }}
               />
             </TouchableOpacity> */}
 
-          {/* Text below row */}
-          <View style={{ flexDirection: "row", marginBottom: 40 }}>
-            <Text
-              style={{
-                fontSize: 12,
-                color: "white",
-
-                marginTop: 5, // Adds consistent space
-                fontFamily: "Excon-Regular",
-              }}
-            >
-              Don't have an account?
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                dispatch(setRole(true)), router.push("/(auth)/Signup");
-              }}
-            >
+            {/* Text below row */}
+            <View style={{ flexDirection: "row", marginBottom: 40 }}>
               <Text
                 style={{
                   fontSize: 12,
-                  color: "red",
-                  marginTop: 6, // Adds consistent space
+                  color: "white",
+
+                  marginTop: 5, // Adds consistent space
                   fontFamily: "Excon-Regular",
                 }}
               >
-                {" "}
-                Create an Account
+                Don't have an account?
               </Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch(setRole(true)), router.push("/(auth)/Signup");
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "red",
+                    marginTop: 6, // Adds consistent space
+                    fontFamily: "Excon-Regular",
+                  }}
+                >
+                  {" "}
+                  Create an Account
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        </KeyboardAwareScrollView>
+      </View>
 
-        {/* <Step2ScanQr
+      {/* <Step2ScanQr
           snapPoints={snapPoints}
           bottomSheetRef={bottomSheetRef}
           key="dssa"
           closeBottomSheet={closeBottomSheet}
           active={isActive}
         /> */}
-      </KeyboardAwareScrollView>
     </>
   );
 };

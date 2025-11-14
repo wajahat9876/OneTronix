@@ -358,7 +358,8 @@ export default function ZoomBarChart({
       series: selectedParams.map((param) => ({
         name: param,
         type: "bar",
-        barWidth: 7,
+        barWidth:
+          selectTab === 1 ? 7 : selectTab === 2 ? 18 : selectTab === 3 ? 60 : 7,
         itemStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             { offset: 0, color: paramColors[param]?.area[0] ?? "#000" },

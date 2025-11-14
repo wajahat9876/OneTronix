@@ -8,6 +8,7 @@ const Layout = () => {
         animation: "slide_from_right",
         animationDuration: 500,
       }}
+      initialRouteName="index"
     />
   );
 };

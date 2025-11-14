@@ -1,7 +1,13 @@
 import { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import { vs } from "@utils/design/design";
+import { ms, vs } from "@utils/design/design";
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Checkbox } from "react-native-paper";
 import PortalBottomSheet from "../PortalBottomSheet";
 import { PortalBottomSheetRef } from "../PortalBottomSheet/types";
@@ -57,6 +63,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
       handleIndicatorStyle={{
         backgroundColor: "black",
       }}
+      backgroundStyle={{ backgroundColor: "#E4E5E8" }}
       TouchComponent={() => <></>}
       backdropComponent={(
         props // Custom backdrop to handle press
@@ -70,7 +77,19 @@ const FilterModal: React.FC<FilterModalProps> = ({
       )}
     >
       <ScrollView style={styles.modalBox}>
-        <Text style={styles.title}>Parameter Selection</Text>
+        <Text style={styles.title}>Filters</Text>
+        <Text
+          style={{
+            alignSelf: "center",
+            fontSize: ms(10),
+            color: "gray",
+            fontFamily: "Excon-Regular",
+            width: "50%",
+            textAlign: "center",
+          }}
+        >
+          Select the filter to view its information
+        </Text>
 
         {options.map((item) => (
           <TouchableOpacity
@@ -79,13 +98,26 @@ const FilterModal: React.FC<FilterModalProps> = ({
             onPress={() => toggleSelection(item)}
             activeOpacity={0.8}
           >
-            <Checkbox
-              status={selected.includes(item) ? "checked" : "unchecked"}
-              onPress={() => toggleSelection(item)}
-            />
-            <Text style={{ fontFamily: "Excon-Regular", color: "black" }}>
+            <Text
+              style={{
+                fontFamily: "Excon-Regular",
+                color: "black",
+              }}
+            >
               {item}
             </Text>
+            <View
+              style={{
+                backgroundColor: selected.includes(item) ? "#27c840" : "white",
+                borderRadius: 20,
+              }}
+            >
+              <Checkbox
+                status={selected.includes(item) ? "checked" : "unchecked"}
+                onPress={() => toggleSelection(item)}
+                color="white"
+              />
+            </View>
           </TouchableOpacity>
         ))}
 
@@ -97,9 +129,9 @@ const FilterModal: React.FC<FilterModalProps> = ({
           <Text style={styles.confirmText}>Confirm</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={restoreDefault}>
+        {/* <TouchableOpacity onPress={restoreDefault}>
           <Text style={styles.restoreText}>Restore Default</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ScrollView>
     </PortalBottomSheet>
   );
@@ -110,30 +142,37 @@ export default FilterModal;
 const styles = StyleSheet.create({
   modalBox: {
     flex: 1,
-    backgroundColor: "#fff",
-    borderRadius: 10,
+    backgroundColor: "#E4E5E8",
+
     padding: 20,
   },
   title: {
-    fontSize: 16,
+    fontSize: ms(18),
     fontWeight: "bold",
     marginBottom: 10,
     textAlign: "center",
     color: "black",
+    fontFamily: "Excon-Medium",
   },
   row: {
     flexDirection: "row",
     alignItems: "center",
     marginVertical: 5,
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    backgroundColor: "white",
+    borderRadius: 8,
+    paddingVertical: 5,
   },
   confirmBtn: {
     width: "80%",
     alignSelf: "center",
     marginTop: 15,
-    backgroundColor: "#007AFF",
+    backgroundColor: "#F4192C",
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
+    marginBottom: 60,
   },
   confirmText: {
     color: "#fff",

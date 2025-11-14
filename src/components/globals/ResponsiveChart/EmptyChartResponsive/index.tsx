@@ -40,11 +40,11 @@ export default function EmptyChart({
   const colors = useMemo(
     () => ({
       hour: "#000000",
-      Purchase: "#0770FF",
-      Charging: "#F2597F",
-      Discharging: "gray",
-      Consumption: "#F7D102",
-      Solar: "black",
+      Purchase: "#ff2e24",
+      Charging: "#5ac3d8",
+      Discharging: "#de9b14",
+      Consumption: "#2f2f2f",
+      Solar: "#27c840",
     }),
     []
   );

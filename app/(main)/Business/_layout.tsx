@@ -7,7 +7,7 @@ import { useBusinessDetails } from "@/store/selectors/business/business";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import Colors from "@src/constants/Colors";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
-import { ms, vs } from "@utils/design/design";
+import { hs, ms, vs } from "@utils/design/design";
 import Home from "app/(main)/Business/Home/index";
 // import Info from "app/(main)/Business/Info/index";
 import Setting from "app/(main)/Business/Settings/index";
@@ -15,14 +15,14 @@ import Setting from "app/(main)/Business/Settings/index";
 import DevicesBlack from "@assets/icons/bottom-tabs/blackDevices.svg";
 import HomeBlack from "@assets/icons/bottom-tabs/blackHome.svg";
 import ReportBlack from "@assets/icons/bottom-tabs/blackReport.svg";
-import SettingBlack from "@assets/icons/bottom-tabs/BlackSetting.svg";
+import SettingBlack from "@assets/icons/bottom-tabs/user.png";
+import SettingWhite from "@assets/icons/bottom-tabs/userWhite.png";
 import Devices from "@assets/icons/bottom-tabs/whiteDevices.svg";
 import HomeWhite from "@assets/icons/bottom-tabs/whiteHome.svg";
 import ReportWhite from "@assets/icons/bottom-tabs/whiteReport.svg";
-import SettingWhite from "@assets/icons/bottom-tabs/whiteSetting.svg";
 import Info from "app/(main)/Business/Info/index";
 import { Redirect } from "expo-router";
-import { Platform } from "react-native";
+import { Image, Platform } from "react-native";
 import { MD3DarkTheme, MD3LightTheme, PaperProvider } from "react-native-paper";
 import Transaction from "./Transaction";
 // Icons
@@ -109,9 +109,10 @@ const Layout = () => {
           }}
         />
         <Tab.Screen
-          name="Devices"
+          name="Info"
           component={Info}
           options={{
+            tabBarLabel: "Devices",
             tabBarIcon: () => (isDarkMode ? <Devices /> : <DevicesBlack />),
           }}
         />
@@ -138,7 +139,17 @@ const Layout = () => {
           component={Setting}
           options={{
             tabBarIcon: () =>
-              isDarkMode ? <SettingWhite /> : <SettingBlack />,
+              isDarkMode ? (
+                <Image
+                  source={SettingWhite}
+                  style={{ width: hs(25), height: vs(30) }}
+                />
+              ) : (
+                <Image
+                  source={SettingBlack}
+                  style={{ width: hs(25), height: vs(30) }}
+                />
+              ),
           }}
         />
       </Tab.Navigator>

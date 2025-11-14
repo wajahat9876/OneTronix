@@ -180,7 +180,6 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
             onChange={(item) => handleChangeInverter(item.value)}
             style={{
               width: "50%",
-
               borderColor: "gray",
               borderRadius: 8,
               height: vs(40),
@@ -189,7 +188,7 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
             }}
             selectedTextStyle={{
               fontSize: ms(14),
-              width: 1,
+
               ellipsizeMode: "tail",
               fontFamily: "Excon-Medium",
               color: backColorLight ? "#000" : "#fff",

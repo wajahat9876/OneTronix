@@ -269,20 +269,8 @@ export default function PanZoomPage() {
     >
       <StatusBar barStyle={"dark-content"} />
       <ScrollView>
-        {/* <Text
-          style={{
-            paddingHorizontal: 12,
-            marginTop: 20,
-            marginBottom: vs(20),
-            fontSize: ms(16),
-            fontFamily: "Ranade-Medium",
-          }}
-        >
-          Usage & Generation
-        </Text> */}
         <View
           style={{
-            // backgroundColor: "#FAFAFA",
             backgroundColor: "white",
             paddingHorizontal: 10,
             paddingBottom: vs(5),
@@ -299,7 +287,6 @@ export default function PanZoomPage() {
               <View
                 style={{
                   width: "95%",
-                  // marginLeft: 10,
                   alignSelf: "center",
                 }}
               >

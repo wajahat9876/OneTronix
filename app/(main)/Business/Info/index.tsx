@@ -8,7 +8,7 @@ import useMultistepForm from "@src/hooks/useMultiStepForm";
 import { View } from "react-native";
 import { LinearTransition } from "react-native-reanimated";
 
-const Info = () => {
+const Index = () => {
   useStatusBar("dark");
 
   const { step, goTo } = useMultistepForm([<Step0_Info />, <Step1_Setting />], {
@@ -26,4 +26,4 @@ const Info = () => {
   return <View style={{ flex: 1, backgroundColor: "white" }}>{step}</View>;
 };
 
-export default Info;
+export default Index;

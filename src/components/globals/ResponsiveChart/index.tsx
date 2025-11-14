@@ -1,8 +1,6 @@
-import ZoomOut from "@assets/icons/Zoomout.png";
-import ZoomIn from "@assets/icons/zoomin.png";
 import { ms, vs } from "@utils/design/design";
 import React, { useMemo, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { runOnJS } from "react-native-reanimated";
 import {
@@ -212,11 +210,29 @@ export default function PinchZoomLineChart({
           </View>
 
           <View style={{ flexDirection: "row", alignSelf: "center", gap: 10 }}>
-            <TouchableOpacity onPress={handleZoomOut}>
-              <Image source={ZoomOut} style={{ width: 30, height: 30 }} />
+            <TouchableOpacity onPress={handleZoomOut} style={styles.zoomimg}>
+              <Text
+                style={{
+                  color: "black",
+                  fontSize: ms(25),
+                  alignSelf: "center",
+                  fontFamily: "Ranade-Medium",
+                }}
+              >
+                -
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleZoomIn}>
-              <Image source={ZoomIn} style={{ width: 30, height: 30 }} />
+            <TouchableOpacity onPress={handleZoomIn} style={styles.zoomimg}>
+              <Text
+                style={{
+                  color: "black",
+                  fontSize: ms(22),
+                  alignSelf: "center",
+                  fontFamily: "Ranade-Medium",
+                }}
+              >
+                +
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -338,6 +354,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 6,
     marginVertical: 4,
+  },
+  zoomimg: {
+    backgroundColor: "#F5F4F4",
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
   },
   legendDot: { width: 10, height: 10, borderRadius: 5, marginRight: 4 },
   legendLabel: { fontSize: 12, color: "#333" },

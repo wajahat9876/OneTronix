@@ -2,15 +2,17 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Text, TouchableOpacity } from "@src/components/libraries";
 import { globalStyle } from "@src/styles/globals";
 import { hs, ms, vs } from "@utils/design/design";
+import { View } from "react-native";
 
 interface ISettingItemProps {
   title: string;
   marginTop: number;
   onClick: () => void;
+  isIconVisible?: boolean;
 }
 
 const SettingItem = (props: ISettingItemProps) => {
-  const { title, marginTop, onClick } = props;
+  const { title, marginTop, onClick, isIconVisible } = props;
   return (
     <TouchableOpacity
       style={{
@@ -22,7 +24,6 @@ const SettingItem = (props: ISettingItemProps) => {
         shadowOffset: { width: ms(2), height: ms(2) },
         shadowOpacity: 0.05,
         padding: ms(16),
-
         marginRight: hs(16),
         flexDirection: "row",
         justifyContent: "space-between",
@@ -35,11 +36,29 @@ const SettingItem = (props: ISettingItemProps) => {
       }}
       onPress={onClick}
     >
-      <Text
-        style={{ ...globalStyle.textMedium, fontSize: 15.34, color: "black" }}
-      >
-        {title}
-      </Text>
+      {isIconVisible ? (
+        <View
+          style={{ flexDirection: "row", alignItems: "center", gap: hs(8) }}
+        >
+          <MaterialIcons name="person" size={22} color="black" />
+          <Text
+            style={{
+              ...globalStyle.textMedium,
+              fontSize: 15.34,
+              color: "black",
+            }}
+          >
+            {title}
+          </Text>
+        </View>
+      ) : (
+        <Text
+          style={{ ...globalStyle.textMedium, fontSize: 15.34, color: "black" }}
+        >
+          {title}
+        </Text>
+      )}
+
       <MaterialIcons name="arrow-right" size={42} color="black" />
     </TouchableOpacity>
   );

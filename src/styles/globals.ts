@@ -60,7 +60,7 @@ export const globalStyle = StyleSheet.create({
   },
   textMedium: {
     fontSize: 20,
-    fontFamily: "poppins-medium",
+    fontFamily: "Ranade-Medium",
   },
   textRegular: {
     fontSize: 14,

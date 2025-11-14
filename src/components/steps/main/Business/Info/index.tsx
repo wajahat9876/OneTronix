@@ -1,3 +1,4 @@
+import { useChangeActiveInverterMutation } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import {
   setLastSelectedDevice,
@@ -14,6 +15,7 @@ import AddDeviceQr from "@src/components/steps/Qr/AddDeviceQr";
 import { pageTransitionAnimation } from "@src/constants/Animation";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
 import { useAppDispatch, useAppSelector } from "@src/hooks/useReduxHooks";
+import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
 import { hs, ms, vs } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
 import { useRouter } from "expo-router";
@@ -34,7 +36,7 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
   const [expanded, setExpanded] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
-
+  const [changeInverter, { isLoading }] = useChangeActiveInverterMutation();
   //Qr Code
   const [isActive, setActive] = useState(false);
   const bottomSheetRef = useRef<PortalBottomSheetRef>(null);
@@ -52,7 +54,24 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
   const snapPoints = useMemo(() => ["100%"], []);
   const [, setBottomSheetVisible] = useState(false);
   const [value, setValue] = useState<string>("");
-  const dropdownRef = useRef<any>(null);
+  const [activeInverter, setActiveInverter] = useState<string>("");
+  const handleChangeInverter = async (newActiveId: string) => {
+    if (newActiveId === activeInverter) return;
+
+    const currentActive = businessData?.activeDevice;
+    setActiveInverter(newActiveId);
+    try {
+      const res = await changeInverter({
+        deviceId: currentActive?._id, // current active inverter
+        activeDeviceId: newActiveId, // inverter to activate
+      }).unwrap();
+      renderToastSuccess(res?.message || "Switched inverter successfully");
+      router.push("/(main)/Business/Home");
+    } catch (error: any) {
+      renderToastError(error?.data?.message || "Something went wrong");
+      setActiveInverter(currentActive?._id ?? "");
+    }
+  };
   return (
     <Animated.View
       {...pageTransitionAnimation}
@@ -131,7 +150,24 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
                       <View style={styles.mainRow}>
                         <View style={styles.menuRow}>
                           <View style={{ flexDirection: "row" }}>
-                            <Text style={styles.deviceTxt}>{item?.name}</Text>
+                            <TouchableOpacity
+                              onPress={() => {
+                                handleChangeInverter(item?._id);
+                              }}
+                            >
+                              <Text style={styles.deviceTxt}>{item?.name}</Text>
+                            </TouchableOpacity>
+                            <Text
+                              style={{
+                                color: "red",
+
+                                paddingHorizontal: 5,
+                                fontSize: ms(7),
+                                fontFamily: "Excon-Regular",
+                              }}
+                            >
+                              {item?.type}
+                            </Text>
                             <View
                               style={[
                                 styles.statusDot,
