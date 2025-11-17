@@ -359,7 +359,13 @@ export default function ZoomBarChart({
         name: param,
         type: "bar",
         barWidth:
-          selectTab === 1 ? 7 : selectTab === 2 ? 18 : selectTab === 3 ? 60 : 7,
+          selectTab === 1
+            ? 7
+            : selectTab === 2
+            ? 18
+            : selectTab === 3
+            ? hs(98)
+            : 7,
         itemStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             { offset: 0, color: paramColors[param]?.area[0] ?? "#000" },

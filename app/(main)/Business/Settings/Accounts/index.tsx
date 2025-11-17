@@ -50,7 +50,13 @@ const CreateAccount = ({ back }: MultiStepFormProps) => {
               <View style={styles.iconPerson}>
                 <IconPerson />
               </View>
-              <Text style={{ marginLeft: vs(10), fontFamily: "poppins" }}>
+              <Text
+                style={{
+                  marginLeft: vs(10),
+                  fontFamily: "Excon-Medium",
+                  color: "black",
+                }}
+              >
                 {capitalizeFirstWord(businessData?.firstName)}
               </Text>
             </View>
@@ -118,7 +124,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: Platform.OS === "ios" ? 2 : 0,
+    elevation: Platform.OS === "ios" ? 2 : 2,
     marginBottom: 10,
     paddingBottom: 50,
   },

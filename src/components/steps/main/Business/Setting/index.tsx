@@ -40,42 +40,42 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
             <SettingItem
               title={data?.firstName || "Profile"}
               isIconVisible
-              marginTop={vs(24)}
+              marginTop={vs(30)}
               onClick={() => {
                 goTo?.(1);
               }}
             />
             <SettingItem
               title="Device Management"
-              marginTop={vs(24)}
+              marginTop={vs(30)}
               onClick={() => {
                 router.push("/(main)/Business/Info");
               }}
             />
             <SettingItem
               title="System Setting"
-              marginTop={vs(24)}
+              marginTop={vs(30)}
               onClick={() => {
                 // goTo?.(1);
               }}
             />
             <SettingItem
               title="Terms and Conditions"
-              marginTop={vs(24)}
+              marginTop={vs(30)}
               onClick={() => {
                 // goTo?.(1);
               }}
             />
             <SettingItem
               title="Privacy Policy"
-              marginTop={vs(24)}
+              marginTop={vs(30)}
               onClick={() => {
                 // goTo?.(1);
               }}
             />
 
-            <View style={{ marginBottom: vs(24) }}>
-              <GlobalLogout key="dsa" marginTop={vs(24)} />
+            <View style={{ marginBottom: vs(30) }}>
+              <GlobalLogout key="dsa" marginTop={vs(30)} />
             </View>
           </ScrollView>
         </View>

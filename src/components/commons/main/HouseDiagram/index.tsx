@@ -289,7 +289,7 @@ const HouseDiagram = (props: HouseDiagramProps) => {
           {home} kW
         </Text>
       </View>
-      <View style={[styles.label, { bottom: scale(140), right: scale(40) }]}>
+      <View style={[styles.label, { bottom: scale(135), right: scale(55) }]}>
         <Text style={[styles.labelTitle, { color: textColor }]}>Battery</Text>
         <Text style={[styles.labelValue, { color: labelColor }]}>
           {battery} kW

@@ -133,6 +133,50 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
           <Logo />
         </View>
       </View>
+
+      <View
+        style={{
+          alignItems: "flex-start",
+          marginTop: vs(32),
+          paddingHorizontal: 10,
+        }}
+      >
+        <Text
+          style={{
+            color: "red",
+            fontWeight: "900",
+            fontSize: ms(40),
+            lineHeight: 45,
+            fontFamily: "Excon-Regular",
+          }}
+        >
+          ONE
+        </Text>
+        <Text
+          style={{
+            color: "red",
+            fontSize: ms(44),
+            fontFamily: "Excon-Regular",
+            lineHeight: 45,
+            marginTop: -4, // tighten spacing between ONE and TRONIX
+          }}
+        >
+          TRONIX
+        </Text>
+        <Text
+          style={{
+            color: "white",
+            fontSize: ms(13),
+            fontFamily: "Excon-Regular",
+            letterSpacing: 1,
+            lineHeight: 18,
+
+            marginTop: -5, // small gap from TRONIX
+          }}
+        >
+          TECHNOLOGY PARTNER
+        </Text>
+      </View>
       <KeyboardAwareScrollView
         contentContainerStyle={{
           paddingBottom: Platform.OS === "ios" ? getRespValue(10) : 20,
@@ -148,49 +192,6 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
         viewIsInsideTabBar
         keyboardOpeningTime={0}
       >
-        <View
-          style={{
-            alignItems: "flex-start",
-            marginTop: vs(32),
-            paddingHorizontal: 10,
-          }}
-        >
-          <Text
-            style={{
-              color: "red",
-              fontWeight: "900",
-              fontSize: ms(40),
-              lineHeight: 45,
-              fontFamily: "Excon-Regular",
-            }}
-          >
-            ONE
-          </Text>
-          <Text
-            style={{
-              color: "red",
-              fontSize: ms(44),
-              fontFamily: "Excon-Regular",
-              lineHeight: 45,
-              marginTop: -4, // tighten spacing between ONE and TRONIX
-            }}
-          >
-            TRONIX
-          </Text>
-          <Text
-            style={{
-              color: "white",
-              fontSize: ms(13),
-              fontFamily: "Excon-Regular",
-              letterSpacing: 1,
-              lineHeight: 18,
-
-              marginTop: -5, // small gap from TRONIX
-            }}
-          >
-            TECHNOLOGY PARTNER
-          </Text>
-        </View>
         <View
           style={{
             flex: 1,
