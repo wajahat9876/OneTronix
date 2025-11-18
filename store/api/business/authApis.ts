@@ -196,17 +196,17 @@ export const businessAuthApi = createApi({
       },
     }),
 
-    forgotBusinessPasswordEmail: builder.mutation<any, any>({
+    forgotPasswordEmail: builder.mutation<any, any>({
       query: (body) => ({
-        url: "auth/forgetPasswordEmail",
+        url: "user/auth/forget-password",
         method: "POST",
         body,
       }),
     }),
 
-    verifyForgotBusinessPasswordEmail: builder.mutation<any, any>({
+    verifyForgotPasswordEmail: builder.mutation<any, any>({
       query: (body) => ({
-        url: "auth/Verify-Otp",
+        url: "user/auth/verifyForgetPassword",
         method: "POST",
         body,
       }),
@@ -224,7 +224,26 @@ export const businessAuthApi = createApi({
         }
       },
     }),
+    resetPassword: builder.mutation<any, any>({
+      query: (body) => ({
+        url: "user/auth//reset-password",
+        method: "POST",
+        body,
+      }),
 
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
+          );
+        } catch (data: ICurrentResponse | any) {
+          handleLogout(data, { dispatch });
+        } finally {
+          // do nothing
+        }
+      },
+    }),
     // businessCurrent: builder.query<ICurrentResponse, void>({
     //   query: () => ({
     //     url: 'business/auth/current',
@@ -261,10 +280,11 @@ export const {
   useBusinessAutoSignupMutation,
   useBusinessManualSignupMutation,
   useBusinessVerifyEmailSignUpMutation,
-  useForgotBusinessPasswordEmailMutation,
-  useVerifyForgotBusinessPasswordEmailMutation,
+  useForgotPasswordEmailMutation,
+  useVerifyForgotPasswordEmailMutation,
   useBuisnessSignoutMutation,
   useBusinessSignupInstallerMutation,
   useVerifyOtpInstallerMutation,
+  useResetPasswordMutation,
   // Unused Api
 } = businessAuthApi;
