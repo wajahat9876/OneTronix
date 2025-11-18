@@ -251,6 +251,9 @@ export default function PanZoomPage() {
     setModalVisible(true);
     bottomSheetRef.current?.open();
   };
+  const currentYear = new Date().getFullYear();
+  const minYear = currentYear - 2;
+
   return (
     <HeaderMain
       title=""
@@ -729,7 +732,7 @@ export default function PanZoomPage() {
           visible={show}
           selectedTab={selectedTab}
           value={date}
-          minDate={new Date(2023, 0, 1)}
+          minDate={new Date(minYear, 0, 1)}
           maxDate={new Date()}
           onCancel={() => setShow(false)}
           onConfirm={(date) => {
