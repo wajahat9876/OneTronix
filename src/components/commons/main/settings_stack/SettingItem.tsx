@@ -2,24 +2,30 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Text, TouchableOpacity } from "@src/components/libraries";
 import { globalStyle } from "@src/styles/globals";
 import { hs, ms, vs } from "@utils/design/design";
-import { View } from "react-native";
+import { Image, View } from "react-native";
 
 interface ISettingItemProps {
   title: string;
   marginTop: number;
   onClick: () => void;
   isIconVisible?: boolean;
+  icon?: any;
+  borderBottomWidth?: number;
 }
 
 const SettingItem = (props: ISettingItemProps) => {
-  const { title, marginTop, onClick, isIconVisible } = props;
+  const { title, marginTop, onClick, isIconVisible, icon, borderBottomWidth } =
+    props;
   return (
     <TouchableOpacity
       style={{
-        backgroundColor: "#F2F2F2",
+        backgroundColor: "white",
         alignItems: "center",
-        borderRadius: ms(16),
+        borderBottomWidth: borderBottomWidth,
+        borderRadius: ms(5),
         shadowRadius: ms(16),
+        width: "93%",
+        alignSelf: "center",
         shadowColor: "#394779",
         shadowOffset: { width: ms(2), height: ms(2) },
         shadowOpacity: 0.05,
@@ -38,13 +44,13 @@ const SettingItem = (props: ISettingItemProps) => {
     >
       {isIconVisible ? (
         <View
-          style={{ flexDirection: "row", alignItems: "center", gap: hs(8) }}
+          style={{ flexDirection: "row", alignItems: "center", gap: hs(12) }}
         >
-          <MaterialIcons name="person" size={22} color="black" />
+          <Image source={icon} style={{ width: hs(22), height: hs(22) }} />
           <Text
             style={{
               ...globalStyle.textMedium,
-              fontSize: 15.34,
+              fontSize: 17,
               color: "black",
             }}
           >
@@ -53,13 +59,13 @@ const SettingItem = (props: ISettingItemProps) => {
         </View>
       ) : (
         <Text
-          style={{ ...globalStyle.textMedium, fontSize: 15.34, color: "black" }}
+          style={{ ...globalStyle.textMedium, fontSize: 17, color: "black" }}
         >
           {title}
         </Text>
       )}
 
-      <MaterialIcons name="arrow-right" size={42} color="black" />
+      <MaterialIcons name="arrow-right" size={40} color="black" />
     </TouchableOpacity>
   );
 };

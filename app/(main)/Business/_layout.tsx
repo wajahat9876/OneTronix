@@ -138,6 +138,7 @@ const Layout = () => {
           name="Settings"
           component={Setting}
           options={{
+            tabBarLabel: "Menu",
             tabBarIcon: () =>
               isDarkMode ? (
                 <Image

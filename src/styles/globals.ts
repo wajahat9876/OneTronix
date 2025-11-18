@@ -59,8 +59,8 @@ export const globalStyle = StyleSheet.create({
     borderRadius: ms(16),
   },
   textMedium: {
-    fontSize: 20,
-    fontFamily: "Ranade-Medium",
+    fontSize: ms(20),
+    fontFamily: "Excon-Regular",
   },
   textRegular: {
     fontSize: 14,

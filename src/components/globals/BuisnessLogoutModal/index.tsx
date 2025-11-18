@@ -2,7 +2,7 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import useBusinessLogout from "@src/hooks/useBusinessLogout";
 import { globalStyle } from "@src/styles/globals";
-import { hs, vs } from "@utils/design/design";
+import { hs, ms, vs } from "@utils/design/design";
 import React, { useState } from "react";
 // eslint-disable-next-line prettier/prettier
 // import { useBuisnessSignoutMutation } from '@/store/api/business/authApis';
@@ -10,7 +10,14 @@ import LogoutIcon from "@assets/icons/eccLogoutIcon.svg";
 import { useAppDispatch } from "@src/hooks/useReduxHooks";
 import { getRespValue } from "@utils/getRespValue";
 import { useRouter } from "expo-router";
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Button from "../Button";
 // Global Logout Modal Component
 const LogoutModal: React.FC<{
@@ -51,8 +58,9 @@ const LogoutModal: React.FC<{
 );
 
 // Main GlobalLogout Component
-const BusinessLogoutModal: React.FC<{ marginTop: number }> = ({
+const BusinessLogoutModal: React.FC<{ marginTop: number; icon?: any }> = ({
   marginTop,
+  icon,
 }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const { handleBusinessLogout } = useBusinessLogout();
@@ -72,23 +80,29 @@ const BusinessLogoutModal: React.FC<{ marginTop: number }> = ({
       <TouchableOpacity
         style={{
           ...globalStyle.whiteRoundedCard,
-          backgroundColor: "#F2F2F2",
+          backgroundColor: "white",
           flexDirection: "row",
           justifyContent: "space-between",
           paddingLeft: hs(16),
+          borderRadius: ms(6),
           paddingRight: hs(8),
           paddingTop: vs(8),
           paddingBottom: vs(8),
+          width: "93%",
+          alignSelf: "center",
           marginTop,
           marginLeft: hs(0),
         }}
         onPress={handleLogoutPress}
       >
-        <Text
-          style={{ ...globalStyle.textMedium, fontSize: 15.34, color: "black" }}
-        >
-          Logout
-        </Text>
+        <View style={{ flexDirection: "row", gap: 10 }}>
+          <Image source={icon} style={{ width: 26, height: 26 }} />
+          <Text
+            style={{ ...globalStyle.textMedium, fontSize: 17, color: "black" }}
+          >
+            Logout
+          </Text>
+        </View>
         <MaterialIcons name="arrow-right" size={42} color="black" />
       </TouchableOpacity>
       {/* Logout confirmation modal */}

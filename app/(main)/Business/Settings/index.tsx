@@ -8,12 +8,14 @@ import useMultistepForm from "@src/hooks/useMultiStepForm";
 import { useEffect, useRef } from "react";
 import { View } from "react-native";
 import { LinearTransition } from "react-native-reanimated";
+import About from "./About";
 import Account from "./Accounts";
 const Index = ({ navigation }: any) => {
   const { step, goTo } = useMultistepForm(
     [
       <Settings />, // 0
       <Account />, // 1
+      <About />, //2
     ],
     {
       animated: true,
