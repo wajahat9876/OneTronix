@@ -1,9 +1,10 @@
-import { ViewProps } from 'react-native';
-import { AnimatedProps } from 'react-native-reanimated';
+import { ViewProps } from "react-native";
+import { AnimatedProps } from "react-native-reanimated";
 
 export interface GlobalProps {
   animated?: boolean;
   animatedProps?: AnimatedProps<ViewProps>;
+  parentGoto?: (index: number) => void;
 }
 
 export interface MultiStepFormProps {

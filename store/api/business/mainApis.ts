@@ -200,6 +200,46 @@ export const businessMainApi = createApi({
         }
       },
     }),
+    verifyCurrentPassword: builder.mutation<any, any>({
+      query: (body) => ({
+        url: "user/auth/password/verify",
+        method: "POST",
+        body,
+      }),
+
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
+          );
+        } catch (data: ICurrentResponse | any) {
+          handleLogout(data, { dispatch });
+        } finally {
+          // do nothing
+        }
+      },
+    }),
+    verifyNewPassword: builder.mutation<any, any>({
+      query: (body) => ({
+        url: "user/auth/password",
+        method: "PUT",
+        body,
+      }),
+
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
+          );
+        } catch (data: ICurrentResponse | any) {
+          handleLogout(data, { dispatch });
+        } finally {
+          // do nothing
+        }
+      },
+    }),
     createBusinessBeneficiary: builder.mutation<any, any>({
       query: (body) => ({
         url: "business/integrated-finance/createBeneficiary",
@@ -602,6 +642,8 @@ export const businessMainApi = createApi({
 });
 
 export const {
+  useVerifyNewPasswordMutation,
+  useVerifyCurrentPasswordMutation,
   useAddNewDeviceMutation,
   useReadNotificationsMutation,
   useGetNotificationsQuery,

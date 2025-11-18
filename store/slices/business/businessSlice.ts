@@ -36,6 +36,7 @@ export interface IBusinessState {
   inverterData?: inverterData;
   isVerifiedEmail?: boolean;
   isDarkMode?: boolean;
+  currentPassword?: string;
   lastSelectedDeviceData?: {
     battery?: {
       chargingAmp?: number;
@@ -88,6 +89,7 @@ const initialState: IBusinessState = {
   businessPhone: "",
   isDarkMode: false,
   selectedBenefBankDetails: [],
+  currentPassword: "",
   lastSelectedBusinessBenefDetails: {
     isFirstTransfer: false,
     accountNumber: "",
@@ -197,6 +199,9 @@ const businessSlice = createSlice({
       state.tempToken = "";
       state.auth_token = "";
     },
+    setCurrentPassword(state, action) {
+      state.currentPassword = action.payload;
+    },
     setBusinessCategory(state, action) {
       state.businessCategory = action.payload;
     },
@@ -232,6 +237,7 @@ const businessSlice = createSlice({
       state.isDarkMode = initialState.isDarkMode;
       state.lastSelectedDeviceData = initialState.lastSelectedDeviceData;
       state.lastSelectedDeviceId = "";
+      state.currentPassword = "";
 
       // console.log('businessLogout', state);
     },
@@ -309,6 +315,7 @@ const businessSlice = createSlice({
 });
 
 export const {
+  setCurrentPassword,
   setLastSelectedDevice,
   setLastSelectedDeviceId,
   setPackageId,

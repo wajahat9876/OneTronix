@@ -4,23 +4,23 @@ import ScreenAuth from "@src/components/globals/ScreenAuth";
 import { ScrollView, StyleSheet } from "@src/components/libraries";
 import { pageTransitionAnimation } from "@src/constants/Animation";
 import Colors from "@src/constants/Colors";
-import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
 // import { globalStyle } from '@src/styles/globals';
 import { hs, vs } from "@utils/design/design";
 import { Platform, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
-const About = ({ goTo }: MultiStepFormProps) => {
+import { SettingProps } from "../type";
+const SystemSetting = ({ goTo, parentGoto }: SettingProps) => {
   const { data } = useAppSelector(useBusinessDetails);
 
   return (
     <Animated.View
       {...pageTransitionAnimation}
-      key="transfer_monessy"
+      key="transfer_moneyssasasa"
       style={{ flex: 1, backgroundColor: "#F9F9F9" }}
     >
       <ScreenAuth
-        title="About"
+        title="System Setting"
         style={{
           backgroundColor: "#F9F9F9",
         }}
@@ -32,7 +32,7 @@ const About = ({ goTo }: MultiStepFormProps) => {
           rightIcon: true,
         }}
         back={() => {
-          goTo?.(0);
+          parentGoto?.(0);
         }}
       >
         <View style={styles.container}>
@@ -47,26 +47,16 @@ const About = ({ goTo }: MultiStepFormProps) => {
                 color: "gray",
               }}
             >
-              Legal & Information
+              Authentication
             </Text>
             <SettingItem
-              title="Terms and Conditions"
+              title="Change Password"
               marginTop={vs(0)}
               //   isIconVisible
               //   icon={DeviceIcon}
               borderBottomWidth={0}
               onClick={() => {
-                // goTo?.(1);
-              }}
-            />
-            <SettingItem
-              title="Privacy Policy"
-              marginTop={vs(0)}
-              borderBottomWidth={0}
-              //   isIconVisible
-              //   icon={systemIcon}
-              onClick={() => {
-                // goTo?.(1);
+                goTo?.(1);
               }}
             />
           </ScrollView>
@@ -94,4 +84,4 @@ const styles = StyleSheet.create({
     elevation: Platform.OS === "ios" ? 2 : 2,
   },
 });
-export default About;
+export default SystemSetting;

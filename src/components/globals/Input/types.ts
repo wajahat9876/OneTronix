@@ -1,4 +1,4 @@
-import { TextInputProps } from 'react-native-paper';
+import { TextInputProps } from "react-native-paper";
 
 export interface MyTextInputProps extends TextInputProps {
   password?: boolean;
@@ -10,7 +10,10 @@ export interface MyTextInputProps extends TextInputProps {
   borderBottomHeight?: number;
   lineHeight?: number;
   roundedRadius?: string;
-  type?: 'default' | 'underlined';
+  type?: "default" | "underlined";
+  fontFamily?: string;
+  height?: number;
+  width?: string;
 }
 
 export interface DefaultTextInputProps extends TextInputProps {
@@ -23,7 +26,9 @@ export interface DefaultTextInputProps extends TextInputProps {
   borderBottomHeight?: number;
   lineHeight?: number;
   roundedRadius?: string;
-  type?: 'default' | 'underlined';
+  type?: "default" | "underlined";
+  height?: number;
+  width?: string;
 }
 
 export interface UnderlinedTextInputProps extends TextInputProps {
@@ -35,5 +40,5 @@ export interface UnderlinedTextInputProps extends TextInputProps {
   borderBottomColor?: string;
   borderBottomHeight?: number;
   lineHeight?: number;
-  type?: 'default' | 'underlined';
+  type?: "default" | "underlined";
 }

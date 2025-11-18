@@ -53,7 +53,7 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
                   justifyContent: "space-between",
                 }}
               >
-                <View style={{ flexDirection: "row", gap: 10 }}>
+                <View style={{ flexDirection: "row", gap: 12 }}>
                   <Image
                     source={ProfileIcon}
                     style={{ width: 35, height: 35 }}
@@ -79,7 +79,12 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
                     </Text>
                   </View>
                 </View>
-                <MaterialIcons name="arrow-right" size={40} color="black" />
+                <MaterialIcons
+                  name="arrow-right"
+                  size={40}
+                  color="black"
+                  style={{ marginRight: hs(-10) }}
+                />
               </TouchableOpacity>
             </View>
 
@@ -112,7 +117,7 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
               isIconVisible
               icon={systemIcon}
               onClick={() => {
-                // goTo?.(1);
+                goTo?.(3);
               }}
             />
             <SettingItem
@@ -145,7 +150,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     backgroundColor: "white",
     borderRadius: 15,
-    padding: 25,
+    padding: 30,
     width: "94%",
     shadowColor: "#000",
     shadowOffset: { width: 2, height: 2 },
