@@ -4,28 +4,17 @@
 /* eslint-disable import/order */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IBusinessState } from "@/store/slices/business/businessSlice";
-import { IAPIError, IAPISuccess } from "@/store/types";
 import {
-  AddDirectorPayload,
-  AddShareholderPayload,
-  MainApplicantPayload,
   SignInPayload,
   SignUpPayload,
-  UpdateMainApplicantPayload,
-  UploadDocumentsPayload,
   VerifyOtpPayload,
 } from "@/store/types/business/api_requests_data/auth";
 import {
-  IActiveCompaniesResponse,
   IBusinessAutoSignUpResponse,
   IBusinessManualSignUpResponse,
   ICurrentResponse,
-  IDirectorResponse,
-  IShareholderResponse,
   ISignInResponse,
-  IUploadDocumentResponse,
   IVerifySignupEmailResponse,
-  IVerifySignupPhoneResponse,
 } from "@/store/types/business/api_responses/auth";
 import { handleLogout } from "@/store/utils/errorHandler";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
@@ -207,130 +196,6 @@ export const businessAuthApi = createApi({
       },
     }),
 
-    businessVerifyPhoneSignUp: builder.mutation<
-      IVerifySignupPhoneResponse,
-      VerifyOtpPayload
-    >({
-      query: (body) => ({
-        url: "auth/verifyPhoneOtp",
-        method: "POST",
-        body,
-      }),
-
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
-    updateAddress: builder.mutation<any, any>({
-      query: (body) => ({
-        url: "auth/updateMainApplicantAddress",
-        method: "POST",
-        body,
-      }),
-
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
-    setBusinessPin: builder.mutation<any, any>({
-      query: (body) => ({
-        url: "auth/setPin",
-        method: "POST",
-        body,
-      }),
-
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
-
-    verifyBusinessPin: builder.mutation({
-      query: (body) => ({
-        url: "auth/verifyPin",
-        method: "POST",
-        body,
-      }),
-
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
-    businessVerifyTermAndConditions: builder.mutation<any, any>({
-      query: (body) => ({
-        url: "auth/termAndConditions",
-        method: "POST",
-        body,
-      }),
-
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          // handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
-    updateBusinessPhoneNumber: builder.mutation<any, any>({
-      query: (body) => ({
-        url: "business/auth/updatebusinessdetails",
-        method: "POST",
-        body,
-      }),
-
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
     forgotBusinessPasswordEmail: builder.mutation<any, any>({
       query: (body) => ({
         url: "auth/forgetPasswordEmail",
@@ -338,13 +203,7 @@ export const businessAuthApi = createApi({
         body,
       }),
     }),
-    forgotBusinessPasswordPhone: builder.mutation<any, any>({
-      query: (body) => ({
-        url: "auth/forgetPasswordNumber",
-        method: "POST",
-        body,
-      }),
-    }),
+
     verifyForgotBusinessPasswordEmail: builder.mutation<any, any>({
       query: (body) => ({
         url: "auth/Verify-Otp",
@@ -365,46 +224,7 @@ export const businessAuthApi = createApi({
         }
       },
     }),
-    verifyForgotBusinessPasswordPhone: builder.mutation<any, any>({
-      query: (body) => ({
-        url: "auth/Verify-Otp",
-        method: "POST",
-        body,
-      }),
 
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
-    resetBusinessPassword: builder.mutation<any, any>({
-      query: (body) => ({
-        url: "auth/reset-password",
-        method: "POST",
-        body,
-      }),
-
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
     // businessCurrent: builder.query<ICurrentResponse, void>({
     //   query: () => ({
     //     url: 'business/auth/current',
@@ -413,265 +233,6 @@ export const businessAuthApi = createApi({
     //   providesTags: ['GetBusinessData'],
     // }),
 
-    businessFeePlans: builder.query<any, void>({
-      query: () => ({
-        url: "clearBank/getFeeDetails",
-        method: "GET",
-      }),
-    }),
-
-    businessAddDirector: builder.mutation<
-      IAPISuccess | IAPIError,
-      AddDirectorPayload
-    >({
-      query: (body) => ({
-        url: "auth/directors",
-        method: "POST",
-        body,
-      }),
-
-      invalidatesTags: ["Directors"],
-      // async onQueryStarted(_, { dispatch, queryFulfilled }) {
-      //   try {
-      //     await queryFulfilled;
-      //     dispatch(businessAuthApi.util.invalidateTags(['Directors']));
-      //   } catch (e) {
-      //     console.error('getting directors after insertion error: ', e);
-      //   }
-      // },
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
-
-    businessAddShareholder: builder.mutation<
-      IAPISuccess | IAPIError,
-      AddShareholderPayload
-    >({
-      query: (body) => ({
-        url: "auth/shareHolder",
-        method: "POST",
-        body,
-      }),
-
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
-
-    businessSelectMainApplicant: builder.mutation<
-      IAPISuccess | IAPIError,
-      MainApplicantPayload
-    >({
-      query: ({ peopleId }) => ({
-        url: `auth/creditSafeDirectorCheck?peopleId=${peopleId}`,
-        method: "GET",
-      }),
-
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
-    businessUpdateMainApplicant: builder.mutation<
-      IAPISuccess | IAPIError,
-      UpdateMainApplicantPayload
-    >({
-      query: (body) => ({
-        url: "auth/updateMainApplicant",
-        method: "POST",
-        body,
-      }),
-
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
-    getActiveCompanies: builder.query<
-      IActiveCompaniesResponse,
-      { nameSearch: string }
-    >({
-      query: ({ nameSearch }) => ({
-        url: `/auth/creditSafeNameSearch?nameSearch=${encodeURIComponent(
-          nameSearch
-        )}`,
-        method: "GET",
-      }),
-    }),
-
-    getAllDirector: builder.query<IDirectorResponse, any>({
-      query: ({ type }) => ({
-        url: `auth/getDirectorShareholder?&type=${type}`,
-        method: "GET",
-      }),
-      providesTags: ["Directors"],
-    }),
-
-    getAllShareholder: builder.query<IShareholderResponse, void>({
-      query: () => ({
-        url: "business/auth/shareHolder",
-        method: "POST",
-      }),
-    }),
-
-    businessUploadDocuments: builder.mutation<
-      IUploadDocumentResponse,
-      UploadDocumentsPayload
-    >({
-      query: (body) => ({
-        url: "auth/uploadImagedocs",
-        method: "POST",
-        body,
-      }),
-
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
-    businessInfo: builder.mutation<any, any>({
-      query: (body) => ({
-        url: "auth/businessInfo",
-        method: "POST",
-        body,
-      }),
-
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
-
-    importantInfo: builder.mutation({
-      query: (body) => ({
-        url: "auth/checkImportantInfo",
-        method: "POST",
-        body,
-      }),
-
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
-    signupFlowCompleted: builder.mutation<any, void>({
-      query: () => ({
-        url: "business/auth/signupFlowCompleted",
-        method: "POST",
-      }),
-
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
-    transactionAlert: builder.mutation<any, any>({
-      query: ({ type }) => ({
-        url: `business/auth/alerts?type=${type}`,
-        method: "POST",
-      }),
-
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            businessCurrentApi.util.invalidateTags(["getBusinessCurrent"])
-          );
-        } catch (data: ICurrentResponse | any) {
-          handleLogout(data, { dispatch });
-        } finally {
-          // do nothing
-        }
-      },
-    }),
-    resendBusinessSigninOtp: builder.mutation({
-      query: ({ email }) => ({
-        url: "business/auth/resend-signin-otp",
-        method: "POST",
-        body: { email },
-      }),
-    }),
-    resendBusinessEmailOtp: builder.mutation({
-      query: ({ email }) => ({
-        url: "auth/resendEmailOtp",
-        method: "POST",
-        body: { email },
-      }),
-    }),
-    resendBusinessPhoneOtp: builder.mutation({
-      query: ({ phoneNumber }) => ({
-        url: "auth/resendPhoneOtp",
-        method: "POST",
-        body: { phoneNumber },
-      }),
-    }),
     buisnessSignout: builder.mutation<any, any>({
       query: (body) => ({
         url: "auth/signOut",
@@ -700,35 +261,10 @@ export const {
   useBusinessAutoSignupMutation,
   useBusinessManualSignupMutation,
   useBusinessVerifyEmailSignUpMutation,
-  useBusinessVerifyPhoneSignUpMutation,
-  useBusinessInfoMutation,
-  useSetBusinessPinMutation,
-  useVerifyBusinessPinMutation,
   useForgotBusinessPasswordEmailMutation,
-  useForgotBusinessPasswordPhoneMutation,
   useVerifyForgotBusinessPasswordEmailMutation,
-  useVerifyForgotBusinessPasswordPhoneMutation,
-  useResetBusinessPasswordMutation,
-  useBusinessUpdateMainApplicantMutation,
-  useBusinessVerifyTermAndConditionsMutation,
-  useBusinessFeePlansQuery,
-  useBusinessAddDirectorMutation,
-  useBusinessAddShareholderMutation,
-  useBusinessSelectMainApplicantMutation,
-  useGetActiveCompaniesQuery,
-  useGetAllDirectorQuery,
-  useGetAllShareholderQuery,
-  useBusinessUploadDocumentsMutation,
-  useImportantInfoMutation,
-  useResendBusinessEmailOtpMutation,
-  useResendBusinessPhoneOtpMutation,
-  useResendBusinessSigninOtpMutation,
   useBuisnessSignoutMutation,
-  useUpdateAddressMutation,
   useBusinessSignupInstallerMutation,
   useVerifyOtpInstallerMutation,
   // Unused Api
-  useTransactionAlertMutation,
-  useUpdateBusinessPhoneNumberMutation,
-  useSignupFlowCompletedMutation,
 } = businessAuthApi;

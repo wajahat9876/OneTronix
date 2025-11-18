@@ -25,22 +25,6 @@ const Layout = () => {
         }}
         name="Signup/index"
       />
-      <Stack.Screen
-        options={{ gestureEnabled: false }}
-        name="ChoosePin/Business/index"
-      />
-      <Stack.Screen
-        options={{ gestureEnabled: false }}
-        name="UpdatedAddress/index"
-      />
-      <Stack.Screen
-        options={{ gestureEnabled: false }}
-        name="UploadBusinessDocuments/index"
-      />
-      <Stack.Screen
-        options={{ gestureEnabled: false }}
-        name="VerifyPasscode/index"
-      />
     </Stack>
   );
 };
