@@ -1,5 +1,4 @@
 /* eslint-disable import/order */
-import { MaterialIcons } from "@expo/vector-icons";
 import useBusinessLogout from "@src/hooks/useBusinessLogout";
 import { globalStyle } from "@src/styles/globals";
 import { hs, ms, vs } from "@utils/design/design";
@@ -7,6 +6,7 @@ import React, { useState } from "react";
 // eslint-disable-next-line prettier/prettier
 // import { useBuisnessSignoutMutation } from '@/store/api/business/authApis';
 import LogoutIcon from "@assets/icons/eccLogoutIcon.svg";
+import { AntDesign } from "@expo/vector-icons";
 import { useAppDispatch } from "@src/hooks/useReduxHooks";
 import { getRespValue } from "@utils/getRespValue";
 import { useRouter } from "expo-router";
@@ -86,8 +86,8 @@ const BusinessLogoutModal: React.FC<{ marginTop: number; icon?: any }> = ({
           paddingLeft: hs(16),
           borderRadius: ms(6),
           paddingRight: hs(8),
-          paddingTop: vs(8),
-          paddingBottom: vs(8),
+          paddingTop: vs(20),
+          paddingBottom: vs(20),
           width: "93%",
           alignSelf: "center",
           marginTop,
@@ -103,7 +103,7 @@ const BusinessLogoutModal: React.FC<{ marginTop: number; icon?: any }> = ({
             Logout
           </Text>
         </View>
-        <MaterialIcons name="arrow-right" size={42} color="black" />
+        <AntDesign name="right" size={20} color="gray" />
       </TouchableOpacity>
       {/* Logout confirmation modal */}
       <LogoutModal

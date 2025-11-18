@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 export interface ISignInTypeState {
   signInType: string;
@@ -9,19 +9,16 @@ export interface ISignInTypeState {
 }
 
 const initialState: ISignInTypeState = {
-  signInType: 'Business',
+  signInType: "Business",
   index: 0,
   isPinCodeAccepted: false,
   isNetworkConnected: false,
 };
 
 const signInTypeSlice = createSlice({
-  name: 'signInType',
+  name: "signInType",
   initialState,
   reducers: {
-    setIsPinCodeAccepted(state, action) {
-      state.isPinCodeAccepted = action.payload;
-    },
     setIsNetworkConnected(state, action) {
       state.isNetworkConnected = action.payload;
     },
@@ -32,19 +29,15 @@ const signInTypeSlice = createSlice({
     resetSignInType(state) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       state = {
-        signInType: 'Business',
+        signInType: "Business",
         index: 0,
       };
-      console.log('redux Signintype', state);
+      console.log("redux Signintype", state);
     },
   },
 });
 
-export const {
-  setSignInType,
-  resetSignInType,
-  setIsPinCodeAccepted,
-  setIsNetworkConnected,
-} = signInTypeSlice.actions;
+export const { setSignInType, resetSignInType, setIsNetworkConnected } =
+  signInTypeSlice.actions;
 
 export default signInTypeSlice.reducer;
