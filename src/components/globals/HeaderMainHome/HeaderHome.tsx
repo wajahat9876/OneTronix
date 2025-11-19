@@ -188,13 +188,14 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
             }}
             selectedTextStyle={{
               fontSize: ms(14),
-
               ellipsizeMode: "tail",
               fontFamily: "Excon-Medium",
               color: backColorLight ? "#000" : "#fff",
+              numberOfLines: 0,
+              flexShrink: 1,
             }}
             itemTextStyle={{
-              fontSize: ms(13),
+              fontSize: ms(12),
               fontFamily: "Excon-Regular",
               color: Colors.light.theme.black,
             }}

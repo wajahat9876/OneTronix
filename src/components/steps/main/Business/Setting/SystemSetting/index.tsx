@@ -6,6 +6,7 @@ import { pageTransitionAnimation } from "@src/constants/Animation";
 import Colors from "@src/constants/Colors";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
 // import { globalStyle } from '@src/styles/globals';
+import CPIcon from "@assets/icons/MenuIcons/changePassword.png";
 import { hs, vs } from "@utils/design/design";
 import { Platform, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
@@ -52,8 +53,8 @@ const SystemSetting = ({ goTo, parentGoto }: SettingProps) => {
             <SettingItem
               title="Change Password"
               marginTop={vs(0)}
-              //   isIconVisible
-              //   icon={DeviceIcon}
+              isIconVisible
+              icon={CPIcon}
               borderBottomWidth={0}
               onClick={() => {
                 goTo?.(1);

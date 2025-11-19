@@ -30,10 +30,9 @@ export const businessAuthApi = createApi({
       const { tempToken, auth_token } = (
         getState() as { business: IBusinessState }
       ).business;
-      // if (tempToken) {
-      //   headers.set("Authorization", `Bearer ${tempToken}`);
-      // } else
-      if (auth_token) {
+      if (tempToken) {
+        headers.set("Authorization", `Bearer ${tempToken}`);
+      } else if (auth_token) {
         headers.set("Authorization", `Bearer ${auth_token}`);
       }
       return headers;

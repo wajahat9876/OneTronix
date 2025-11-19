@@ -197,7 +197,6 @@ const businessSlice = createSlice({
     },
     resetBusinessTempToken(state) {
       state.tempToken = "";
-      state.auth_token = "";
     },
     setCurrentPassword(state, action) {
       state.currentPassword = action.payload;
@@ -264,6 +263,18 @@ const businessSlice = createSlice({
       businessAuthApi.endpoints.businessSignupInstaller.matchFulfilled,
       (state, { payload }) => {
         state.auth_token = payload.results?.token;
+      }
+    );
+    builder.addMatcher(
+      businessAuthApi.endpoints.forgotPasswordEmail.matchFulfilled,
+      (state, { payload }) => {
+        state.tempToken = payload.results?.token;
+      }
+    );
+    builder.addMatcher(
+      businessAuthApi.endpoints.verifyForgotPasswordEmail.matchFulfilled,
+      (state, { payload }) => {
+        state.tempToken = payload.results?.token;
       }
     );
     builder.addMatcher(

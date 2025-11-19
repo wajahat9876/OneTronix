@@ -1,0 +1,261 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable import/order */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable camelcase */
+import { useResetPasswordMutation } from "@/store/api/business/authApis";
+import { resetBusinessTempToken } from "@/store/slices/business/businessSlice";
+import Logo from "@assets/eccLogo/oneTronixLogo.svg";
+import Button from "@src/components/globals/Button";
+import FormikInput from "@src/components/globals/FormikInput";
+import LoadingModal from "@src/components/globals/LoadingModal";
+import { StyleSheet, Text } from "@src/components/libraries";
+import { textInputDefaultProps } from "@src/constants/Props";
+import { MultiStepFormProps } from "@src/hooks/useMultiStepForm/types";
+import { useAppDispatch } from "@src/hooks/useReduxHooks";
+import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
+import { hs, ms, vs } from "@utils/design/design";
+import { getRespValue } from "@utils/getRespValue";
+import { useRouter } from "expo-router";
+import { useFormik } from "formik";
+import { useCallback, useRef } from "react";
+import {
+  Platform,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import * as Yup from "yup";
+
+const Step2_ResetPassword = ({ back, next, goTo }: MultiStepFormProps) => {
+  const dispatch = useAppDispatch();
+  const [resetPassword, { isLoading: businessLoading }] =
+    useResetPasswordMutation();
+  const router = useRouter();
+  const passwordRef = useRef<TextInput>(null);
+  const confirmPasswordRef = useRef<TextInput>(null);
+
+  const handleverify = useCallback(async (values: any) => {
+    try {
+      const result = await resetPassword({
+        password: values.password,
+        confirmPassword: values.confirmPassword,
+      }).unwrap();
+      dispatch(resetBusinessTempToken());
+      router.replace("/(auth)/Signin");
+      renderToastSuccess(result.message);
+    } catch (error: any) {
+      renderToastError(error.data.message);
+    }
+  }, []);
+  const formik = useFormik({
+    initialValues: {
+      password: "",
+      confirmPassword: "",
+    },
+    validationSchema: Yup.object({
+      password: Yup.string()
+        .min(8, "Password must be at least 8 characters")
+        .required("Required"),
+      confirmPassword: Yup.string()
+        .min(8, "Password must be at least 8 characters")
+        .required("Required"),
+    }),
+    onSubmit: (values) => {
+      console.log(values?.password);
+
+      handleverify(values);
+    },
+  });
+  const handleBack = () => {
+    dispatch(resetBusinessTempToken());
+    goTo?.(0);
+  };
+  return (
+    <>
+      <ScrollView style={{ flex: 1 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingHorizontal: hs(10),
+            paddingVertical: hs(30),
+            marginTop: Platform.OS === "ios" ? vs(10) : vs(15),
+          }}
+        >
+          <TouchableOpacity onPress={() => handleBack()}>
+            <Text
+              style={{
+                color: "white",
+                fontSize: ms(16),
+                marginTop: vs(10),
+                fontFamily: "Ranade-Regular",
+              }}
+            >
+              ← Back
+            </Text>
+          </TouchableOpacity>
+          <View
+            style={{
+              alignSelf: "flex-end",
+            }}
+          >
+            <Logo />
+          </View>
+        </View>
+        <View
+          style={{
+            marginLeft: 12,
+            marginTop: vs(8),
+          }}
+        >
+          <Text
+            style={{
+              color: "red",
+              fontWeight: "900",
+              fontSize: ms(44),
+              fontFamily: "Excon-Medium",
+              lineHeight: 45,
+            }}
+          >
+            ONE
+          </Text>
+          <Text
+            style={{
+              color: "red",
+              fontSize: ms(44),
+              fontFamily: "Excon-Regular",
+              lineHeight: 45,
+              marginTop: -4, // tighten spacing between ONE and TRONIX
+            }}
+          >
+            TRONIX
+          </Text>
+          <Text
+            style={{
+              color: "white",
+              fontSize: ms(13),
+              fontFamily: "Excon-Regular",
+              letterSpacing: 1,
+              lineHeight: 18,
+              marginTop: -5, // small gap from TRONIX
+            }}
+          >
+            TECHNOLOGY PARTNER
+          </Text>
+        </View>
+        <KeyboardAwareScrollView
+          contentContainerStyle={{
+            paddingBottom: Platform.OS === "ios" ? getRespValue(10) : 20,
+            flexGrow: 1,
+          }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          enableOnAndroid
+          scrollEnabled
+          resetScrollToCoords={{ x: 0, y: 0 }}
+          viewIsInsideTabBar
+          extraHeight={0}
+          extraScrollHeight={5}
+          enableAutomaticScroll={false}
+        >
+          <View style={styles.container}>
+            <Text style={styles.title} className="text-white ">
+              Enter New Password
+            </Text>
+            <View
+              style={{ width: "90%", alignSelf: "center", marginTop: vs(20) }}
+            >
+              <FormikInput
+                formik={formik}
+                name="password"
+                ref={passwordRef}
+                autoComplete="password"
+                textContentType="password"
+                inputProps={{
+                  ...textInputDefaultProps,
+                  textContentType: "password",
+                  placeholder: "Enter Password",
+                  height: vs(70),
+                  fontFamily: "Excon-Regular",
+                  className: "mt-2",
+                  returnKeyType: "done",
+                  password: true,
+                  autoComplete: "password",
+                  onSubmitEditing: () => {
+                    if (confirmPasswordRef?.current) {
+                      confirmPasswordRef.current.focus();
+                    }
+                  },
+                }}
+              />
+            </View>
+            <View
+              style={{ width: "90%", alignSelf: "center", marginTop: vs(20) }}
+            >
+              <FormikInput
+                formik={formik}
+                name="confirmPassword"
+                ref={confirmPasswordRef}
+                autoComplete="password"
+                textContentType="password"
+                inputProps={{
+                  ...textInputDefaultProps,
+                  textContentType: "password",
+                  height: vs(70),
+                  fontFamily: "Excon-Regular",
+                  placeholder: "Confirm Password",
+                  className: "mt-2",
+                  returnKeyType: "done",
+                  password: true,
+                  autoComplete: "password",
+                }}
+              />
+            </View>
+          </View>
+        </KeyboardAwareScrollView>
+      </ScrollView>
+      <View
+        style={{
+          width: "80%",
+          alignSelf: "center",
+          position: "absolute",
+          bottom: 20,
+        }}
+      >
+        <Button
+          btnTitle="Continue"
+          disabled={businessLoading}
+          btnColor="#F4192C"
+          btnTitleColor="white"
+          onClick={() => {
+            formik.submitForm();
+          }}
+        />
+      </View>
+      <LoadingModal isLoading={businessLoading} />
+    </>
+  );
+};
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    // paddingTop: vs(22),
+    paddingHorizontal: hs(8),
+    marginTop: vs(60),
+  },
+  title: {
+    fontSize: ms(24),
+    fontFamily: "Excon-Medium",
+    alignSelf: "center",
+  },
+  subtitle: {
+    marginTop: vs(16),
+    fontSize: ms(12),
+    fontFamily: "Ranade-Thin",
+    alignSelf: "center",
+    width: "60%",
+  },
+});
+export default Step2_ResetPassword;

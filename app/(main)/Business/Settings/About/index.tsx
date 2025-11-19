@@ -7,9 +7,12 @@ import Colors from "@src/constants/Colors";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
 // import { globalStyle } from '@src/styles/globals';
+import TCIcon from "@assets/icons/MenuIcons/Tc.png";
+import PPIcon from "@assets/icons/MenuIcons/pp.png";
 import { hs, vs } from "@utils/design/design";
 import { Platform, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
+
 const About = ({ goTo }: MultiStepFormProps) => {
   const { data } = useAppSelector(useBusinessDetails);
 
@@ -52,8 +55,8 @@ const About = ({ goTo }: MultiStepFormProps) => {
             <SettingItem
               title="Terms and Conditions"
               marginTop={vs(0)}
-              //   isIconVisible
-              //   icon={DeviceIcon}
+              isIconVisible
+              icon={TCIcon}
               borderBottomWidth={0}
               onClick={() => {
                 // goTo?.(1);
@@ -63,8 +66,8 @@ const About = ({ goTo }: MultiStepFormProps) => {
               title="Privacy Policy"
               marginTop={vs(0)}
               borderBottomWidth={0}
-              //   isIconVisible
-              //   icon={systemIcon}
+              isIconVisible
+              icon={PPIcon}
               onClick={() => {
                 // goTo?.(1);
               }}

@@ -252,6 +252,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
                 textContentType: "password",
                 placeholder: "Enter Password",
                 className: "mt-2",
+                fontFamily: "Excon-Regular",
                 returnKeyType: "done",
                 password: true,
                 autoComplete: "password",
@@ -270,7 +271,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
               {/* </Link> */}
               <TouchableOpacity
                 onPress={() => {
-                  // router.push("/(auth)/Signup");
+                  router.push("/(auth)/Forgot/Business");
                 }}
               >
                 <Text

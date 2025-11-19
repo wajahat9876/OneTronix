@@ -7,7 +7,7 @@
 import Colors from "@src/constants/Colors";
 import { globalStyle } from "@src/styles/globals";
 import { hs, ms } from "@utils/design/design";
-import React, { forwardRef } from "react";
+import React, { forwardRef, JSX } from "react";
 import { FlatListProps, Platform, Text, View } from "react-native";
 import { Dropdown, IDropdownRef } from "react-native-element-dropdown";
 
@@ -131,7 +131,7 @@ const DropdownRNE = forwardRef(
             accessibilityLabel={accessibilityLabel}
             search={search}
             placeholder={placeholder}
-            placeholderStyle={placeholderStyle}
+            placeholderStyle={{ flexshrink: 1, ...placeholderStyle }}
             iconStyle={iconStyle}
             maxHeight={200}
             minHeight={minHeight}
@@ -139,7 +139,7 @@ const DropdownRNE = forwardRef(
             inputSearchStyle={inputSearchStyle}
             key={key}
             activeColor={activeColor}
-            selectedTextStyle={selectedTextStyle}
+            selectedTextStyle={{ flexShrink: 1, ...selectedTextStyle }}
             selectedTextProps={selectedTextProps}
             itemContainerStyle={itemContainerStyle}
             itemTextStyle={itemTextStyle}
@@ -201,6 +201,7 @@ const DropdownRNE = forwardRef(
               fontSize: ms(14),
               marginLeft: hs(-6),
               color: "gray",
+
               ...placeholderStyle,
             }}
             iconStyle={iconStyle}

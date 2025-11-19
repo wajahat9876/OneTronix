@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable camelcase */
+import { resetBusinessTempToken } from "@/store/slices/business/businessSlice";
 import WelcomeTronixLogo from "@assets/eccLogo/WelcomeTronixLogo (1).svg";
+import { useFocusEffect } from "@react-navigation/native";
 import EasyEmoneyGradient from "@src/components/globals/BackgroundGradient";
 import Screen from "@src/components/globals/Screen";
+import { useAppDispatch } from "@src/hooks/useReduxHooks";
 import { ms } from "@utils/design/design";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Text, View, useWindowDimensions } from "react-native";
 import {
   Gesture,
@@ -22,6 +25,7 @@ import Animated, {
 } from "react-native-reanimated";
 import Signin from "../Signin";
 const Welcome = () => {
+  const dispatch = useAppDispatch();
   const { width } = useWindowDimensions(); // instead of height
   const x = useSharedValue(0); // renamed from y
   const [showLoginUI, setShowLoginUi] = useState<boolean>(false);
@@ -92,7 +96,15 @@ const Welcome = () => {
   //     },
   //   ],
   // }));
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(resetBusinessTempToken());
 
+      return () => {
+        console.log("Screen unfocused!");
+      };
+    }, [])
+  );
   return (
     <>
       {/* <BackgroundImage src={Image} /> */}

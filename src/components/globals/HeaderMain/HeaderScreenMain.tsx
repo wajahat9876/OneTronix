@@ -178,6 +178,8 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
               fontSize: ms(14),
               fontFamily: "Excon-Medium",
               color: "#000",
+              numberOfLines: 1,
+              ellipsizeMode: "tail",
             }}
             itemTextStyle={{
               fontSize: ms(13),

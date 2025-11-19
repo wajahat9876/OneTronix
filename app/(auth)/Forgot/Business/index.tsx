@@ -2,26 +2,22 @@
 /* eslint-disable camelcase */
 /* eslint-disable react/jsx-pascal-case */
 
-import Image from "@assets/images/BackgroundImage/Background.png";
-import BackgroundImage from "@src/components/globals/BackgroundImage";
+import EasyEmoneyGradient from "@src/components/globals/BackgroundGradient";
+import Step0_VerifyEmail from "@src/components/steps/Auth/ForgotPassword/Step0_VerifyEmailForgot";
+import Step1_VerifyOtp from "@src/components/steps/Auth/ForgotPassword/Step1_VerifyOtp";
+import Step2_ResetPassword from "@src/components/steps/Auth/ForgotPassword/Step2_ResetPassword";
+
 import useMultistepForm from "@src/hooks/useMultiStepForm";
-import { useState } from "react";
 import { View } from "react-native";
 
 const Forgot = () => {
-  const [checkData, setCheckData] = useState<{
-    isPhone: boolean;
-    email: string;
-    phone: string;
-  }>({
-    isPhone: false,
-    email: "",
-    phone: "",
-  });
-  const { step } = useMultistepForm([], {});
+  const { step } = useMultistepForm(
+    [<Step0_VerifyEmail />, <Step1_VerifyOtp />, <Step2_ResetPassword />],
+    {}
+  );
   return (
     <>
-      <BackgroundImage src={Image} />
+      <EasyEmoneyGradient />
       <View className="flex-1">{step}</View>
     </>
   );
