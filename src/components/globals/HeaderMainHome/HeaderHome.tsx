@@ -10,14 +10,16 @@ import {
 } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import alertIcon from "@assets/icons/alerts.png";
-import BellIcon from "@assets/icons/bell.png"; // your SVG bell icon
+import BellIcon from "@assets/icons/bell.svg"; // your SVG bell icon
+import InverterIconblack from "@assets/icons/inverterIcon.svg";
+import InverterIconWhite from "@assets/icons/inverterIconWhite.svg";
 import { MaterialIcons } from "@expo/vector-icons";
 import { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import Colors from "@src/constants/Colors";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
 import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
 import { hs, ms, vs } from "@utils/design/design";
-import BellIconWhite from "assets/icons/BellIconWhite.png";
+import BellIconWhite from "assets/icons/bellWhite.svg";
 import { useFocusEffect } from "expo-router";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -168,6 +170,41 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
       >
         {/* LEFT: Dropdown */}
         <View style={{ width: "75%" }}>
+          <View
+            style={{
+              marginTop: vs(10),
+              marginBottom: vs(-5),
+              paddingHorizontal: hs(10),
+            }}
+          >
+            {backColorLight ? (
+              <View style={{ flexDirection: "row", gap: 5 }}>
+                <InverterIconblack width={20} height={20} />
+                <Text
+                  style={{
+                    fontFamily: "Ranade-Medium",
+                    color: "#000",
+                    fontSize: ms(14),
+                  }}
+                >
+                  Inverter
+                </Text>
+              </View>
+            ) : (
+              <View style={{ flexDirection: "row", gap: 5 }}>
+                <InverterIconWhite width={20} height={20} />
+                <Text
+                  style={{
+                    fontFamily: "Ranade-Medium",
+                    color: "white",
+                    fontSize: ms(14),
+                  }}
+                >
+                  Inverter
+                </Text>
+              </View>
+            )}
+          </View>
           <DropdownRNE
             disabled={isDropdownDisabled}
             dropdownPosition="bottom"
@@ -178,9 +215,12 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
             valueField="value"
             placeholder="Select Inverter"
             onChange={(item) => handleChangeInverter(item.value)}
+            containerStyle={{
+              backgroundColor: backColorLight ? "#f0f0f0" : "#3b3b3b",
+            }}
             style={{
               width: "50%",
-              borderColor: "gray",
+              borderColor: backColorLight ? "#f0f0f0" : "black",
               borderRadius: 8,
               height: vs(40),
               paddingHorizontal: hs(10),
@@ -189,22 +229,23 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
             selectedTextStyle={{
               fontSize: ms(14),
               ellipsizeMode: "tail",
-              fontFamily: "Excon-Medium",
+              fontFamily: "Excon-Light",
               color: backColorLight ? "#000" : "#fff",
               numberOfLines: 0,
               flexShrink: 1,
             }}
+            activeColor={backColorLight ? "#e0e0e0" : "#5b5b5b"}
             itemTextStyle={{
               fontSize: ms(12),
               fontFamily: "Excon-Regular",
-              color: Colors.light.theme.black,
+              color: backColorLight ? "#000" : "#fff",
             }}
             placeholderStyle={{
               fontFamily: "Excon-Regular",
               color: "gray",
             }}
-            iconColor={backColorLight ? "black" : "white"}
-            iconStyle={{ marginTop: vs(3) }}
+            iconColor={backColorLight ? "#2f2f2e" : "white"}
+            iconStyle={{ marginTop: vs(3), marginRight: hs(8) }}
           />
         </View>
 
@@ -217,9 +258,18 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
           }}
         >
           {backColorLight ? (
-            <Image source={BellIcon} style={{ width: 25, height: 25 }} />
+            <View
+              style={{
+                backgroundColor: "#dddee0",
+                opacity: 0.7,
+                padding: vs(12),
+                borderRadius: 50,
+              }}
+            >
+              <BellIconWhite />
+            </View>
           ) : (
-            <Image source={BellIconWhite} style={{ width: 28, height: 28 }} />
+            <BellIcon />
           )}
           {data?.notificationCount > 0 && (
             <View

@@ -81,7 +81,8 @@ const TabButtons: FC<TabButtonsProps> = ({
           {
             height: dimensions.height,
             width: buttonWidth,
-            backgroundColor: "black",
+            backgroundColor: "#030302",
+            opacity: 0.8,
           },
         ]}
       />

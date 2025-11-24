@@ -1,14 +1,9 @@
+import GreenCiircle from "@assets/icons/ghost.svg";
+import EmptyCiircle from "@assets/icons/ghost1.svg";
 import { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { ms, vs } from "@utils/design/design";
 import React, { useEffect, useState } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { Checkbox } from "react-native-paper";
+import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import PortalBottomSheet from "../PortalBottomSheet";
 import { PortalBottomSheetRef } from "../PortalBottomSheet/types";
 
@@ -106,18 +101,17 @@ const FilterModal: React.FC<FilterModalProps> = ({
             >
               {item}
             </Text>
-            <View
-              style={{
-                backgroundColor: selected.includes(item) ? "#27c840" : "white",
-                borderRadius: 20,
-              }}
-            >
-              <Checkbox
+
+            {selected.includes(item) ? (
+              <GreenCiircle width={30} height={30} />
+            ) : (
+              <EmptyCiircle width={30} height={30} />
+            )}
+            {/* <Checkbox
                 status={selected.includes(item) ? "checked" : "unchecked"}
                 onPress={() => toggleSelection(item)}
                 color="white"
-              />
-            </View>
+              /> */}
           </TouchableOpacity>
         ))}
 
@@ -126,7 +120,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
           onPress={handleConfirm}
           activeOpacity={0.8}
         >
-          <Text style={styles.confirmText}>Confirm</Text>
+          <Text style={styles.confirmText}>Done</Text>
         </TouchableOpacity>
 
         {/* <TouchableOpacity onPress={restoreDefault}>
@@ -177,6 +171,9 @@ const styles = StyleSheet.create({
   confirmText: {
     color: "#fff",
     fontWeight: "600",
+    fontFamily: "Ranade-Regular",
+    paddingVertical: vs(6),
+    fontSize: ms(16),
   },
   restoreText: {
     textAlign: "center",

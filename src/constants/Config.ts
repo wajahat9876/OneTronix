@@ -2,8 +2,8 @@ export const dev = __DEV__;
 // https://api.eccmoney.co.uk/api/v1/ productionLink
 export default {
   baseURL: dev
-    ? "https://api.onetronix.net/api/v1/"
-    : "https://api.onetronix.net/api/v1/",
+    ? "https://devapi.onetronix.net/api/v1/"
+    : "https://devapi.onetronix.net/api/v1/",
   baseURL2: dev
     ? "https://devapi.eccmoney.co.uk/api/v2/"
     : "https://devapi.eccmoney.co.uk/api/v2/",

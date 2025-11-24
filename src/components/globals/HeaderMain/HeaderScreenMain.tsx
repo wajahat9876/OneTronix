@@ -10,7 +10,8 @@ import {
 } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import alertIcon from "@assets/icons/alerts.png";
-import BellIcon from "@assets/icons/bell.png"; // your SVG bell icon
+import BellIcon from "@assets/icons/bellWhite.svg"; // your SVG bell icon
+import InverterIconblack from "@assets/icons/inverterIcon.svg";
 import { MaterialIcons } from "@expo/vector-icons";
 import { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import Colors from "@src/constants/Colors";
@@ -19,6 +20,7 @@ import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
 import { hs, ms, vs } from "@utils/design/design";
 import { useFocusEffect } from "expo-router";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
+
 import {
   FlatList,
   Image,
@@ -156,6 +158,26 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
       >
         {/* LEFT: Dropdown */}
         <View style={{ width: "75%" }}>
+          <View
+            style={{
+              marginTop: vs(10),
+              marginBottom: vs(-5),
+              paddingHorizontal: hs(10),
+            }}
+          >
+            <View style={{ flexDirection: "row", gap: 5 }}>
+              <InverterIconblack width={20} height={20} />
+              <Text
+                style={{
+                  fontFamily: "Ranade-Medium",
+                  color: "#000",
+                  fontSize: ms(14),
+                }}
+              >
+                Inverter
+              </Text>
+            </View>
+          </View>
           <DropdownRNE
             disabled={isDropdownDisabled}
             dropdownPosition="bottom"
@@ -176,7 +198,8 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
             }}
             selectedTextStyle={{
               fontSize: ms(14),
-              fontFamily: "Excon-Medium",
+              fontFamily: "Excon-Light",
+
               color: "#000",
               numberOfLines: 1,
               ellipsizeMode: "tail",
@@ -190,8 +213,8 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
               fontFamily: "Excon-Regular",
               color: "gray",
             }}
-            iconColor="black"
-            iconStyle={{ marginTop: vs(3) }}
+            iconColor="#2f2f2e"
+            iconStyle={{ marginTop: vs(3), marginRight: hs(8) }}
           />
         </View>
 
@@ -201,7 +224,16 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
             handleReadNotifications();
           }}
         >
-          <Image source={BellIcon} style={{ width: 25, height: 25 }} />
+          <View
+            style={{
+              backgroundColor: "#dddee0",
+              opacity: 0.7,
+              padding: vs(12),
+              borderRadius: 50,
+            }}
+          >
+            <BellIcon />
+          </View>
 
           {data?.notificationCount > 0 && (
             <View
