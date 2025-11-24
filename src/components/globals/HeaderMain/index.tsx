@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import {
   Platform,
   ScrollView,
@@ -30,7 +30,7 @@ const HeaderMain = (props: IScreenAuthProps) => {
     disableTopSafeArea,
     disableAppBar,
     darkStatus,
-
+    isNotDefaultMode,
     back,
     onPress,
     label,
@@ -70,7 +70,7 @@ const HeaderMain = (props: IScreenAuthProps) => {
         {!disableTopSafeArea && (
           <View style={{ height: paddingTop, backgroundColor: topColor }} />
         )}
-        {!disableAppBar && <GlobalHeaderMain />}
+        {!disableAppBar && <GlobalHeaderMain {...props} />}
         {children}
 
         {!disableBottomSafeArea && (

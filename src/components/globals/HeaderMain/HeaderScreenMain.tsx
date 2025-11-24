@@ -12,6 +12,8 @@ import { useBusinessDetails } from "@/store/selectors/business/business";
 import alertIcon from "@assets/icons/alerts.png";
 import BellIcon from "@assets/icons/bellWhite.svg"; // your SVG bell icon
 import InverterIconblack from "@assets/icons/inverterIcon.svg";
+import InverterIconWhite from "@assets/icons/inverterIconWhite.svg";
+
 import { MaterialIcons } from "@expo/vector-icons";
 import { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import Colors from "@src/constants/Colors";
@@ -33,7 +35,9 @@ import { ScrollView } from "react-native-gesture-handler";
 import DropdownRNE from "../DropdownRNE";
 import PortalBottomSheet from "../PortalBottomSheet";
 import { PortalBottomSheetRef } from "../PortalBottomSheet/types";
-interface GlobalHeaderProps {}
+interface GlobalHeaderProps {
+  isNotDefaultMode?: boolean;
+}
 const NotificationItem = ({ item }: { item: any }) => {
   return (
     <View style={styles.card}>
@@ -65,7 +69,7 @@ const NotificationItem = ({ item }: { item: any }) => {
 };
 const GlobalHeaderMain = (props: GlobalHeaderProps) => {
   const [changeInverter, { isLoading }] = useChangeActiveInverterMutation();
-  const {} = props;
+  const { isNotDefaultMode } = props;
   const { data, auth_token } = useAppSelector(useBusinessDetails);
   const [readNotifications, { isLoading: readLoading }] =
     useReadNotificationsMutation();
@@ -166,11 +170,16 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
             }}
           >
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <InverterIconblack width={20} height={20} />
+              {isNotDefaultMode ? (
+                <InverterIconWhite width={20} height={20} />
+              ) : (
+                <InverterIconblack width={20} height={20} />
+              )}
+
               <Text
                 style={{
                   fontFamily: "Ranade-Medium",
-                  color: "#000",
+                  color: isNotDefaultMode ? "white" : "black",
                   fontSize: ms(14),
                 }}
               >
@@ -200,7 +209,7 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
               fontSize: ms(14),
               fontFamily: "Excon-Light",
 
-              color: "#000",
+              color: isNotDefaultMode ? "white" : "#000",
               numberOfLines: 1,
               ellipsizeMode: "tail",
             }}
@@ -213,7 +222,7 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
               fontFamily: "Excon-Regular",
               color: "gray",
             }}
-            iconColor="#2f2f2e"
+            iconColor={isNotDefaultMode ? "white" : "#2f2f2e"}
             iconStyle={{ marginTop: vs(3), marginRight: hs(8) }}
           />
         </View>
@@ -227,7 +236,7 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
           <View
             style={{
               backgroundColor: "#dddee0",
-              opacity: 0.7,
+              opacity: isNotDefaultMode ? 1 : 0.7,
               padding: vs(12),
               borderRadius: 50,
             }}

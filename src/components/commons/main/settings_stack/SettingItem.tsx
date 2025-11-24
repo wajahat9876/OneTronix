@@ -19,10 +19,10 @@ const SettingItem = (props: ISettingItemProps) => {
   return (
     <TouchableOpacity
       style={{
-        backgroundColor: "white",
+        backgroundColor: "#F2F2F2",
         alignItems: "center",
         borderBottomWidth: borderBottomWidth,
-        borderRadius: ms(5),
+        borderRadius: ms(10),
         shadowRadius: ms(16),
         width: "93%",
         alignSelf: "center",
@@ -35,8 +35,8 @@ const SettingItem = (props: ISettingItemProps) => {
         justifyContent: "space-between",
         paddingLeft: hs(16),
         paddingRight: hs(8),
-        paddingTop: vs(20),
-        paddingBottom: vs(20),
+        paddingTop: vs(25),
+        paddingBottom: vs(25),
         marginTop,
         marginLeft: hs(0),
       }}
@@ -50,7 +50,7 @@ const SettingItem = (props: ISettingItemProps) => {
           <Text
             style={{
               ...globalStyle.textMedium,
-              fontSize: 17,
+              fontSize: ms(17),
               color: "black",
             }}
           >

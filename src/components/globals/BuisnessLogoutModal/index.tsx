@@ -80,15 +80,15 @@ const BusinessLogoutModal: React.FC<{ marginTop: number; icon?: any }> = ({
       <TouchableOpacity
         style={{
           ...globalStyle.whiteRoundedCard,
-          backgroundColor: "white",
+          backgroundColor: "#F2F2F2",
           flexDirection: "row",
           justifyContent: "space-between",
           paddingLeft: hs(16),
-          borderRadius: ms(6),
+          borderRadius: ms(10),
           paddingRight: hs(8),
           paddingTop: vs(20),
           paddingBottom: vs(20),
-          width: "93%",
+          width: "94%",
           alignSelf: "center",
           marginTop,
           marginLeft: hs(0),

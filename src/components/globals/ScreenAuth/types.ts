@@ -20,4 +20,5 @@ export interface IScreenAuthProps extends ViewProps, MultiStepFormProps {
   disableTopSafeArea?: boolean;
   newScreenAuth?: boolean;
   backColorLight?: boolean;
+  isNotDefaultMode?: boolean;
 }

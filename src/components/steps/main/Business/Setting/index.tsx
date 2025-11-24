@@ -1,10 +1,8 @@
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import SettingItem from "@src/components/commons/main/settings_stack/SettingItem";
 import GlobalLogout from "@src/components/globals/BuisnessLogoutModal";
-import ScreenAuth from "@src/components/globals/ScreenAuth";
 import { StyleSheet } from "@src/components/libraries";
 import { pageTransitionAnimation } from "@src/constants/Animation";
-import Colors from "@src/constants/Colors";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
 import { useAppSelector } from "@src/hooks/useReduxHooks";
 // import { globalStyle } from '@src/styles/globals';
@@ -14,132 +12,157 @@ import LogoutIcon from "@assets/icons/MenuIcons/logout.png";
 import ProfileIcon from "@assets/icons/MenuIcons/profile.png";
 import systemIcon from "@assets/icons/MenuIcons/systemsetting.png";
 import { AntDesign } from "@expo/vector-icons";
+import HeaderMain from "@src/components/globals/HeaderMain";
 import { hs, ms, vs } from "@utils/design/design";
 import { router } from "expo-router";
-import { Image, Platform, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ImageBackground,
+  Platform,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Animated from "react-native-reanimated";
+
+import BackgroundImage from "@assets/icons/settingBackground.png";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
 const Settings = ({ goTo }: MultiStepFormProps) => {
   const { data } = useAppSelector(useBusinessDetails);
-
+  useFocusEffect(
+    useCallback(() => {
+      StatusBar.setBarStyle("light-content");
+      if (Platform.OS === "android") {
+        StatusBar.setBackgroundColor("transparent");
+      }
+    }, [])
+  );
   return (
     <Animated.View
       {...pageTransitionAnimation}
       key="transfer_money"
-      style={{ flex: 1, backgroundColor: "#F9F9F9" }}
+      style={{ flex: 1, backgroundColor: "white" }} //#F9F9F9
     >
-      <ScreenAuth
-        title="Settings"
+      <View
         style={{
-          backgroundColor: "#F9F9F9",
+          width: "100%",
+          height: "40%", // adjust as needed
+          borderBottomLeftRadius: 15,
+          borderBottomRightRadius: 15,
+          overflow: "hidden",
+          position: "absolute",
+          top: 0,
         }}
-        topColor={"#F9F9F9"}
-        bottomColor={Colors.light.theme.backgroundTopCurveSection}
-        darkStatus
+      >
+        <ImageBackground
+          source={BackgroundImage}
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
+          resizeMode="cover"
+        />
+      </View>
+      <HeaderMain
+        title=""
+        style={{
+          backgroundColor: "transparent",
+        }}
+        isNotDefaultMode={true}
+        topColor=""
+        bottomColor={"transparent"}
+        darkStatus={false}
+        disableTopSafeArea
         appBarProps={{
           light: true,
-          rightIcon: true,
         }}
+        // disableAppBar
         back={() => {}}
       >
-        <View style={styles.container}>
-          {/* <ScrollView> */}
-          <View style={styles.card}>
-            <TouchableOpacity
-              onPress={() => {
-                goTo?.(1);
-              }}
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <View style={{ flexDirection: "row", gap: 12 }}>
-                <Image source={ProfileIcon} style={{ width: 35, height: 35 }} />
-                <View>
-                  <Text
-                    style={{
-                      fontFamily: "Excon-Medium",
-                      fontSize: 18,
-                      color: "black",
-                    }}
-                  >
-                    {data?.firstName}
-                  </Text>
-                  <Text
-                    style={{
-                      color: "gray",
-                      fontFamily: "Excon-Regular",
-                      fontSize: ms(10),
-                    }}
-                  >
-                    View Profile
-                  </Text>
-                </View>
-              </View>
-              <AntDesign
-                name="right"
-                size={20}
-                color="gray"
-                style={{ marginRight: -10 }}
-              />
-            </TouchableOpacity>
-          </View>
-
-          <Text
+        <View style={styles.card}>
+          <TouchableOpacity
+            onPress={() => {
+              goTo?.(1);
+            }}
             style={{
-              marginTop: vs(30),
-              fontFamily: "Excon-Regular",
-              fontSize: 15,
-              padding: 5,
-              paddingHorizontal: hs(10),
-              color: "gray",
+              flexDirection: "row",
+              justifyContent: "space-between",
             }}
           >
-            Services
-          </Text>
-          <SettingItem
-            title="Device Management"
-            marginTop={vs(0)}
-            isIconVisible
-            icon={DeviceIcon}
-            borderBottomWidth={0}
-            onClick={() => {
-              router.push("/(main)/Business/Info");
-            }}
-          />
-          <SettingItem
-            title="System Setting"
-            marginTop={vs(0)}
-            borderBottomWidth={0}
-            isIconVisible
-            icon={systemIcon}
-            onClick={() => {
-              goTo?.(3);
-            }}
-          />
-          <SettingItem
-            title="About"
-            icon={aboutIcon}
-            isIconVisible
-            marginTop={vs(0)}
-            onClick={() => {
-              goTo?.(2);
-            }}
-          />
-          {/* </ScrollView> */}
+            <View style={{ flexDirection: "row", gap: 12 }}>
+              <Image source={ProfileIcon} style={{ width: 55, height: 55 }} />
+              <View>
+                <Text
+                  style={{
+                    fontFamily: "Ranade-Medium",
+                    fontSize: ms(24),
+                    color: "white",
+                    marginTop: vs(5),
+                  }}
+                >
+                  {data?.firstName}
+                </Text>
+                <Text
+                  style={{
+                    color: "gray",
+                    fontFamily: "Ranade-Medium",
+                    fontSize: ms(13),
+                  }}
+                >
+                  {data?.email}
+                </Text>
+              </View>
+            </View>
+            <AntDesign
+              name="right"
+              size={20}
+              color="gray"
+              style={{ marginRight: -10, marginTop: vs(30) }}
+            />
+          </TouchableOpacity>
         </View>
-        <View
-          style={{
-            position: "absolute",
-            bottom: 10,
-            alignSelf: "center",
-            marginLeft: hs(16),
-            marginTop: vs(24),
-          }}
-        >
-          <GlobalLogout key="dsa" marginTop={vs(0)} icon={LogoutIcon} />
+        <View style={styles.container}>
+          <ScrollView>
+            <Text style={[styles.txt, { marginTop: vs(5) }]}>Services</Text>
+            <SettingItem
+              title="Device Management"
+              marginTop={vs(10)}
+              isIconVisible
+              icon={DeviceIcon}
+              borderBottomWidth={0}
+              onClick={() => {
+                router.push("/(main)/Business/Info");
+              }}
+            />
+            <SettingItem
+              title="System Setting"
+              marginTop={vs(15)}
+              borderBottomWidth={0}
+              isIconVisible
+              icon={systemIcon}
+              onClick={() => {
+                goTo?.(3);
+              }}
+            />
+            <SettingItem
+              title="About"
+              icon={aboutIcon}
+              isIconVisible
+              marginTop={vs(15)}
+              onClick={() => {
+                goTo?.(2);
+              }}
+            />
+            <Text style={[styles.txt, { marginTop: vs(20) }]}>Other</Text>
+            <View style={{ alignSelf: "center", marginBottom: vs(30) }}>
+              <GlobalLogout key="dsa" marginTop={vs(10)} icon={LogoutIcon} />
+            </View>
+          </ScrollView>
         </View>
-      </ScreenAuth>
+      </HeaderMain>
     </Animated.View>
   );
 };
@@ -147,20 +170,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginLeft: hs(16),
-    marginTop: vs(24),
+    marginTop: vs(190),
+  },
+  txt: {
+    fontFamily: "Excon-Medium",
+    fontSize: ms(14),
+    padding: 5,
+    paddingHorizontal: hs(10),
+    color: "black",
   },
   card: {
-    marginRight: hs(10),
+    position: "absolute",
+    top: "22%", // card sits inside the image like your design
     alignSelf: "center",
-    backgroundColor: "white",
+    backgroundColor: "transparent",
     borderRadius: 15,
-    padding: 30,
-    width: "94%",
+    padding: 20,
+    width: "99%",
     shadowColor: "#000",
-    shadowOffset: { width: 2, height: 2 },
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: Platform.OS === "ios" ? 2 : 2,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });
 export default Settings;
