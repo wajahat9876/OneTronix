@@ -11,7 +11,6 @@ import DeviceIcon from "@assets/icons/MenuIcons/device.png";
 import LogoutIcon from "@assets/icons/MenuIcons/logout.png";
 import ProfileIcon from "@assets/icons/MenuIcons/profile.png";
 import systemIcon from "@assets/icons/MenuIcons/systemsetting.png";
-import { AntDesign } from "@expo/vector-icons";
 import HeaderMain from "@src/components/globals/HeaderMain";
 import { hs, ms, vs } from "@utils/design/design";
 import { router } from "expo-router";
@@ -85,7 +84,7 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
         <View style={styles.card}>
           <TouchableOpacity
             onPress={() => {
-              goTo?.(1);
+              // goTo?.(1);
             }}
             style={{
               flexDirection: "row",
@@ -116,17 +115,17 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
                 </Text>
               </View>
             </View>
-            <AntDesign
+            {/* <AntDesign
               name="right"
               size={20}
               color="gray"
               style={{ marginRight: -10, marginTop: vs(30) }}
-            />
+            /> */}
           </TouchableOpacity>
         </View>
         <View style={styles.container}>
           <ScrollView>
-            <Text style={[styles.txt, { marginTop: vs(5) }]}>Services</Text>
+            <Text style={[styles.txt, { marginTop: vs(15) }]}>Services</Text>
             <SettingItem
               title="Device Management"
               marginTop={vs(10)}
@@ -170,7 +169,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginLeft: hs(16),
-    marginTop: vs(190),
+    marginTop: vs(200),
   },
   txt: {
     fontFamily: "Excon-Medium",
@@ -181,17 +180,12 @@ const styles = StyleSheet.create({
   },
   card: {
     position: "absolute",
-    top: "22%", // card sits inside the image like your design
+    top: Platform.OS === "ios" ? "25%" : "28%", // card sits inside the image like your design
     alignSelf: "center",
     backgroundColor: "transparent",
     borderRadius: 15,
     padding: 20,
     width: "99%",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
 });
 export default Settings;

@@ -40,7 +40,6 @@ const AnimatedLinePath = ({
 }) => {
   const dashOffset = useRef(new Animated.Value(0)).current;
   const animRef = useRef<Animated.CompositeAnimation | null>(null);
-
   useEffect(() => {
     if (active) {
       const toVal = direction === "forward" ? -400 : 400;
@@ -100,6 +99,7 @@ const HouseDiagram = (props: HouseDiagramProps) => {
   const onLayout = (e: any) => setLayout(e.nativeEvent.layout);
   const textColor = isDarkMode ? "white" : "black";
   const labelColor = isDarkMode ? "white" : "#555";
+  const { data: businessData } = useAppSelector(useBusinessDetails);
 
   const ready = layout.width > 0 && layout.height > 0;
   const original = {
@@ -237,19 +237,20 @@ const HouseDiagram = (props: HouseDiagramProps) => {
             r={3}
             fill="#05B1F2"
           />
-
-          <AnimatedLinePath
-            d={batteryPath}
-            active={batteryWatt > 0 && batteryStatus !== "ONHOLD"}
-            strokeDasharray="20,80"
-            direction={
-              batteryStatus === "CHARGING"
-                ? "forward"
-                : batteryStatus === "DISCHARGING"
-                ? "backward"
-                : "forward"
-            }
-          />
+          {businessData?.activeDevice?.type === "hybrid" && (
+            <AnimatedLinePath
+              d={batteryPath}
+              active={batteryWatt > 0 && batteryStatus !== "ONHOLD"}
+              strokeDasharray="20,80"
+              direction={
+                batteryStatus === "CHARGING"
+                  ? "forward"
+                  : batteryStatus === "DISCHARGING"
+                  ? "backward"
+                  : "forward"
+              }
+            />
+          )}
 
           <AnimatedLinePath
             d={homePath}
@@ -289,12 +290,15 @@ const HouseDiagram = (props: HouseDiagramProps) => {
           {home} kW
         </Text>
       </View>
-      <View style={[styles.label, { bottom: scale(135), right: scale(55) }]}>
-        <Text style={[styles.labelTitle, { color: textColor }]}>Battery</Text>
-        <Text style={[styles.labelValue, { color: labelColor }]}>
-          {battery} kW
-        </Text>
-      </View>
+      {businessData?.activeDevice?.type === "hybrid" && (
+        <View style={[styles.label, { bottom: scale(135), right: scale(55) }]}>
+          <Text style={[styles.labelTitle, { color: textColor }]}>Battery</Text>
+          <Text style={[styles.labelValue, { color: labelColor }]}>
+            {battery} kW
+          </Text>
+        </View>
+      )}
+
       <View style={[styles.label, { bottom: scale(60), right: scale(130) }]}>
         <Text style={[styles.labelTitle, { color: textColor }]}>Grid</Text>
         <Text style={[styles.labelValue, { color: labelColor }]}>

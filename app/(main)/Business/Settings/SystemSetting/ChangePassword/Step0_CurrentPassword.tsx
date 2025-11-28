@@ -126,7 +126,7 @@ const Step0_CurrentPassword = ({ goTo, next }: MultiStepFormProps) => {
               loading={isLoading}
               disabled={!formik.isValid || isLoading}
               btnTitle="Continue"
-              btnColor="black"
+              btnColor="#f41a2c"
               btnTitleColor="white"
               onClick={() => {
                 formik.submitForm();

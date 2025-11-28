@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
-import { ActivityIndicator, View } from 'react-native';
-import { WebView } from 'react-native-webview';
+import { ActivityIndicator, View } from "react-native";
+import { WebView } from "react-native-webview";
 
 interface GlobalWebViewProps {
   uri: string;
@@ -15,17 +14,17 @@ const GlobalWebView = ({ uri }: GlobalWebViewProps) => {
       renderLoading={() => (
         <View
           style={{
-            position: 'absolute',
-            alignItems: 'center',
-            justifyContent: 'center',
+            position: "absolute",
+            alignItems: "center",
+            justifyContent: "center",
             left: 0,
             right: 0,
             top: 0,
             bottom: 0,
-            backgroundColor: 'white',
+            backgroundColor: "white",
           }}
         >
-          <ActivityIndicator color="blue" size="large" />
+          <ActivityIndicator color="#f41a2c" size="large" />
         </View>
       )}
     />
@@ -34,14 +33,14 @@ const GlobalWebView = ({ uri }: GlobalWebViewProps) => {
 
 const styles = {
   loaderContainer: {
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
     left: 0,
     right: 0,
     top: 0,
     bottom: 0,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
 };
 

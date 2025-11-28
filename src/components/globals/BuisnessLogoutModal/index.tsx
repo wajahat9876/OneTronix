@@ -2,79 +2,39 @@
 import useBusinessLogout from "@src/hooks/useBusinessLogout";
 import { globalStyle } from "@src/styles/globals";
 import { hs, ms, vs } from "@utils/design/design";
-import React, { useState } from "react";
+import React, { useRef } from "react";
 // eslint-disable-next-line prettier/prettier
 // import { useBuisnessSignoutMutation } from '@/store/api/business/authApis';
-import LogoutIcon from "@assets/icons/eccLogoutIcon.svg";
+import LogoutIcon from "@assets/icons/logout.svg";
 import { AntDesign } from "@expo/vector-icons";
-import { useAppDispatch } from "@src/hooks/useReduxHooks";
-import { getRespValue } from "@utils/getRespValue";
-import { useRouter } from "expo-router";
+import { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import {
   Image,
-  Modal,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import Button from "../Button";
-// Global Logout Modal Component
-const LogoutModal: React.FC<{
-  isVisible: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  isLoading: boolean;
-}> = ({ isVisible, onClose, onConfirm, isLoading }) => (
-  <Modal
-    transparent
-    animationType="fade"
-    visible={isVisible}
-    onRequestClose={onClose}
-  >
-    <View style={styles.modalOverlay}>
-      <View style={styles.modalContainer}>
-        <LogoutIcon style={{ marginBottom: getRespValue(15) }} />
-        <Text style={styles.modalText}>Are you sure you want to log out?</Text>
-        <View style={styles.buttonContainer}>
-          <Button
-            btnTitle="Yes"
-            btnTitleColor="white"
-            loading={isLoading}
-            onClick={onConfirm}
-            btnColor="#000000"
-            disabled={isLoading}
-          />
-          <Button
-            btnTitleColor="black"
-            btnTitle="No"
-            onClick={onClose}
-            btnColor="#F8F9FE"
-          />
-        </View>
-      </View>
-    </View>
-  </Modal>
-);
+import PortalBottomSheet from "../PortalBottomSheet";
+import { PortalBottomSheetRef } from "../PortalBottomSheet/types";
 
 // Main GlobalLogout Component
 const BusinessLogoutModal: React.FC<{ marginTop: number; icon?: any }> = ({
   marginTop,
   icon,
 }) => {
-  const [isModalVisible, setModalVisible] = useState(false);
   const { handleBusinessLogout } = useBusinessLogout();
-  const dispatch = useAppDispatch();
-
-  const handleLogoutPress = () => {
-    setModalVisible(true);
+  const bottomSheetRef = useRef<PortalBottomSheetRef>(null);
+  const openSheet = () => {
+    bottomSheetRef.current?.open();
   };
 
-  const handleCloseModal = () => {
-    setModalVisible(false);
+  const closeSheet = () => {
+    bottomSheetRef.current?.close();
   };
 
-  const router = useRouter();
   return (
     <View>
       <TouchableOpacity
@@ -93,7 +53,7 @@ const BusinessLogoutModal: React.FC<{ marginTop: number; icon?: any }> = ({
           marginTop,
           marginLeft: hs(0),
         }}
-        onPress={handleLogoutPress}
+        onPress={openSheet}
       >
         <View style={{ flexDirection: "row", gap: 10 }}>
           <Image source={icon} style={{ width: 26, height: 26 }} />
@@ -106,14 +66,57 @@ const BusinessLogoutModal: React.FC<{ marginTop: number; icon?: any }> = ({
         <AntDesign name="right" size={20} color="gray" />
       </TouchableOpacity>
       {/* Logout confirmation modal */}
-      <LogoutModal
-        isLoading={false}
-        isVisible={isModalVisible}
-        onClose={handleCloseModal}
-        onConfirm={() => {
-          handleBusinessLogout();
+      <PortalBottomSheet
+        ref={bottomSheetRef}
+        snapPoints={Platform.OS === "ios" ? ["50%"] : ["48%"]}
+        handleComponent={undefined}
+        backgroundStyle={{ backgroundColor: "#e8eaec" }}
+        handleIndicatorStyle={{
+          backgroundColor: "#c2c3c4",
         }}
-      />
+        enableContentPanningGesture
+        enableHandlePanningGesture
+        TouchComponent={() => <></>}
+        backdropComponent={(props) => (
+          <BottomSheetBackdrop
+            {...props}
+            appearsOnIndex={0}
+            disappearsOnIndex={-1}
+            onPress={closeSheet}
+          />
+        )}
+      >
+        <View style={{ flex: 1 }}>
+          <View
+            style={{
+              alignItems: "center",
+              marginTop: vs(15),
+              marginBottom: vs(10),
+            }}
+          >
+            <LogoutIcon />
+          </View>
+          <Text style={styles.modalText}>
+            Are you sure you want to log out?
+          </Text>
+
+          <View style={styles.buttonContainer}>
+            <Button
+              btnTitleColor="black"
+              btnTitle="No"
+              onClick={closeSheet}
+              btnColor="#c9cacc"
+            />
+            <Button
+              btnTitle="Yes"
+              loading={false}
+              onClick={handleBusinessLogout}
+              btnColor="#f41a2c"
+              btnTitleColor="white"
+            />
+          </View>
+        </View>
+      </PortalBottomSheet>
     </View>
   );
 };
@@ -126,23 +129,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
-  modalContainer: {
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 8,
-    width: "85%",
-    alignItems: "center",
-  },
+
   modalText: {
-    fontSize: 18,
-    marginBottom: 20,
-    fontFamily: "Excon-Regular",
-    color: "black",
+    width: "75%",
+    fontSize: ms(24),
+    textAlign: "center",
+    marginBottom: Platform.OS === "ios" ? vs(20) : vs(40),
+    fontFamily: "Excon-Medium",
+    color: "#030302cc",
+    alignSelf: "center",
   },
   buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    width: "100%",
+    alignSelf: "center",
+    width: "80%",
+
+    gap: vs(20),
   },
 });
 

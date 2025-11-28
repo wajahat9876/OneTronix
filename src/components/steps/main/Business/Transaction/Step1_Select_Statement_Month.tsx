@@ -50,6 +50,8 @@ export enum SelectMethod {
   Total = "total",
 }
 export default function PanZoomPage() {
+  const { data: reduxData } = useAppSelector(useBusinessDetails);
+
   //Filter Modal  code
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
@@ -71,6 +73,7 @@ export default function PanZoomPage() {
     data: businessData,
     inverterData,
   } = useAppSelector(useBusinessDetails);
+  console.log(inverterData);
 
   // Tab Button Code
 
@@ -469,6 +472,7 @@ export default function PanZoomPage() {
           <DonutChart2
             type="Production"
             selectedTab={selectedTab}
+            inverterType={reduxData?.activeDevice?.type}
             totalValue={parseFloat(
               (analyticsData?.results?.production?.production || 0).toFixed(2)
             )}
@@ -490,6 +494,7 @@ export default function PanZoomPage() {
           {/* Consumption Section */}
           <DonutChart2
             type="Consumption"
+            inverterType={reduxData?.activeDevice?.type}
             selectedTab={selectedTab}
             totalValue={parseFloat(
               (analyticsData?.results?.consumption.consumption || 0).toFixed(2)
@@ -634,7 +639,11 @@ export default function PanZoomPage() {
               />
               <DetailRow
                 label="Current"
-                value={inverterData?.inverterData?.data?.ac?.amp}
+                value={
+                  inverterData?.inverterData?.data?.ac?.status === "IMPORT"
+                    ? inverterData?.inverterData?.data?.ac?.amp
+                    : inverterData?.inverterData?.data?.ac?.exportAmp
+                }
                 unit={"A"}
               />
               <DetailRow
@@ -645,40 +654,49 @@ export default function PanZoomPage() {
 
               <DetailRow
                 label="Power"
-                value={inverterData?.inverterData?.data?.ac?.watt}
-                unit={"kW"}
-              />
-            </View>
-            <View style={{ marginTop: vs(10) }}>
-              <Text style={styles.txtCycle}>Battery</Text>
-              <DetailRow
-                label="Voltage"
-                value={inverterData?.inverterData?.data?.battery?.voltage}
-                unit={"V"}
-              />
-              <DetailRow
-                label="Charging Current"
-                value={inverterData?.inverterData?.data?.battery?.chargingAmp}
-                unit={"A"}
-              />
-              <DetailRow
-                label="Charging Power"
-                value={inverterData?.inverterData?.data?.battery?.chargingWatt}
-                unit={"kW"}
-              />
-              <DetailRow
-                label="Discharging Current"
-                value={inverterData?.inverterData?.data?.battery?.inverterAmp}
-                unit={"A"}
-              />
-              <DetailRow
-                label="Discharging Power"
                 value={
-                  inverterData?.inverterData?.data?.battery?.dischargingWatt
+                  inverterData?.inverterData?.data?.ac?.status === "IMPORT"
+                    ? inverterData?.inverterData?.data?.ac?.watt
+                    : inverterData?.inverterData?.data?.ac?.exportWatt
                 }
                 unit={"kW"}
               />
             </View>
+            {reduxData?.activeDevice?.type === "hybrid" && (
+              <View style={{ marginTop: vs(10) }}>
+                <Text style={styles.txtCycle}>Battery</Text>
+                <DetailRow
+                  label="Voltage"
+                  value={inverterData?.inverterData?.data?.battery?.voltage}
+                  unit={"V"}
+                />
+                <DetailRow
+                  label="Charging Current"
+                  value={inverterData?.inverterData?.data?.battery?.chargingAmp}
+                  unit={"A"}
+                />
+                <DetailRow
+                  label="Charging Power"
+                  value={
+                    inverterData?.inverterData?.data?.battery?.chargingWatt
+                  }
+                  unit={"kW"}
+                />
+                <DetailRow
+                  label="Discharging Current"
+                  value={inverterData?.inverterData?.data?.battery?.inverterAmp}
+                  unit={"A"}
+                />
+                <DetailRow
+                  label="Discharging Power"
+                  value={
+                    inverterData?.inverterData?.data?.battery?.dischargingWatt
+                  }
+                  unit={"kW"}
+                />
+              </View>
+            )}
+
             <View style={{ marginTop: vs(10) }}>
               <Text style={styles.txtCycle}>Inverter</Text>
               <DetailRow
@@ -712,11 +730,14 @@ export default function PanZoomPage() {
                 value={inverterData?.inverterData?.data?.temperature?.inverter}
                 unit={"℃"}
               />
-              <DetailRow
-                label="Booster"
-                value={inverterData?.inverterData?.data?.temperature?.booster}
-                unit={"℃"}
-              />
+              {reduxData?.activeDevice?.type === "hybrid" && (
+                <DetailRow
+                  label="Booster"
+                  value={inverterData?.inverterData?.data?.temperature?.booster}
+                  unit={"℃"}
+                />
+              )}
+
               <DetailRow
                 label="MPPT"
                 value={inverterData?.inverterData?.data?.temperature?.mppt}
@@ -746,7 +767,7 @@ export default function PanZoomPage() {
         />
       )}
 
-      <Loader visible={summaryFetching} message="Yahoooo" />
+      <Loader visible={summaryFetching} message="Loading..." />
     </HeaderMain>
   );
 }

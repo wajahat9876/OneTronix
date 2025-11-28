@@ -12,16 +12,21 @@ type DonutChartProps = {
   type?: "Production" | "Consumption";
   selectedTab?: number;
   totalValue: number;
+  inverterType?: string;
 };
 
 const DonutChart2 = forwardRef<View, DonutChartProps>(
-  ({ load, grid, battery, solar, type, selectedTab, totalValue }, ref) => {
+  (
+    { load, grid, battery, solar, type, selectedTab, totalValue, inverterType },
+    ref
+  ) => {
     const labelMap: Record<string, string> = {
       load: type === "Production" ? "to Load" : "from Load",
       grid: type === "Production" ? "to Grid" : "from Grid",
       battery: type === "Production" ? "to Battery" : "from Battery",
       solar: type === "Production" ? "to Solar" : "from Solar",
     };
+    console.log(inverterType);
 
     const colorMap: Record<string, string> = {
       load: "#27c840",
@@ -29,8 +34,14 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
       battery: "#787878",
       solar: "#27c840",
     };
+    const rawEntries = { load, grid, battery, solar };
 
-    const entries = Object.entries({ load, grid, battery, solar }).filter(
+    // ❌ remove battery if inverterType is NOT hybrid
+    if (!inverterType?.toLowerCase().includes("hybrid")) {
+      delete rawEntries.battery;
+      totalValue = (load || 0) + (grid || 0) + (solar || 0);
+    }
+    const entries = Object.entries(rawEntries).filter(
       ([, v]) => v !== undefined
     );
 

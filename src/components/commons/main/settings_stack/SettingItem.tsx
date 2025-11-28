@@ -1,6 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
 import { Text, TouchableOpacity } from "@src/components/libraries";
-import { globalStyle } from "@src/styles/globals";
 import { hs, ms, vs } from "@utils/design/design";
 import { Image, View } from "react-native";
 
@@ -35,8 +34,8 @@ const SettingItem = (props: ISettingItemProps) => {
         justifyContent: "space-between",
         paddingLeft: hs(16),
         paddingRight: hs(8),
-        paddingTop: vs(25),
-        paddingBottom: vs(25),
+        paddingTop: vs(10),
+        paddingBottom: vs(10),
         marginTop,
         marginLeft: hs(0),
       }}
@@ -46,11 +45,11 @@ const SettingItem = (props: ISettingItemProps) => {
         <View
           style={{ flexDirection: "row", alignItems: "center", gap: hs(12) }}
         >
-          <Image source={icon} style={{ width: hs(22), height: hs(22) }} />
+          <Image source={icon} style={{ width: hs(40), height: hs(40) }} />
           <Text
             style={{
-              ...globalStyle.textMedium,
-              fontSize: ms(17),
+              fontFamily: "Excon-Medium",
+              fontSize: ms(14),
               color: "black",
             }}
           >
@@ -59,7 +58,11 @@ const SettingItem = (props: ISettingItemProps) => {
         </View>
       ) : (
         <Text
-          style={{ ...globalStyle.textMedium, fontSize: 17, color: "black" }}
+          style={{
+            fontFamily: "Excon-Medium",
+            fontSize: ms(14),
+            color: "black",
+          }}
         >
           {title}
         </Text>

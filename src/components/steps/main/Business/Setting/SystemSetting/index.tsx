@@ -1,31 +1,27 @@
-import { useBusinessDetails } from "@/store/selectors/business/business";
 import SettingItem from "@src/components/commons/main/settings_stack/SettingItem";
 import ScreenAuth from "@src/components/globals/ScreenAuth";
 import { ScrollView, StyleSheet } from "@src/components/libraries";
 import { pageTransitionAnimation } from "@src/constants/Animation";
 import Colors from "@src/constants/Colors";
-import { useAppSelector } from "@src/hooks/useReduxHooks";
 // import { globalStyle } from '@src/styles/globals';
 import CPIcon from "@assets/icons/MenuIcons/changePassword.png";
-import { hs, vs } from "@utils/design/design";
+import { hs, ms, vs } from "@utils/design/design";
 import { Platform, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { SettingProps } from "../type";
 const SystemSetting = ({ goTo, parentGoto }: SettingProps) => {
-  const { data } = useAppSelector(useBusinessDetails);
-
   return (
     <Animated.View
       {...pageTransitionAnimation}
       key="transfer_moneyssasasa"
-      style={{ flex: 1, backgroundColor: "#F9F9F9" }}
+      style={{ flex: 1, backgroundColor: "white" }}
     >
       <ScreenAuth
         title="System Setting"
         style={{
-          backgroundColor: "#F9F9F9",
+          backgroundColor: "transparent",
         }}
-        topColor={"#F9F9F9"}
+        topColor={"transparent"}
         bottomColor={Colors.light.theme.backgroundTopCurveSection}
         darkStatus
         appBarProps={{
@@ -40,19 +36,19 @@ const SystemSetting = ({ goTo, parentGoto }: SettingProps) => {
           <ScrollView>
             <Text
               style={{
-                marginTop: vs(30),
-                fontFamily: "Excon-Regular",
-                fontSize: 15,
+                marginTop: vs(10),
+                fontFamily: "Excon-Medium",
+                fontSize: ms(14),
                 padding: 5,
                 paddingHorizontal: hs(10),
-                color: "gray",
+                color: "black",
               }}
             >
               Authentication
             </Text>
             <SettingItem
               title="Change Password"
-              marginTop={vs(0)}
+              marginTop={vs(10)}
               isIconVisible
               icon={CPIcon}
               borderBottomWidth={0}
@@ -70,7 +66,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginLeft: hs(16),
-    marginTop: vs(24),
+    marginTop: vs(20),
   },
   card: {
     alignSelf: "center",

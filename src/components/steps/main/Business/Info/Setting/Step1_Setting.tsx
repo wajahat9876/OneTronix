@@ -2,9 +2,13 @@
 /* eslint-disable import/order */
 import { useChangeInverterSettingMutation } from "@/store/api/business/mainApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
+import ConfirmIcon from "@assets/icons/confirmModel.svg";
+import { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import Button from "@src/components/globals/Button";
 import FormikDropdownRNE from "@src/components/globals/DropdownRNE/FormikDropdownRNE";
 import FormikInput from "@src/components/globals/FormikInput";
+import PortalBottomSheet from "@src/components/globals/PortalBottomSheet";
+import { PortalBottomSheetRef } from "@src/components/globals/PortalBottomSheet/types";
 import ScreenAuth from "@src/components/globals/ScreenAuth";
 import ToggleSwitch from "@src/components/globals/ToggleSwitch";
 import { pageTransitionAnimation } from "@src/constants/Animation";
@@ -18,9 +22,7 @@ import { getRespValue } from "@utils/getRespValue";
 import { useFormik } from "formik";
 import { useRef, useState } from "react";
 import {
-  Modal,
   Platform,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -690,6 +692,14 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
     }
   };
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const bottomSheetRef = useRef<PortalBottomSheetRef>(null);
+  const openSheet = () => {
+    bottomSheetRef.current?.open();
+  };
+
+  const closeSheet = () => {
+    bottomSheetRef.current?.close();
+  };
 
   return (
     <Animated.View
@@ -755,93 +765,75 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
 
         <View
           style={{
-            width: "50%",
+            width: "80%",
             position: "absolute",
-            bottom: vs(8),
+            bottom: vs(10),
             alignSelf: "center",
           }}
         >
           <Button
             btnTitle="Submit"
-            btnColor="black"
+            btnColor="#f41a2c"
             loading={isLoading}
             disabled={isLoading}
             btnTitleColor="white"
-            onClick={() => setShowConfirmModal(true)}
+            onClick={() => openSheet()}
           />
         </View>
-        <Modal
-          visible={showConfirmModal}
-          transparent
-          animationType="fade"
-          onRequestClose={() => setShowConfirmModal(false)}
+        <PortalBottomSheet
+          ref={bottomSheetRef}
+          snapPoints={Platform.OS === "ios" ? ["52%"] : ["48%"]}
+          handleComponent={undefined}
+          backgroundStyle={{ backgroundColor: "#e8eaec" }}
+          handleIndicatorStyle={{
+            backgroundColor: "#c2c3c4",
+          }}
+          enableContentPanningGesture
+          enableHandlePanningGesture
+          TouchComponent={() => <></>}
+          backdropComponent={(props) => (
+            <BottomSheetBackdrop
+              {...props}
+              appearsOnIndex={0}
+              disappearsOnIndex={-1}
+              onPress={closeSheet}
+            />
+          )}
         >
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "rgba(0,0,0,0.5)",
-            }}
-          >
+          <View style={{ flex: 1 }}>
             <View
               style={{
-                width: "80%",
-                backgroundColor: "white",
-                padding: 20,
-                borderRadius: 12,
+                alignItems: "center",
+                marginTop: vs(15),
+                marginBottom: vs(10),
               }}
             >
-              <Text
-                style={{
-                  fontSize: ms(16),
-                  fontWeight: "600",
-                  marginBottom: 20,
-                  fontFamily: "Excon-Regular",
-                  color: "black",
+              <ConfirmIcon />
+            </View>
+            <Text style={styles.modalText}>
+              Changes will be reflected after 5-10 minutes.
+            </Text>
+
+            <View style={styles.buttonContainer}>
+              <Button
+                btnTitleColor="black"
+                btnTitle="Cancel"
+                onClick={closeSheet}
+                btnColor="#c9cacc"
+              />
+              <Button
+                btnTitle="Proceed"
+                loading={false}
+                onClick={() => {
+                  formik.handleSubmit();
+                  closeSheet();
                 }}
-              >
-                Changes will be reflected after 5-10 minutes
-              </Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Pressable
-                  onPress={() => {
-                    setShowConfirmModal(false);
-                    formik.handleSubmit();
-                  }}
-                  style={{
-                    paddingVertical: 10,
-                    paddingHorizontal: 20,
-                    borderRadius: 8,
-                    backgroundColor: "black",
-                  }}
-                >
-                  <Text style={{ color: "white", fontFamily: "Excon-Regular" }}>
-                    Proceed
-                  </Text>
-                </Pressable>
-                <Pressable
-                  onPress={() => setShowConfirmModal(false)}
-                  style={{
-                    paddingVertical: 10,
-                    paddingHorizontal: 20,
-                    borderRadius: 8,
-                    backgroundColor: "#F8F9FE",
-                  }}
-                >
-                  <Text style={{ fontFamily: "Excon-Regular", color: "black" }}>
-                    Cancel
-                  </Text>
-                </Pressable>
-              </View>
+                btnColor="#f41a2c"
+                btnTitleColor="white"
+              />
             </View>
           </View>
-        </Modal>
+        </PortalBottomSheet>
       </ScreenAuth>
     </Animated.View>
   );
@@ -853,6 +845,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+  },
+  modalText: {
+    width: "75%",
+    fontSize: ms(24),
+    textAlign: "center",
+    marginBottom: Platform.OS === "ios" ? vs(20) : vs(40), // 20,
+    fontFamily: "Excon-Medium",
+    color: "#030302cc",
+    alignSelf: "center",
+  },
+  buttonContainer: {
+    alignSelf: "center",
+    width: "80%",
+
+    gap: vs(20),
   },
   mainView: {
     marginTop: vs(10),

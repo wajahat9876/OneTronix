@@ -34,16 +34,20 @@ const ExchangeBlock: React.FC<Props> = ({
 
           <Text style={styles.label}>{label1}</Text>
           <View style={{ flexDirection: "row" }}>
-            <Text style={styles.value}>{value1}</Text>
-            <Text style={styles.unit}>{unit1}</Text>
+            <Text style={styles.value} numberOfLines={1} adjustsFontSizeToFit>
+              {value1}
+              <Text style={styles.unit}>{unit1}</Text>
+            </Text>
           </View>
         </View>
         <View style={styles.header}>
           {icon2 && <Image source={icon2} style={styles.icon} />}
           <Text style={styles.label}> {label2}</Text>
           <View style={{ flexDirection: "row" }}>
-            <Text style={styles.value}>{value2}</Text>
-            <Text style={styles.unit}>{unit2}</Text>
+            <Text style={styles.value} numberOfLines={1} adjustsFontSizeToFit>
+              {value2}
+              <Text style={styles.unit}>{unit2}</Text>
+            </Text>
           </View>
         </View>
       </View>

@@ -10,7 +10,9 @@ import { View } from "react-native";
 import { LinearTransition } from "react-native-reanimated";
 import About from "./About";
 import Account from "./Accounts";
+import PrivacyPolicy from "./PrivacyPolicy";
 import SystemSetting from "./SystemSetting";
+import TermsConditions from "./Terms&Conditions";
 const Index = ({ navigation }: any) => {
   const { step, goTo } = useMultistepForm(
     [
@@ -18,6 +20,8 @@ const Index = ({ navigation }: any) => {
       <Account />, // 1
       <About />, //2
       <SystemSetting />, //3
+      <TermsConditions />, //4
+      <PrivacyPolicy />, //5
     ],
     {
       animated: true,

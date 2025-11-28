@@ -220,7 +220,11 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                 <Text style={[styles.txt, { color: textColor }]}>
                   Daily Purchase
                 </Text>
-                <Text style={[styles.txtStyle, { color: textColor }]}>
+                <Text
+                  style={[styles.txtStyle, { color: textColor }]}
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
+                >
                   {Number(
                     result?.results?.dailySummary?.grid?.dailyPurchase || 0
                   ).toFixed(2)}
@@ -236,7 +240,11 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                 <Text style={[styles.txt, { color: textColor }]}>
                   Daily Consumption
                 </Text>
-                <Text style={[styles.txtStyle, { color: textColor }]}>
+                <Text
+                  style={[styles.txtStyle, { color: textColor }]}
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
+                >
                   {Number(
                     result?.results?.dailySummary?.consumption
                       ?.dailyConsumption || 0
@@ -259,7 +267,11 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                 >
                   Daily Production
                 </Text>
-                <Text style={[styles.dailyTxt, { color: "white" }]}>
+                <Text
+                  style={[styles.dailyTxt, { color: "white" }]}
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
+                >
                   {Number(
                     result?.results?.dailySummary?.production
                       ?.dailyProduction ?? 0
@@ -276,7 +288,11 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                 <Text style={[styles.txt, { color: textColor }]}>
                   Total Production
                 </Text>
-                <Text style={[styles.txtStyle, { color: textColor }]}>
+                <Text
+                  style={[styles.txtStyle, { color: textColor }]}
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
+                >
                   {Number(
                     result?.results?.totalSummary?.production
                       ?.totalProduction || 0

@@ -9,7 +9,7 @@ import { useAppSelector } from "@src/hooks/useReduxHooks";
 // import { globalStyle } from '@src/styles/globals';
 import TCIcon from "@assets/icons/MenuIcons/Tc.png";
 import PPIcon from "@assets/icons/MenuIcons/pp.png";
-import { hs, vs } from "@utils/design/design";
+import { hs, ms, vs } from "@utils/design/design";
 import { Platform, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 
@@ -20,14 +20,14 @@ const About = ({ goTo }: MultiStepFormProps) => {
     <Animated.View
       {...pageTransitionAnimation}
       key="transfer_monessy"
-      style={{ flex: 1, backgroundColor: "#F9F9F9" }}
+      style={{ flex: 1, backgroundColor: "white" }}
     >
       <ScreenAuth
         title="About"
         style={{
-          backgroundColor: "#F9F9F9",
+          backgroundColor: "transparent",
         }}
-        topColor={"#F9F9F9"}
+        topColor={"transparent"}
         bottomColor={Colors.light.theme.backgroundTopCurveSection}
         darkStatus
         appBarProps={{
@@ -42,34 +42,34 @@ const About = ({ goTo }: MultiStepFormProps) => {
           <ScrollView>
             <Text
               style={{
-                marginTop: vs(30),
-                fontFamily: "Excon-Regular",
-                fontSize: 15,
+                marginTop: vs(10),
+                fontFamily: "Excon-Medium",
+                fontSize: ms(14),
                 padding: 5,
                 paddingHorizontal: hs(10),
-                color: "gray",
+                color: "black",
               }}
             >
               Legal & Information
             </Text>
             <SettingItem
               title="Terms and Conditions"
-              marginTop={vs(0)}
+              marginTop={vs(10)}
               isIconVisible
               icon={TCIcon}
               borderBottomWidth={0}
               onClick={() => {
-                // goTo?.(1);
+                goTo?.(4);
               }}
             />
             <SettingItem
               title="Privacy Policy"
-              marginTop={vs(0)}
+              marginTop={vs(15)}
               borderBottomWidth={0}
               isIconVisible
               icon={PPIcon}
               onClick={() => {
-                // goTo?.(1);
+                goTo?.(5);
               }}
             />
           </ScrollView>
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginLeft: hs(16),
-    marginTop: vs(24),
+    marginTop: vs(10),
   },
   card: {
     alignSelf: "center",

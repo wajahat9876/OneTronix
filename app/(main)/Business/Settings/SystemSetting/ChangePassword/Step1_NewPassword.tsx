@@ -150,7 +150,7 @@ const Step1_NewPassword = ({ parentGoto, back }: SettingProps) => {
               loading={isLoading}
               disabled={isLoading}
               btnTitle="Continue"
-              btnColor="black"
+              btnColor="#f41a2c"
               btnTitleColor="white"
               onClick={() => {
                 formik.submitForm();

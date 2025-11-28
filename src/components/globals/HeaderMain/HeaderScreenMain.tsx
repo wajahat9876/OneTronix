@@ -32,7 +32,7 @@ import {
   View,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import DropdownRNE from "../DropdownRNE";
+// import DropdownRNE from "../DropdownRNE";
 import PortalBottomSheet from "../PortalBottomSheet";
 import { PortalBottomSheetRef } from "../PortalBottomSheet/types";
 interface GlobalHeaderProps {
@@ -163,13 +163,15 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
         {/* LEFT: Dropdown */}
         <View style={{ width: "75%" }}>
           <View
-            style={{
-              marginTop: vs(10),
-              marginBottom: vs(-5),
-              paddingHorizontal: hs(10),
-            }}
+            style={
+              {
+                // marginTop: vs(10),
+                // marginBottom: vs(-5),
+                // paddingHorizontal: hs(10),
+              }
+            }
           >
-            <View style={{ flexDirection: "row", gap: 5 }}>
+            <View style={{ flexDirection: "row" }}>
               {isNotDefaultMode ? (
                 <InverterIconWhite width={20} height={20} />
               ) : (
@@ -187,7 +189,7 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
               </Text>
             </View>
           </View>
-          <DropdownRNE
+          {/* <DropdownRNE
             disabled={isDropdownDisabled}
             dropdownPosition="bottom"
             dropdownType="custom"
@@ -224,7 +226,7 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
             }}
             iconColor={isNotDefaultMode ? "white" : "#2f2f2e"}
             iconStyle={{ marginTop: vs(3), marginRight: hs(8) }}
-          />
+          /> */}
         </View>
 
         <TouchableOpacity

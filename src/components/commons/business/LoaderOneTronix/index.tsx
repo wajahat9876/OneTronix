@@ -1,5 +1,5 @@
 // src/components/Loader.tsx
-import React from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, Modal, StyleSheet, Text, View } from "react-native";
 
 type LoaderProps = {
@@ -8,6 +8,22 @@ type LoaderProps = {
 };
 
 export default function Loader({ visible, message }: LoaderProps) {
+  const [internalVisible, setInternalVisible] = useState(visible);
+
+  useEffect(() => {
+    setInternalVisible(visible); // sync with prop
+
+    if (!visible) return;
+
+    // auto hide after 20 seconds max
+    const timer = setTimeout(() => {
+      setInternalVisible(false);
+    }, 20000);
+
+    return () => clearTimeout(timer);
+  }, [visible]);
+
+  if (!internalVisible) return null;
   return (
     <Modal
       transparent
