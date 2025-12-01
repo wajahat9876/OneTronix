@@ -55,20 +55,31 @@ export interface IBusinessState {
       onLevel?: number;
     };
     inverter?: {
-      outputVoltLevel?: number;
       overLoad?: number;
+      outputVoltLevel?: number;
+      nominalFreq?: number;
+      powerFactor?: number;
+      syncMode?: string;
     };
     misc?: {
       buzzer?: boolean;
       lcdBacklight?: boolean;
+      softStart?: boolean;
     };
     solar?: {
       highVolts?: number;
       lowVolts?: number;
+      mpptTrackSpeed?: number;
     };
     utility?: {
       overVolts?: number;
       underVolts?: number;
+      antiIslanding?: boolean;
+      exportEnabled?: boolean;
+      maxExportPower?: number;
+      overFreq?: number;
+      phaseSync?: boolean;
+      underFreq?: number;
     };
     utilityControl?: {
       cutOffTime?: number;
@@ -135,7 +146,60 @@ const initialState: IBusinessState = {
     agentName: "",
     _id: "",
   },
-
+  lastSelectedDeviceData: {
+    battery: {
+      chargingAmp: 0,
+      floatToCutOff: 0,
+      floating: 0,
+      full: 0,
+      fullToFloat: 0,
+      low: 0,
+      typeOfBattery: "",
+    },
+    chargingSource: {
+      type: "",
+    },
+    heavyLoad: {
+      offTime: 0,
+      onTime: 0,
+      offLevel: 0,
+      onLevel: 0,
+    },
+    inverter: {
+      overLoad: 0,
+      outputVoltLevel: 0,
+      nominalFreq: 0,
+      powerFactor: 0,
+      syncMode: "",
+    },
+    misc: {
+      buzzer: false,
+      lcdBacklight: false,
+      softStart: false,
+    },
+    solar: {
+      highVolts: 0,
+      lowVolts: 0,
+      mpptTrackSpeed: 0,
+    },
+    utility: {
+      overVolts: 0,
+      underVolts: 0,
+      antiIslanding: false,
+      exportEnabled: false,
+      maxExportPower: 0,
+      overFreq: 0,
+      phaseSync: false,
+      underFreq: 0,
+    },
+    utilityControl: {
+      cutOffTime: 0,
+      enabled: false,
+      offLevel: 0,
+      onLevel: 0,
+    },
+  },
+  lastSelectedDeviceId: "",
   data: {
     isVerified: false,
     auth_token: "",

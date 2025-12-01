@@ -34,21 +34,17 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Animated from "react-native-reanimated";
 import * as Yup from "yup";
 const TABS = [
-  { key: "Battery", label: "Battery" },
-  { key: "Charging Source", label: "Charging Source" },
-  { key: "Heavy Load", label: "Heavy Load" },
   { key: "Inverter", label: "Inverter" },
   { key: "Misc", label: "Misc" },
   { key: "Solar", label: "Solar" },
   { key: "Utility", label: "Utility" },
-  { key: "Utility Control", label: "Utility Control" },
 ];
 
-const Step1_Setting = ({ back }: MultiStepFormProps) => {
-  const [selectedTab, setSelectedTab] = useState("Battery");
+const Step2_SettingOnGrid = ({ back, goTo }: MultiStepFormProps) => {
+  const [selectedTab, setSelectedTab] = useState("Inverter");
   const { lastSelectedDeviceData, lastSelectedDeviceId } =
     useAppSelector(useBusinessDetails);
-  console.log(lastSelectedDeviceData, "Hybrid");
+  console.log(lastSelectedDeviceData, "On Grid");
 
   const [changeSetting, { isLoading }] = useChangeInverterSettingMutation();
   // Misc
@@ -56,89 +52,62 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
   const [lcdBacklight, setlcdBacklight] = useState(
     lastSelectedDeviceData?.misc?.lcdBacklight
   );
-  //Utility Control
-  const [enable, setEnable] = useState(
-    lastSelectedDeviceData?.utilityControl?.enabled
+  const [softStart, setSoftStart] = useState(
+    lastSelectedDeviceData?.misc?.softStart
   );
-  const chargingAmpRef = useRef<TextInput>(null);
-  const floatToCutOffRef = useRef<TextInput>(null);
-  const floatingRef = useRef<TextInput>(null);
-  const fullRef = useRef<TextInput>(null);
-  const fullToFloatRef = useRef<TextInput>(null);
-  const lowRef = useRef<TextInput>(null);
-
-  // Heavy Load
-  const OffTimeRef = useRef<TextInput>(null);
-  const OnTimeRef = useRef<TextInput>(null);
-  const offLevelRef = useRef<TextInput>(null);
-  const onLevelRef = useRef<TextInput>(null);
 
   // Inverter
   const outputVoltLevelRef = useRef<TextInput>(null);
-  const overLoadRef = useRef<TextInput>(null);
+  const nominalFreqRef = useRef<TextInput>(null);
+  const powerFactorRef = useRef<TextInput>(null);
 
   // Solar
   const highVoltsRef = useRef<TextInput>(null);
   const lowVoltsRef = useRef<TextInput>(null);
+  const mpptTrackSpeedRef = useRef<TextInput>(null);
 
   // Utility
   const overVoltsRef = useRef<TextInput>(null);
   const underVoltsRef = useRef<TextInput>(null);
-
-  // Utility Control
-  const cutOffTimeRef = useRef<TextInput>(null);
-  const utilityControlOffLevelRef = useRef<TextInput>(null);
-  const utilityControlOnLevelRef = useRef<TextInput>(null);
+  const maxExportPowerRef = useRef<TextInput>(null);
+  const overFreqRef = useRef<TextInput>(null);
+  const underFreqRef = useRef<TextInput>(null);
+  const [antiIslanding, setAntiIsland] = useState(
+    lastSelectedDeviceData?.utility?.antiIslanding
+  );
+  const [exportEnabled, setExportEnabled] = useState(
+    lastSelectedDeviceData?.utility?.exportEnabled
+  );
+  const [phaseSync, setPhaseSync] = useState(
+    lastSelectedDeviceData?.utility?.phaseSync
+  );
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      // Battery Section
-      chargingAmp: String(lastSelectedDeviceData?.battery?.chargingAmp ?? ""),
-      floatToCutOff: String(
-        lastSelectedDeviceData?.battery?.floatToCutOff ?? ""
-      ),
-      floating: String(lastSelectedDeviceData?.battery?.floating ?? ""),
-      full: String(lastSelectedDeviceData?.battery?.full ?? ""),
-      fullToFloat: String(lastSelectedDeviceData?.battery?.fullToFloat ?? ""),
-      low: String(lastSelectedDeviceData?.battery?.low ?? ""),
-      typeOfBattery: String(
-        lastSelectedDeviceData?.battery?.typeOfBattery ?? ""
-      ),
-
-      // Charging Source
-      type: String(lastSelectedDeviceData?.chargingSource?.type ?? ""),
-
-      // Heavy Load
-      offTime: String(lastSelectedDeviceData?.heavyLoad?.offTime ?? ""),
-      onTime: String(lastSelectedDeviceData?.heavyLoad?.onTime ?? ""),
-      offLevel: String(lastSelectedDeviceData?.heavyLoad?.offLevel ?? ""),
-      onLevel: String(lastSelectedDeviceData?.heavyLoad?.onLevel ?? ""),
-
       // Inverter
       outputVoltLevel: String(
         lastSelectedDeviceData?.inverter?.outputVoltLevel ?? ""
       ),
-      overLoad: String(lastSelectedDeviceData?.inverter?.overLoad ?? ""),
+      nominalFreq: String(lastSelectedDeviceData?.inverter?.nominalFreq ?? ""),
+      powerFactor: String(lastSelectedDeviceData?.inverter?.powerFactor ?? ""),
+      syncMode: String(lastSelectedDeviceData?.inverter?.syncMode ?? ""),
 
       // Solar
       highVolts: String(lastSelectedDeviceData?.solar?.highVolts ?? ""),
       lowVolts: String(lastSelectedDeviceData?.solar?.lowVolts ?? ""),
+      mpptTrackSpeed: String(
+        lastSelectedDeviceData?.solar?.mpptTrackSpeed ?? ""
+      ),
 
       // Utility
       overVolts: String(lastSelectedDeviceData?.utility?.overVolts ?? ""),
       underVolts: String(lastSelectedDeviceData?.utility?.underVolts ?? ""),
-
-      // Utility Control
-      cutOffTime: String(
-        lastSelectedDeviceData?.utilityControl?.cutOffTime ?? ""
+      maxExportPower: String(
+        lastSelectedDeviceData?.utility?.maxExportPower ?? ""
       ),
-      utilityControlOffLevel: String(
-        lastSelectedDeviceData?.utilityControl?.offLevel ?? ""
-      ),
-      utilityControlOnLevel: String(
-        lastSelectedDeviceData?.utilityControl?.onLevel ?? ""
-      ),
+      overFreq: String(lastSelectedDeviceData?.utility?.overFreq ?? ""),
+      underFreq: String(lastSelectedDeviceData?.utility?.underFreq ?? ""),
     },
     validationSchema: Yup.object({
       //Battery Section
@@ -174,7 +143,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
       console.log("values", values);
       const numericValues = Object.fromEntries(
         Object.entries(values).map(([key, value]) => {
-          if (["typeOfBattery", "type"].includes(key)) {
+          if (["syncMode"].includes(key)) {
             return [key, value]; // keep as string
           }
           return [key, Number(value)];
@@ -184,45 +153,33 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
       const payload = {
         deviceId: lastSelectedDeviceId,
         settings: {
-          battery: {
-            low: numericValues.low,
-            full: numericValues.full,
-            floating: numericValues.floating,
-            chargingAmp: numericValues.chargingAmp,
-            typeOfBattery: numericValues.typeOfBattery,
-            fullToFloat: numericValues.fullToFloat,
-            floatToCutOff: numericValues.floatToCutOff,
-          },
           utility: {
             underVolts: numericValues.underVolts,
             overVolts: numericValues.overVolts,
+            maxExportPower: numericValues.maxExportPower,
+            overFreq: numericValues.overFreq,
+            underFreq: numericValues.underFreq,
+            phaseSync,
+            antiIslanding,
+            exportEnabled,
           },
-          utilityControl: {
-            enabled: enable, // from your state
-            onLevel: numericValues.onLevel,
-            offLevel: numericValues.offLevel,
-            cutOffTime: numericValues.cutOffTime,
-          },
-          chargingSource: {
-            type: numericValues.type,
-          },
+
           solar: {
             highVolts: numericValues.highVolts,
             lowVolts: numericValues.lowVolts,
+            mpptTrackSpeed: numericValues.mpptTrackSpeed,
           },
-          heavyLoad: {
-            onLevel: numericValues.onLevel,
-            offLevel: numericValues.offLevel,
-            onTime: numericValues.onTime,
-            offTime: numericValues.offTime,
-          },
+
           inverter: {
             outputVoltLevel: numericValues.outputVoltLevel,
-            overLoad: numericValues.overLoad,
+            nominalFreq: numericValues.nominalFreq,
+            powerFactor: numericValues.powerFactor,
+            syncMode: numericValues.syncMode,
           },
           misc: {
             buzzer,
             lcdBacklight,
+            softStart,
           },
         },
       };
@@ -240,247 +197,6 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
 
   const renderContent = () => {
     switch (selectedTab) {
-      case "Battery":
-        return (
-          <View style={styles.mainView}>
-            <View style={styles.txt}>
-              <FormikInput
-                formik={formik}
-                name="chargingAmp"
-                ref={chargingAmpRef}
-                inputProps={{
-                  ...textInputUnderlinedProps,
-                  keyboardType: "number-pad",
-                  placeholder: "Charging Amps",
-                  returnKeyType: "next",
-                  onSubmitEditing: () => {
-                    // if (streetRef?.current) {
-                    //   streetRef.current.focus();
-                    // }
-                  },
-                }}
-              />
-            </View>
-            <View style={styles.txt}>
-              <FormikInput
-                formik={formik}
-                name="floatToCutOff"
-                ref={floatToCutOffRef}
-                inputProps={{
-                  ...textInputUnderlinedProps,
-                  keyboardType: "number-pad",
-                  placeholder: "Float to cut off",
-                  returnKeyType: "next",
-                  onSubmitEditing: () => {
-                    // if (streetRef?.current) {
-                    //   streetRef.current.focus();
-                    // }
-                  },
-                }}
-              />
-            </View>
-            <View style={styles.txt}>
-              <FormikInput
-                formik={formik}
-                name="floating"
-                ref={floatingRef}
-                inputProps={{
-                  ...textInputUnderlinedProps,
-                  keyboardType: "number-pad",
-                  placeholder: "Floating",
-                  returnKeyType: "next",
-                  onSubmitEditing: () => {
-                    // if (streetRef?.current) {
-                    //   streetRef.current.focus();
-                    // }
-                  },
-                }}
-              />
-            </View>
-            <View style={styles.txt}>
-              <FormikInput
-                formik={formik}
-                name="full"
-                ref={fullRef}
-                inputProps={{
-                  ...textInputUnderlinedProps,
-                  keyboardType: "number-pad",
-                  placeholder: "Full",
-                  returnKeyType: "next",
-                  onSubmitEditing: () => {
-                    // if (streetRef?.current) {
-                    //   streetRef.current.focus();
-                    // }
-                  },
-                }}
-              />
-            </View>
-            <View style={styles.txt}>
-              <FormikInput
-                formik={formik}
-                name="fullToFloat"
-                ref={fullToFloatRef}
-                inputProps={{
-                  ...textInputUnderlinedProps,
-                  keyboardType: "number-pad",
-                  placeholder: "Full to float",
-                  returnKeyType: "next",
-                  onSubmitEditing: () => {
-                    // if (streetRef?.current) {
-                    //   streetRef.current.focus();
-                    // }
-                  },
-                }}
-              />
-            </View>
-            <View style={styles.txt}>
-              <FormikInput
-                formik={formik}
-                name="low"
-                ref={lowRef}
-                inputProps={{
-                  ...textInputUnderlinedProps,
-                  keyboardType: "number-pad",
-                  placeholder: "Low",
-                  returnKeyType: "next",
-                  onSubmitEditing: () => {
-                    // if (streetRef?.current) {
-                    //   streetRef.current.focus();
-                    // }
-                  },
-                }}
-              />
-            </View>
-            <View style={styles.txt}>
-              <FormikDropdownRNE
-                data={[
-                  {
-                    label: "Led Acid",
-                    value: "Led Acid",
-                  },
-                ]}
-                formik={formik}
-                selectedTextStyle={{ color: "black" }}
-                placeholderStyle={{ color: "black" }}
-                itemTextStyle={{ color: "black" }}
-                dropdownType="sm"
-                labelField="label"
-                valueField="value"
-                placeholder="Select Reason"
-                name="typeOfBattery"
-                value={formik?.values?.typeOfBattery}
-                dropdownPosition="bottom"
-                maxHeight={220}
-                style={{ padding: 15 }}
-              />
-            </View>
-          </View>
-        );
-      case "Charging Source":
-        return (
-          <View style={styles.mainView}>
-            <View style={styles.txt}>
-              <FormikDropdownRNE
-                data={[
-                  {
-                    label: "Utility + Solar",
-                    value: "Utility + Solar",
-                  },
-                ]}
-                formik={formik}
-                dropdownType="sm"
-                labelField="label"
-                valueField="value"
-                placeholder="Select Reason"
-                name="type"
-                selectedTextStyle={{ color: "black" }}
-                placeholderStyle={{ color: "black" }}
-                itemTextStyle={{ color: "black" }}
-                value={formik?.values?.type}
-                dropdownPosition="bottom"
-                maxHeight={220}
-                style={{ padding: 15 }}
-              />
-            </View>
-          </View>
-        );
-      case "Heavy Load":
-        return (
-          <View style={styles.mainView}>
-            <View style={styles.txt}>
-              <FormikInput
-                formik={formik}
-                name="offTime"
-                ref={OffTimeRef}
-                inputProps={{
-                  ...textInputUnderlinedProps,
-                  keyboardType: "number-pad",
-                  placeholder: "Off Time",
-                  returnKeyType: "next",
-                  onSubmitEditing: () => {
-                    // if (streetRef?.current) {
-                    //   streetRef.current.focus();
-                    // }
-                  },
-                }}
-              />
-            </View>
-            <View style={styles.txt}>
-              <FormikInput
-                formik={formik}
-                name="onTime"
-                ref={OnTimeRef}
-                inputProps={{
-                  ...textInputUnderlinedProps,
-                  keyboardType: "number-pad",
-                  placeholder: "On Time",
-                  returnKeyType: "next",
-                  onSubmitEditing: () => {
-                    // if (streetRef?.current) {
-                    //   streetRef.current.focus();
-                    // }
-                  },
-                }}
-              />
-            </View>
-            <View style={styles.txt}>
-              <FormikInput
-                formik={formik}
-                name="offLevel"
-                ref={offLevelRef}
-                inputProps={{
-                  ...textInputUnderlinedProps,
-                  keyboardType: "number-pad",
-                  placeholder: "Off Level",
-                  returnKeyType: "next",
-                  onSubmitEditing: () => {
-                    // if (streetRef?.current) {
-                    //   streetRef.current.focus();
-                    // }
-                  },
-                }}
-              />
-            </View>
-            <View style={styles.txt}>
-              <FormikInput
-                formik={formik}
-                name="onLevel"
-                ref={onLevelRef}
-                inputProps={{
-                  ...textInputUnderlinedProps,
-                  keyboardType: "number-pad",
-                  placeholder: "On Level",
-                  returnKeyType: "next",
-                  onSubmitEditing: () => {
-                    // if (streetRef?.current) {
-                    //   streetRef.current.focus();
-                    // }
-                  },
-                }}
-              />
-            </View>
-          </View>
-        );
       case "Inverter":
         return (
           <View style={styles.mainView}>
@@ -495,6 +211,42 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                   placeholder: "Output Volt Level",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
+                    if (nominalFreqRef?.current) {
+                      nominalFreqRef.current.focus();
+                    }
+                  },
+                }}
+              />
+            </View>
+            <View style={styles.txt}>
+              <FormikInput
+                formik={formik}
+                name="nominalFreq"
+                ref={nominalFreqRef}
+                inputProps={{
+                  ...textInputUnderlinedProps,
+                  keyboardType: "number-pad",
+                  placeholder: "Nominal Freq",
+                  returnKeyType: "next",
+                  onSubmitEditing: () => {
+                    if (powerFactorRef?.current) {
+                      powerFactorRef.current.focus();
+                    }
+                  },
+                }}
+              />
+            </View>
+            <View style={styles.txt}>
+              <FormikInput
+                formik={formik}
+                name="powerFactor"
+                ref={powerFactorRef}
+                inputProps={{
+                  ...textInputUnderlinedProps,
+                  keyboardType: "number-pad",
+                  placeholder: "Power Factor",
+                  returnKeyType: "next",
+                  onSubmitEditing: () => {
                     // if (streetRef?.current) {
                     //   streetRef.current.focus();
                     // }
@@ -503,21 +255,26 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
               />
             </View>
             <View style={styles.txt}>
-              <FormikInput
-                formik={formik}
-                name="overLoad"
-                ref={overLoadRef}
-                inputProps={{
-                  ...textInputUnderlinedProps,
-                  keyboardType: "number-pad",
-                  placeholder: "Over Load",
-                  returnKeyType: "next",
-                  onSubmitEditing: () => {
-                    // if (streetRef?.current) {
-                    //   streetRef.current.focus();
-                    // }
+              <FormikDropdownRNE
+                data={[
+                  {
+                    label: "PLL",
+                    value: "PLL",
                   },
-                }}
+                ]}
+                formik={formik}
+                selectedTextStyle={{ color: "black" }}
+                placeholderStyle={{ color: "black" }}
+                itemTextStyle={{ color: "black" }}
+                dropdownType="sm"
+                labelField="label"
+                valueField="value"
+                placeholder="Select"
+                name="syncMode"
+                value={formik?.values?.syncMode}
+                dropdownPosition="bottom"
+                maxHeight={220}
+                style={{ padding: 15 }}
               />
             </View>
           </View>
@@ -554,6 +311,21 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 value={lcdBacklight}
               />
             </View>
+            <View
+              style={{
+                marginTop: vs(20),
+                borderBottomColor:
+                  Colors.light.theme.textInputBottomBorderColor,
+                borderBottomWidth: 1.5,
+                paddingBottom: vs(10),
+              }}
+            >
+              <ToggleSwitch
+                label="Soft Start"
+                onValueChange={setSoftStart}
+                value={softStart}
+              />
+            </View>
           </View>
         );
       case "Solar":
@@ -586,6 +358,24 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
                   placeholder: "Low Volts",
+                  returnKeyType: "next",
+                  onSubmitEditing: () => {
+                    // if (streetRef?.current) {
+                    //   streetRef.current.focus();
+                    // }
+                  },
+                }}
+              />
+            </View>
+            <View style={styles.txt}>
+              <FormikInput
+                formik={formik}
+                name="mpptTrackSpeed"
+                ref={mpptTrackSpeedRef}
+                inputProps={{
+                  ...textInputUnderlinedProps,
+                  keyboardType: "number-pad",
+                  placeholder: "Mppt Track Speed",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -636,20 +426,15 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 }}
               />
             </View>
-          </View>
-        );
-      case "Utility Control":
-        return (
-          <View style={styles.mainView}>
             <View style={styles.txt}>
               <FormikInput
                 formik={formik}
-                name="cutOffTime"
-                ref={cutOffTimeRef}
+                name="maxExportPower"
+                ref={maxExportPowerRef}
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Cut off time",
+                  placeholder: "Max Export Power",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -662,12 +447,12 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
             <View style={styles.txt}>
               <FormikInput
                 formik={formik}
-                name="utilityControlOffLevel"
-                ref={utilityControlOffLevelRef}
+                name="overFreq"
+                ref={overFreqRef}
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Off Level",
+                  placeholder: "Over Freq",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -680,12 +465,12 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
             <View style={styles.txt}>
               <FormikInput
                 formik={formik}
-                name="utilityControlOnLevel"
-                ref={utilityControlOnLevelRef}
+                name="underFreq"
+                ref={underFreqRef}
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "On Level",
+                  placeholder: "Under Freq",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -696,29 +481,64 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
               />
             </View>
             <View
-              style={{
-                marginLeft: hs(10),
-                marginRight: hs(10),
-                marginTop: vs(20),
-                borderBottomColor:
-                  Colors.light.theme.textInputBottomBorderColor,
-                borderBottomWidth: 1.5,
-                paddingBottom: vs(10),
-              }}
+              style={[
+                styles.txt,
+                {
+                  borderBottomColor:
+                    Colors.light.theme.textInputBottomBorderColor,
+                  borderBottomWidth: 1.5,
+                  paddingBottom: vs(10),
+                },
+              ]}
             >
               <ToggleSwitch
-                label="Enable"
-                onValueChange={setEnable}
-                value={enable}
+                label="Anti Islanding"
+                onValueChange={setAntiIsland}
+                value={antiIslanding}
+              />
+            </View>
+            <View
+              style={[
+                styles.txt,
+                {
+                  borderBottomColor:
+                    Colors.light.theme.textInputBottomBorderColor,
+                  borderBottomWidth: 1.5,
+                  paddingBottom: vs(10),
+                },
+              ]}
+            >
+              <ToggleSwitch
+                label="Export Enabled"
+                onValueChange={setExportEnabled}
+                value={exportEnabled}
+              />
+            </View>
+            <View
+              style={[
+                styles.txt,
+                {
+                  borderBottomColor:
+                    Colors.light.theme.textInputBottomBorderColor,
+                  borderBottomWidth: 1.5,
+                  paddingBottom: vs(10),
+                },
+              ]}
+            >
+              <ToggleSwitch
+                label="Phase Sync"
+                onValueChange={setPhaseSync}
+                value={phaseSync}
               />
             </View>
           </View>
         );
+
       default:
         return null;
     }
   };
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
   const bottomSheetRef = useRef<PortalBottomSheetRef>(null);
   const openSheet = () => {
     bottomSheetRef.current?.open();
@@ -744,7 +564,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
           light: true,
           rightIcon: true,
         }}
-        back={() => back?.()}
+        back={() => goTo?.(0)}
       >
         {/* Everything inside same screen layout */}
         <View style={styles.innerContainer}>
@@ -866,7 +686,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
   );
 };
 
-export default Step1_Setting;
+export default Step2_SettingOnGrid;
 
 const styles = StyleSheet.create({
   container: {

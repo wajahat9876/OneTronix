@@ -188,7 +188,11 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
                               dispatch(setLastSelectedDeviceId(item?._id));
                               if (e?.value === "Setting") {
                                 setTimeout(() => {
-                                  goTo?.(1);
+                                  if (item?.type === "hybrid") {
+                                    goTo?.(1);
+                                  } else {
+                                    goTo?.(2);
+                                  }
                                 }, 500);
                               } else if (e?.value === "Edit") {
                               }
