@@ -64,7 +64,6 @@ const Step2_ResetPassword = ({ back, next, goTo }: MultiStepFormProps) => {
     }),
     onSubmit: (values) => {
       console.log(values?.password);
-
       handleverify(values);
     },
   });

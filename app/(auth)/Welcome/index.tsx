@@ -115,6 +115,7 @@ const Welcome = () => {
         bottomColor="transparent"
         darkStatus={false}
         disableAppBar
+        disableTopSafeArea
       >
         <>
           {showLoginUI && <Signin />}

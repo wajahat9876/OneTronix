@@ -29,7 +29,7 @@ const Step1_VerifyOtp = ({ back, next }: MultiStepFormProps) => {
     try {
       const verifySignInData = {
         otp: Number(enteredOtp),
-        otpType: "signin",
+        otpType: "forgetPasswordEmail",
       };
       const result = await verifyOtp(verifySignInData).unwrap();
       next?.();

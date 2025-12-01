@@ -76,7 +76,8 @@ const OTP = (props: any) => {
       secureTextEntry={secureTextEntry}
       selectionColor="white"
       codeInputFieldStyle={{
-        borderWidth: 0,
+        borderWidth: 1,
+        borderColor: "#f41a2c",
         borderRadius: ms(10),
         color: inputTextColor || Colors.light.theme.white,
         fontSize: ms(22),

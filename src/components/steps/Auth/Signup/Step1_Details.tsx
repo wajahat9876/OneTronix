@@ -248,7 +248,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
                   ...textInputDefaultProps,
                   placeholder: "Enter first name",
                   keyboardType: "ascii-capable",
-                  className: "mt-4",
+                  className: "mt-2",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     if (lastNameRef?.current) {
@@ -271,7 +271,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
 
                   placeholder: "Enter last name",
                   keyboardType: "ascii-capable",
-                  className: "mt-4",
+                  className: "mt-2",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     if (emailRef?.current) {
@@ -298,7 +298,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
                   autoComplete: "username",
                   placeholder: "Enter Email",
                   keyboardType: "email-address",
-                  className: "mt-4",
+                  className: "mt-2",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     if (passwordRef?.current) {

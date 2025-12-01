@@ -89,8 +89,8 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
           source={Logoicon}
           style={{
             position: "absolute",
-            width: 140,
-            height: 170,
+            width: 200,
+            height: 230,
             // marginTop: 20,
             alignSelf: "flex-end",
           }}
@@ -155,10 +155,10 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
           enableOnAndroid
-          extraScrollHeight={35}
+          extraScrollHeight={20}
           enableAutomaticScroll
           scrollEnabled
-          extraHeight={Platform.OS === "ios" ? getRespValue(320) : 80}
+          extraHeight={Platform.OS === "ios" ? getRespValue(320) : 40}
           viewIsInsideTabBar
           keyboardOpeningTime={0}
         >
@@ -169,7 +169,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
               borderRadius: 20,
               width: "95%",
               alignSelf: "center",
-              marginTop: vs(60),
+              marginTop: vs(10),
             }}
           >
             <Text
@@ -212,11 +212,12 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
               textContentType="username"
               inputProps={{
                 ...textInputDefaultProps,
+                height: 50,
                 textContentType: "username",
                 autoComplete: "username",
                 placeholder: "Enter Email",
                 keyboardType: "email-address",
-                className: "mt-4",
+                className: "mt-2",
                 returnKeyType: "next",
                 onSubmitEditing: () => {
                   if (passwordRef?.current) {
@@ -229,7 +230,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
               style={{
                 fontSize: ms(16),
                 alignSelf: "flex-start",
-                marginTop: vs(16),
+                marginTop: vs(8),
                 marginLeft: hs(10),
                 fontFamily: "Excon-Regular",
               }}
@@ -246,6 +247,8 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
               textContentType="password"
               inputProps={{
                 ...textInputDefaultProps,
+                height: 50,
+
                 textContentType: "password",
                 placeholder: "Enter Password",
                 className: "mt-2",
