@@ -98,52 +98,54 @@ const Step1_NewPassword = ({ parentGoto, back }: SettingProps) => {
             >
               Please enter your new password to proceed.
             </Text>
-            <FormikInput
-              formik={formik}
-              name="password"
-              ref={passwordRef}
-              autoComplete="password"
-              textContentType="password"
-              inputProps={{
-                width: "90%",
-                height: vs(80),
-                textColor: "black",
-                fontFamily: "Excon-Regular",
-                backgroundColor: "white",
-                cursorColor: "black",
-                selectionColor: "#D3D3D3",
-                placeholderTextColor: Colors.light.theme.placeholderColor,
-                textContentType: "password",
-                placeholder: "Enter Password",
-                className: "mt-10 ml-4",
-                returnKeyType: "done",
-                password: true,
-                autoComplete: "password",
-              }}
-            />
-            <FormikInput
-              formik={formik}
-              name="confirmPassword"
-              ref={passwordRef}
-              autoComplete="password"
-              textContentType="password"
-              inputProps={{
-                width: "90%",
-                height: vs(80),
-                textColor: "black",
-                fontFamily: "Excon-Regular",
-                backgroundColor: "white",
-                cursorColor: "black",
-                selectionColor: "#D3D3D3",
-                placeholderTextColor: Colors.light.theme.placeholderColor,
-                textContentType: "password",
-                placeholder: "Confirm Password",
-                className: "mt-2 ml-4",
-                returnKeyType: "done",
-                password: true,
-                autoComplete: "password",
-              }}
-            />
+            <View style={{ width: "90%" }}>
+              <FormikInput
+                formik={formik}
+                name="password"
+                ref={passwordRef}
+                autoComplete="password"
+                textContentType="password"
+                inputProps={{
+                  height: vs(80),
+                  textColor: "black",
+                  fontFamily: "Excon-Regular",
+                  backgroundColor: "white",
+                  cursorColor: "black",
+                  selectionColor: "#D3D3D3",
+                  placeholderTextColor: Colors.light.theme.placeholderColor,
+                  textContentType: "password",
+                  placeholder: "Enter Password",
+                  className: "mt-10 ml-4",
+                  returnKeyType: "done",
+                  password: true,
+                  autoComplete: "password",
+                }}
+              />
+            </View>
+            <View style={{ width: "90%" }}>
+              <FormikInput
+                formik={formik}
+                name="confirmPassword"
+                ref={passwordRef}
+                autoComplete="password"
+                textContentType="password"
+                inputProps={{
+                  height: vs(80),
+                  textColor: "black",
+                  fontFamily: "Excon-Regular",
+                  backgroundColor: "white",
+                  cursorColor: "black",
+                  selectionColor: "#D3D3D3",
+                  placeholderTextColor: Colors.light.theme.placeholderColor,
+                  textContentType: "password",
+                  placeholder: "Confirm Password",
+                  className: "mt-2 ml-4",
+                  returnKeyType: "done",
+                  password: true,
+                  autoComplete: "password",
+                }}
+              />
+            </View>
           </DismissKeyboardView>
           <View style={{ width: "80%", alignSelf: "center", marginBottom: 20 }}>
             <Button

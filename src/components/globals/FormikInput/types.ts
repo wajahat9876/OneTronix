@@ -1,5 +1,5 @@
-import { TextInputProps } from 'react-native';
-import { MyTextInputProps } from '../Input/types';
+import { TextInputProps } from "react-native";
+import { MyTextInputProps } from "../Input/types";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface MyFormikProps extends TextInputProps {
@@ -7,4 +7,5 @@ export interface MyFormikProps extends TextInputProps {
   name: string;
   value?: string;
   inputProps?: MyTextInputProps;
+  fontFamily?: string;
 }

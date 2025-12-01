@@ -19,7 +19,6 @@ import { useFormik } from "formik";
 import { useMemo, useRef, useState } from "react";
 import { Image, Platform, TextInput, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { SafeAreaView } from "react-native-safe-area-context";
 import * as Yup from "yup";
 
 const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
@@ -80,9 +79,6 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
   const [, setBottomSheetVisible] = useState(false);
   return (
     <>
-      <SafeAreaView
-        edges={Platform.OS === "android" ? ["top"] : ["top", "bottom"]}
-      />
       <View
         className="w-full justify-start flex-1"
         style={{
@@ -243,6 +239,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
             </Text>
             <FormikInput
               formik={formik}
+              fontFamily="Excon-Regular"
               name="password"
               ref={passwordRef}
               autoComplete="password"

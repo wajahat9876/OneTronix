@@ -12,7 +12,6 @@ import { useBusinessDetails } from "@/store/selectors/business/business";
 import alertIcon from "@assets/icons/alerts.png";
 import BellIcon from "@assets/icons/bellWhite.svg"; // your SVG bell icon
 import InverterIconblack from "@assets/icons/inverterIcon.svg";
-import InverterIconWhite from "@assets/icons/inverterIconWhite.svg";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
@@ -171,23 +170,43 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
               }
             }
           >
-            <View style={{ flexDirection: "row" }}>
-              {isNotDefaultMode ? (
-                <InverterIconWhite width={20} height={20} />
-              ) : (
+            {isNotDefaultMode ? (
+              <View>
+                <Text
+                  style={{
+                    fontFamily: "Excon-Light",
+                    fontSize: ms(14),
+                    color: "#e8eaec",
+                    marginBottom: vs(2),
+                  }}
+                >
+                  Menu
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "Ranade-Medium",
+                    fontSize: ms(14),
+                    color: "#e8eaec",
+                  }}
+                >
+                  Settings & Services
+                </Text>
+              </View>
+            ) : (
+              <View style={{ flexDirection: "row" }}>
                 <InverterIconblack width={20} height={20} />
-              )}
 
-              <Text
-                style={{
-                  fontFamily: "Ranade-Medium",
-                  color: isNotDefaultMode ? "white" : "black",
-                  fontSize: ms(14),
-                }}
-              >
-                Inverter
-              </Text>
-            </View>
+                <Text
+                  style={{
+                    fontFamily: "Ranade-Medium",
+                    color: "black",
+                    fontSize: ms(14),
+                  }}
+                >
+                  Inverter
+                </Text>
+              </View>
+            )}
           </View>
           {/* <DropdownRNE
             disabled={isDropdownDisabled}
@@ -238,7 +257,7 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
           <View
             style={{
               backgroundColor: "#dddee0",
-              opacity: isNotDefaultMode ? 1 : 0.7,
+              opacity: 0.7,
               padding: vs(12),
               borderRadius: 50,
             }}

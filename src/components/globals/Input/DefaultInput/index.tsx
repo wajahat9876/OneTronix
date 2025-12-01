@@ -29,6 +29,7 @@ const DefaultInput = React.forwardRef<TextInput, DefaultTextInputProps>(
       roundedRadius,
       height,
       width,
+      fontFamily,
       ...others
     } = props;
     const togglePasswordVisibility = () => {
@@ -46,7 +47,7 @@ const DefaultInput = React.forwardRef<TextInput, DefaultTextInputProps>(
           }}
           contentStyle={{
             paddingLeft: hs(16),
-            fontFamily: "Excon-Regular",
+            fontFamily: fontFamily || "Excon-Regular",
             fontSize: ms(14),
             ...(contentStyle as object),
           }}
@@ -60,7 +61,7 @@ const DefaultInput = React.forwardRef<TextInput, DefaultTextInputProps>(
             borderBottomColor: borderBottomColor || "transparent",
             borderBottomWidth: borderBottomHeight || 0,
             height: height || vs(60),
-            width: width || "100%",
+            fontFamily: fontFamily || "Excon-Regular",
             lineHeight,
             ...(style as object),
           }}

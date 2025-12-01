@@ -52,6 +52,7 @@ const UnderlinedInput = React.forwardRef<TextInput, UnderlinedTextInputProps>(
               style={{
                 color: "gray",
                 fontSize: ms(12),
+                fontFamily: "Excon-Medium",
               }}
             >
               {props.placeholder}

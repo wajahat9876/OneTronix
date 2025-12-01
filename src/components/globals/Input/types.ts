@@ -29,6 +29,7 @@ export interface DefaultTextInputProps extends TextInputProps {
   type?: "default" | "underlined";
   height?: number;
   width?: string;
+  fontFamily?: string;
 }
 
 export interface UnderlinedTextInputProps extends TextInputProps {
