@@ -49,92 +49,90 @@ const FilterModal: React.FC<FilterModalProps> = ({
   };
 
   return (
-    visible && (
-      <PortalBottomSheet
-        ref={ref}
-        snapPoints={["54%"]}
-        handleComponent={undefined}
-        enableContentPanningGesture
-        enableHandlePanningGesture
-        handleIndicatorStyle={{
-          backgroundColor: "black",
-        }}
-        backgroundStyle={{ backgroundColor: "#E4E5E8" }}
-        TouchComponent={() => <></>}
-        backdropComponent={(
-          props // Custom backdrop to handle press
-        ) => (
-          <BottomSheetBackdrop
-            {...props}
-            appearsOnIndex={0}
-            disappearsOnIndex={-1}
-            onPress={() => ref?.current?.close()}
-          />
-        )}
+    <PortalBottomSheet
+      ref={ref}
+      snapPoints={["54%"]}
+      handleComponent={undefined}
+      enableContentPanningGesture
+      enableHandlePanningGesture
+      handleIndicatorStyle={{
+        backgroundColor: "black",
+      }}
+      backgroundStyle={{ backgroundColor: "#E4E5E8" }}
+      TouchComponent={() => <></>}
+      backdropComponent={(
+        props // Custom backdrop to handle press
+      ) => (
+        <BottomSheetBackdrop
+          {...props}
+          appearsOnIndex={0}
+          disappearsOnIndex={-1}
+          onPress={() => ref?.current?.close()}
+        />
+      )}
+    >
+      <ScrollView
+        style={styles.modalBox}
+        keyboardShouldPersistTaps="handled"
+        nestedScrollEnabled={true} // ✅ crucial for Android
+        showsVerticalScrollIndicator={false}
       >
-        <ScrollView
-          style={styles.modalBox}
-          keyboardShouldPersistTaps="handled"
-          nestedScrollEnabled={true} // ✅ crucial for Android
-          showsVerticalScrollIndicator={false}
+        <Text style={styles.title}>Filters</Text>
+        <Text
+          style={{
+            alignSelf: "center",
+            fontSize: ms(10),
+            color: "gray",
+            fontFamily: "Excon-Regular",
+            width: "50%",
+            textAlign: "center",
+          }}
         >
-          <Text style={styles.title}>Filters</Text>
-          <Text
-            style={{
-              alignSelf: "center",
-              fontSize: ms(10),
-              color: "gray",
-              fontFamily: "Excon-Regular",
-              width: "50%",
-              textAlign: "center",
-            }}
+          Select the filter to view its information
+        </Text>
+
+        {options.map((item) => (
+          <TouchableOpacity
+            key={item}
+            style={styles.row}
+            onPress={() => toggleSelection(item)}
+            activeOpacity={0.8}
           >
-            Select the filter to view its information
-          </Text>
-
-          {options.map((item) => (
-            <TouchableOpacity
-              key={item}
-              style={styles.row}
-              onPress={() => toggleSelection(item)}
-              activeOpacity={0.8}
+            <Text
+              style={{
+                fontFamily: "Excon-Regular",
+                color: "black",
+              }}
             >
-              <Text
-                style={{
-                  fontFamily: "Excon-Regular",
-                  color: "black",
-                }}
-              >
-                {item}
-              </Text>
+              {item}
+            </Text>
 
-              {selected.includes(item) ? (
-                <GreenCiircle width={30} height={30} />
-              ) : (
-                <EmptyCiircle width={30} height={30} />
-              )}
-              {/* <Checkbox
+            {selected.includes(item) ? (
+              <GreenCiircle width={30} height={30} />
+            ) : (
+              <EmptyCiircle width={30} height={30} />
+            )}
+            {/* <Checkbox
                 status={selected.includes(item) ? "checked" : "unchecked"}
                 onPress={() => toggleSelection(item)}
                 color="white"
               /> */}
-            </TouchableOpacity>
-          ))}
-
-          <TouchableOpacity
-            style={styles.confirmBtn}
-            onPress={handleConfirm}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.confirmText}>Done</Text>
           </TouchableOpacity>
+        ))}
 
-          {/* <TouchableOpacity onPress={restoreDefault}>
+        <TouchableOpacity
+          style={styles.confirmBtn}
+          onPress={handleConfirm}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.confirmText}>Done</Text>
+        </TouchableOpacity>
+
+        {/* <TouchableOpacity onPress={restoreDefault}>
           <Text style={styles.restoreText}>Restore Default</Text>
         </TouchableOpacity> */}
-        </ScrollView>
-      </PortalBottomSheet>
-    )
+      </ScrollView>
+    </PortalBottomSheet>
   );
 };
 

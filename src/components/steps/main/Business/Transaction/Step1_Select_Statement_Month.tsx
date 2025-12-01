@@ -239,16 +239,25 @@ export default function PanZoomPage() {
     return data.results.map((item: any) => {
       const time = moment.utc(item.createdAtPK);
       const hour = time.hour() + time.minute() / 60;
-      return {
-        hour,
-        Purchase: item.data?.ac?.watt ?? 0,
-        Charging: item.data?.battery?.chargingWatt ?? 0,
-        Discharging: item.data?.battery?.dischargingWatt ?? 0,
-        Consumption: item.data?.output?.watt ?? 0,
-        Solar: item.data?.solar?.watt ?? 0,
-      };
+      const isHybrid = reduxData?.activeDevice?.type === "hybrid";
+      return isHybrid
+        ? {
+            hour,
+            Purchase: item.data?.ac?.watt ?? 0,
+            Charging: item.data?.battery?.chargingWatt ?? 0,
+            Discharging: item.data?.battery?.dischargingWatt ?? 0,
+            Consumption: item.data?.output?.watt ?? 0,
+            Solar: item.data?.solar?.watt ?? 0,
+          }
+        : {
+            hour,
+            Purchase: item.data?.ac?.watt ?? 0,
+            Consumption: item.data?.output?.watt ?? 0,
+            Solar: item.data?.solar?.watt ?? 0,
+            Export: item.data?.ac?.exportWatt ?? 0,
+          };
     });
-  }, [data?.results]);
+  }, [data?.results, reduxData?.activeDevice?.type]);
 
   const openFilterModel = () => {
     setModalVisible(true);
@@ -402,23 +411,52 @@ export default function PanZoomPage() {
                   }}
                   options={
                     selectedTab === 0
+                      ? reduxData?.activeDevice?.type === "hybrid"
+                        ? [
+                            "Solar",
+                            "Consumption",
+                            "Purchase",
+                            "Charging",
+                            "Discharging",
+                          ]
+                        : ["Solar", "Consumption", "Purchase", "Export"] // ⚡ non-hybrid
+                      : reduxData?.activeDevice?.type === "hybrid"
                       ? [
-                          "Solar",
-                          "Consumption",
-                          "Purchase",
-                          "Charging",
-                          "Discharging",
-                        ]
-                      : [
                           "Solar Production",
                           "Energy Consumed",
                           "Energy Purchased",
                           "Energy Charged",
                           "Energy Discharged",
                         ]
+                      : [
+                          "Solar Production",
+                          "Energy Consumed",
+                          "Energy Purchased",
+                          "Energy Export", // ⚡ non-hybrid
+                        ]
                   }
+                  // options={
+                  //   selectedTab === 0
+                  //     ? [
+                  //         "Solar",
+                  //         "Consumption",
+                  //         "Purchase",
+                  //         "Charging",
+                  //         "Discharging",
+                  //       ]
+                  //     : [
+                  //         "Solar Production",
+                  //         "Energy Consumed",
+                  //         "Energy Purchased",
+                  //         "Energy Charged",
+                  //         "Energy Discharged",
+                  //       ]
+                  // }
                   defaultSelected={modalDefaultSelected}
-                  onConfirm={(selected: any) => setSelectedParams(selected)}
+                  onConfirm={(selected: any) => {
+                    bottomSheetRef?.current?.close();
+                    setSelectedParams(selected);
+                  }}
                 />
               </View>
             </View>
@@ -593,7 +631,11 @@ export default function PanZoomPage() {
               icon2={HomeIcon}
               title="Grid Exchange"
               label1={"Energy Export"}
-              value1={Number(0).toFixed(1)}
+              value1={
+                reduxData?.activeDevice?.type === "hybrid"
+                  ? Number(0).toFixed(1)
+                  : Number(totalData?.results?.grid?.export || 0).toFixed(1)
+              }
               unit1={"kWh"}
               label2={"Energy Purchased"}
               value2={Number(totalData?.results?.grid?.purchase || 0).toFixed(

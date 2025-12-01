@@ -1,4 +1,4 @@
-import { ms, vs } from "@utils/design/design";
+import { hs, ms, vs } from "@utils/design/design";
 import React, { useMemo, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -17,6 +17,7 @@ interface PowerData {
   Discharging: number;
   Consumption: number;
   Solar: number;
+  Export?: number; // ✅ add this
 }
 
 interface PinchZoomLineChartProps {
@@ -39,12 +40,18 @@ export default function PinchZoomLineChart({
     Discharging: "#de9b14",
     Consumption: "#2f2f2f",
     Solar: "#27c840",
+    Export: "#d703fc", // ✅ add export color
   };
 
   const visibleKeys = selectedParams?.filter((key) =>
-    ["Purchase", "Charging", "Discharging", "Consumption", "Solar"].includes(
-      key
-    )
+    [
+      "Purchase",
+      "Charging",
+      "Discharging",
+      "Consumption",
+      "Solar",
+      "Export",
+    ].includes(key)
   );
 
   const baseKey = visibleKeys[0] ?? "ac";
@@ -166,7 +173,15 @@ export default function PinchZoomLineChart({
     Charging: "Charging Power",
     Discharging: "Discharging Power",
     Solar: "Solar Power",
+    Export: "Export Power",
   };
+  const verticalLabelFontSize = (() => {
+    const digits = Math.floor(globalMaxY).toString().length;
+    if (digits === 1) return ms(10); // 0-9
+    if (digits === 2) return ms(8.5); // 10-99
+    if (digits === 3) return ms(7.5); // 100-999
+    return ms(5); // 1000+
+  })();
   return (
     <GestureDetector gesture={composedGesture}>
       <View style={styles.container}>
@@ -256,7 +271,7 @@ export default function PinchZoomLineChart({
               ticks: { stroke: { color: "#ccc", width: 0.3 } },
               labels: {
                 label: {
-                  fontSize: ms(10),
+                  fontSize: verticalLabelFontSize,
                   fontFamily: "Ranade-Medium",
                 },
                 formatter: (v: number) =>
@@ -285,7 +300,10 @@ export default function PinchZoomLineChart({
           {visibleKeys.map((key, index) => (
             <React.Fragment key={`${key}-${index}`}>
               <Line
-                data={data.map((d) => ({ x: d.hour, y: d[key] }))}
+                data={data.map((d) => ({
+                  x: d.hour,
+                  y: Number(d[key]) || 0,
+                }))}
                 theme={{
                   stroke: { color: colors[key], width: 2 },
                 }}
@@ -306,7 +324,10 @@ export default function PinchZoomLineChart({
                 }}
               />
               <Area
-                data={data.map((d) => ({ x: d.hour, y: d[key] }))}
+                data={data.map((d) => ({
+                  x: d.hour,
+                  y: Number(d[key]) || 0,
+                }))}
                 theme={{
                   gradient: {
                     from: { color: colors[key], opacity: 0.3 },
@@ -335,10 +356,15 @@ export default function PinchZoomLineChart({
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, marginTop: 5 },
+  container: {
+    flex: 1,
+    marginTop: 5,
+    // backgroundColor: "red",
+    marginLeft: hs(2),
+  },
   title: {
     textAlign: "center",
-    fontSize: 16,
+    fontSize: ms(16),
     fontWeight: "600",
   },
   dotText: { flexDirection: "row", alignItems: "center", marginBottom: 4 },

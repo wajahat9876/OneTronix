@@ -26,6 +26,7 @@ type BarChartProps = {
     | "Energy Charged"
     | "Energy Discharged"
     | "Solar Production"
+    | "Energy Export"
   )[];
   selectTab: 1 | 2 | 3;
   selectedDate?: string;
@@ -39,7 +40,7 @@ export default function ZoomBarChart({
 }: BarChartProps) {
   const chartRef = useRef<any>(null);
   const chartInstanceRef = useRef<echarts.ECharts | null>(null);
-  const CHART_WIDTH = hs(395);
+  const CHART_WIDTH = hs(390);
   const height = vs(420);
   const [legendValues, setLegendValues] = useState<Record<string, number>>({});
   const [isChartReady, setIsChartReady] = useState(false);
@@ -67,6 +68,10 @@ export default function ZoomBarChart({
     "Solar Production": {
       line: "#27c840",
       area: ["#27c840", "#08CF03"],
+    },
+    "Energy Export": {
+      line: "#d703fc",
+      area: ["#d703fc", "#ef9afd"],
     },
   };
 
@@ -103,6 +108,8 @@ export default function ZoomBarChart({
               ? entry?.battery?.dailyDischarging ?? 0
               : param === "Solar Production"
               ? entry?.grid?.dailyPurchase ?? 0
+              : param === "Energy Export"
+              ? entry?.grid?.dailyExport ?? 0
               : 0;
           resultSeries[param].push(value);
         });
@@ -130,6 +137,8 @@ export default function ZoomBarChart({
               ? entry?.battery?.monthlyDischarging ?? 0
               : param === "Solar Production"
               ? entry?.grid?.monthlyPurchase ?? 0
+              : param === "Energy Export"
+              ? entry?.grid?.monthlyExport ?? 0
               : 0;
           resultSeries[param].push(value);
         });
@@ -184,6 +193,8 @@ export default function ZoomBarChart({
               ? entry?.battery?.yearlyDischarging ?? 0
               : param === "Solar Production"
               ? entry?.grid?.yearlyPurchase ?? 0
+              : param === "Energy Export"
+              ? entry?.grid?.yearlyExport ?? 0
               : 0;
           resultSeries[param].push(value);
         });
@@ -498,7 +509,14 @@ export default function ZoomBarChart({
     setLegendValues({});
   }, [selectTab]);
   return (
-    <View style={{ width: CHART_WIDTH, height, backgroundColor: "#fff" }}>
+    <View
+      style={{
+        width: CHART_WIDTH,
+        height,
+        backgroundColor: "#fff",
+        marginLeft: hs(5),
+      }}
+    >
       <View style={{ paddingHorizontal: 16, marginLeft: 10 }}>
         {selectedParams.map((param) => {
           const value = legendValues[param] ?? "--";
