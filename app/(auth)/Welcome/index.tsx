@@ -151,7 +151,7 @@ const Welcome = () => {
                       // fontWeight: "bold",
                       fontSize: ms(50),
                       lineHeight: 55,
-                      fontFamily: "Excon-Medium",
+                      fontFamily: "Excon-Black",
                     }}
                   >
                     ONE

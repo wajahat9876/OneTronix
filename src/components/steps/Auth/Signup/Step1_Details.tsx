@@ -144,10 +144,10 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
         <Text
           style={{
             color: "red",
-            fontWeight: "900",
+            // fontWeight: "900",
             fontSize: ms(40),
             lineHeight: 45,
-            fontFamily: "Excon-Regular",
+            fontFamily: "Excon-Black",
           }}
         >
           ONE
@@ -249,6 +249,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
                   placeholder: "Enter first name",
                   keyboardType: "ascii-capable",
                   className: "mt-2",
+                  fontFamily: "Excon-Regular",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     if (lastNameRef?.current) {
@@ -268,7 +269,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
                 ref={lastNameRef}
                 inputProps={{
                   ...textInputDefaultProps,
-
+                  fontFamily: "Excon-Regular",
                   placeholder: "Enter last name",
                   keyboardType: "ascii-capable",
                   className: "mt-2",
@@ -297,6 +298,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
                   textContentType: "username",
                   autoComplete: "username",
                   placeholder: "Enter Email",
+                  fontFamily: "Excon-Regular",
                   keyboardType: "email-address",
                   className: "mt-2",
                   returnKeyType: "next",
@@ -322,6 +324,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
                   ...textInputDefaultProps,
                   textContentType: "password",
                   placeholder: "Enter Password",
+                  fontFamily: "Excon-Regular",
                   className: "mt-2",
                   returnKeyType: "done",
                   password: true,
@@ -344,7 +347,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
                 ref={confirmPasswordRef}
                 inputProps={{
                   ...textInputDefaultProps,
-
+                  fontFamily: "Excon-Regular",
                   placeholder: "Re-enter Password",
                   className: "mt-2",
                   returnKeyType: "done",

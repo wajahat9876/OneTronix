@@ -117,7 +117,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
               // fontWeight: "900",
               fontSize: ms(40),
               lineHeight: 45,
-              fontFamily: "Excon-Medium",
+              fontFamily: "Excon-Black",
             }}
           >
             ONE
@@ -216,6 +216,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
                 textContentType: "username",
                 autoComplete: "username",
                 placeholder: "Enter Email",
+                fontFamily: "Excon-Regular",
                 keyboardType: "email-address",
                 className: "mt-2",
                 returnKeyType: "next",

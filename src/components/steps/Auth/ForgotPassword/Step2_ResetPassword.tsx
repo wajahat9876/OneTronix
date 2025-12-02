@@ -112,9 +112,8 @@ const Step2_ResetPassword = ({ back, next, goTo }: MultiStepFormProps) => {
           <Text
             style={{
               color: "red",
-              fontWeight: "900",
               fontSize: ms(44),
-              fontFamily: "Excon-Medium",
+              fontFamily: "Excon-Black",
               lineHeight: 45,
             }}
           >

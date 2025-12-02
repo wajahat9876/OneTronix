@@ -91,9 +91,8 @@ const Step0_VerifyEmail = ({ back, next }: MultiStepFormProps) => {
           <Text
             style={{
               color: "red",
-              fontWeight: "900",
               fontSize: ms(44),
-              fontFamily: "Excon-Medium",
+              fontFamily: "Excon-Black",
               lineHeight: 45,
             }}
           >

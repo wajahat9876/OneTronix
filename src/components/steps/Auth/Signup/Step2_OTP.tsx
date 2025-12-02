@@ -145,10 +145,9 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
         <Text
           style={{
             color: "red",
-            fontWeight: "900",
             fontSize: ms(40),
             lineHeight: 45,
-            fontFamily: "Excon-Regular",
+            fontFamily: "Excon-Black",
           }}
         >
           ONE

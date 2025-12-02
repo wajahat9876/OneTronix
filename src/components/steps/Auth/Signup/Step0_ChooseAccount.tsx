@@ -108,7 +108,7 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
               // fontWeight: "900",
               fontSize: ms(44),
               lineHeight: 45,
-              fontFamily: "Excon-Medium",
+              fontFamily: "Excon-Black",
             }}
           >
             ONE

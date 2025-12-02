@@ -99,9 +99,8 @@ const Step1_VerifyOtp = ({ back, next }: MultiStepFormProps) => {
         <Text
           style={{
             color: "red",
-            fontWeight: "900",
             fontSize: ms(44),
-            fontFamily: "Excon-Medium",
+            fontFamily: "Excon-Black",
             lineHeight: 45,
           }}
         >
