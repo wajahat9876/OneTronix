@@ -111,6 +111,7 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
               <SvgText
                 alignmentBaseline="middle"
                 fontSize={10}
+                fontFamily="Excon-Regular"
                 fontWeight="600"
                 fill={item?.color ?? "#333"}
                 textAnchor="start"
@@ -173,11 +174,12 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
               <Text
                 style={{
                   fontSize: ms(14),
-                  fontWeight: "bold",
                   textAlign: "center",
-                  fontFamily: "Excon-Regular",
+                  fontFamily: "Excon-Medium",
                   color: "black",
                 }}
+                numberOfLines={1}
+                adjustsFontSizeToFit
               >
                 {totalValue === 0 ? "No Data" : `${totalValue.toFixed(1)} kWh`}
               </Text>

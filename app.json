@@ -9,7 +9,7 @@
     "scheme": "template",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/icon.png",
+      "image": "./assets/eccLogo/logo.png",
       "resizeMode": "cover",
       "backgroundColor": "#000000"
     },
@@ -81,7 +81,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/icon.png",
+          "image": "./assets/eccLogo/logo.png",
           "resizeMode": "cover",
           "backgroundColor": "#000000"
         }
@@ -104,7 +104,7 @@
           "faceIDPermission": "Allow OneTronix to use Face ID for secure and easy authentication."
         }
       ],
-      "expo-asset",
+      "expo-asset"
  
     ],
     "extra": {

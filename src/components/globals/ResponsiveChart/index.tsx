@@ -177,7 +177,7 @@ export default function PinchZoomLineChart({
   };
   const verticalLabelFontSize = (() => {
     const digits = Math.floor(globalMaxY).toString().length;
-    if (digits === 1) return ms(10); // 0-9
+    if (digits === 1) return ms(9.5); // 0-9
     if (digits === 2) return ms(8.5); // 10-99
     if (digits === 3) return ms(7.5); // 100-999
     return ms(5); // 1000+
@@ -258,7 +258,7 @@ export default function PinchZoomLineChart({
             x: d.hour,
             y: d[baseKey] ?? 0,
           }))}
-          padding={{ left: 40, bottom: 20, right: 15, top: 20 }}
+          padding={{ left: 45, bottom: 20, right: 15, top: 20 }}
           xDomain={{ min: 0, max: xMax }}
           yDomain={{ min: 0, max: globalMaxY }}
           viewport={viewport}
@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 5,
     // backgroundColor: "red",
-    marginLeft: hs(2),
+    marginLeft: hs(3),
   },
   title: {
     textAlign: "center",

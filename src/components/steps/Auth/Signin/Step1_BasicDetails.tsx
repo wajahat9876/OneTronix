@@ -212,7 +212,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
               textContentType="username"
               inputProps={{
                 ...textInputDefaultProps,
-                height: 50,
+                height: 55,
                 textContentType: "username",
                 autoComplete: "username",
                 placeholder: "Enter Email",
@@ -247,8 +247,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
               textContentType="password"
               inputProps={{
                 ...textInputDefaultProps,
-                height: 50,
-
+                height: 55,
                 textContentType: "password",
                 placeholder: "Enter Password",
                 className: "mt-2",

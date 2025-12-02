@@ -338,7 +338,9 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
                   style={{ marginRight: hs(4) }}
                 />
               </TouchableOpacity>
-              <View style={{ flex: 1, alignItems: "center" }}>
+              <View
+                style={{ flex: 1, alignItems: "center", marginTop: vs(10) }}
+              >
                 <Text
                   style={{
                     fontFamily: "Excon-Medium",
