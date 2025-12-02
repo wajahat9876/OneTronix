@@ -251,7 +251,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Charging Amps",
+                  placeholder: "Charging Amps (A)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -269,7 +269,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Float to cut off",
+                  placeholder: "Float to cut off (h)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -287,7 +287,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Floating",
+                  placeholder: "Floating (V)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -305,7 +305,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Full",
+                  placeholder: "Full (V)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -323,7 +323,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Full to float",
+                  placeholder: "Full to float (h)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -341,7 +341,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Low",
+                  placeholder: "Low (V)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -357,6 +357,18 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                   {
                     label: "Led Acid",
                     value: "Led Acid",
+                  },
+                  {
+                    label: "Dry",
+                    value: "Dry",
+                  },
+                  {
+                    label: "Tubular",
+                    value: "Tubular",
+                  },
+                  {
+                    label: "Li Ion",
+                    value: "Li Ion",
                   },
                 ]}
                 formik={formik}
@@ -386,6 +398,14 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                     label: "Utility + Solar",
                     value: "Utility + Solar",
                   },
+                  {
+                    label: "Only Solar",
+                    value: "Only Solar",
+                  },
+                  {
+                    label: "Only Utility",
+                    value: "Only Utility",
+                  },
                 ]}
                 formik={formik}
                 dropdownType="sm"
@@ -410,30 +430,12 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
             <View style={styles.txt}>
               <FormikInput
                 formik={formik}
-                name="offTime"
-                ref={OffTimeRef}
+                name="onLevel"
+                ref={onLevelRef}
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Off Time",
-                  returnKeyType: "next",
-                  onSubmitEditing: () => {
-                    // if (streetRef?.current) {
-                    //   streetRef.current.focus();
-                    // }
-                  },
-                }}
-              />
-            </View>
-            <View style={styles.txt}>
-              <FormikInput
-                formik={formik}
-                name="onTime"
-                ref={OnTimeRef}
-                inputProps={{
-                  ...textInputUnderlinedProps,
-                  keyboardType: "number-pad",
-                  placeholder: "On Time",
+                  placeholder: "On Level (V)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -451,7 +453,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Off Level",
+                  placeholder: "Off Level (V)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -464,12 +466,30 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
             <View style={styles.txt}>
               <FormikInput
                 formik={formik}
-                name="onLevel"
-                ref={onLevelRef}
+                name="offTime"
+                ref={OffTimeRef}
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "On Level",
+                  placeholder: "Off Time (s)",
+                  returnKeyType: "next",
+                  onSubmitEditing: () => {
+                    // if (streetRef?.current) {
+                    //   streetRef.current.focus();
+                    // }
+                  },
+                }}
+              />
+            </View>
+            <View style={styles.txt}>
+              <FormikInput
+                formik={formik}
+                name="onTime"
+                ref={OnTimeRef}
+                inputProps={{
+                  ...textInputUnderlinedProps,
+                  keyboardType: "number-pad",
+                  placeholder: "On Time (s)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -492,7 +512,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Output Volt Level",
+                  placeholder: "Output Volt Level (V)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -510,7 +530,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Over Load",
+                  placeholder: "Over Load (A)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -567,7 +587,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "High Volts",
+                  placeholder: "High Volts (V)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -585,7 +605,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Low Volts",
+                  placeholder: "Low Volts (V)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -608,7 +628,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Over Volts",
+                  placeholder: "Over Volts (V)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -626,7 +646,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Under Volts",
+                  placeholder: "Under Volts (V)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -644,12 +664,12 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
             <View style={styles.txt}>
               <FormikInput
                 formik={formik}
-                name="cutOffTime"
-                ref={cutOffTimeRef}
+                name="utilityControlOnLevel"
+                ref={utilityControlOnLevelRef}
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Cut off time",
+                  placeholder: "On Level (V)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -667,7 +687,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Off Level",
+                  placeholder: "Off Level (V)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -680,12 +700,12 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
             <View style={styles.txt}>
               <FormikInput
                 formik={formik}
-                name="utilityControlOnLevel"
-                ref={utilityControlOnLevelRef}
+                name="cutOffTime"
+                ref={cutOffTimeRef}
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "On Level",
+                  placeholder: "Cut off time (min)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -695,6 +715,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                 }}
               />
             </View>
+
             <View
               style={{
                 marginLeft: hs(10),

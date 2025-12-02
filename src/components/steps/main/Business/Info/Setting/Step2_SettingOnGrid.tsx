@@ -208,7 +208,7 @@ const Step2_SettingOnGrid = ({ back, goTo }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Output Volt Level",
+                  placeholder: "Output Volt Level (V)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     if (nominalFreqRef?.current) {
@@ -226,7 +226,7 @@ const Step2_SettingOnGrid = ({ back, goTo }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Nominal Freq",
+                  placeholder: "Nominal Freq (Hz)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     if (powerFactorRef?.current) {
@@ -339,7 +339,7 @@ const Step2_SettingOnGrid = ({ back, goTo }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "High Volts",
+                  placeholder: "High Volts (V)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -357,7 +357,7 @@ const Step2_SettingOnGrid = ({ back, goTo }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Low Volts",
+                  placeholder: "Low Volts (V)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -398,7 +398,7 @@ const Step2_SettingOnGrid = ({ back, goTo }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Over Volts",
+                  placeholder: "Over Volts (V)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -416,7 +416,7 @@ const Step2_SettingOnGrid = ({ back, goTo }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Under Volts",
+                  placeholder: "Under Volts (V)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -434,7 +434,7 @@ const Step2_SettingOnGrid = ({ back, goTo }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Max Export Power",
+                  placeholder: "Max Export Power (W)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -452,7 +452,7 @@ const Step2_SettingOnGrid = ({ back, goTo }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Over Freq",
+                  placeholder: "Over Freq (Hz)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
@@ -470,7 +470,7 @@ const Step2_SettingOnGrid = ({ back, goTo }: MultiStepFormProps) => {
                 inputProps={{
                   ...textInputUnderlinedProps,
                   keyboardType: "number-pad",
-                  placeholder: "Under Freq",
+                  placeholder: "Under Freq (Hz)",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     // if (streetRef?.current) {
