@@ -226,7 +226,9 @@ const Step2ScanQr = React.memo((props: ScanQr) => {
             setScanned(false);
           }}
         >
-          <Text style={{ color: "white" }}>Cancel</Text>
+          <Text style={{ color: "white", fontFamily: "Excon-Regular" }}>
+            Cancel
+          </Text>
         </TouchableOpacity>
         {/* Close button for modal */}
       </View>

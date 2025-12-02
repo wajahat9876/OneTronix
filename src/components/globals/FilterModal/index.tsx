@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: "center",
     color: "black",
-    fontFamily: "Excon-Medium",
+    fontFamily: "Excon-medium",
   },
   row: {
     flexDirection: "row",

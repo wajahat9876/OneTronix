@@ -175,7 +175,7 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
                   fontSize: ms(14),
                   fontWeight: "bold",
                   textAlign: "center",
-                  fontFamily: "Excon-Medium",
+                  fontFamily: "Excon-Regular",
                   color: "black",
                 }}
               >
@@ -242,7 +242,7 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
                     color: "#666",
                     marginTop: 3,
                     marginLeft: 20,
-                    fontFamily: "Excon-Medium",
+                    fontFamily: "Excon-Regular",
                   }}
                 >
                   {value} kWh
@@ -250,7 +250,13 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
               </View>
             ))
           ) : (
-            <Text style={{ fontSize: 12, color: "#666" }}>
+            <Text
+              style={{
+                fontSize: 12,
+                color: "#666",
+                fontFamily: "Excon-Medium",
+              }}
+            >
               No breakdown available
             </Text>
           )}

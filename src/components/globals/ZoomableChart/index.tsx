@@ -7,7 +7,7 @@ import {
   TooltipComponent,
 } from "echarts/components";
 import * as echarts from "echarts/core";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Dimensions, StatusBar, StyleSheet, Text, View } from "react-native";
 
 echarts.use([

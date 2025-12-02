@@ -16,8 +16,8 @@ import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
 import { getRespValue } from "@utils/getRespValue";
 import { Camera, CameraView } from "expo-camera";
 import React, { useRef, useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+
 import "react-native-reanimated";
 
 interface ScanQr {
@@ -256,7 +256,9 @@ const AddDeviceQr = React.memo((props: ScanQr) => {
             setScanned(false);
           }}
         >
-          <Text style={{ color: "white" }}>Cancel</Text>
+          <Text style={{ color: "white", fontFamily: "Excon-Regular" }}>
+            Cancel
+          </Text>
         </TouchableOpacity>
         {/* Close button for modal */}
       </View>
