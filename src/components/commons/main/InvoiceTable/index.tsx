@@ -1,10 +1,10 @@
 /* eslint-disable import/order */
-import Colors from '@src/constants/Colors';
-import useFormatDate from '@src/hooks/useFormatDate';
-import { hs, ms, vs } from '@utils/design/design';
-import { getRespValue } from '@utils/getRespValue';
-import React from 'react';
-import { FlatList, Platform, StyleSheet, Text, View } from 'react-native';
+import Colors from "@src/constants/Colors";
+import useFormatDate from "@src/hooks/useFormatDate";
+import { hs, ms, vs } from "@utils/design/design";
+import { getRespValue } from "@utils/getRespValue";
+import React from "react";
+import { FlatList, Platform, StyleSheet, Text, View } from "react-native";
 
 const InvoiceTable: React.FC<any> = ({ data }) => {
   const { formatDate } = useFormatDate();
@@ -37,7 +37,7 @@ const InvoiceTable: React.FC<any> = ({ data }) => {
                 styles.cell,
                 styles.dataText,
                 {
-                  color: item.status === 'Success' ? 'green' : 'red',
+                  color: item.status === "Success" ? "green" : "red",
                   marginRight: hs(-8),
                 },
               ]}
@@ -55,43 +55,41 @@ const InvoiceTable: React.FC<any> = ({ data }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: getRespValue(20),
     marginBottom: vs(20),
     marginTop: vs(8),
-    shadowColor: '#000',
-    width: '98%',
-    alignSelf: 'center',
+    shadowColor: "#000",
+    width: "98%",
+    alignSelf: "center",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
-    elevation: Platform.OS === 'ios' ? 2 : 4,
+    elevation: Platform.OS === "ios" ? 2 : 4,
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: vs(10),
     padding: ms(8),
     borderRadius: 8,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   headerRow: {
     backgroundColor: Colors.light.theme.eccRedColor,
   },
   cell: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   headerText: {
-    color: 'white',
-    fontWeight: '600',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
   },
   dataText: {
-    color: '#000',
-    fontWeight: '500',
-    alignSelf: 'center',
-    textAlign: 'center',
+    color: "#000",
+    alignSelf: "center",
+    textAlign: "center",
     fontSize: ms(10),
   },
 });

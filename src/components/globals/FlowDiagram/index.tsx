@@ -4,7 +4,7 @@ import GridIcon from "@assets/HomeIcons/gridIcon.png";
 import HomeIcon from "@assets/HomeIcons/homeIcon.png";
 import InverterIcon from "@assets/HomeIcons/inverterIcon.png";
 import { ms } from "@utils/design/design";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Animated, Image, StyleSheet, Text, View } from "react-native";
 import Svg, { Defs, Marker, Path } from "react-native-svg";
 // Animated Path
@@ -431,7 +431,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     fontSize: ms(11),
     width: 80,
-    fontWeight: "600",
     textAlign: "center",
     fontFamily: "Excon-Medium",
   },

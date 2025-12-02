@@ -26,9 +26,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontWeight: "500",
     color: "#000",
-
     fontFamily: "Excon-Medium",
   },
   value: {

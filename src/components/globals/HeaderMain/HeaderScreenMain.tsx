@@ -284,7 +284,7 @@ const GlobalHeaderMain = (props: GlobalHeaderProps) => {
                 style={{
                   color: "white",
                   fontSize: 10,
-                  fontWeight: "bold",
+                  fontFamily: "Excon-Medium",
                 }}
               >
                 {data?.notificationCount}

@@ -11,7 +11,6 @@ import Colors from "@src/constants/Colors";
 import useCapitalizeFirstWord from "@src/hooks/useCapitalizeFirst";
 import { MultiStepFormProps } from "@src/hooks/useMultiStepForm";
 import { hs, ms, vs } from "@utils/design/design";
-import { getRespValue } from "@utils/getRespValue";
 import { Image, Platform, StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { useSelector } from "react-redux";
@@ -101,14 +100,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginLeft: hs(20),
-  },
-  txt: {
-    fontSize: getRespValue(18),
-    fontWeight: "400",
-  },
-  subTitle: {
-    fontSize: getRespValue(18),
-    fontWeight: "600",
   },
   card: {
     alignSelf: "center",

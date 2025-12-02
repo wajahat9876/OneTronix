@@ -1,7 +1,7 @@
-import Colors from '@src/constants/Colors';
-import useCurrencyFlag from '@src/hooks/useCurrencyFlag';
-import { ms, vs } from '@utils/design/design';
-import React from 'react';
+import Colors from "@src/constants/Colors";
+import useCurrencyFlag from "@src/hooks/useCurrencyFlag";
+import { ms, vs } from "@utils/design/design";
+import React from "react";
 import {
   FlatList,
   Image,
@@ -9,7 +9,7 @@ import {
   StyleSheet,
   Text,
   View,
-} from 'react-native';
+} from "react-native";
 
 // Define the data type
 export type TableRow = {
@@ -75,22 +75,22 @@ const TableCard: React.FC<Props> = ({ data }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: ms(10),
     borderRadius: 10,
     marginVertical: vs(8),
-    shadowColor: '#000',
-    width: '90%',
-    alignSelf: 'center',
+    shadowColor: "#000",
+    width: "90%",
+    alignSelf: "center",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
-    elevation: Platform.OS === 'ios' ? 2 : 0,
+    elevation: Platform.OS === "ios" ? 2 : 0,
   },
   flagContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     gap: ms(5),
   },
 
@@ -100,27 +100,25 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: vs(10),
     padding: ms(8),
     borderRadius: 8,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   headerRow: {
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
   },
   cell: {
     flex: 1,
     fontSize: ms(12),
-    textAlign: 'center',
+    textAlign: "center",
   },
   headerText: {
     color: Colors.light.theme.eccRedColor,
-    fontWeight: '600',
   },
   dataText: {
-    color: '#000',
-    fontWeight: '400',
+    color: "#000",
   },
 });
 

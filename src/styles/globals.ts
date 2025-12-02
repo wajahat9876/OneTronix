@@ -64,7 +64,7 @@ export const globalStyle = StyleSheet.create({
   },
   textRegular: {
     fontSize: 14,
-    fontFamily: "poppins",
+    fontFamily: "Excon-Regular",
   },
   textRegularSmall: { fontSize: ms(12), fontFamily: "poppins" },
   textSemibold: {

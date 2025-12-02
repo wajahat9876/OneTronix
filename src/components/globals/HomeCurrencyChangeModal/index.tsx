@@ -1,10 +1,10 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Blacktick from '@assets/images/blackTick.png';
-import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
-import Colors from '@src/constants/Colors';
-import useCurrencyFlag from '@src/hooks/useCurrencyFlag';
-import React, { forwardRef } from 'react';
+import Blacktick from "@assets/images/blackTick.png";
+import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import Colors from "@src/constants/Colors";
+import useCurrencyFlag from "@src/hooks/useCurrencyFlag";
+import { forwardRef } from "react";
 import {
   FlatList,
   Image,
@@ -13,9 +13,9 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import ScreenAuth from '../ScreenAuth';
+} from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import ScreenAuth from "../ScreenAuth";
 
 interface Homeee {
   data: any;
@@ -41,14 +41,14 @@ const HomeCurrencyChangeModal = forwardRef(
 
     return (
       <BottomSheet
-        handleIndicatorStyle={{ backgroundColor: 'white' }}
+        handleIndicatorStyle={{ backgroundColor: "white" }}
         backgroundStyle={styles.bottomSheet}
         ref={bottomSheetRef}
         index={-1}
         snapPoints={snapPoints}
         enablePanDownToClose
         backdropComponent={(
-          props, // Custom backdrop to handle press
+          props // Custom backdrop to handle press
         ) => (
           <BottomSheetBackdrop
             {...props}
@@ -61,7 +61,7 @@ const HomeCurrencyChangeModal = forwardRef(
         <ScreenAuth
           title="Create Currency"
           style={{
-            backgroundColor: 'transparent',
+            backgroundColor: "transparent",
           }}
           topColor="transparent"
           disableTopSafeArea
@@ -93,11 +93,11 @@ const HomeCurrencyChangeModal = forwardRef(
                 >
                   <View
                     style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
+                      flexDirection: "row",
+                      justifyContent: "space-between",
                     }}
                   >
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flexDirection: "row" }}>
                       {item.currencyCode && (
                         <Image
                           source={getFlagImage(item.currencyCode)}
@@ -105,7 +105,7 @@ const HomeCurrencyChangeModal = forwardRef(
                         />
                       )}
                       <Text
-                        style={{ fontSize: 16, marginLeft: 5, color: 'black' }}
+                        style={{ fontSize: 16, marginLeft: 5, color: "black" }}
                       >
                         {item.currencyCode}
                       </Text>
@@ -125,51 +125,50 @@ const HomeCurrencyChangeModal = forwardRef(
         </ScreenAuth>
       </BottomSheet>
     );
-  },
+  }
 );
 
 // Export the component as default
 export default HomeCurrencyChangeModal;
 const styles = StyleSheet.create({
   Card: {
-    alignSelf: 'center',
-    backgroundColor: 'white',
+    alignSelf: "center",
+    backgroundColor: "white",
     borderRadius: 15,
-    width: '90%',
+    width: "90%",
     padding: 15,
-    shadowColor: 'black',
+    shadowColor: "black",
     shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
-    elevation: Platform.OS === 'ios' ? 2 : 0,
+    elevation: Platform.OS === "ios" ? 2 : 0,
     marginBottom: 20,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   createTxt: {
     padding: 5,
     fontSize: 14,
-    fontWeight: '600',
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   Create: {
-    alignSelf: 'center',
-    backgroundColor: 'white',
+    alignSelf: "center",
+    backgroundColor: "white",
     borderRadius: 15,
-    width: '80%',
+    width: "80%",
     padding: 10,
-    shadowColor: 'black',
+    shadowColor: "black",
     shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
-    elevation: Platform.OS === 'ios' ? 2 : 0,
+    elevation: Platform.OS === "ios" ? 2 : 0,
     marginBottom: 20,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   bottomSheet: {
-    borderCurve: 'circular',
+    borderCurve: "circular",
     borderRadius: 40,
     borderWidth: 5,
-    borderColor: '#f9f9f9',
+    borderColor: "#f9f9f9",
     backgroundColor: Colors.light.theme.backgroundTopCurveSection,
   },
 });

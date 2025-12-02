@@ -65,7 +65,7 @@ const DefaultInput = React.forwardRef<TextInput, DefaultTextInputProps>(
             lineHeight,
             ...(style as object),
           }}
-          className={`w-full rounded-${roundedRadius} text-xl ${
+          className={`w-full rounded-${roundedRadius}  ${
             last ? "border-b-2" : ""
           } ${className}`}
           secureTextEntry={password ? !isPasswordVisible : false}
@@ -81,6 +81,13 @@ const DefaultInput = React.forwardRef<TextInput, DefaultTextInputProps>(
               />
             )
           }
+          theme={{
+            fonts: {
+              regular: {
+                fontFamily: "Excon-Regular",
+              },
+            },
+          }}
         />
         <AnimatePresence>
           {errorText && (

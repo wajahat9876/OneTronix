@@ -139,7 +139,7 @@ const RectangularChart: React.FC<Props> = ({
                         fontSize={Math.max(8, Math.min(10, rectHeight * 0.4))}
                         fill={item.textColor}
                         textAnchor="middle" // center everything
-                        fontWeight="bold"
+                        // fontWeight="bold"
                       >
                         {item.value.toFixed(1)}
                       </SvgText>
@@ -153,7 +153,7 @@ const RectangularChart: React.FC<Props> = ({
                         fontSize={Math.max(7, Math.min(9, rectHeight * 0.35))}
                         fill={item.textColor}
                         textAnchor="middle"
-                        fontWeight="bold"
+                        // fontWeight="bold"
                       >
                         %
                       </SvgText>
@@ -230,7 +230,7 @@ const RectangularChart: React.FC<Props> = ({
                       style={{
                         fontSize: 9,
                         color: "black",
-                        fontWeight: "600",
+                        // fontWeight: "600",
                         marginBottom: 2,
                         fontFamily: "Ranade-Medium",
                       }}
@@ -241,7 +241,7 @@ const RectangularChart: React.FC<Props> = ({
                       style={{
                         fontSize: 9,
                         color: "#818283",
-                        fontWeight: "600",
+                        // fontWeight: "600",
                         fontFamily: "Excon-medium",
                       }}
                     >
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
   txtProduction: {
     fontSize: 13,
     fontFamily: "Excon-Regular",
-    fontWeight: "600",
+    // fontWeight: "600",
     color: "#111",
     marginBottom: 8,
     // alignSelf: "center",s

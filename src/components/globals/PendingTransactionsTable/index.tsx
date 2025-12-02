@@ -1,10 +1,10 @@
-import useformatdata from '@hooks/useFormatDate';
-import Colors from '@src/constants/Colors';
-import useCapitalizeFirstWord from '@src/hooks/useCapitalizeFirst';
-import useCurrencyFlag from '@src/hooks/useCurrencyFlag';
-import { ms, vs } from '@utils/design/design';
-import { getRespValue } from '@utils/getRespValue';
-import React from 'react';
+import useformatdata from "@hooks/useFormatDate";
+import Colors from "@src/constants/Colors";
+import useCapitalizeFirstWord from "@src/hooks/useCapitalizeFirst";
+import useCurrencyFlag from "@src/hooks/useCurrencyFlag";
+import { ms, vs } from "@utils/design/design";
+import { getRespValue } from "@utils/getRespValue";
+import React from "react";
 import {
   FlatList,
   Image,
@@ -12,7 +12,7 @@ import {
   StyleSheet,
   Text,
   View,
-} from 'react-native';
+} from "react-native";
 
 const PendingTransactionsTable: React.FC<{
   data: any[];
@@ -28,7 +28,7 @@ const PendingTransactionsTable: React.FC<{
         data={data}
         ListHeaderComponent={() => (
           <View style={[styles.row, styles.headerRow]}>
-            {headers.map(header => (
+            {headers.map((header) => (
               <Text key={header.key} style={[styles.cell, styles.headerText]}>
                 {header.label}
               </Text>
@@ -44,10 +44,10 @@ const PendingTransactionsTable: React.FC<{
         contentContainerStyle={{ paddingBottom: vs(90) }}
         renderItem={({ item }) => (
           <View style={styles.row}>
-            {headers.map(header => {
+            {headers.map((header) => {
               const value = item[header.key];
 
-              if (['buyCurrency', 'sellCurrency'].includes(header.key)) {
+              if (["buyCurrency", "sellCurrency"].includes(header.key)) {
                 return (
                   <View
                     key={header.key}
@@ -63,24 +63,24 @@ const PendingTransactionsTable: React.FC<{
                 );
               }
 
-              if (header.key === 'status') {
+              if (header.key === "status") {
                 return (
                   <View key={header.key} style={styles.cell}>
                     <Text
                       style={[
                         styles.dataText,
-                        { color: value === 'pending' ? 'red' : 'green' },
+                        { color: value === "pending" ? "red" : "green" },
                       ]}
                     >
-                      {capitalizeFirstWord(value?.toString() || '')}
+                      {capitalizeFirstWord(value?.toString() || "")}
                     </Text>
                   </View>
                 );
               }
 
-              if (header.key === 'sellAmount' || header.key === 'buyAmount') {
+              if (header.key === "sellAmount" || header.key === "buyAmount") {
                 const currency =
-                  header.key === 'sellAmount'
+                  header.key === "sellAmount"
                     ? item.sellCurrency
                     : item.buyCurrency;
                 return (
@@ -93,7 +93,7 @@ const PendingTransactionsTable: React.FC<{
                 );
               }
 
-              if (header.key === 'updatedAt') {
+              if (header.key === "updatedAt") {
                 return (
                   <Text key={header.key} style={[styles.cell, styles.dateText]}>
                     {formatDate(value)}, {formatTime(value)}
@@ -103,7 +103,7 @@ const PendingTransactionsTable: React.FC<{
 
               return (
                 <Text key={header.key} style={[styles.cell, styles.dataText]}>
-                  {value ?? '-'}
+                  {value ?? "-"}
                 </Text>
               );
             })}
@@ -117,25 +117,25 @@ const PendingTransactionsTable: React.FC<{
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: getRespValue(10),
     marginBottom: vs(20),
     marginTop: vs(8),
-    width: '90%',
-    alignSelf: 'center',
-    shadowColor: '#000',
+    width: "90%",
+    alignSelf: "center",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
-    elevation: Platform.OS === 'ios' ? 2 : 0,
+    elevation: Platform.OS === "ios" ? 2 : 0,
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: vs(8),
     paddingHorizontal: ms(4),
     paddingVertical: ms(6),
     borderRadius: 6,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   headerRow: {
     backgroundColor: Colors.light.theme.eccRedColor,
@@ -143,28 +143,27 @@ const styles = StyleSheet.create({
   cell: {
     flex: 1,
     paddingHorizontal: ms(4),
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   headerText: {
-    color: '#fff',
-    fontWeight: '500',
+    color: "#fff",
     fontSize: ms(10),
-    textAlign: 'center',
+    textAlign: "center",
   },
   dataText: {
-    color: '#000',
+    color: "#000",
     fontSize: ms(10),
-    textAlign: 'center',
+    textAlign: "center",
   },
   dateText: {
-    color: '#000',
+    color: "#000",
     fontSize: ms(9),
-    textAlign: 'center',
+    textAlign: "center",
   },
   flagContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   flag: {
     width: 20,
@@ -173,15 +172,14 @@ const styles = StyleSheet.create({
   },
   emptyContainer: {
     paddingVertical: vs(20),
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
   },
   emptyText: {
-    color: '#999',
+    color: "#999",
     fontSize: ms(14),
-    fontWeight: '500',
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
 

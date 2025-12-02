@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   Animated,
   PanResponder,
@@ -104,7 +104,6 @@ const styles = StyleSheet.create({
   valueText: {
     marginTop: 10,
     fontSize: 14,
-    fontWeight: "500",
   },
   buttons: {
     flexDirection: "row",
@@ -113,6 +112,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 20,
-    fontWeight: "bold",
+    color: "#0770FF",
+    fontFamily: "Excon-Medium",
   },
 });

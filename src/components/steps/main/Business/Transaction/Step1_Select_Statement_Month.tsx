@@ -770,20 +770,20 @@ export default function PanZoomPage() {
               <DetailRow
                 label="Inverter"
                 value={inverterData?.inverterData?.data?.temperature?.inverter}
-                unit={"℃"}
+                unit={"°C"}
               />
               {reduxData?.activeDevice?.type === "hybrid" && (
                 <DetailRow
                   label="Booster"
                   value={inverterData?.inverterData?.data?.temperature?.booster}
-                  unit={"℃"}
+                  unit={"°C"}
                 />
               )}
 
               <DetailRow
                 label="MPPT"
                 value={inverterData?.inverterData?.data?.temperature?.mppt}
-                unit={"℃"}
+                unit={"°C"}
               />
             </View>
           </View>
@@ -838,7 +838,6 @@ const styles = StyleSheet.create({
   txtProduction: {
     fontSize: ms(14),
     fontFamily: "Excon-Medium",
-    fontWeight: "600",
     color: "black",
     marginBottom: 8,
     // alignSelf: "center",s
@@ -847,7 +846,6 @@ const styles = StyleSheet.create({
     fontFamily: "Excon-medium",
     paddingHorizontal: 12,
     fontSize: ms(13),
-    fontWeight: "600",
     color: "#111",
     marginBottom: 8,
   },
@@ -873,6 +871,6 @@ const styles = StyleSheet.create({
     elevation: Platform.OS === "ios" ? 0.5 : 0.5,
     marginBottom: 10,
   },
-  txtStyle: { fontSize: ms(10), fontWeight: "600", paddingVertical: 8 },
+  txtStyle: { fontSize: ms(10), paddingVertical: 8 },
   labelStyles: { fontSize: ms(11), fontFamily: "Excon-Regular" },
 });

@@ -10,7 +10,7 @@ import { PortalBottomSheetRef } from "@src/components/globals/PortalBottomSheet/
 import ScreenAuth from "@src/components/globals/ScreenAuth";
 import Colors from "@src/constants/Colors";
 import { useRouter } from "expo-router";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Platform, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {
@@ -247,7 +247,6 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 18,
-    fontWeight: "bold",
     textAlign: "center",
     marginVertical: 20,
     color: "#2c3e50",
@@ -271,7 +270,6 @@ const styles = StyleSheet.create({
   activeText: {
     fontSize: 12,
     color: "#3366cc",
-    fontWeight: "bold",
   },
   controlsContainer: {
     flexDirection: "row",
@@ -297,7 +295,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 10,
     textAlign: "center",
-    fontWeight: "600",
   },
   chartContainer: {
     height: 300,
@@ -324,7 +321,6 @@ const styles = StyleSheet.create({
   },
   dataTitle: {
     fontSize: 14,
-    fontWeight: "bold",
     marginBottom: 8,
     color: "#2c3e50",
   },
@@ -346,7 +342,6 @@ const styles = StyleSheet.create({
   },
   instructionTitle: {
     fontSize: 14,
-    fontWeight: "bold",
     marginBottom: 8,
     color: "#2c3e50",
   },

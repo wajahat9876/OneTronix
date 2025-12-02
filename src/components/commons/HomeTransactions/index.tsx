@@ -1,17 +1,16 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable import/prefer-default-export */
-import useCapitalizeFirstWord from '@src/hooks/useCapitalizeFirst';
-import useCurrencyFlag from '@src/hooks/useCurrencyFlag';
-import { getRespValue } from '@utils/getRespValue';
-import moment from 'moment';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { IAmountProps, IHomeTransactionsListProps } from './types';
+import useCapitalizeFirstWord from "@src/hooks/useCapitalizeFirst";
+import useCurrencyFlag from "@src/hooks/useCurrencyFlag";
+import { getRespValue } from "@utils/getRespValue";
+import moment from "moment";
+import { StyleSheet, Text, View } from "react-native";
+import { IAmountProps, IHomeTransactionsListProps } from "./types";
 
 const formatDate = (dateString: any): any => {
-  if (!dateString) return '';
-  return moment(dateString).format('DD MMM YYYY');
+  if (!dateString) return "";
+  return moment(dateString).format("DD MMM YYYY");
 };
 const Amount = ({ amount, isCredit, sign }: IAmountProps) => {
   if (isCredit)
@@ -77,10 +76,10 @@ const HomeTransactionsList = ({
   );
 };
 const specialAccounts = [
-  'operating account',
-  'easy cash card expense',
-  'easy cash card',
-  'GBP FX Settlement Account - PagoNxt',
+  "operating account",
+  "easy cash card expense",
+  "easy cash card",
+  "GBP FX Settlement Account - PagoNxt",
 ];
 export const renderItem = ({
   item,
@@ -91,47 +90,47 @@ export const renderItem = ({
 }) => {
   if (activeCurrency === 1) {
     switch (item?.transcationType) {
-      case 'feeDebit':
+      case "feeDebit":
         return (
           <HomeTransactionsList
             key="fee_debit"
-            name={`${'To: '}${'ECC'}`}
+            name={`${"To: "}${"ECC"}`}
             amount={parseFloat(item?.amount?.instructedAmount).toFixed(2)}
             balance={parseFloat(item?.balance).toFixed(2)}
-            isCredit={item?.debitCreditCode === 'CRDT'}
+            isCredit={item?.debitCreditCode === "CRDT"}
             date={formatDate(item?.transactionTime)}
             currency={item?.amount?.currency}
             beneficiaryName=""
             tranactionNumber="ECC Charges"
           />
         );
-      case 'Credit':
+      case "Credit":
         return (
           <HomeTransactionsList
             key="Credit"
             name={
-              specialAccounts.some(acc =>
+              specialAccounts.some((acc) =>
                 item?.counterpartAccount?.identification?.accountName
                   .toLowerCase()
-                  .includes(acc.toLowerCase()),
+                  .includes(acc.toLowerCase())
               )
-                ? `${'From: '}${item?.counterpartAccount?.identification?.iban}`
+                ? `${"From: "}${item?.counterpartAccount?.identification?.iban}`
                 : item?.counterpartAccount?.identification?.accountName
             }
             amount={parseFloat(item?.amount?.instructedAmount).toFixed(2)}
             balance={parseFloat(item?.balance).toFixed(2)}
-            isCredit={item?.debitCreditCode === 'CRDT'}
+            isCredit={item?.debitCreditCode === "CRDT"}
             date={formatDate(item?.transactionTime)}
             currency={item?.amount?.currency}
             beneficiaryName={
-              item?.transactionReference?.includes('-')
-                ? item.transactionReference.split('-')[1]
+              item?.transactionReference?.includes("-")
+                ? item.transactionReference.split("-")[1]
                 : item?.transactionReference
             }
-            tranactionNumber={`${'Tx: '}${item?.transcationType}`}
+            tranactionNumber={`${"Tx: "}${item?.transcationType}`}
           />
         );
-      case 'manualAdjustmentCredit':
+      case "manualAdjustmentCredit":
         return (
           <HomeTransactionsList
             key="manualAdjustmentCredit"
@@ -147,23 +146,23 @@ export const renderItem = ({
             // }
             amount={parseFloat(item?.amount?.instructedAmount).toFixed(2)}
             balance={parseFloat(item?.balance).toFixed(2)}
-            isCredit={item?.debitCreditCode === 'CRDT'}
+            isCredit={item?.debitCreditCode === "CRDT"}
             date={formatDate(item?.transactionTime)}
             currency={item?.amount?.currency}
             beneficiaryName={
-              item?.transactionReference?.includes('-')
-                ? item.transactionReference.split('-')[1]
+              item?.transactionReference?.includes("-")
+                ? item.transactionReference.split("-")[1]
                 : item?.transactionReference
             }
-            tranactionNumber={`${'Tx: '}${'Manual Adjustment Credit'}`}
+            tranactionNumber={`${"Tx: "}${"Manual Adjustment Credit"}`}
           />
         );
-      case 'FXCredit':
+      case "FXCredit":
         return (
           <HomeTransactionsList
             key="Credit"
             name={
-              'Exchange'
+              "Exchange"
               // specialAccounts.some(acc =>
               //   item?.counterpartAccount?.identification?.accountName
               //     .toLowerCase()
@@ -177,24 +176,24 @@ export const renderItem = ({
             //   item?.entryType === 'fee' ? item?.feeAmount : item?.amount,
             // ).toFixed(2)}
             balance={parseFloat(item?.balance).toFixed(2)}
-            isCredit={item?.debitCreditCode === 'CRDT'}
+            isCredit={item?.debitCreditCode === "CRDT"}
             date={formatDate(item?.transactionTime)}
             currency={item?.amount?.currency}
-            beneficiaryName={' '}
-            tranactionNumber={`Tx: ${'FX Credit'}`}
+            beneficiaryName={" "}
+            tranactionNumber={`Tx: ${"FX Credit"}`}
           />
         );
-      case 'Debit':
+      case "Debit":
         return (
           <HomeTransactionsList
             key="Debit"
             name={
-              specialAccounts.some(acc =>
+              specialAccounts.some((acc) =>
                 item?.counterpartAccount?.identification?.accountName
                   .toLowerCase()
-                  .includes(acc.toLowerCase()),
+                  .includes(acc.toLowerCase())
               )
-                ? `${'To: '}${item?.counterpartAccount?.identification?.iban}`
+                ? `${"To: "}${item?.counterpartAccount?.identification?.iban}`
                 : item?.counterpartAccount?.identification?.accountName
             }
             // name={
@@ -206,23 +205,23 @@ export const renderItem = ({
             //   item?.entryType === 'fee' ? item?.feeAmount : item?.amount,
             // ).toFixed(2)}
             balance={parseFloat(item?.balance).toFixed(2)}
-            isCredit={item?.direction === 'credit'}
+            isCredit={item?.direction === "credit"}
             date={formatDate(item?.transactionTime)}
             currency={item?.amount?.currency}
             beneficiaryName={
-              item?.transactionReference?.includes('-')
-                ? item.transactionReference.split('-')[1]
+              item?.transactionReference?.includes("-")
+                ? item.transactionReference.split("-")[1]
                 : item?.transactionReference
             }
-            tranactionNumber={`${'Tx: '}${item?.transcationType}`}
+            tranactionNumber={`${"Tx: "}${item?.transcationType}`}
           />
         );
-      case 'FXDebit':
+      case "FXDebit":
         return (
           <HomeTransactionsList
             key="Debit"
             name={
-              'Exchange'
+              "Exchange"
               // specialAccounts.some(acc =>
               //   item?.counterpartAccount?.identification?.accountName
               //     .toLowerCase()
@@ -236,16 +235,16 @@ export const renderItem = ({
             //   item?.entryType === 'fee' ? item?.feeAmount : item?.amount,
             // ).toFixed(2)}
             balance={parseFloat(item?.balance).toFixed(2)}
-            isCredit={item?.direction === 'credit'}
+            isCredit={item?.direction === "credit"}
             date={formatDate(item?.transactionTime)}
             currency={item?.amount?.currency}
             beneficiaryName={
-              ' '
+              " "
               // item?.transactionReference?.includes('-')
               //   ? item.transactionReference.split('-')[1]
               //   : item?.transactionReference
             }
-            tranactionNumber={`${'Tx: '}${'FX Debit'}`}
+            tranactionNumber={`${"Tx: "}${"FX Debit"}`}
           />
         );
 
@@ -265,34 +264,34 @@ export const renderItem = ({
             // }
             amount={parseFloat(item?.amount?.instructedAmount).toFixed(2)}
             balance={parseFloat(item?.balance).toFixed(2)}
-            isCredit={item?.debitCreditCode === 'CRDT'}
+            isCredit={item?.debitCreditCode === "CRDT"}
             date={formatDate(item?.transactionTime)}
             currency={item?.amount?.currency}
             beneficiaryName={
-              item?.transactionReference?.includes('-')
-                ? item.transactionReference.split('-')[1]
+              item?.transactionReference?.includes("-")
+                ? item.transactionReference.split("-")[1]
                 : item?.transactionReference
             }
-            tranactionNumber={`${'Tx: '}${'Manual Adjustment'}`}
+            tranactionNumber={`${"Tx: "}${"Manual Adjustment"}`}
           />
         );
     }
   } else {
     switch (item?.transcationType) {
-      case 'feeDebit':
+      case "feeDebit":
         return (
           <HomeTransactionsList
             key="fee_debit2"
-            name={`To: ${'ECC'}`}
+            name={`To: ${"ECC"}`}
             beneficiaryName=""
             amount={parseFloat(item?.amount).toFixed(2)}
             // balance={parseFloat(item?.currentBalance).toFixed(2)}
-            balance={' '}
+            balance={" "}
             isCredit={
-              item?.transcationType === 'Credit' ||
-              item?.transcationType === 'FXCredit' ||
-              item?.transcationType === 'manualAdjustment' ||
-              item?.transcationType === 'manualAdjustmentCredit'
+              item?.transcationType === "Credit" ||
+              item?.transcationType === "FXCredit" ||
+              item?.transcationType === "manualAdjustment" ||
+              item?.transcationType === "manualAdjustmentCredit"
             }
             date={formatDate(item?.createdAt)}
             currency={item?.currency}
@@ -300,125 +299,125 @@ export const renderItem = ({
           />
         );
 
-      case 'Credit':
+      case "Credit":
         return (
           <HomeTransactionsList
             key="Credit"
             name={`From: ${item?.from?.IBAN}`}
             amount={parseFloat(item?.amount).toFixed(2)}
             // balance={parseFloat(item?.currentBalance).toFixed(2)}
-            balance={' '}
+            balance={" "}
             isCredit={
-              item?.transcationType === 'Credit' ||
-              item?.transcationType === 'FXCredit' ||
-              item?.transcationType === 'manualAdjustment' ||
-              item?.transcationType === 'manualAdjustmentCredit'
+              item?.transcationType === "Credit" ||
+              item?.transcationType === "FXCredit" ||
+              item?.transcationType === "manualAdjustment" ||
+              item?.transcationType === "manualAdjustmentCredit"
             }
             date={formatDate(item?.createdAt)}
             currency={item?.currency}
             beneficiaryName=""
-            tranactionNumber={`${'Tx: '}${item?.transcationType}`}
+            tranactionNumber={`${"Tx: "}${item?.transcationType}`}
           />
         );
-      case 'FXCredit':
+      case "FXCredit":
         return (
           <HomeTransactionsList
             key="Credit"
             name={`From: ${item?.from?.IBAN}`}
             amount={parseFloat(item?.amount).toFixed(2)}
             // balance={parseFloat(item?.currentBalance).toFixed(2)}
-            balance={' '}
+            balance={" "}
             isCredit={
-              item?.transcationType === 'Credit' ||
-              item?.transcationType === 'FXCredit' ||
-              item?.transcationType === 'manualAdjustment' ||
-              item?.transcationType === 'manualAdjustmentCredit'
+              item?.transcationType === "Credit" ||
+              item?.transcationType === "FXCredit" ||
+              item?.transcationType === "manualAdjustment" ||
+              item?.transcationType === "manualAdjustmentCredit"
             }
             date={formatDate(item?.createdAt)}
             currency={item?.currency}
             beneficiaryName=""
-            tranactionNumber={`${'Tx: '}${'FX Credit'}`}
+            tranactionNumber={`${"Tx: "}${"FX Credit"}`}
           />
         );
-      case 'manualAdjustment':
+      case "manualAdjustment":
         return (
           <HomeTransactionsList
             key="Credit"
             name="ECC Credit"
             amount={parseFloat(item?.amount).toFixed(2)}
             // balance={parseFloat(item?.currentBalance).toFixed(2)}
-            balance={' '}
+            balance={" "}
             isCredit={
-              item?.transcationType === 'Credit' ||
-              item?.transcationType === 'FXCredit' ||
-              item?.transcationType === 'manualAdjustment' ||
-              item?.transcationType === 'manualAdjustmentCredit'
+              item?.transcationType === "Credit" ||
+              item?.transcationType === "FXCredit" ||
+              item?.transcationType === "manualAdjustment" ||
+              item?.transcationType === "manualAdjustmentCredit"
             }
             date={formatDate(item?.createdAt)}
             currency={item?.currency}
             beneficiaryName=""
-            tranactionNumber={`${'Tx: '}${'Manual Adjustment'}`}
+            tranactionNumber={`${"Tx: "}${"Manual Adjustment"}`}
           />
         );
-      case 'manualAdjustmentCredit':
+      case "manualAdjustmentCredit":
         return (
           <HomeTransactionsList
             key="Creditsss"
             name="ECC Credit"
             amount={parseFloat(item?.amount).toFixed(2)}
             // balance={parseFloat(item?.currentBalance).toFixed(2)}
-            balance={' '}
+            balance={" "}
             isCredit={
-              item?.transcationType === 'Credit' ||
-              item?.transcationType === 'FXCredit' ||
-              item?.transcationType === 'manualAdjustment' ||
-              item?.transcationType === 'manualAdjustmentCredit'
+              item?.transcationType === "Credit" ||
+              item?.transcationType === "FXCredit" ||
+              item?.transcationType === "manualAdjustment" ||
+              item?.transcationType === "manualAdjustmentCredit"
             }
             date={formatDate(item?.createdAt)}
             currency={item?.currency}
             beneficiaryName=""
-            tranactionNumber={`${'Tx: '}${'Manual Adjustment Credit'}`}
+            tranactionNumber={`${"Tx: "}${"Manual Adjustment Credit"}`}
           />
         );
 
-      case 'Debit':
+      case "Debit":
         return (
           <HomeTransactionsList
             key="fee_debit2"
             name={`To: ${item?.to?.IBAN}`}
             amount={parseFloat(item?.amount).toFixed(2)}
             // balance={parseFloat(item?.currentBalance).toFixed(2)}
-            balance={' '}
+            balance={" "}
             isCredit={
-              item?.transcationType === 'Credit' ||
-              item?.transcationType === 'FXCredit' ||
-              item?.transcationType === 'manualAdjustment' ||
-              item?.transcationType === 'manualAdjustmentCredit'
+              item?.transcationType === "Credit" ||
+              item?.transcationType === "FXCredit" ||
+              item?.transcationType === "manualAdjustment" ||
+              item?.transcationType === "manualAdjustmentCredit"
             }
             date={formatDate(item?.createdAt)}
             currency={item?.currency}
             beneficiaryName=""
-            tranactionNumber={`${'Tx: '}${item?.transcationType}`}
+            tranactionNumber={`${"Tx: "}${item?.transcationType}`}
           />
         );
-      case 'FXDebit':
+      case "FXDebit":
         return (
           <HomeTransactionsList
             key="Debit"
             name={`To: ${item?.to?.IBAN}`}
             amount={parseFloat(item?.amount).toFixed(2)}
             // balance={parseFloat(item?.currentBalance).toFixed(2)}
-            balance={' '}
+            balance={" "}
             isCredit={
-              item?.transcationType === 'Credit' ||
-              item?.transcationType === 'FXCredit' ||
-              item?.transcationType === 'manualAdjustment' ||
-              item?.transcationType === 'manualAdjustmentCredit'
+              item?.transcationType === "Credit" ||
+              item?.transcationType === "FXCredit" ||
+              item?.transcationType === "manualAdjustment" ||
+              item?.transcationType === "manualAdjustmentCredit"
             }
             date={formatDate(item?.createdAt)}
             currency={item?.currency}
             beneficiaryName=""
-            tranactionNumber={`${'Tx: '}${'FX Debit'}`}
+            tranactionNumber={`${"Tx: "}${"FX Debit"}`}
           />
         );
 
@@ -429,11 +428,11 @@ export const renderItem = ({
             name=""
             amount={parseFloat(item?.amount).toFixed(2)}
             // balance={parseFloat(item?.balance).toFixed(2)}
-            balance={' '}
-            isCredit={item?.direction === 'credit'}
+            balance={" "}
+            isCredit={item?.direction === "credit"}
             date={formatDate(item?.entryDateTime)}
             currency={item?.currency}
-            tranactionNumber={`${'Tx: '}${item?.transcationType}`}
+            tranactionNumber={`${"Tx: "}${item?.transcationType}`}
           />
         );
     }
@@ -442,28 +441,25 @@ export const renderItem = ({
 // default is for generic
 const styles = StyleSheet.create({
   viewTrans: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginTop: 2,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
-  txtCredit: { color: 'green', fontWeight: '600', fontSize: getRespValue(16) },
-  txtDebit: { color: 'red', fontWeight: '600', fontSize: getRespValue(16) },
+  txtCredit: { color: "green", fontSize: getRespValue(16) },
+  txtDebit: { color: "red", fontSize: getRespValue(16) },
   txtAccount: {
-    color: 'black',
-    fontWeight: '600',
-    width: '70%',
+    color: "black",
+    width: "70%",
     fontSize: getRespValue(16),
   },
   txtTrans: {
     marginTop: 5,
-    color: 'black',
-    fontWeight: '600',
+    color: "black",
     fontSize: getRespValue(16),
   },
   directionTxt: {
     marginTop: 5,
-    color: 'black',
-    fontWeight: '400',
+    color: "black",
     fontSize: getRespValue(16),
   },
 });

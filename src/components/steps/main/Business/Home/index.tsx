@@ -361,25 +361,21 @@ const styles = StyleSheet.create({
   },
   directionTxt: {
     color: "black",
-    fontWeight: "400",
     fontSize: getRespValue(16),
   },
   txtAccount: {
     color: "black",
-    fontWeight: "600",
     width: "70%",
     fontSize: getRespValue(16),
   },
-  txtTrans: { color: "black", fontWeight: "600", fontSize: getRespValue(16) },
+  txtTrans: { color: "black", fontSize: getRespValue(16) },
   txtStyle: {
     fontSize: ms(27),
-    fontWeight: "600",
     paddingVertical: 10,
     fontFamily: "Ranade-Medium",
   },
   dailyTxt: {
     fontSize: ms(27),
-    fontWeight: "600",
     paddingVertical: 10,
     fontFamily: "Ranade-Medium",
   },

@@ -316,7 +316,6 @@ const styles = StyleSheet.create({
   label: { position: "absolute", alignItems: "center" },
   labelTitle: {
     fontSize: ms(11),
-    fontWeight: "600",
     fontFamily: "Excon-Regular",
   },
   labelValue: { fontSize: ms(9), fontFamily: "Excon-Regular" },

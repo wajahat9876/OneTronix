@@ -1,5 +1,5 @@
 // src/components/MonthYearPicker.tsx
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -236,11 +236,11 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ddd",
   },
   cancelText: { color: "#666" },
-  okText: { color: "#0a84ff", fontWeight: "600" },
-  title: { fontWeight: "600", fontSize: 15, color: "#222" },
+  okText: { color: "#0a84ff", fontFamily: "Excon-Medium" },
+  title: { fontSize: 15, color: "#222", fontFamily: "Excon-Medium" },
   sectionLabel: {
     fontSize: 13,
-    fontWeight: "600",
+    fontFamily: "Excon-Medium",
     marginHorizontal: 16,
     marginTop: 12,
     marginBottom: 6,
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     borderColor: "#eee",
   },
   monthText: { fontSize: 12, color: "#333" },
-  monthTextSelected: { color: "white", fontWeight: "600" },
+  monthTextSelected: { color: "white", fontFamily: "Excon-Regular" },
   monthTextDisabled: { color: "#aaa" },
   yearList: { maxHeight: 200, marginHorizontal: 12 },
   yearItem: {
@@ -280,5 +280,5 @@ const styles = StyleSheet.create({
   },
   yearItemSelected: { backgroundColor: "#f0f8ff" },
   yearText: { fontSize: 14, color: "#222" },
-  yearTextSelected: { color: "#0a84ff", fontWeight: "700" },
+  yearTextSelected: { color: "#0a84ff", fontFamily: "Excon-Regular" },
 });

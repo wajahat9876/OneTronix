@@ -739,7 +739,6 @@ const styles = StyleSheet.create({
   tabText: {
     color: "#333",
     fontSize: 14,
-    fontWeight: "500",
     fontFamily: "Excon-Regular",
   },
   activeTabText: {

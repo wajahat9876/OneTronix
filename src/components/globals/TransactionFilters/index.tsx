@@ -1,11 +1,11 @@
-import ArrowBackDark from '@assets/icons/LeftSmall.svg';
-import BottomSheet from '@gorhom/bottom-sheet';
-import Colors from '@src/constants/Colors';
-import { hs } from '@utils/design/design';
-import { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import Button from '../Button';
+import ArrowBackDark from "@assets/icons/LeftSmall.svg";
+import BottomSheet from "@gorhom/bottom-sheet";
+import Colors from "@src/constants/Colors";
+import { hs } from "@utils/design/design";
+import { useEffect, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import Button from "../Button";
 
 interface FilterProps {
   snapPoints: any;
@@ -16,7 +16,7 @@ interface FilterProps {
 
 const TransactionFilters = (props: FilterProps) => {
   const { snapPoints, bottomSheetRef, handleApply, closeSheet } = props;
-  const initialTransferType = 'all';
+  const initialTransferType = "all";
   const [transferType, setTransferType] = useState(initialTransferType);
   const [isCheckedIn, setIsCheckedIn] = useState(false);
   const [isCheckedOut, setIsCheckedOut] = useState(false);
@@ -25,9 +25,9 @@ const TransactionFilters = (props: FilterProps) => {
     useState(initialTransferType);
   const resetFilters = () => {
     setTransferType(appliedTransferType);
-    setIsCheckedIn(appliedTransferType === 'incomingTransfer');
-    setIsCheckedOut(appliedTransferType === 'outgoingTransfer');
-    setIsAll(appliedTransferType === 'all');
+    setIsCheckedIn(appliedTransferType === "incomingTransfer");
+    setIsCheckedOut(appliedTransferType === "outgoingTransfer");
+    setIsAll(appliedTransferType === "all");
   };
   // Sync UI with current state
   useEffect(() => {
@@ -35,20 +35,20 @@ const TransactionFilters = (props: FilterProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appliedTransferType, closeSheet]);
   const handleIncomingPress = () => {
-    setTransferType('incomingTransfer');
+    setTransferType("incomingTransfer");
     setIsCheckedIn(true);
     setIsCheckedOut(false);
     setIsAll(false);
   };
 
   const handleOutgoingPress = () => {
-    setTransferType('outgoingTransfer');
+    setTransferType("outgoingTransfer");
     setIsCheckedIn(false);
     setIsCheckedOut(true);
     setIsAll(false);
   };
   const handleAll = () => {
-    setTransferType('all');
+    setTransferType("all");
     setIsCheckedIn(false);
     setIsCheckedOut(false);
     setIsAll(true);
@@ -58,7 +58,7 @@ const TransactionFilters = (props: FilterProps) => {
   // const [fromDate, setFromDate] = useState<string | undefined>(undefined);
   return (
     <BottomSheet
-      handleIndicatorStyle={{ backgroundColor: 'transparent' }}
+      handleIndicatorStyle={{ backgroundColor: "transparent" }}
       backgroundStyle={styles.bottomSheet}
       ref={bottomSheetRef}
       index={-1}
@@ -87,12 +87,12 @@ const TransactionFilters = (props: FilterProps) => {
                 styles.choiceBtn,
                 {
                   backgroundColor: isAll
-                    ? '#EBECF3'
+                    ? "#EBECF3"
                     : Colors.light.theme.backgroundTopCurveSection,
                 },
               ]}
             >
-              <Text style={{ color: 'black' }}>All</Text>
+              <Text style={{ color: "black" }}>All</Text>
             </TouchableOpacity>
           </View>
 
@@ -103,12 +103,12 @@ const TransactionFilters = (props: FilterProps) => {
                 styles.choiceBtn,
                 {
                   backgroundColor: isCheckedIn
-                    ? '#EBECF3'
+                    ? "#EBECF3"
                     : Colors.light.theme.backgroundTopCurveSection,
                 },
               ]}
             >
-              <Text style={{ color: 'black' }}>Incoming</Text>
+              <Text style={{ color: "black" }}>Incoming</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleOutgoingPress}
@@ -116,13 +116,13 @@ const TransactionFilters = (props: FilterProps) => {
                 styles.choiceBtn,
                 {
                   backgroundColor: isCheckedOut
-                    ? '#EBECF3'
+                    ? "#EBECF3"
                     : Colors.light.theme.backgroundTopCurveSection,
                   marginLeft: 5,
                 },
               ]}
             >
-              <Text style={{ color: 'black' }}>Outgoing</Text>
+              <Text style={{ color: "black" }}>Outgoing</Text>
             </TouchableOpacity>
           </View>
           {/* 2nd choice */}
@@ -192,16 +192,15 @@ export default TransactionFilters;
 const styles = StyleSheet.create({
   mainContainer: { flex: 1, paddingLeft: hs(16), paddingRight: hs(16) },
   headerAuth: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginHorizontal: 10,
     marginBottom: 10,
   },
-  toggleView: { flexDirection: 'row', margin: 10, alignSelf: 'center' },
+  toggleView: { flexDirection: "row", margin: 10, alignSelf: "center" },
   mainHeading: {
-    alignSelf: 'center',
-    color: '#2F394F',
+    alignSelf: "center",
+    color: "#2F394F",
     fontSize: 16,
-    fontWeight: '500',
     marginBottom: 20,
     marginLeft: 130,
   },
@@ -209,22 +208,21 @@ const styles = StyleSheet.create({
     width: 170,
     padding: 10,
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   subHeading: {
     marginBottom: 15,
-    fontWeight: '600',
   },
   bottomSheet: {
-    backgroundColor: 'white',
-    borderCurve: 'circular',
+    backgroundColor: "white",
+    borderCurve: "circular",
     borderRadius: 40,
     borderWidth: 5,
-    borderColor: '#f9f9f9',
+    borderColor: "#f9f9f9",
   },
 
   checkBox: {
-    alignContent: 'center',
+    alignContent: "center",
     margin: 8,
   },
 });

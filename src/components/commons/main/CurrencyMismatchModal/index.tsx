@@ -1,6 +1,6 @@
-import Button from '@src/components/globals/Button'; // Update the path to match your Button component
-import React from 'react';
-import { Modal, StyleSheet, Text, View } from 'react-native';
+import Button from "@src/components/globals/Button"; // Update the path to match your Button component
+import React from "react";
+import { Modal, StyleSheet, Text, View } from "react-native";
 
 interface GlobalModalProps {
   visible: boolean;
@@ -28,18 +28,18 @@ const MismatchCurrency: React.FC<GlobalModalProps> = ({
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
   },
   modalContainer: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     paddingVertical: 24,
     paddingHorizontal: 20,
     borderRadius: 16,
-    width: '85%',
-    alignItems: 'center',
-    shadowColor: '#000',
+    width: "85%",
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -47,10 +47,9 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontSize: 16,
-    color: '#333',
-    textAlign: 'left',
+    color: "#333",
+    textAlign: "left",
     marginBottom: 20,
-    fontWeight: '500',
   },
 });
 

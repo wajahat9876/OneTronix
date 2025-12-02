@@ -299,7 +299,6 @@ const styles = StyleSheet.create({
   PlusTxt: {
     color: "white",
     fontSize: 40,
-    fontWeight: "bold",
     marginBottom: 2,
     fontFamily: "Excon-Regular",
   },

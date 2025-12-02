@@ -2,10 +2,10 @@
 // /* eslint-disable react/require-default-props */
 // /* eslint-disable @typescript-eslint/no-unused-vars */
 // /* eslint-disable react/jsx-no-useless-fragment */
-import { getRespValue } from '@utils/getRespValue';
-import moment from 'moment';
-import { useEffect, useRef, useState } from 'react';
-import { AppState, AppStateStatus, Text, View } from 'react-native';
+import { getRespValue } from "@utils/getRespValue";
+import moment from "moment";
+import { useEffect, useRef, useState } from "react";
+import { AppState, AppStateStatus, Text, View } from "react-native";
 
 const OTPTimer = ({
   text,
@@ -26,7 +26,7 @@ const OTPTimer = ({
     const updateTime = () => {
       const seconds = Math.max(
         Math.floor((endTimeRef.current - Date.now()) / 1000),
-        0,
+        0
       );
       setSecondsLeft(seconds);
       if (seconds <= 0) {
@@ -37,16 +37,16 @@ const OTPTimer = ({
     const intervalId = setInterval(updateTime, 1000);
 
     const subscription = AppState.addEventListener(
-      'change',
+      "change",
       (nextAppState: AppStateStatus) => {
         if (
           appState.current.match(/inactive|background/) &&
-          nextAppState === 'active'
+          nextAppState === "active"
         ) {
           updateTime(); // sync time after resume
         }
         appState.current = nextAppState;
-      },
+      }
     );
 
     return () => {
@@ -56,18 +56,18 @@ const OTPTimer = ({
   }, [handleExpired]);
 
   return (
-    <View style={{ width: '100%', alignItems: 'center' }}>
+    <View style={{ width: "100%", alignItems: "center" }}>
       <Text
         style={{
           fontSize: getRespValue(18),
           lineHeight: getRespValue(26),
-          color: light ? 'black' : 'white',
-          fontWeight: '600',
+          color: light ? "black" : "white",
+          // fontWeight: "600",
         }}
         className="font-aeonik px-4 pt-4 pb-4 w-full text-left"
       >
         {text}
-        {moment().startOf('day').seconds(secondsLeft).format('mm:ss')}
+        {moment().startOf("day").seconds(secondsLeft).format("mm:ss")}
       </Text>
     </View>
   );
@@ -124,7 +124,7 @@ export default OTPTimer;
 //           fontSize: getRespValue(18),
 //           lineHeight: getRespValue(26),
 //           color: light ? 'black' : 'white',
-//           fontWeight: '600',
+//
 //         }}
 //         className="font-aeonik px-4 pt-4 pb-4 w-full text-left"
 //       >

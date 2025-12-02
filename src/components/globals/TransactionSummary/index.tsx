@@ -1,13 +1,12 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/require-default-props */
-import Logo from '@assets/eccLogo/ecc small icon.svg';
-import { getRespValue } from '@utils/getRespValue';
-import moment from 'moment';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { IDetailsRow, ITransactionDetails } from './types';
+import Logo from "@assets/eccLogo/ecc small icon.svg";
+import { getRespValue } from "@utils/getRespValue";
+import moment from "moment";
+import { StyleSheet, Text, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { IDetailsRow, ITransactionDetails } from "./types";
 
 const DetailsRow = ({ left, right }: IDetailsRow) => {
   return (
@@ -18,10 +17,10 @@ const DetailsRow = ({ left, right }: IDetailsRow) => {
   );
 };
 const specialAccounts = [
-  'operating account',
-  'easy cash card expense',
-  'easy cash card',
-  'GBP FX Settlement Account - PagoNxt',
+  "operating account",
+  "easy cash card expense",
+  "easy cash card",
+  "GBP FX Settlement Account - PagoNxt",
 ];
 export const RenderItem = ({
   transactionDetails,
@@ -31,25 +30,25 @@ export const RenderItem = ({
   activeCurrency: any;
 }) => {
   const formatDate = (dateString: any): any => {
-    if (!dateString) return '';
-    return moment(dateString).format('DD MMM YYYY');
+    if (!dateString) return "";
+    return moment(dateString).format("DD MMM YYYY");
   };
   const formatTime = (dateString: any): any => {
-    if (!dateString) return '';
-    return moment(dateString).format('hh:mm A'); // 12-hour format with AM/PM
+    if (!dateString) return "";
+    return moment(dateString).format("hh:mm A"); // 12-hour format with AM/PM
   };
 
   if (activeCurrency === 1) {
     switch (transactionDetails?.transcationType) {
-      case 'feeDebit': {
+      case "feeDebit": {
         return (
           <>
             <DetailsRow left="Name" right="ECC Charges" />
             <DetailsRow
               left="Reference"
               right={
-                transactionDetails?.transactionReference?.includes('-')
-                  ? transactionDetails.transactionReference.split('-')[1]
+                transactionDetails?.transactionReference?.includes("-")
+                  ? transactionDetails.transactionReference.split("-")[1]
                   : transactionDetails?.transactionReference
               }
             />
@@ -59,7 +58,7 @@ export const RenderItem = ({
             <DetailsRow
               left="Amount:"
               right={`${parseFloat(
-                transactionDetails?.amount?.instructedAmount,
+                transactionDetails?.amount?.instructedAmount
               ).toFixed(2)} ${transactionDetails?.amount?.currency}`}
             />
 
@@ -73,19 +72,19 @@ export const RenderItem = ({
             />
             <DetailsRow
               left="Balance:"
-              right={`${parseFloat(transactionDetails?.balance ?? '0').toFixed(
-                2,
+              right={`${parseFloat(transactionDetails?.balance ?? "0").toFixed(
+                2
               )} ${transactionDetails?.amount?.currency}`}
             />
           </>
         );
       }
-      case 'Credit': {
+      case "Credit": {
         const accountName =
           transactionDetails?.counterpartAccount?.identification?.accountName ??
-          '';
-        const isSpecialAccount = specialAccounts.some(acc =>
-          accountName.toLowerCase().includes(acc.toLowerCase()),
+          "";
+        const isSpecialAccount = specialAccounts.some((acc) =>
+          accountName.toLowerCase().includes(acc.toLowerCase())
         );
         const displayName = isSpecialAccount
           ? transactionDetails?.counterpartAccount?.identification?.iban
@@ -98,8 +97,8 @@ export const RenderItem = ({
                 <DetailsRow
                   left="Reference"
                   right={
-                    transactionDetails?.transactionReference?.includes('-')
-                      ? transactionDetails.transactionReference.split('-')[1]
+                    transactionDetails?.transactionReference?.includes("-")
+                      ? transactionDetails.transactionReference.split("-")[1]
                       : transactionDetails?.transactionReference
                   }
                 />
@@ -113,7 +112,7 @@ export const RenderItem = ({
             <DetailsRow
               left="Amount:"
               right={`${parseFloat(
-                transactionDetails?.amount?.instructedAmount,
+                transactionDetails?.amount?.instructedAmount
               ).toFixed(2)} ${transactionDetails?.amount?.currency}`}
             />
 
@@ -127,19 +126,19 @@ export const RenderItem = ({
             />
             <DetailsRow
               left="Balance:"
-              right={`${parseFloat(transactionDetails?.balance ?? '0').toFixed(
-                2,
+              right={`${parseFloat(transactionDetails?.balance ?? "0").toFixed(
+                2
               )} ${transactionDetails?.amount?.currency}`}
             />
           </>
         );
       }
-      case 'FXCredit': {
+      case "FXCredit": {
         const accountName =
           transactionDetails?.counterpartAccount?.identification?.accountName ??
-          '';
-        const isSpecialAccount = specialAccounts.some(acc =>
-          accountName.toLowerCase().includes(acc.toLowerCase()),
+          "";
+        const isSpecialAccount = specialAccounts.some((acc) =>
+          accountName.toLowerCase().includes(acc.toLowerCase())
         );
         const displayName = isSpecialAccount
           ? transactionDetails?.counterpartAccount?.identification?.iban
@@ -167,7 +166,7 @@ export const RenderItem = ({
             <DetailsRow
               left="Amount:"
               right={`${parseFloat(
-                transactionDetails?.amount?.instructedAmount,
+                transactionDetails?.amount?.instructedAmount
               ).toFixed(2)} ${transactionDetails?.amount?.currency}`}
             />
 
@@ -181,19 +180,19 @@ export const RenderItem = ({
             />
             <DetailsRow
               left="Balance:"
-              right={`${parseFloat(transactionDetails?.balance ?? '0').toFixed(
-                2,
+              right={`${parseFloat(transactionDetails?.balance ?? "0").toFixed(
+                2
               )} ${transactionDetails?.amount?.currency}`}
             />
           </>
         );
       }
-      case 'manualAdjustmentCredit': {
+      case "manualAdjustmentCredit": {
         const accountName =
           transactionDetails?.counterpartAccount?.identification?.accountName ??
-          '';
-        const isSpecialAccount = specialAccounts.some(acc =>
-          accountName.toLowerCase().includes(acc.toLowerCase()),
+          "";
+        const isSpecialAccount = specialAccounts.some((acc) =>
+          accountName.toLowerCase().includes(acc.toLowerCase())
         );
         const displayName = isSpecialAccount
           ? transactionDetails?.counterpartAccount?.identification?.iban
@@ -214,8 +213,8 @@ export const RenderItem = ({
             <DetailsRow
               left="Reference"
               right={
-                transactionDetails?.transactionReference?.includes('-')
-                  ? transactionDetails.transactionReference.split('-')[1]
+                transactionDetails?.transactionReference?.includes("-")
+                  ? transactionDetails.transactionReference.split("-")[1]
                   : transactionDetails?.transactionReference
               }
             />
@@ -224,7 +223,7 @@ export const RenderItem = ({
             <DetailsRow
               left="Amount:"
               right={`${parseFloat(
-                transactionDetails?.amount?.instructedAmount,
+                transactionDetails?.amount?.instructedAmount
               ).toFixed(2)} ${transactionDetails?.amount?.currency}`}
             />
 
@@ -238,19 +237,19 @@ export const RenderItem = ({
             />
             <DetailsRow
               left="Balance:"
-              right={`${parseFloat(transactionDetails?.balance ?? '0').toFixed(
-                2,
+              right={`${parseFloat(transactionDetails?.balance ?? "0").toFixed(
+                2
               )} ${transactionDetails?.amount?.currency}`}
             />
           </>
         );
       }
-      case 'manualAdjustment': {
+      case "manualAdjustment": {
         const accountName =
           transactionDetails?.counterpartAccount?.identification?.accountName ??
-          '';
-        const isSpecialAccount = specialAccounts.some(acc =>
-          accountName.toLowerCase().includes(acc.toLowerCase()),
+          "";
+        const isSpecialAccount = specialAccounts.some((acc) =>
+          accountName.toLowerCase().includes(acc.toLowerCase())
         );
         const displayName = isSpecialAccount
           ? transactionDetails?.counterpartAccount?.identification?.iban
@@ -271,8 +270,8 @@ export const RenderItem = ({
             <DetailsRow
               left="Reference"
               right={
-                transactionDetails?.transactionReference?.includes('-')
-                  ? transactionDetails.transactionReference.split('-')[1]
+                transactionDetails?.transactionReference?.includes("-")
+                  ? transactionDetails.transactionReference.split("-")[1]
                   : transactionDetails?.transactionReference
               }
             />
@@ -281,7 +280,7 @@ export const RenderItem = ({
             <DetailsRow
               left="Amount:"
               right={`${parseFloat(
-                transactionDetails?.amount?.instructedAmount,
+                transactionDetails?.amount?.instructedAmount
               ).toFixed(2)} ${transactionDetails?.amount?.currency}`}
             />
 
@@ -295,19 +294,19 @@ export const RenderItem = ({
             />
             <DetailsRow
               left="Balance:"
-              right={`${parseFloat(transactionDetails?.balance ?? '0').toFixed(
-                2,
+              right={`${parseFloat(transactionDetails?.balance ?? "0").toFixed(
+                2
               )} ${transactionDetails?.amount?.currency}`}
             />
           </>
         );
       }
-      case 'FXDebit': {
+      case "FXDebit": {
         const accountName =
           transactionDetails?.counterpartAccount?.identification?.accountName ??
-          '';
-        const isSpecialAccount = specialAccounts.some(acc =>
-          accountName.toLowerCase().includes(acc.toLowerCase()),
+          "";
+        const isSpecialAccount = specialAccounts.some((acc) =>
+          accountName.toLowerCase().includes(acc.toLowerCase())
         );
         const displayName = isSpecialAccount
           ? transactionDetails?.counterpartAccount?.identification?.iban
@@ -335,7 +334,7 @@ export const RenderItem = ({
             <DetailsRow
               left="Amount:"
               right={`${parseFloat(
-                transactionDetails?.amount?.instructedAmount,
+                transactionDetails?.amount?.instructedAmount
               ).toFixed(2)} ${transactionDetails?.amount?.currency}`}
             />
 
@@ -349,19 +348,19 @@ export const RenderItem = ({
             />
             <DetailsRow
               left="Balance:"
-              right={`${parseFloat(transactionDetails?.balance ?? '0').toFixed(
-                2,
+              right={`${parseFloat(transactionDetails?.balance ?? "0").toFixed(
+                2
               )} ${transactionDetails?.amount?.currency}`}
             />
           </>
         );
       }
-      case 'Debit': {
+      case "Debit": {
         const accountName =
           transactionDetails?.counterpartAccount?.identification?.accountName ??
-          '';
-        const isSpecialAccount = specialAccounts.some(acc =>
-          accountName.toLowerCase().includes(acc.toLowerCase()),
+          "";
+        const isSpecialAccount = specialAccounts.some((acc) =>
+          accountName.toLowerCase().includes(acc.toLowerCase())
         );
         const displayName = isSpecialAccount
           ? transactionDetails?.counterpartAccount?.identification?.iban
@@ -374,8 +373,8 @@ export const RenderItem = ({
                 <DetailsRow
                   left="Reference"
                   right={
-                    transactionDetails?.transactionReference?.includes('-')
-                      ? transactionDetails.transactionReference.split('-')[1]
+                    transactionDetails?.transactionReference?.includes("-")
+                      ? transactionDetails.transactionReference.split("-")[1]
                       : transactionDetails?.transactionReference
                   }
                 />
@@ -389,7 +388,7 @@ export const RenderItem = ({
             <DetailsRow
               left="Amount:"
               right={`${parseFloat(
-                transactionDetails?.amount?.instructedAmount,
+                transactionDetails?.amount?.instructedAmount
               ).toFixed(2)} ${transactionDetails?.amount?.currency}`}
             />
 
@@ -403,8 +402,8 @@ export const RenderItem = ({
             />
             <DetailsRow
               left="Balance:"
-              right={`${parseFloat(transactionDetails?.balance ?? '0').toFixed(
-                2,
+              right={`${parseFloat(transactionDetails?.balance ?? "0").toFixed(
+                2
               )} ${transactionDetails?.amount?.currency}`}
             />
           </>
@@ -424,8 +423,8 @@ export const RenderItem = ({
             />
             <DetailsRow
               left="Balance:"
-              right={`${parseFloat(transactionDetails?.balance ?? '0').toFixed(
-                2,
+              right={`${parseFloat(transactionDetails?.balance ?? "0").toFixed(
+                2
               )} ${transactionDetails?.currency}`}
             />
 
@@ -453,7 +452,7 @@ export const RenderItem = ({
     }
   } else {
     switch (transactionDetails?.transcationType) {
-      case 'feeDebit':
+      case "feeDebit":
         return (
           <>
             {/* <DetailsRow left="Name" right="ECC Charges" /> */}
@@ -482,7 +481,7 @@ export const RenderItem = ({
             /> */}
           </>
         );
-      case 'Credit':
+      case "Credit":
         return (
           <>
             <DetailsRow left="From" right={transactionDetails?.from?.IBAN} />
@@ -510,7 +509,7 @@ export const RenderItem = ({
             /> */}
           </>
         );
-      case 'FXCredit':
+      case "FXCredit":
         return (
           <>
             <DetailsRow left="From" right={transactionDetails?.from?.IBAN} />
@@ -539,7 +538,7 @@ export const RenderItem = ({
             /> */}
           </>
         );
-      case 'manualAdjustmentCredit':
+      case "manualAdjustmentCredit":
         return (
           <>
             {/* <DetailsRow left="From" right={transactionDetails?.from?.IBAN} /> */}
@@ -567,7 +566,7 @@ export const RenderItem = ({
             /> */}
           </>
         );
-      case 'manualAdjustment':
+      case "manualAdjustment":
         return (
           <>
             {/* <DetailsRow left="From" right={transactionDetails?.from?.IBAN} /> */}
@@ -595,7 +594,7 @@ export const RenderItem = ({
             /> */}
           </>
         );
-      case 'Debit':
+      case "Debit":
         return (
           <>
             <DetailsRow left="To" right={transactionDetails?.to?.IBAN} />
@@ -622,7 +621,7 @@ export const RenderItem = ({
             /> */}
           </>
         );
-      case 'FXDebit':
+      case "FXDebit":
         return (
           <>
             <DetailsRow left="To" right={transactionDetails?.to?.IBAN} />
@@ -705,7 +704,6 @@ const TransactionSummary = ({
         <Logo />
         <Text
           style={{
-            fontWeight: 'bold',
             fontSize: 18,
             marginBottom: 50,
             marginTop: getRespValue(20),
@@ -724,19 +722,19 @@ const TransactionSummary = ({
 
 const styles = StyleSheet.create({
   mainContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: getRespValue(20),
   },
   wrapView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingHorizontal: getRespValue(20),
     marginBottom: getRespValue(20),
   },
-  subHeading: { fontWeight: '700', fontSize: getRespValue(18) },
+  subHeading: { fontSize: getRespValue(18) },
   txt: { marginLeft: 10, fontSize: getRespValue(18) },
   closeBtn: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 2,
   },
 });

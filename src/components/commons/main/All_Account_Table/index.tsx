@@ -1,11 +1,11 @@
 /* eslint-disable import/order */
-import { useBusinessDetails } from '@/store/selectors/business/business';
-import Colors from '@src/constants/Colors';
-import useCurrencyFlag from '@src/hooks/useCurrencyFlag';
-import { useAppSelector } from '@src/hooks/useReduxHooks';
-import { hs, ms, vs } from '@utils/design/design';
-import { getRespValue } from '@utils/getRespValue';
-import React from 'react';
+import { useBusinessDetails } from "@/store/selectors/business/business";
+import Colors from "@src/constants/Colors";
+import useCurrencyFlag from "@src/hooks/useCurrencyFlag";
+import { useAppSelector } from "@src/hooks/useReduxHooks";
+import { hs, ms, vs } from "@utils/design/design";
+import { getRespValue } from "@utils/getRespValue";
+import React from "react";
 import {
   FlatList,
   Image,
@@ -13,7 +13,7 @@ import {
   StyleSheet,
   Text,
   View,
-} from 'react-native';
+} from "react-native";
 
 // Define the data type
 interface CurrencyBalance {
@@ -42,8 +42,8 @@ const AllAccountTable: React.FC<any> = ({ data }) => {
         currency,
         actual: balanceData?.actual ?? 0,
         available: balanceData?.available ?? 0,
-        iban: businessData.IBAN ?? account?.iban ?? 'N/A',
-        status: account.approved ? 'Approved' : 'Pending',
+        iban: businessData.IBAN ?? account?.iban ?? "N/A",
+        status: account.approved ? "Approved" : "Pending",
       };
     }) ?? [];
 
@@ -83,7 +83,7 @@ const AllAccountTable: React.FC<any> = ({ data }) => {
               style={[
                 styles.cell,
                 styles.dataText,
-                { color: item.status === 'Approved' ? 'green' : 'red' },
+                { color: item.status === "Approved" ? "green" : "red" },
                 { marginLeft: hs(5) },
               ]}
             >
@@ -92,7 +92,7 @@ const AllAccountTable: React.FC<any> = ({ data }) => {
 
             <Text style={[styles.cell, styles.dataText]}>
               {`${getCurrencySymbol(
-                item.currency,
+                item.currency
               )} ${item.available.toLocaleString()}`}
             </Text>
           </View>
@@ -105,22 +105,22 @@ const AllAccountTable: React.FC<any> = ({ data }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: getRespValue(20),
     marginBottom: vs(20),
     marginTop: vs(8),
-    shadowColor: '#000',
-    width: '90%',
-    alignSelf: 'center',
+    shadowColor: "#000",
+    width: "90%",
+    alignSelf: "center",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
-    elevation: Platform.OS === 'ios' ? 2 : 0,
+    elevation: Platform.OS === "ios" ? 2 : 0,
   },
   flagContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     gap: ms(5),
   },
 
@@ -130,38 +130,35 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: vs(10),
     padding: ms(8),
     borderRadius: 8,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   headerRow: {
     backgroundColor: Colors.light.theme.eccRedColor,
   },
   cell: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   headerText: {
-    color: 'white',
-    fontWeight: '600',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
   },
   dataText: {
-    color: '#000',
-    fontWeight: '400',
-    alignSelf: 'center',
-    textAlign: 'center',
+    color: "#000",
+    alignSelf: "center",
+    textAlign: "center",
     fontSize: ms(12),
   },
 
   ibanText: {
-    color: '#000',
-    fontWeight: '400',
+    color: "#000",
     fontSize: ms(10),
-    alignSelf: 'center',
+    alignSelf: "center",
   },
 });
 

@@ -1,12 +1,10 @@
 import { clone, ruleTypes } from "gifted-charts-core";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { LineChart } from "react-native-gifted-charts";
 
 const AreaChartDynamicData = () => {
-  const lcomp = (v) => (
-    <Text style={{ width: 50, color: "white", fontWeight: "bold" }}>{v}</Text>
-  );
+  const lcomp = (v) => <Text style={{ width: 50, color: "white" }}>{v}</Text>;
   const dPoint = () => {
     return (
       <View

@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 15,
     color: "#333",
-    fontWeight: "500",
     fontFamily: "Excon-Regular",
   },
   toggleContainer: {

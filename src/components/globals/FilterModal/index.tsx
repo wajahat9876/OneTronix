@@ -146,7 +146,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: ms(18),
-    fontWeight: "bold",
     marginBottom: 10,
     textAlign: "center",
     color: "black",
@@ -174,7 +173,6 @@ const styles = StyleSheet.create({
   },
   confirmText: {
     color: "#fff",
-    fontWeight: "600",
     fontFamily: "Ranade-Regular",
     paddingVertical: vs(6),
     fontSize: ms(16),

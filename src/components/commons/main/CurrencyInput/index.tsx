@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable react/require-default-props */
-import useCurrencyFlag from '@src/hooks/useCurrencyFlag';
-import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import useCurrencyFlag from "@src/hooks/useCurrencyFlag";
+import { useState } from "react";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 
 interface CurrencyInput {
   currency?: string;
@@ -12,30 +12,30 @@ interface CurrencyInput {
 }
 
 const currencySymbols = {
-  GBP: '£',
-  EUR: '€',
-  USD: '$',
+  GBP: "£",
+  EUR: "€",
+  USD: "$",
   // Add more currencies as needed
 };
 
 const CurrencyInput = ({
-  currency = 'GBP',
+  currency = "GBP",
   onValueChange,
   containerStyle,
 }: CurrencyInput) => {
-  const [displayValue, setDisplayValue] = useState('');
+  const [displayValue, setDisplayValue] = useState("");
   const { getCurrencySymbol } = useCurrencyFlag();
   const handleChangeText = (text: string) => {
     // Allow only numbers (no decimal point handling needed for this requirement)
-    const cleanedText = text.replace(/[^0-9]/g, '');
+    const cleanedText = text.replace(/[^0-9]/g, "");
 
     // Convert the cleaned text to a number and divide by 100
     const numericValue = parseInt(cleanedText, 10);
 
     // If the input is empty or non-numeric, handle it gracefully
     if (isNaN(numericValue)) {
-      setDisplayValue('');
-      if (onValueChange) onValueChange('');
+      setDisplayValue("");
+      if (onValueChange) onValueChange("");
       return;
     }
 
@@ -51,12 +51,12 @@ const CurrencyInput = ({
     }
   };
 
-  const symbol = getCurrencySymbol(currency) || '£';
+  const symbol = getCurrencySymbol(currency) || "£";
 
   return (
     <View
       style={{
-        flexDirection: 'row',
+        flexDirection: "row",
         borderRadius: 8,
         paddingHorizontal: 10,
         paddingVertical: 5,
@@ -77,24 +77,23 @@ const CurrencyInput = ({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     borderBottomWidth: 1,
     borderWidth: 0,
-    borderBottomColor: '#ccc',
+    borderBottomColor: "#ccc",
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 5,
   },
   symbol: {
     fontSize: 22,
-    fontWeight: '500',
     marginRight: 5,
   },
   input: {
     flex: 1,
     fontSize: 24,
-    textAlign: 'left',
+    textAlign: "left",
   },
 });
 

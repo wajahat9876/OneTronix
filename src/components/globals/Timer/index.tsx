@@ -1,11 +1,11 @@
 /* eslint-disable react/require-default-props */
-import { TouchableOpacity } from '@src/components/libraries';
-import CountDownCircleTimer from '@src/components/libraries/CircleTimer';
-import Colors from '@src/constants/Colors';
-import { getRespValue } from '@utils/getRespValue';
-import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity } from "@src/components/libraries";
+import CountDownCircleTimer from "@src/components/libraries/CircleTimer";
+import Colors from "@src/constants/Colors";
+import { getRespValue } from "@utils/getRespValue";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
 interface TimerProps {
   creationDateTime: string; // Pass transaction creation time
@@ -14,14 +14,14 @@ interface TimerProps {
 }
 const Timer: React.FC<TimerProps> = ({ creationDateTime, item, onPress }) => {
   const createdAt = moment.utc(creationDateTime);
-  const expiryTime = createdAt.add(10, 'minutes');
+  const expiryTime = createdAt.add(10, "minutes");
   const [remainingTimer, setRemainingTimer] = useState<number>(
-    Math.max(expiryTime.diff(moment.utc(), 'seconds'), 0),
+    Math.max(expiryTime.diff(moment.utc(), "seconds"), 0)
   );
   const [complete, setComplete] = useState(false);
   useEffect(() => {
     const intervalId = setInterval(() => {
-      const timeLeft = Math.max(expiryTime.diff(moment.utc(), 'seconds'), 0);
+      const timeLeft = Math.max(expiryTime.diff(moment.utc(), "seconds"), 0);
       setRemainingTimer(timeLeft);
       if (timeLeft === 0) clearInterval(intervalId);
       setComplete(true);
@@ -33,9 +33,9 @@ const Timer: React.FC<TimerProps> = ({ creationDateTime, item, onPress }) => {
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${secs
+    return `${minutes.toString().padStart(2, "0")}:${secs
       .toString()
-      .padStart(2, '0')}`;
+      .padStart(2, "0")}`;
   };
 
   return (
@@ -44,7 +44,7 @@ const Timer: React.FC<TimerProps> = ({ creationDateTime, item, onPress }) => {
         <TouchableOpacity onPress={onPress} style={styles.transactionItem}>
           <View
             style={{
-              justifyContent: 'space-between',
+              justifyContent: "space-between",
               flex: 1,
             }}
           >
@@ -58,7 +58,7 @@ const Timer: React.FC<TimerProps> = ({ creationDateTime, item, onPress }) => {
             strokeWidth={4}
             initialRemainingTime={remainingTimer}
             duration={600}
-            colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+            colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
             colorsTime={[600, 300, 120, 0]}
             size={55}
             onComplete={() => {
@@ -66,9 +66,7 @@ const Timer: React.FC<TimerProps> = ({ creationDateTime, item, onPress }) => {
             }}
           >
             {({ remainingTime }) => (
-              <Text
-                style={{ fontSize: 10, fontWeight: 'bold', color: '#004777' }}
-              >
+              <Text style={{ fontSize: 10, color: "#004777" }}>
                 {formatTime(remainingTime)}
               </Text>
             )}
@@ -98,68 +96,67 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.theme.backgroundTopCurveSection,
     paddingVertical: 40,
   },
-  title: { fontSize: 20, fontWeight: 'bold', marginBottom: 16 },
+  title: { fontSize: 20, marginBottom: 16 },
   list: { paddingBottom: 16 },
   transactionItem: {
     marginBottom: 20,
     padding: 16,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
     borderWidth: 1,
-    borderColor: 'white',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    borderColor: "white",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   noDataContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
   noDataText: {
     fontSize: 18,
-    color: 'gray',
-    fontWeight: 'bold',
+    color: "gray",
   },
-  transactionId: { fontSize: 16, fontWeight: '500', paddingRight: 5 },
-  timerText: { fontSize: 10, fontWeight: 'bold', color: '#004777' },
+  transactionId: { fontSize: 16, paddingRight: 5 },
+  timerText: { fontSize: 10, color: "#004777" },
   expiredText: {
     fontSize: getRespValue(16),
-    fontWeight: 'bold',
-    color: 'red',
+
+    color: "red",
     paddingVertical: 20,
   },
   approveBtn: {
-    flexDirection: 'row',
-    backgroundColor: '#F1FFF2',
+    flexDirection: "row",
+    backgroundColor: "#F1FFF2",
     padding: getRespValue(18),
-    justifyContent: 'center',
-    width: '63%',
+    justifyContent: "center",
+    width: "63%",
     borderRadius: 15,
-    alignSelf: 'center',
-    borderColor: 'green',
+    alignSelf: "center",
+    borderColor: "green",
     borderWidth: 1.5,
     marginTop: getRespValue(20),
   },
   rejectBtn: {
-    flexDirection: 'row',
-    backgroundColor: '#FEE6E6',
+    flexDirection: "row",
+    backgroundColor: "#FEE6E6",
     padding: getRespValue(18),
-    justifyContent: 'center',
-    width: '63%',
+    justifyContent: "center",
+    width: "63%",
     borderRadius: 15,
-    alignSelf: 'center',
-    borderColor: 'red',
+    alignSelf: "center",
+    borderColor: "red",
     borderWidth: 1.5,
     marginTop: getRespValue(20),
   },
   wrapView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingHorizontal: getRespValue(60),
     marginBottom: getRespValue(20),
   },
-  subHeading: { fontWeight: '700', fontSize: getRespValue(18) },
+  subHeading: { fontSize: getRespValue(18) },
   txt: { marginLeft: 10, fontSize: getRespValue(18) },
 });

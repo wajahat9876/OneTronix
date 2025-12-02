@@ -365,7 +365,6 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     fontSize: ms(16),
-    fontWeight: "600",
   },
   dotText: { flexDirection: "row", alignItems: "center", marginBottom: 4 },
   colorDot: { width: 10, height: 10, borderRadius: 5, marginRight: 6 },

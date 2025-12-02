@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
   },
   one: {
     color: "red",
-    fontWeight: "900",
     fontSize: ms(40),
     lineHeight: 45,
     fontFamily: "Excon-Black",

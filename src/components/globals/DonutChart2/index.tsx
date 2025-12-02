@@ -111,8 +111,7 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
               <SvgText
                 alignmentBaseline="middle"
                 fontSize={10}
-                fontFamily="Excon-Regular"
-                fontWeight="600"
+                fontFamily="Excon-Medium"
                 fill={item?.color ?? "#333"}
                 textAnchor="start"
                 dy={0}
@@ -229,7 +228,6 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
                     style={{
                       fontSize: ms(9),
                       color: "#333",
-                      fontWeight: "500",
                       fontFamily: "Excon-Regular",
                     }}
                   >
