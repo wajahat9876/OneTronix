@@ -106,9 +106,12 @@ const Step1_NewPassword = ({ parentGoto, back }: SettingProps) => {
                 autoComplete="password"
                 textContentType="password"
                 inputProps={{
+                  theme: {
+                    fonts: { regular: { fontFamily: "Ranade-Regular" } },
+                  },
                   height: vs(80),
                   textColor: "black",
-                  fontFamily: "Excon-Regular",
+                  fontFamily: "Ranade-Regular",
                   backgroundColor: "white",
                   cursorColor: "black",
                   selectionColor: "#D3D3D3",
@@ -130,9 +133,12 @@ const Step1_NewPassword = ({ parentGoto, back }: SettingProps) => {
                 autoComplete="password"
                 textContentType="password"
                 inputProps={{
+                  theme: {
+                    fonts: { regular: { fontFamily: "Ranade-Regular" } },
+                  },
                   height: vs(80),
                   textColor: "black",
-                  fontFamily: "Excon-Regular",
+                  fontFamily: "Ranade-Regular",
                   backgroundColor: "white",
                   cursorColor: "black",
                   selectionColor: "#D3D3D3",

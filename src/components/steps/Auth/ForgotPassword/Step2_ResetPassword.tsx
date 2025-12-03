@@ -4,7 +4,7 @@
 /* eslint-disable camelcase */
 import { useResetPasswordMutation } from "@/store/api/business/authApis";
 import { resetBusinessTempToken } from "@/store/slices/business/businessSlice";
-import Logo from "@assets/eccLogo/oneTronixLogo.svg";
+import Logoicon from "@assets/eccLogo/one-tronix-logo.png";
 import Button from "@src/components/globals/Button";
 import FormikInput from "@src/components/globals/FormikInput";
 import LoadingModal from "@src/components/globals/LoadingModal";
@@ -14,18 +14,17 @@ import { MultiStepFormProps } from "@src/hooks/useMultiStepForm/types";
 import { useAppDispatch } from "@src/hooks/useReduxHooks";
 import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
 import { hs, ms, vs } from "@utils/design/design";
-import { getRespValue } from "@utils/getRespValue";
 import { useRouter } from "expo-router";
 import { useFormik } from "formik";
 import { useCallback, useRef } from "react";
 import {
+  Image,
   Platform,
-  ScrollView,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import * as Yup from "yup";
 
 const Step2_ResetPassword = ({ back, next, goTo }: MultiStepFormProps) => {
@@ -73,147 +72,142 @@ const Step2_ResetPassword = ({ back, next, goTo }: MultiStepFormProps) => {
   };
   return (
     <>
-      <ScrollView style={{ flex: 1 }}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            paddingHorizontal: hs(10),
-            paddingVertical: hs(30),
-            marginTop: Platform.OS === "ios" ? vs(10) : vs(15),
-          }}
-        >
-          <TouchableOpacity onPress={() => handleBack()}>
-            <Text
-              style={{
-                color: "white",
-                fontSize: ms(16),
-                marginTop: vs(10),
-                fontFamily: "Ranade-Regular",
-              }}
-            >
-              ← Back
-            </Text>
-          </TouchableOpacity>
-          <View
-            style={{
-              alignSelf: "flex-end",
-            }}
-          >
-            <Logo />
-          </View>
-        </View>
-        <View
-          style={{
-            marginLeft: 12,
-            marginTop: vs(8),
-          }}
-        >
-          <Text
-            style={{
-              color: "red",
-              fontSize: ms(44),
-              fontFamily: "Excon-Black",
-              lineHeight: 45,
-            }}
-          >
-            ONE
-          </Text>
-          <Text
-            style={{
-              color: "red",
-              fontSize: ms(44),
-              fontFamily: "Excon-Regular",
-              lineHeight: 45,
-              marginTop: -4, // tighten spacing between ONE and TRONIX
-            }}
-          >
-            TRONIX
-          </Text>
+      <View
+        style={{
+          paddingHorizontal: hs(10),
+          paddingVertical: hs(30),
+          marginTop: Platform.OS === "ios" ? vs(10) : vs(15),
+        }}
+      >
+        <TouchableOpacity onPress={() => handleBack()}>
           <Text
             style={{
               color: "white",
-              fontSize: ms(13),
-              fontFamily: "Excon-Regular",
-              letterSpacing: 1,
-              lineHeight: 18,
-              marginTop: -5, // small gap from TRONIX
+              fontSize: ms(16),
+              marginTop: vs(10),
+              fontFamily: "Ranade-Regular",
             }}
           >
-            TECHNOLOGY PARTNER
+            ← Back
           </Text>
-        </View>
-        <KeyboardAwareScrollView
-          contentContainerStyle={{
-            paddingBottom: Platform.OS === "ios" ? getRespValue(10) : 20,
-            flexGrow: 1,
+        </TouchableOpacity>
+      </View>
+      <Image
+        source={Logoicon}
+        style={{
+          position: "absolute",
+          width: 200,
+          height: 230,
+          alignSelf: "flex-end",
+        }}
+      />
+      <View
+        style={{
+          marginLeft: hs(15),
+          marginTop: vs(80),
+        }}
+      >
+        <Text
+          style={{
+            color: "red",
+            fontSize: ms(44),
+            fontFamily: "Excon-Black",
+            lineHeight: 45,
           }}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-          enableOnAndroid
-          scrollEnabled
-          resetScrollToCoords={{ x: 0, y: 0 }}
-          viewIsInsideTabBar
-          extraHeight={0}
-          extraScrollHeight={5}
-          enableAutomaticScroll={false}
         >
-          <View style={styles.container}>
-            <Text style={styles.title} className="text-white ">
-              Enter New Password
-            </Text>
-            <View
-              style={{ width: "90%", alignSelf: "center", marginTop: vs(20) }}
-            >
-              <FormikInput
-                formik={formik}
-                name="password"
-                ref={passwordRef}
-                autoComplete="password"
-                textContentType="password"
-                inputProps={{
-                  ...textInputDefaultProps,
-                  textContentType: "password",
-                  placeholder: "Enter Password",
-                  height: vs(70),
-                  fontFamily: "Excon-Regular",
-                  className: "mt-2",
-                  returnKeyType: "done",
-                  password: true,
-                  autoComplete: "password",
-                  onSubmitEditing: () => {
-                    if (confirmPasswordRef?.current) {
-                      confirmPasswordRef.current.focus();
-                    }
-                  },
-                }}
-              />
-            </View>
-            <View
-              style={{ width: "90%", alignSelf: "center", marginTop: vs(20) }}
-            >
-              <FormikInput
-                formik={formik}
-                name="confirmPassword"
-                ref={confirmPasswordRef}
-                autoComplete="password"
-                textContentType="password"
-                inputProps={{
-                  ...textInputDefaultProps,
-                  textContentType: "password",
-                  height: vs(70),
-                  fontFamily: "Excon-Regular",
-                  placeholder: "Confirm Password",
-                  className: "mt-2",
-                  returnKeyType: "done",
-                  password: true,
-                  autoComplete: "password",
-                }}
-              />
-            </View>
+          ONE
+        </Text>
+        <Text
+          style={{
+            color: "red",
+            fontSize: ms(44),
+            fontFamily: "Excon-Regular",
+            lineHeight: 45,
+            marginTop: -4, // tighten spacing between ONE and TRONIX
+          }}
+        >
+          TRONIX
+        </Text>
+        <Text
+          style={{
+            color: "white",
+            fontSize: ms(13),
+            fontFamily: "Excon-Regular",
+            letterSpacing: 1,
+            lineHeight: 18,
+            marginTop: -5, // small gap from TRONIX
+          }}
+        >
+          TECHNOLOGY PARTNER
+        </Text>
+      </View>
+      <KeyboardAwareScrollView
+        contentContainerStyle={{
+          paddingBottom: Platform.OS === "ios" ? vs(10) : vs(0),
+        }}
+        automaticallyAdjustContentInsets={false}
+        automaticallyAdjustKeyboardInsets={false}
+        automaticallyAdjustsScrollIndicatorInsets={false}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+        scrollEnabled={true} // ⬅️ user can manually scroll
+      >
+        <View style={styles.container}>
+          <Text style={styles.title} className="text-white ">
+            Enter New Password
+          </Text>
+          <View
+            style={{ width: "90%", alignSelf: "center", marginTop: vs(20) }}
+          >
+            <FormikInput
+              formik={formik}
+              name="password"
+              ref={passwordRef}
+              autoComplete="password"
+              textContentType="password"
+              inputProps={{
+                ...textInputDefaultProps,
+                textContentType: "password",
+                placeholder: "Enter Password",
+                height: vs(70),
+                fontFamily: "Ranade-Regular",
+                className: "mt-2",
+                returnKeyType: "done",
+                password: true,
+                autoComplete: "password",
+                onSubmitEditing: () => {
+                  if (confirmPasswordRef?.current) {
+                    confirmPasswordRef.current.focus();
+                  }
+                },
+              }}
+            />
           </View>
-        </KeyboardAwareScrollView>
-      </ScrollView>
+          <View
+            style={{ width: "90%", alignSelf: "center", marginTop: vs(20) }}
+          >
+            <FormikInput
+              formik={formik}
+              name="confirmPassword"
+              ref={confirmPasswordRef}
+              autoComplete="password"
+              textContentType="password"
+              inputProps={{
+                ...textInputDefaultProps,
+                textContentType: "password",
+                height: vs(70),
+                fontFamily: "Ranade-Regular",
+                placeholder: "Confirm Password",
+                className: "mt-2",
+                returnKeyType: "done",
+                password: true,
+                autoComplete: "password",
+              }}
+            />
+          </View>
+        </View>
+      </KeyboardAwareScrollView>
+
       <View
         style={{
           width: "80%",

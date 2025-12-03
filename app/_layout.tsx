@@ -8,9 +8,10 @@ import store from "@store/index";
 import { toastConfig } from "@utils/helpers/toast";
 import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { ActivityIndicator, Text, TextInput, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import { DefaultTheme, PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
@@ -81,25 +82,27 @@ const RootLayout = () => {
     <SelectProvider>
       <SafeAreaProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
-          <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-              <PaperProvider
-                theme={{
-                  ...DefaultTheme,
-                  colors: {
-                    ...DefaultTheme.colors,
-                    secondaryContainer: "transparent",
-                  },
-                }}
-              >
-                <PortalProvider>
-                  <ReduxWrapper />
-                </PortalProvider>
-                <CheckNetwork />
-              </PaperProvider>
-            </PersistGate>
-          </Provider>
-          <Toast config={toastConfig} />
+          <KeyboardProvider>
+            <Provider store={store}>
+              <PersistGate loading={null} persistor={persistor}>
+                <PaperProvider
+                  theme={{
+                    ...DefaultTheme,
+                    colors: {
+                      ...DefaultTheme.colors,
+                      secondaryContainer: "transparent",
+                    },
+                  }}
+                >
+                  <PortalProvider>
+                    <ReduxWrapper />
+                  </PortalProvider>
+                  <CheckNetwork />
+                </PaperProvider>
+              </PersistGate>
+            </Provider>
+            <Toast config={toastConfig} />
+          </KeyboardProvider>
         </GestureHandlerRootView>
       </SafeAreaProvider>
     </SelectProvider>

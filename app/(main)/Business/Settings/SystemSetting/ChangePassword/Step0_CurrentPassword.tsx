@@ -101,14 +101,17 @@ const Step0_CurrentPassword = ({ goTo, next }: MultiStepFormProps) => {
               <FormikInput
                 formik={formik}
                 name="currentPassword"
-                fontFamily="Excon-Regular"
+                fontFamily="Ranade-Regular"
                 ref={passwordRef}
                 autoComplete="password"
                 textContentType="password"
                 inputProps={{
+                  theme: {
+                    fonts: { regular: { fontFamily: "Ranade-Regular" } },
+                  },
                   height: vs(80),
                   textColor: "black",
-                  fontFamily: "Excon-Regular",
+                  fontFamily: "Ranade-Regular",
                   backgroundColor: "white",
                   cursorColor: "black",
                   selectionColor: "#D3D3D3",

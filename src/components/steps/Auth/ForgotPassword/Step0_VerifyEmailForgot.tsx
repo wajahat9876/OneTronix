@@ -4,7 +4,7 @@
 /* eslint-disable camelcase */
 import { useForgotPasswordEmailMutation } from "@/store/api/business/authApis";
 import { resetBusinessTempToken } from "@/store/slices/business/businessSlice";
-import Logo from "@assets/eccLogo/oneTronixLogo.svg";
+import Logoicon from "@assets/eccLogo/one-tronix-logo.png";
 import Button from "@src/components/globals/Button";
 import FormikInput from "@src/components/globals/FormikInput";
 import LoadingModal from "@src/components/globals/LoadingModal";
@@ -17,7 +17,13 @@ import { hs, ms, vs } from "@utils/design/design";
 import { useRouter } from "expo-router";
 import { useFormik } from "formik";
 import { useCallback } from "react";
-import { Platform, ScrollView, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import * as Yup from "yup";
 
 const Step0_VerifyEmail = ({ back, next }: MultiStepFormProps) => {
@@ -55,8 +61,6 @@ const Step0_VerifyEmail = ({ back, next }: MultiStepFormProps) => {
       <ScrollView style={{ flex: 1 }}>
         <View
           style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
             paddingHorizontal: hs(10),
             paddingVertical: hs(30),
             marginTop: Platform.OS === "ios" ? vs(10) : vs(15),
@@ -74,18 +78,20 @@ const Step0_VerifyEmail = ({ back, next }: MultiStepFormProps) => {
               ← Back
             </Text>
           </TouchableOpacity>
-          <View
+          <Image
+            source={Logoicon}
             style={{
+              position: "absolute",
+              width: 200,
+              height: 230,
               alignSelf: "flex-end",
             }}
-          >
-            <Logo />
-          </View>
+          />
         </View>
         <View
           style={{
-            marginLeft: 12,
-            marginTop: vs(8),
+            marginLeft: hs(15),
+            marginTop: vs(80),
           }}
         >
           <Text
@@ -137,6 +143,7 @@ const Step0_VerifyEmail = ({ back, next }: MultiStepFormProps) => {
               inputProps={{
                 ...textInputDefaultProps,
                 height: vs(70),
+                fontFamily: "Ranade-Regular",
                 textContentType: "username",
                 autoComplete: "username",
                 placeholder: "Enter Email",

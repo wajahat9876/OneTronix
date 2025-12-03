@@ -4,7 +4,7 @@
 /* eslint-disable camelcase */
 import { useVerifyForgotPasswordEmailMutation } from "@/store/api/business/authApis";
 import { resetBusinessTempToken } from "@/store/slices/business/businessSlice";
-import Logo from "@assets/eccLogo/oneTronixLogo.svg";
+import Logoicon from "@assets/eccLogo/one-tronix-logo.png";
 import LoadingModal from "@src/components/globals/LoadingModal";
 import OTP from "@src/components/globals/OTP";
 import { StyleSheet, Text } from "@src/components/libraries";
@@ -15,8 +15,15 @@ import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
 import { hs, ms, vs } from "@utils/design/design";
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { Platform, ScrollView, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Animated from "react-native-reanimated";
+
 const Step1_VerifyOtp = ({ back, next }: MultiStepFormProps) => {
   const dispatch = useAppDispatch();
 
@@ -63,8 +70,6 @@ const Step1_VerifyOtp = ({ back, next }: MultiStepFormProps) => {
     <ScrollView style={{ flex: 1 }}>
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
           paddingHorizontal: hs(10),
           paddingVertical: hs(30),
           marginTop: Platform.OS === "ios" ? vs(10) : vs(15),
@@ -82,18 +87,20 @@ const Step1_VerifyOtp = ({ back, next }: MultiStepFormProps) => {
             ← Back
           </Text>
         </TouchableOpacity>
-        <View
-          style={{
-            alignSelf: "flex-end",
-          }}
-        >
-          <Logo />
-        </View>
       </View>
+      <Image
+        source={Logoicon}
+        style={{
+          position: "absolute",
+          width: 200,
+          height: 230,
+          alignSelf: "flex-end",
+        }}
+      />
       <View
         style={{
-          marginLeft: 12,
-          marginTop: vs(8),
+          marginLeft: hs(15),
+          marginTop: vs(80),
         }}
       >
         <Text

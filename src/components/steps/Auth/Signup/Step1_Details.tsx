@@ -8,7 +8,6 @@ import {
 } from "@/store/api/business/authApis";
 import { useBusinessDetails } from "@/store/selectors/business/business";
 import { setRole } from "@/store/slices/business/businessSlice";
-import Logo from "@assets/eccLogo/oneTronixLogo.svg";
 import Button from "@src/components/globals/Button";
 import FormikInput from "@src/components/globals/FormikInput";
 import DismissKeyboardView from "@src/components/globals/HideKeyboard";
@@ -21,9 +20,11 @@ import { hs, ms, vs } from "@utils/design/design";
 import { getRespValue } from "@utils/getRespValue";
 import { useRouter } from "expo-router";
 
+import Logoicon from "@assets/eccLogo/one-tronix-logo.png";
 import { useFormik } from "formik";
 import { useRef } from "react";
 import {
+  Image,
   Keyboard,
   Platform,
   TextInput,
@@ -106,8 +107,6 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
     <>
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
           paddingHorizontal: hs(18),
           paddingVertical: hs(30),
           marginTop: Platform.OS === "ios" ? vs(10) : vs(10),
@@ -125,26 +124,27 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
             ← Back
           </Text>
         </TouchableOpacity>
-        <View
-          style={{
-            alignSelf: "flex-end",
-          }}
-        >
-          <Logo />
-        </View>
       </View>
-
+      <Image
+        source={Logoicon}
+        style={{
+          position: "absolute",
+          width: 200,
+          height: 230,
+          alignSelf: "flex-end",
+        }}
+      />
       <View
         style={{
           alignItems: "flex-start",
-          marginTop: vs(32),
-          paddingHorizontal: 10,
+          marginTop: vs(80),
+          marginLeft: hs(15),
         }}
       >
         <Text
           style={{
             color: "red",
-            // fontWeight: "900",
+
             fontSize: ms(40),
             lineHeight: 45,
             fontFamily: "Excon-Black",
@@ -197,7 +197,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
             flex: 1,
             paddingLeft: hs(16),
             paddingRight: hs(16),
-            marginTop: vs(82),
+            marginTop: vs(30),
             borderTopLeftRadius: ms(20),
             borderTopRightRadius: ms(20),
             backgroundColor: "transparent",
@@ -249,7 +249,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
                   placeholder: "Enter first name",
                   keyboardType: "ascii-capable",
                   className: "mt-2",
-                  fontFamily: "Excon-Regular",
+                  // fontFamily: "Excon-Regular",
                   returnKeyType: "next",
                   onSubmitEditing: () => {
                     if (lastNameRef?.current) {
@@ -269,7 +269,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
                 ref={lastNameRef}
                 inputProps={{
                   ...textInputDefaultProps,
-                  fontFamily: "Excon-Regular",
+                  // fontFamily: "Excon-Regular",
                   placeholder: "Enter last name",
                   keyboardType: "ascii-capable",
                   className: "mt-2",
@@ -298,7 +298,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
                   textContentType: "username",
                   autoComplete: "username",
                   placeholder: "Enter Email",
-                  fontFamily: "Excon-Regular",
+                  // fontFamily: "Excon-Regular",
                   keyboardType: "email-address",
                   className: "mt-2",
                   returnKeyType: "next",
@@ -324,7 +324,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
                   ...textInputDefaultProps,
                   textContentType: "password",
                   placeholder: "Enter Password",
-                  fontFamily: "Excon-Regular",
+                  // fontFamily: "Excon-Regular",
                   className: "mt-2",
                   returnKeyType: "done",
                   password: true,
@@ -347,7 +347,7 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
                 ref={confirmPasswordRef}
                 inputProps={{
                   ...textInputDefaultProps,
-                  fontFamily: "Excon-Regular",
+                  // fontFamily: "Excon-Regular",
                   placeholder: "Re-enter Password",
                   className: "mt-2",
                   returnKeyType: "done",

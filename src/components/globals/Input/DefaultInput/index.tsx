@@ -47,7 +47,7 @@ const DefaultInput = React.forwardRef<TextInput, DefaultTextInputProps>(
           }}
           contentStyle={{
             paddingLeft: hs(16),
-            fontFamily: fontFamily || "Excon-Regular",
+            fontFamily: fontFamily || "Ranade-Regular",
             fontSize: ms(14),
             ...(contentStyle as object),
           }}
@@ -61,7 +61,7 @@ const DefaultInput = React.forwardRef<TextInput, DefaultTextInputProps>(
             borderBottomColor: borderBottomColor || "transparent",
             borderBottomWidth: borderBottomHeight || 0,
             height: height || vs(60),
-            fontFamily: fontFamily || "Excon-Regular",
+            fontFamily: fontFamily || "Ranade-Regular",
             lineHeight,
             ...(style as object),
           }}
@@ -84,7 +84,7 @@ const DefaultInput = React.forwardRef<TextInput, DefaultTextInputProps>(
           theme={{
             fonts: {
               regular: {
-                fontFamily: "Excon-Regular",
+                fontFamily: fontFamily || "Ranade-Regular",
               },
             },
           }}

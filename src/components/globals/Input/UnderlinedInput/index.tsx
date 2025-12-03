@@ -26,6 +26,7 @@ const UnderlinedInput = React.forwardRef<TextInput, UnderlinedTextInputProps>(
       borderBottomColor,
       borderBottomHeight,
       lineHeight,
+      fontFamily,
       ...others
     } = props;
 
@@ -52,7 +53,7 @@ const UnderlinedInput = React.forwardRef<TextInput, UnderlinedTextInputProps>(
               style={{
                 color: "gray",
                 fontSize: ms(12),
-                fontFamily: "Excon-Medium",
+                fontFamily: "Ranade-Regular",
               }}
             >
               {props.placeholder}
@@ -75,7 +76,7 @@ const UnderlinedInput = React.forwardRef<TextInput, UnderlinedTextInputProps>(
           }}
           contentStyle={{
             paddingLeft: hs(4),
-            fontFamily: "Excon-Regular",
+            fontFamily: fontFamily || "Ranade-Regular",
             fontSize: ms(14),
             ...(contentStyle as object),
           }}
@@ -104,6 +105,13 @@ const UnderlinedInput = React.forwardRef<TextInput, UnderlinedTextInputProps>(
               />
             )
           }
+          theme={{
+            fonts: {
+              regular: {
+                fontFamily: fontFamily || "Ranade-Regular",
+              },
+            },
+          }}
         />
 
         {/* Error Text */}

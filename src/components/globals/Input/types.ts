@@ -41,5 +41,6 @@ export interface UnderlinedTextInputProps extends TextInputProps {
   borderBottomColor?: string;
   borderBottomHeight?: number;
   lineHeight?: number;
+  fontFamily?: string;
   type?: "default" | "underlined";
 }

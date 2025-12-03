@@ -13,12 +13,11 @@ import { MultiStepFormProps } from "@src/hooks/useMultiStepForm/types";
 import { useAppDispatch } from "@src/hooks/useReduxHooks";
 import { renderToastError, renderToastSuccess } from "@src/hooks/useToasty";
 import { hs, ms, vs } from "@utils/design/design";
-import { getRespValue } from "@utils/getRespValue";
 import { useRouter } from "expo-router";
 import { useFormik } from "formik";
 import { useMemo, useRef, useState } from "react";
 import { Image, Platform, TextInput, View } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import * as Yup from "yup";
 
 const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
@@ -77,6 +76,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
   };
   const snapPoints = useMemo(() => ["100%"], []);
   const [, setBottomSheetVisible] = useState(false);
+
   return (
     <>
       <View
@@ -91,7 +91,6 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
             position: "absolute",
             width: 200,
             height: 230,
-            // marginTop: 20,
             alignSelf: "flex-end",
           }}
         />
@@ -108,13 +107,12 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
         <View
           style={{
             alignItems: "flex-start",
-            marginTop: vs(160),
+            marginTop: vs(180),
           }}
         >
           <Text
             style={{
               color: "red",
-              // fontWeight: "900",
               fontSize: ms(40),
               lineHeight: 45,
               fontFamily: "Excon-Black",
@@ -149,18 +147,14 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
         </View>
         <KeyboardAwareScrollView
           contentContainerStyle={{
-            paddingBottom: Platform.OS === "ios" ? getRespValue(10) : 10,
-            flexGrow: 1,
+            paddingBottom: Platform.OS === "ios" ? vs(10) : vs(0),
           }}
+          automaticallyAdjustContentInsets={false}
+          automaticallyAdjustKeyboardInsets={false}
+          automaticallyAdjustsScrollIndicatorInsets={false}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
-          enableOnAndroid
-          extraScrollHeight={20}
-          enableAutomaticScroll
-          scrollEnabled
-          extraHeight={Platform.OS === "ios" ? getRespValue(320) : 40}
-          viewIsInsideTabBar
-          keyboardOpeningTime={0}
+          scrollEnabled={true} // ⬅️ user can manually scroll
         >
           <View
             style={{
@@ -169,7 +163,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
               borderRadius: 20,
               width: "95%",
               alignSelf: "center",
-              marginTop: vs(10),
+              marginTop: vs(60),
             }}
           >
             <Text
@@ -216,7 +210,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
                 textContentType: "username",
                 autoComplete: "username",
                 placeholder: "Enter Email",
-                fontFamily: "Excon-Regular",
+                fontFamily: "Ranade-Regular",
                 keyboardType: "email-address",
                 className: "mt-2",
                 returnKeyType: "next",
@@ -252,7 +246,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
                 textContentType: "password",
                 placeholder: "Enter Password",
                 className: "mt-2",
-                fontFamily: "Excon-Regular",
+                fontFamily: "Ranade-Regular",
                 returnKeyType: "done",
                 password: true,
                 autoComplete: "password",

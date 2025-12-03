@@ -5,11 +5,11 @@
     "version": "1.0.0",
     "newArchEnabled": false,
     "orientation": "portrait",
-    "icon": "./assets/images/adaptive-icon.png",
+    "icon": "./assets/images/iosAdaptive.png",
     "scheme": "template",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/eccLogo/logo.png",
+      "image": "./assets/images/splash.png",
       "resizeMode": "cover",
       "backgroundColor": "#000000"
     },
@@ -35,7 +35,7 @@
     "android": {
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/androidAdaptive.png",
         "backgroundColor": "#000000"
       },
       "package": "com.wajahat959.onetronix",
@@ -81,7 +81,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/eccLogo/logo.png",
+          "image": "./assets/images/splash.png",
           "resizeMode": "cover",
           "backgroundColor": "#000000"
         }
