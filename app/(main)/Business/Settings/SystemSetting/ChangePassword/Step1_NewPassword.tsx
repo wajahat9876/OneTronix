@@ -78,6 +78,7 @@ const Step1_NewPassword = ({ parentGoto, back }: SettingProps) => {
         <View style={styles.container}>
           <DismissKeyboardView>
             <Text
+              allowFontScaling={false}
               style={{
                 fontSize: 18,
                 fontFamily: "Excon-Medium",
@@ -88,6 +89,7 @@ const Step1_NewPassword = ({ parentGoto, back }: SettingProps) => {
               Verify New Password
             </Text>
             <Text
+              allowFontScaling={false}
               style={{
                 fontSize: 14,
                 fontFamily: "Excon-Regular",

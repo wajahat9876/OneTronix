@@ -38,7 +38,12 @@ const Button = ({
         </View>
       ) : (
         <Text
-          style={{ color: disabled ? "gray" : btnTitleColor, fontSize: 15 }}
+          allowFontScaling={false}
+          style={{
+            color: disabled ? "gray" : btnTitleColor,
+            fontSize: 15,
+            fontFamily: "Excon-Medium",
+          }}
           className=" font-poppins-semibold"
         >
           {btnTitle}

@@ -99,13 +99,17 @@ export default function MonthYearPicker({
           {/* Header */}
           <View style={styles.header}>
             <TouchableOpacity onPress={onCancel}>
-              <Text style={styles.cancelText}>Cancel</Text>
+              <Text allowFontScaling={false} style={styles.cancelText}>
+                Cancel
+              </Text>
             </TouchableOpacity>
-            <Text style={styles.title}>
+            <Text allowFontScaling={false} style={styles.title}>
               {selectedTab == 1 ? `Select Month & Year` : `Select Year`}
             </Text>
             <TouchableOpacity onPress={confirm}>
-              <Text style={styles.okText}>OK</Text>
+              <Text allowFontScaling={false} style={styles.okText}>
+                OK
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -113,7 +117,9 @@ export default function MonthYearPicker({
           {selectedTab === 1 ? (
             <>
               <View>
-                <Text style={styles.sectionLabel}>Months</Text>
+                <Text allowFontScaling={false} style={styles.sectionLabel}>
+                  Months
+                </Text>
                 <View style={styles.monthsContainer}>
                   {monthNames.map((m, idx) => {
                     const disabled =
@@ -133,6 +139,7 @@ export default function MonthYearPicker({
                         onPress={() => setSelectedMonth(idx)}
                       >
                         <Text
+                          allowFontScaling={false}
                           style={[
                             styles.monthText,
                             selected && styles.monthTextSelected,
@@ -147,7 +154,9 @@ export default function MonthYearPicker({
                 </View>
               </View>
               {/* Years */}
-              <Text style={styles.sectionLabel}>Years</Text>
+              <Text allowFontScaling={false} style={styles.sectionLabel}>
+                Years
+              </Text>
               <FlatList
                 data={years}
                 keyExtractor={(y) => String(y)}
@@ -165,6 +174,7 @@ export default function MonthYearPicker({
                       onPress={() => setSelectedYear(item)}
                     >
                       <Text
+                        allowFontScaling={false}
                         style={[
                           styles.yearText,
                           selected && styles.yearTextSelected,
@@ -179,7 +189,9 @@ export default function MonthYearPicker({
             </>
           ) : (
             <>
-              <Text style={styles.sectionLabel}>Years</Text>
+              <Text allowFontScaling={false} style={styles.sectionLabel}>
+                Years
+              </Text>
               <FlatList
                 data={years}
                 keyExtractor={(y) => String(y)}
@@ -197,6 +209,7 @@ export default function MonthYearPicker({
                       onPress={() => setSelectedYear(item)}
                     >
                       <Text
+                        allowFontScaling={false}
                         style={[
                           styles.yearText,
                           selected && styles.yearTextSelected,
@@ -235,7 +248,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: "#ddd",
   },
-  cancelText: { color: "#666" },
+  cancelText: { color: "#666", fontFamily: "Excon-Medium" },
   okText: { color: "#0a84ff", fontFamily: "Excon-Medium" },
   title: { fontSize: 15, color: "#222", fontFamily: "Excon-Medium" },
   sectionLabel: {
@@ -268,9 +281,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     borderColor: "#eee",
   },
-  monthText: { fontSize: 12, color: "#333" },
+  monthText: { fontSize: 12, color: "#333", fontFamily: "Excon-Regular" },
   monthTextSelected: { color: "white", fontFamily: "Excon-Regular" },
-  monthTextDisabled: { color: "#aaa" },
+  monthTextDisabled: { color: "#aaa", fontFamily: "Excon-Regular" },
   yearList: { maxHeight: 200, marginHorizontal: 12 },
   yearItem: {
     paddingVertical: 10,
@@ -278,7 +291,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: "#eee",
   },
-  yearItemSelected: { backgroundColor: "#f0f8ff" },
-  yearText: { fontSize: 14, color: "#222" },
+  yearItemSelected: { backgroundColor: "#f0f8ff", fontFamily: "Excon-Regular" },
+  yearText: { fontSize: 14, color: "#222", fontFamily: "Excon-Regular" },
   yearTextSelected: { color: "#0a84ff", fontFamily: "Excon-Regular" },
 });

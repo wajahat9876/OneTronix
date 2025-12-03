@@ -532,6 +532,7 @@ export default function ZoomBarChart({
                 ]}
               />
               <Text
+                allowFontScaling={false}
                 style={{
                   color: "#111",
                   fontSize: ms(11),

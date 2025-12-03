@@ -95,6 +95,7 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
       >
         <View style={styles.container}>
           <Text
+            allowFontScaling={false}
             style={{
               fontFamily: "Excon-Medium",
               fontSize: ms(20),
@@ -126,7 +127,10 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
                   justifyContent: "space-between",
                 }}
               >
-                <Text style={[styles.subTitle, { marginBottom: 8 }]}>
+                <Text
+                  allowFontScaling={false}
+                  style={[styles.subTitle, { marginBottom: 8 }]}
+                >
                   Inverter
                 </Text>
                 <MaterialCommunityIcons
@@ -155,9 +159,15 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
                                 handleChangeInverter(item?._id);
                               }}
                             >
-                              <Text style={styles.deviceTxt}>{item?.name}</Text>
+                              <Text
+                                allowFontScaling={false}
+                                style={styles.deviceTxt}
+                              >
+                                {item?.name}
+                              </Text>
                             </TouchableOpacity>
                             <Text
+                              allowFontScaling={false}
                               style={{
                                 color: "red",
 
@@ -236,7 +246,7 @@ const Step0_Info = ({ goTo }: MultiStepFormProps) => {
                         />
                       </TouchableOpacity> */}
                         </View>
-                        <Text style={styles.idTxt}>
+                        <Text allowFontScaling={false} style={styles.idTxt}>
                           ID: {item.deviceId || "-"}
                         </Text>
                       </View>

@@ -8,7 +8,7 @@ import Colors from "@src/constants/Colors";
 import { globalStyle } from "@src/styles/globals";
 import { hs, ms } from "@utils/design/design";
 import React, { forwardRef, JSX } from "react";
-import { FlatListProps, Platform, Text, View } from "react-native";
+import { FlatListProps, PixelRatio, Platform, Text, View } from "react-native";
 import { Dropdown, IDropdownRef } from "react-native-element-dropdown";
 
 interface Item {
@@ -109,7 +109,7 @@ const DropdownRNE = forwardRef(
       dropdownPosition,
       ...others
     } = props;
-
+    const normalize = (size: any) => size / PixelRatio.getFontScale();
     if (dropdownType === "custom") {
       return (
         <>
@@ -198,7 +198,7 @@ const DropdownRNE = forwardRef(
             placeholder={placeholder}
             placeholderStyle={{
               fontFamily: "poppins",
-              fontSize: ms(14),
+              fontSize: normalize(ms(14)),
               marginLeft: hs(-6),
               color: "gray",
 
@@ -212,7 +212,7 @@ const DropdownRNE = forwardRef(
             key={key}
             selectedTextStyle={{
               fontFamily: "poppins",
-              fontSize: ms(14),
+              fontSize: normalize(ms(14)),
               marginLeft: hs(-5),
               ...selectedTextStyle,
             }}
@@ -224,7 +224,7 @@ const DropdownRNE = forwardRef(
               // borderBottomRightRadius: 15,
               ...itemContainerStyle,
             }}
-            itemTextStyle={{ fontSize: ms(14), ...itemTextStyle }}
+            itemTextStyle={{ fontSize: normalize(ms(14)), ...itemTextStyle }}
             keyboardAvoiding={keyboardAvoiding}
             onChangeText={onChangeText}
             value={value}

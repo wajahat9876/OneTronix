@@ -45,6 +45,7 @@ export default function EmptyChart({
       Discharging: "#de9b14",
       Consumption: "#2f2f2f",
       Solar: "#27c840",
+      Export: "#d703fc",
     }),
     []
   );
@@ -56,6 +57,7 @@ export default function EmptyChart({
       Charging: "Charging Power",
       Discharging: "Discharging Power",
       Solar: "Solar Power",
+      Export: "Export Power",
     }),
     []
   );
@@ -80,6 +82,7 @@ export default function EmptyChart({
                 ]}
               />
               <Text
+                allowFontScaling={false}
                 style={{
                   color: "#111",
                   fontSize: ms(11),

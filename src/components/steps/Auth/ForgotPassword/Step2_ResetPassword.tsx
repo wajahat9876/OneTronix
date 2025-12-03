@@ -167,6 +167,11 @@ const Step2_ResetPassword = ({ back, next, goTo }: MultiStepFormProps) => {
               textContentType="password"
               inputProps={{
                 ...textInputDefaultProps,
+                contentStyle: {
+                  paddingLeft: hs(16),
+                  fontFamily: "Ranade-Regular",
+                  fontSize: ms(14),
+                },
                 textContentType: "password",
                 placeholder: "Enter Password",
                 height: vs(70),
@@ -194,6 +199,11 @@ const Step2_ResetPassword = ({ back, next, goTo }: MultiStepFormProps) => {
               textContentType="password"
               inputProps={{
                 ...textInputDefaultProps,
+                contentStyle: {
+                  paddingLeft: hs(16),
+                  fontFamily: "Ranade-Regular",
+                  fontSize: ms(14),
+                },
                 textContentType: "password",
                 height: vs(70),
                 fontFamily: "Ranade-Regular",
@@ -202,6 +212,11 @@ const Step2_ResetPassword = ({ back, next, goTo }: MultiStepFormProps) => {
                 returnKeyType: "done",
                 password: true,
                 autoComplete: "password",
+                onSubmitEditing: () => {
+                  if (confirmPasswordRef?.current) {
+                    confirmPasswordRef.current.focus();
+                  }
+                },
               }}
             />
           </View>

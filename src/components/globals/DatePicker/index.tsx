@@ -60,6 +60,7 @@ const DatePicker = (props: DatePickerProps) => {
         {showIcon ? (
           <View style={{ position: "relative", width: "100%" }}>
             <Input
+              allowFontScaling={false}
               {...inputProps}
               errorText={errorText}
               editable={false}
@@ -81,10 +82,16 @@ const DatePicker = (props: DatePickerProps) => {
               flexDirection: "row",
             }}
           >
-            <Text style={{ color: "black", fontFamily: "Excon-Regular" }}>
+            <Text
+              allowFontScaling={false}
+              style={{ color: "black", fontFamily: "Excon-Regular" }}
+            >
               Select Date{" "}
             </Text>
-            <Text style={{ color: "black", fontFamily: "Excon-Regular" }}>
+            <Text
+              allowFontScaling={false}
+              style={{ color: "black", fontFamily: "Excon-Regular" }}
+            >
               {value && moment(value).format("YYYY-MM-DD")}
             </Text>
           </View>

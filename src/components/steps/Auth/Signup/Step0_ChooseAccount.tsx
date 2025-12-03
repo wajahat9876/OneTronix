@@ -11,7 +11,14 @@ import { useAppDispatch } from "@src/hooks/useReduxHooks";
 import { hs, ms, vs } from "@utils/design/design";
 import { useRouter } from "expo-router";
 import { useMemo, useRef, useState } from "react";
-import { Image, Platform, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  PixelRatio,
+  Platform,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Picker from "react-native-animated-wheel-picker";
 const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
   const router = useRouter();
@@ -19,7 +26,7 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
   const [isActive, setActive] = useState(false);
   const [selectedValue, setSelectedValue] = useState(1);
   // refs
-
+  const normalizeFont = (size: any) => size / PixelRatio.getFontScale();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const closeBottomSheet = () => {
     setActive(false);
@@ -58,6 +65,7 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
       >
         <TouchableOpacity onPress={() => router.replace("/(auth)/Signin")}>
           <Text
+            allowFontScaling={false}
             style={{
               color: "white",
               fontSize: ms(16),
@@ -85,6 +93,7 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
         }}
       >
         <Text
+          allowFontScaling={false}
           style={{
             color: "red",
             fontSize: ms(44),
@@ -95,6 +104,7 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
           ONE
         </Text>
         <Text
+          allowFontScaling={false}
           style={{
             color: "red",
             fontSize: ms(44),
@@ -106,6 +116,7 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
           TRONIX
         </Text>
         <Text
+          allowFontScaling={false}
           style={{
             color: "white",
             fontSize: ms(13),
@@ -129,6 +140,7 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
       >
         {/* "I am" text */}
         <Text
+          allowFontScaling={false}
           style={{
             color: "gray",
             fontSize: ms(28),
@@ -141,10 +153,11 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
         </Text>
 
         <Picker
+          style={{}}
           itemHeight={45}
           pickerData={DATA}
           textStyle={{
-            fontSize: 32,
+            fontSize: normalizeFont(32),
             fontFamily: "Excon-Regular",
           }}
           onSelected={(item) => setSelectedValue(item?.value)}
@@ -160,6 +173,7 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
       >
         <TouchableOpacity onPress={() => handlePress()}>
           <Text
+            allowFontScaling={false}
             style={{
               color: "white",
               fontSize: ms(16),

@@ -84,7 +84,6 @@ const Step0_VerifyEmail = ({ back, next }: MultiStepFormProps) => {
               position: "absolute",
               width: 200,
               height: 240,
-
               alignSelf: "flex-end",
             }}
           />
@@ -96,6 +95,7 @@ const Step0_VerifyEmail = ({ back, next }: MultiStepFormProps) => {
           }}
         >
           <Text
+            allowFontScaling={false}
             style={{
               color: "red",
               fontSize: ms(44),

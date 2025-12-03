@@ -58,7 +58,12 @@ const BusinessLogoutModal: React.FC<{ marginTop: number; icon?: any }> = ({
         <View style={{ flexDirection: "row", gap: 10 }}>
           <Image source={icon} style={{ width: 26, height: 26 }} />
           <Text
-            style={{ ...globalStyle.textMedium, fontSize: 17, color: "black" }}
+            allowFontScaling={false}
+            style={{
+              fontFamily: "Excon-Medium",
+              fontSize: ms(14),
+              color: "black",
+            }}
           >
             Logout
           </Text>

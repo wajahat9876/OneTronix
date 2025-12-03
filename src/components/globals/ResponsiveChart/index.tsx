@@ -159,7 +159,9 @@ export default function PinchZoomLineChart({
   if (!data?.length || !data.some((d) => Number.isFinite(d.hour))) {
     return (
       <View style={{ padding: 20, alignItems: "center" }}>
-        <Text>No valid data</Text>
+        <Text allowFontScaling={false} style={{ fontFamily: "Excon-Regular" }}>
+          No valid data
+        </Text>
       </View>
     );
   }
@@ -211,6 +213,7 @@ export default function PinchZoomLineChart({
                     ]}
                   />
                   <Text
+                    allowFontScaling={false}
                     style={{
                       color: "#111",
                       fontSize: ms(11),
@@ -227,6 +230,7 @@ export default function PinchZoomLineChart({
           <View style={{ flexDirection: "row", alignSelf: "center", gap: 10 }}>
             <TouchableOpacity onPress={handleZoomOut} style={styles.zoomimg}>
               <Text
+                allowFontScaling={false}
                 style={{
                   color: "black",
                   fontSize: ms(25),
@@ -239,6 +243,7 @@ export default function PinchZoomLineChart({
             </TouchableOpacity>
             <TouchableOpacity onPress={handleZoomIn} style={styles.zoomimg}>
               <Text
+                allowFontScaling={false}
                 style={{
                   color: "black",
                   fontSize: ms(22),

@@ -11,6 +11,7 @@ const DetailRow = ({ label, value, unit }: DataRowProps) => {
   return (
     <View style={styles.row}>
       <Text
+        allowFontScaling={false}
         style={{
           fontSize: ms(13),
           fontFamily: "Excon-Regular",
@@ -21,6 +22,7 @@ const DetailRow = ({ label, value, unit }: DataRowProps) => {
       </Text>
       <View style={{ flexDirection: "row" }}>
         <Text
+          allowFontScaling={false}
           style={{
             fontSize: ms(12),
             fontFamily: "Ranade-Medium",
@@ -30,6 +32,7 @@ const DetailRow = ({ label, value, unit }: DataRowProps) => {
           {value != null ? `${value} ` : "-"}
         </Text>
         <Text
+          allowFontScaling={false}
           style={{
             fontSize: ms(12),
             fontFamily: "Ranade-Medium",

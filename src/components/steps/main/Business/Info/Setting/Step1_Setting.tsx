@@ -796,6 +796,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
                   onPress={() => setSelectedTab(tab.key)}
                 >
                   <Text
+                    allowFontScaling={false}
                     style={[styles.tabText, isActive && styles.activeTabText]}
                   >
                     {tab.label}
@@ -870,7 +871,7 @@ const Step1_Setting = ({ back }: MultiStepFormProps) => {
             >
               <ConfirmIcon />
             </View>
-            <Text style={styles.modalText}>
+            <Text allowFontScaling={false} style={styles.modalText}>
               Changes will be reflected after 5-10 minutes.
             </Text>
 

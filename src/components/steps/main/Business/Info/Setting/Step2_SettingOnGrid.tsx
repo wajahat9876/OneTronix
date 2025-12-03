@@ -589,6 +589,7 @@ const Step2_SettingOnGrid = ({ back, goTo }: MultiStepFormProps) => {
                   onPress={() => setSelectedTab(tab.key)}
                 >
                   <Text
+                    allowFontScaling={false}
                     style={[styles.tabText, isActive && styles.activeTabText]}
                   >
                     {tab.label}
@@ -663,7 +664,7 @@ const Step2_SettingOnGrid = ({ back, goTo }: MultiStepFormProps) => {
             >
               <ConfirmIcon />
             </View>
-            <Text style={styles.modalText}>
+            <Text allowFontScaling={false} style={styles.modalText}>
               Changes will be reflected after 5-10 minutes.
             </Text>
 

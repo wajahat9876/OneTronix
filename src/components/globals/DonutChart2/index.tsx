@@ -130,6 +130,7 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
             >
               {type === "Production" ? (
                 <Text
+                  allowFontScaling={false}
                   style={{
                     fontSize: ms(9),
                     textAlign: "center", // 👈 extra alignment for text
@@ -149,6 +150,7 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
                 </Text>
               ) : type === "Consumption" ? (
                 <Text
+                  allowFontScaling={false}
                   style={{
                     fontSize: ms(9),
                     textAlign: "center", // 👈 extra alignment for text
@@ -171,6 +173,7 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
               )}
 
               <Text
+                allowFontScaling={false}
                 style={{
                   fontSize: ms(14),
                   textAlign: "center",
@@ -225,6 +228,7 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
                     }}
                   />
                   <Text
+                    allowFontScaling={false}
                     style={{
                       fontSize: ms(9),
                       color: "#333",
@@ -237,6 +241,7 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
 
                 {/* Value directly below label */}
                 <Text
+                  allowFontScaling={false}
                   style={{
                     fontSize: ms(11),
                     color: "#666",
@@ -251,6 +256,7 @@ const DonutChart2 = forwardRef<View, DonutChartProps>(
             ))
           ) : (
             <Text
+              allowFontScaling={false}
               style={{
                 fontSize: 12,
                 color: "#666",

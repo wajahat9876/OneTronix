@@ -322,6 +322,11 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
                 textContentType="password"
                 inputProps={{
                   ...textInputDefaultProps,
+                  contentStyle: {
+                    paddingLeft: hs(16),
+                    fontFamily: "Ranade-Regular",
+                    fontSize: ms(14),
+                  },
                   textContentType: "password",
                   placeholder: "Enter Password",
                   // fontFamily: "Excon-Regular",
@@ -347,6 +352,11 @@ const Step1_Details = ({ back, next }: MultiStepFormProps) => {
                 ref={confirmPasswordRef}
                 inputProps={{
                   ...textInputDefaultProps,
+                  contentStyle: {
+                    paddingLeft: hs(16),
+                    fontFamily: "Ranade-Regular",
+                    fontSize: ms(14),
+                  },
                   // fontFamily: "Excon-Regular",
                   placeholder: "Re-enter Password",
                   className: "mt-2",

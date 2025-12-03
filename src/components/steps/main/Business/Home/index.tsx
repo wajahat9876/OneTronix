@@ -194,6 +194,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
             batteryStatus={result?.results?.inverterData?.data?.battery?.status}
           /> */}
           <Text
+            allowFontScaling={false}
             style={{
               textAlign: "center",
               fontFamily: "Excon-Regular",
@@ -217,10 +218,14 @@ const Index = ({ goTo }: MultiStepFormProps) => {
               <View
                 style={[styles.transactionsCard, { backgroundColor: cardBg }]}
               >
-                <Text style={[styles.txt, { color: textColor }]}>
+                <Text
+                  allowFontScaling={false}
+                  style={[styles.txt, { color: textColor }]}
+                >
                   Daily Purchase
                 </Text>
                 <Text
+                  allowFontScaling={false}
                   style={[styles.txtStyle, { color: textColor }]}
                   numberOfLines={1}
                   adjustsFontSizeToFit
@@ -228,7 +233,10 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                   {Number(
                     result?.results?.dailySummary?.grid?.dailyPurchase || 0
                   ).toFixed(2)}
-                  <Text style={[styles.unitTxt, { color: textColor }]}>
+                  <Text
+                    allowFontScaling={false}
+                    style={[styles.unitTxt, { color: textColor }]}
+                  >
                     {" "}
                     kWh
                   </Text>
@@ -237,10 +245,14 @@ const Index = ({ goTo }: MultiStepFormProps) => {
               <View
                 style={[styles.transactionsCard, { backgroundColor: cardBg }]}
               >
-                <Text style={[styles.txt, { color: textColor }]}>
+                <Text
+                  allowFontScaling={false}
+                  style={[styles.txt, { color: textColor }]}
+                >
                   Daily Consumption
                 </Text>
                 <Text
+                  allowFontScaling={false}
                   style={[styles.txtStyle, { color: textColor }]}
                   numberOfLines={1}
                   adjustsFontSizeToFit
@@ -249,7 +261,10 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                     result?.results?.dailySummary?.consumption
                       ?.dailyConsumption || 0
                   ).toFixed(2)}
-                  <Text style={[styles.unitTxt, { color: textColor }]}>
+                  <Text
+                    allowFontScaling={false}
+                    style={[styles.unitTxt, { color: textColor }]}
+                  >
                     {" "}
                     kWh
                   </Text>
@@ -259,6 +274,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
               <View style={styles.dailyCard}>
                 <Text
+                  allowFontScaling={false}
                   style={{
                     color: "white",
                     fontFamily: "Excon-Regular",
@@ -268,6 +284,7 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                   Daily Production
                 </Text>
                 <Text
+                  allowFontScaling={false}
                   style={[styles.dailyTxt, { color: "white" }]}
                   numberOfLines={1}
                   adjustsFontSizeToFit
@@ -276,7 +293,10 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                     result?.results?.dailySummary?.production
                       ?.dailyProduction ?? 0
                   ).toFixed(2)}
-                  <Text style={styles.unitTxt}> kWh</Text>
+                  <Text allowFontScaling={false} style={styles.unitTxt}>
+                    {" "}
+                    kWh
+                  </Text>
                 </Text>
               </View>
               <View
@@ -285,10 +305,14 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                   { backgroundColor: "transparent" },
                 ]}
               >
-                <Text style={[styles.txt, { color: textColor }]}>
+                <Text
+                  allowFontScaling={false}
+                  style={[styles.txt, { color: textColor }]}
+                >
                   Total Production
                 </Text>
                 <Text
+                  allowFontScaling={false}
                   style={[styles.txtStyle, { color: textColor }]}
                   numberOfLines={1}
                   adjustsFontSizeToFit
@@ -297,7 +321,9 @@ const Index = ({ goTo }: MultiStepFormProps) => {
                     result?.results?.totalSummary?.production
                       ?.totalProduction || 0
                   ).toFixed(2)}
-                  <Text style={styles.unitTxt}>kWh</Text>
+                  <Text allowFontScaling={false} style={styles.unitTxt}>
+                    kWh
+                  </Text>
                 </Text>
               </View>
             </View>

@@ -279,29 +279,61 @@ const HouseDiagram = (props: HouseDiagramProps) => {
 
       {/* Labels */}
       <View style={[styles.label, { top: scale(28), left: scale(290) }]}>
-        <Text style={[styles.labelTitle, { color: textColor }]}>Solar</Text>
-        <Text style={[styles.labelValue, { color: labelColor }]}>
+        <Text
+          allowFontScaling={false}
+          style={[styles.labelTitle, { color: textColor }]}
+        >
+          Solar
+        </Text>
+        <Text
+          allowFontScaling={false}
+          style={[styles.labelValue, { color: labelColor }]}
+        >
           {solar} kW
         </Text>
       </View>
       <View style={[styles.label, { top: scale(115), left: scale(78) }]}>
-        <Text style={[styles.labelTitle, { color: textColor }]}>Home</Text>
-        <Text style={[styles.labelValue, { color: labelColor }]}>
+        <Text
+          allowFontScaling={false}
+          style={[styles.labelTitle, { color: textColor }]}
+        >
+          Home
+        </Text>
+        <Text
+          allowFontScaling={false}
+          style={[styles.labelValue, { color: labelColor }]}
+        >
           {home} kW
         </Text>
       </View>
       {businessData?.activeDevice?.type === "hybrid" && (
         <View style={[styles.label, { bottom: scale(135), right: scale(55) }]}>
-          <Text style={[styles.labelTitle, { color: textColor }]}>Battery</Text>
-          <Text style={[styles.labelValue, { color: labelColor }]}>
+          <Text
+            allowFontScaling={false}
+            style={[styles.labelTitle, { color: textColor }]}
+          >
+            Battery
+          </Text>
+          <Text
+            allowFontScaling={false}
+            style={[styles.labelValue, { color: labelColor }]}
+          >
             {battery} kW
           </Text>
         </View>
       )}
 
       <View style={[styles.label, { bottom: scale(60), right: scale(130) }]}>
-        <Text style={[styles.labelTitle, { color: textColor }]}>Grid</Text>
-        <Text style={[styles.labelValue, { color: labelColor }]}>
+        <Text
+          allowFontScaling={false}
+          style={[styles.labelTitle, { color: textColor }]}
+        >
+          Grid
+        </Text>
+        <Text
+          allowFontScaling={false}
+          style={[styles.labelValue, { color: labelColor }]}
+        >
           {grid} kW
         </Text>
       </View>

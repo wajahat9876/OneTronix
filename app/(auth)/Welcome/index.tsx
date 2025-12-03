@@ -146,6 +146,7 @@ const Welcome = () => {
                   }}
                 >
                   <Text
+                    allowFontScaling={false}
                     style={{
                       color: "red",
                       // fontWeight: "bold",
@@ -157,6 +158,7 @@ const Welcome = () => {
                     ONE
                   </Text>
                   <Text
+                    allowFontScaling={false}
                     style={{
                       color: "red",
                       fontSize: ms(55),
@@ -168,6 +170,7 @@ const Welcome = () => {
                     TRONIX
                   </Text>
                   <Text
+                    allowFontScaling={false}
                     style={{
                       color: "white",
                       fontSize: ms(16.5),
@@ -183,6 +186,7 @@ const Welcome = () => {
 
                 {/* <SwipeUpToLogin /> */}
                 <Text
+                  allowFontScaling={false}
                   style={{
                     color: "white",
                     position: "absolute",

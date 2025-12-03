@@ -41,6 +41,7 @@ const About = ({ goTo }: MultiStepFormProps) => {
         <View style={styles.container}>
           <ScrollView>
             <Text
+              allowFontScaling={false}
               style={{
                 marginTop: vs(10),
                 fontFamily: "Excon-Medium",

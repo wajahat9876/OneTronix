@@ -27,26 +27,47 @@ const ExchangeBlock: React.FC<Props> = ({
 }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      <Text allowFontScaling={false} style={styles.title}>
+        {title}
+      </Text>
       <View style={styles.row}>
         <View style={styles.header}>
           {icon1 && <Image source={icon1} style={styles.icon} />}
 
-          <Text style={styles.label}>{label1}</Text>
+          <Text allowFontScaling={false} style={styles.label}>
+            {label1}
+          </Text>
           <View style={{ flexDirection: "row" }}>
-            <Text style={styles.value} numberOfLines={1} adjustsFontSizeToFit>
+            <Text
+              allowFontScaling={false}
+              style={styles.value}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+            >
               {value1}
-              <Text style={styles.unit}>{unit1}</Text>
+              <Text allowFontScaling={false} style={styles.unit}>
+                {unit1}
+              </Text>
             </Text>
           </View>
         </View>
         <View style={styles.header}>
           {icon2 && <Image source={icon2} style={styles.icon} />}
-          <Text style={styles.label}> {label2}</Text>
+          <Text allowFontScaling={false} style={styles.label}>
+            {" "}
+            {label2}
+          </Text>
           <View style={{ flexDirection: "row" }}>
-            <Text style={styles.value} numberOfLines={1} adjustsFontSizeToFit>
+            <Text
+              allowFontScaling={false}
+              style={styles.value}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+            >
               {value2}
-              <Text style={styles.unit}>{unit2}</Text>
+              <Text allowFontScaling={false} style={styles.unit}>
+                {unit2}
+              </Text>
             </Text>
           </View>
         </View>

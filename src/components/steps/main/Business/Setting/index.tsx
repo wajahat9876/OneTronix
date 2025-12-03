@@ -19,7 +19,6 @@ import {
   ImageBackground,
   Platform,
   ScrollView,
-  StatusBar,
   Text,
   TouchableOpacity,
   View,
@@ -27,18 +26,9 @@ import {
 import Animated from "react-native-reanimated";
 
 import BackgroundImage from "@assets/icons/settingBackground.png";
-import { useFocusEffect } from "@react-navigation/native";
-import { useCallback } from "react";
 const Settings = ({ goTo }: MultiStepFormProps) => {
   const { data } = useAppSelector(useBusinessDetails);
-  useFocusEffect(
-    useCallback(() => {
-      StatusBar.setBarStyle("light-content");
-      if (Platform.OS === "android") {
-        StatusBar.setBackgroundColor("transparent");
-      }
-    }, [])
-  );
+
   return (
     <Animated.View
       {...pageTransitionAnimation}
@@ -95,6 +85,7 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
               <Image source={ProfileIcon} style={{ width: 55, height: 55 }} />
               <View>
                 <Text
+                  allowFontScaling={false}
                   style={{
                     fontFamily: "Ranade-Medium",
                     fontSize: ms(24),
@@ -105,6 +96,7 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
                   {data?.firstName}
                 </Text>
                 <Text
+                  allowFontScaling={false}
                   style={{
                     color: "gray",
                     fontFamily: "Ranade-Medium",
@@ -125,7 +117,12 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
         </View>
         <View style={styles.container}>
           <ScrollView>
-            <Text style={[styles.txt, { marginTop: vs(15) }]}>Services</Text>
+            <Text
+              allowFontScaling={false}
+              style={[styles.txt, { marginTop: vs(15) }]}
+            >
+              Services
+            </Text>
             <SettingItem
               title="Device Management"
               marginTop={vs(10)}

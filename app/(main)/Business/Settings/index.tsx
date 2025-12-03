@@ -2,7 +2,6 @@
 /* eslint-disable camelcase */
 /* eslint-disable react/jsx-pascal-case */
 
-import { useStatusBar } from "@hooks/StatusBarColor/index";
 import Settings from "@src/components/steps/main/Business/Setting";
 import useMultistepForm from "@src/hooks/useMultiStepForm";
 import { useEffect, useRef } from "react";
@@ -37,7 +36,7 @@ const Index = ({ navigation }: any) => {
   );
 
   const doublePressRef = useRef(false);
-  useStatusBar("dark");
+  // useStatusBar("dark");
   useEffect(() => {
     let timer: string | number | NodeJS.Timeout | undefined;
 

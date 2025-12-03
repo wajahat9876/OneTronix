@@ -51,20 +51,36 @@ const NotificationItem = ({ item }: { item: any }) => {
         />
         <View>
           <View style={styles.row}>
-            <Text style={styles.label}>Title:</Text>
-            <Text style={styles.txt}>{item?.title}</Text>
+            <Text allowFontScaling={false} style={styles.label}>
+              Title:
+            </Text>
+            <Text allowFontScaling={false} style={styles.txt}>
+              {item?.title}
+            </Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Name:</Text>
-            <Text style={styles.txt}>{item?.deviceRef?.name}</Text>
+            <Text allowFontScaling={false} style={styles.label}>
+              Name:
+            </Text>
+            <Text allowFontScaling={false} style={styles.txt}>
+              {item?.deviceRef?.name}
+            </Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Model:</Text>
-            <Text style={styles.txt}>{item?.deviceRef?.model}</Text>
+            <Text allowFontScaling={false} style={styles.label}>
+              Model:
+            </Text>
+            <Text allowFontScaling={false} style={styles.txt}>
+              {item?.deviceRef?.model}
+            </Text>
           </View>
 
           {/* Optional: description or date */}
-          {item?.message && <Text style={styles.message}>{item.message}</Text>}
+          {item?.message && (
+            <Text allowFontScaling={false} style={styles.message}>
+              {item.message}
+            </Text>
+          )}
         </View>
       </View>
     </View>
@@ -181,6 +197,7 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
               <View style={{ flexDirection: "row" }}>
                 <InverterIconblack width={20} height={20} />
                 <Text
+                  allowFontScaling={false}
                   style={{
                     fontFamily: "Ranade-Medium",
                     color: "#000",
@@ -194,6 +211,7 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
               <View style={{ flexDirection: "row", gap: 5 }}>
                 <InverterIconWhite width={20} height={20} />
                 <Text
+                  allowFontScaling={false}
                   style={{
                     fontFamily: "Ranade-Medium",
                     color: "white",
@@ -287,6 +305,7 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
               }}
             >
               <Text
+                allowFontScaling={false}
                 style={{
                   color: "white",
                   fontSize: 10,
@@ -348,6 +367,7 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
                 style={{ flex: 1, alignItems: "center", marginTop: vs(10) }}
               >
                 <Text
+                  allowFontScaling={false}
                   style={{
                     fontFamily: "Excon-Medium",
                     fontSize: ms(16),
@@ -367,7 +387,9 @@ const GlobalHeader = (props: GlobalHeaderProps) => {
                 className="mt-4"
                 scrollEnabled={false}
                 ListEmptyComponent={() => (
-                  <Text style={styles.empTxt}>No alerts found</Text>
+                  <Text allowFontScaling={false} style={styles.empTxt}>
+                    No alerts found
+                  </Text>
                 )}
                 contentContainerStyle={{ paddingTop: vs(24) }}
                 data={notifications?.results?.alerts || []}

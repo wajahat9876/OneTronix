@@ -24,7 +24,11 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
 }) => {
   return (
     <View style={[styles.container, containerStyle]}>
-      {label ? <Text style={[styles.label, labelStyle]}>{label}</Text> : null}
+      {label ? (
+        <Text allowFontScaling={false} style={[styles.label, labelStyle]}>
+          {label}
+        </Text>
+      ) : null}
 
       <TouchableOpacity
         style={[

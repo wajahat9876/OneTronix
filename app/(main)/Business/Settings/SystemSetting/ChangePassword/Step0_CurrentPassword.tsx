@@ -77,6 +77,7 @@ const Step0_CurrentPassword = ({ goTo, next }: MultiStepFormProps) => {
         <View style={styles.container}>
           <DismissKeyboardView>
             <Text
+              allowFontScaling={false}
               style={{
                 fontSize: 18,
                 fontFamily: "Excon-Medium",
@@ -87,6 +88,7 @@ const Step0_CurrentPassword = ({ goTo, next }: MultiStepFormProps) => {
               Verify Current Password
             </Text>
             <Text
+              allowFontScaling={false}
               style={{
                 fontSize: 14,
                 fontFamily: "Excon-Regular",

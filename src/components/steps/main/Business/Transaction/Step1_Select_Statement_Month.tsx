@@ -370,6 +370,7 @@ export default function PanZoomPage() {
                   >
                     {selectedTab != 3 && (
                       <Text
+                        allowFontScaling={false}
                         style={{ fontFamily: "Excon-Regular", color: "black" }}
                       >
                         Select{" "}
@@ -384,6 +385,7 @@ export default function PanZoomPage() {
                     )}
                     <TouchableOpacity onPress={() => openBottomSheet()}>
                       <Text
+                        allowFontScaling={false}
                         style={{ fontFamily: "Excon-Regular", color: "black" }}
                       >
                         {updatedDate}
@@ -647,6 +649,7 @@ export default function PanZoomPage() {
           {/* Current Cycle */}
           <View style={styles.currentCycle}>
             <Text
+              allowFontScaling={false}
               style={[
                 styles.txtProduction,
                 { alignSelf: "flex-start", padding: 10 },
@@ -655,7 +658,9 @@ export default function PanZoomPage() {
               Current Cycle
             </Text>
             <View style={{ marginTop: vs(10) }}>
-              <Text style={styles.txtCycle}>Solar</Text>
+              <Text allowFontScaling={false} style={styles.txtCycle}>
+                Solar
+              </Text>
               <DetailRow
                 label="Voltage"
                 value={inverterData?.inverterData?.data?.solar?.voltage}
@@ -673,7 +678,9 @@ export default function PanZoomPage() {
               />
             </View>
             <View style={{ marginTop: vs(10) }}>
-              <Text style={styles.txtCycle}>Grid/WAPDA</Text>
+              <Text allowFontScaling={false} style={styles.txtCycle}>
+                Grid/WAPDA
+              </Text>
               <DetailRow
                 label="Voltage"
                 value={inverterData?.inverterData?.data?.ac?.voltage}
@@ -706,7 +713,9 @@ export default function PanZoomPage() {
             </View>
             {reduxData?.activeDevice?.type === "hybrid" && (
               <View style={{ marginTop: vs(10) }}>
-                <Text style={styles.txtCycle}>Battery</Text>
+                <Text allowFontScaling={false} style={styles.txtCycle}>
+                  Battery
+                </Text>
                 <DetailRow
                   label="Voltage"
                   value={inverterData?.inverterData?.data?.battery?.voltage}
@@ -740,7 +749,9 @@ export default function PanZoomPage() {
             )}
 
             <View style={{ marginTop: vs(10) }}>
-              <Text style={styles.txtCycle}>Inverter</Text>
+              <Text allowFontScaling={false} style={styles.txtCycle}>
+                Inverter
+              </Text>
               <DetailRow
                 label="Voltage"
                 value={inverterData?.inverterData?.data?.output?.voltage}
@@ -758,7 +769,9 @@ export default function PanZoomPage() {
               />
             </View>
             <View style={{ marginTop: vs(10) }}>
-              <Text style={styles.txtCycle}>HVDC Bus</Text>
+              <Text allowFontScaling={false} style={styles.txtCycle}>
+                HVDC Bus
+              </Text>
               <DetailRow
                 label="Voltage"
                 value={inverterData?.inverterData?.data?.hvdc?.voltage}
@@ -766,7 +779,9 @@ export default function PanZoomPage() {
               />
             </View>
             <View style={{ marginTop: vs(10) }}>
-              <Text style={styles.txtCycle}>Temperature</Text>
+              <Text allowFontScaling={false} style={styles.txtCycle}>
+                Temperature
+              </Text>
               <DetailRow
                 label="Inverter"
                 value={inverterData?.inverterData?.data?.temperature?.inverter}

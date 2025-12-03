@@ -50,6 +50,7 @@ const UnderlinedInput = React.forwardRef<TextInput, UnderlinedTextInputProps>(
             }}
           >
             <Text
+              allowFontScaling={false}
               style={{
                 color: "gray",
                 fontSize: ms(12),
@@ -64,6 +65,7 @@ const UnderlinedInput = React.forwardRef<TextInput, UnderlinedTextInputProps>(
         {/* Input Field */}
         <TextInputPaper
           {...others}
+          allowFontScaling={false}
           ref={ref}
           autoCorrect={false}
           value={value}
@@ -127,6 +129,7 @@ const UnderlinedInput = React.forwardRef<TextInput, UnderlinedTextInputProps>(
             }}
           >
             <Text
+              allowFontScaling={false}
               style={{
                 ...globalStyle.textRegular,
                 color: Colors.light.theme.errorColor,

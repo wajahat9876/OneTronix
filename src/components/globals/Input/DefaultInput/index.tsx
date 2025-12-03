@@ -39,6 +39,7 @@ const DefaultInput = React.forwardRef<TextInput, DefaultTextInputProps>(
       <>
         <TextInputPaper
           {...others}
+          allowFontScaling={false}
           ref={ref}
           autoCorrect={false}
           value={value}
@@ -117,6 +118,7 @@ const DefaultInput = React.forwardRef<TextInput, DefaultTextInputProps>(
               }}
             >
               <Text
+                allowFontScaling={false}
                 style={{
                   ...globalStyle.textRegular,
                   color: Colors.light.theme.errorColor,

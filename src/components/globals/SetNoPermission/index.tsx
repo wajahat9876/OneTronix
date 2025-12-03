@@ -4,12 +4,12 @@
 /* eslint-disable camelcase */
 /* eslint-disable react/jsx-props-no-spreading */
 
-import { Camera } from 'expo-camera';
-import * as ImagePicker from 'expo-image-picker';
-import { MotiView } from 'moti';
-import React from 'react';
-import { Linking, StyleSheet, Text, View } from 'react-native';
-import Button from '../Button';
+import { Camera } from "expo-camera";
+import * as ImagePicker from "expo-image-picker";
+import { MotiView } from "moti";
+import React from "react";
+import { Linking, StyleSheet, Text, View } from "react-native";
+import Button from "../Button";
 
 const SetNoPermission = ({
   setHasPermission,
@@ -27,9 +27,9 @@ const SetNoPermission = ({
   const handlePress = async () => {
     const { status, canAskAgain } =
       await Camera.requestCameraPermissionsAsync();
-    if (status === 'granted' || canAskAgain)
-      setHasPermission(status === 'granted' ? 'granted' : 'denied');
-    if (status === 'granted' && onPermissionGranted) {
+    if (status === "granted" || canAskAgain)
+      setHasPermission(status === "granted" ? "granted" : "denied");
+    if (status === "granted" && onPermissionGranted) {
       onPermissionGranted(); // Call the callback if permission is granted
     } else {
       Linking.openSettings();
@@ -38,10 +38,10 @@ const SetNoPermission = ({
   const handleMediaPress = async () => {
     const { status, canAskAgain } =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status === 'granted' || canAskAgain) {
-      setHasPermission(status === 'granted' ? 'granted' : 'denied');
+    if (status === "granted" || canAskAgain) {
+      setHasPermission(status === "granted" ? "granted" : "denied");
     }
-    if (status === 'granted' && onPermissionGranted) {
+    if (status === "granted" && onPermissionGranted) {
       onPermissionGranted(); // Call the callback if permission is granted
     } else {
       Linking.openSettings();
@@ -62,12 +62,12 @@ const SetNoPermission = ({
           }}
         />
       ) : (
-        ''
+        ""
       )}
       <View
         style={{
-          alignContent: 'center',
-          alignItems: 'center',
+          alignContent: "center",
+          alignItems: "center",
         }}
       >
         <MotiView
@@ -87,20 +87,24 @@ const SetNoPermission = ({
           }}
           className="px-4 pt-4 pb-4 w-full"
         >
-          <View style={{ alignItems: 'center', marginVertical: 100 }}>
+          <View style={{ alignItems: "center", marginVertical: 100 }}>
             <Text
+              allowFontScaling={false}
               style={{
-                fontSize: 30,
-                color: 'white',
+                fontSize: 28,
+                color: "white",
+                fontFamily: "Excon-medium",
               }}
               className="font-aeonik "
             >
               Please allow camera access
             </Text>
             <Text
+              allowFontScaling={false}
               style={{
                 fontSize: 18,
-                color: 'grey',
+                color: "grey",
+                fontFamily: "Excon-Regular",
               }}
               className="font-aeonik pt-2 pb-2 w-5/5 text-[#000F6D]"
             >
@@ -130,17 +134,17 @@ export default SetNoPermission;
 // const styles = StyleSheet.create({});
 const styles = StyleSheet.create({
   container: {
-    width: '90%',
-    height: '70%',
-    backgroundColor: '#1A1A1A',
-    borderCurve: 'continuous',
+    width: "90%",
+    height: "70%",
+    backgroundColor: "#1A1A1A",
+    borderCurve: "continuous",
     borderWidth: 2,
-    borderColor: '#1A1A1A',
+    borderColor: "#1A1A1A",
     borderTopRightRadius: 35,
     borderTopLeftRadius: 35,
     borderBottomLeftRadius: 35,
     borderBottomRightRadius: 35,
     marginTop: 10,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
 });

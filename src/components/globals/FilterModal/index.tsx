@@ -77,8 +77,11 @@ const FilterModal: React.FC<FilterModalProps> = ({
         nestedScrollEnabled={true} // ✅ crucial for Android
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.title}>Filters</Text>
+        <Text allowFontScaling={false} style={styles.title}>
+          Filters
+        </Text>
         <Text
+          allowFontScaling={false}
           style={{
             alignSelf: "center",
             fontSize: ms(10),
@@ -99,6 +102,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
             activeOpacity={0.8}
           >
             <Text
+              allowFontScaling={false}
               style={{
                 fontFamily: "Excon-Regular",
                 color: "black",
@@ -125,7 +129,9 @@ const FilterModal: React.FC<FilterModalProps> = ({
           onPress={handleConfirm}
           activeOpacity={0.8}
         >
-          <Text style={styles.confirmText}>Done</Text>
+          <Text allowFontScaling={false} style={styles.confirmText}>
+            Done
+          </Text>
         </TouchableOpacity>
 
         {/* <TouchableOpacity onPress={restoreDefault}>

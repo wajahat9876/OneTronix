@@ -104,6 +104,7 @@ const TabButtons: FC<TabButtonsProps> = ({
               }}
             >
               <Text
+                allowFontScaling={false}
                 style={{
                   color: isWhite ? colorWhite : color,
                   fontSize: ms(14),

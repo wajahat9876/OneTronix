@@ -226,6 +226,7 @@ const AddDeviceQr = React.memo((props: ScanQr) => {
         {(scanned || active) && (
           <>
             <Text
+              allowFontScaling={false}
               style={{
                 color: "white",
                 fontFamily: "Excon-medium",
@@ -237,6 +238,7 @@ const AddDeviceQr = React.memo((props: ScanQr) => {
               Connect Your
             </Text>
             <Text
+              allowFontScaling={false}
               style={{
                 color: "white",
                 fontFamily: "Excon-medium",
@@ -256,7 +258,10 @@ const AddDeviceQr = React.memo((props: ScanQr) => {
             setScanned(false);
           }}
         >
-          <Text style={{ color: "white", fontFamily: "Excon-Regular" }}>
+          <Text
+            allowFontScaling={false}
+            style={{ color: "white", fontFamily: "Excon-Regular" }}
+          >
             Cancel
           </Text>
         </TouchableOpacity>

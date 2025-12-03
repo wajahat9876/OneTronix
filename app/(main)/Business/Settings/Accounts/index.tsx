@@ -50,6 +50,7 @@ const CreateAccount = ({ back }: MultiStepFormProps) => {
                 <Image source={IconPerson} style={{ width: 30, height: 30 }} />
               </View>
               <Text
+                allowFontScaling={false}
                 style={{
                   marginLeft: vs(10),
                   fontFamily: "Excon-Medium",
