@@ -1,8 +1,7 @@
 // src/components/Loader.tsx
-import Logo from "@assets/eccLogo/oneTronixLogo.svg";
-import { vs } from "@utils/design/design";
 import { useEffect, useState } from "react";
 import { Modal, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 type LoaderProps = {
   visible: boolean;
   message?: string;
@@ -35,9 +34,7 @@ export default function Loader({ visible, message }: LoaderProps) {
     >
       <View style={styles.overlay}>
         <View style={styles.container}>
-          <View style={{ marginTop: vs(10) }}>
-            <Logo />
-          </View>
+          {visible && <ActivityIndicator size="large" color="#0a84ff" />}
           {message ? <Text style={styles.text}>{message}</Text> : null}
         </View>
       </View>
@@ -53,7 +50,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   container: {
-    backgroundColor: "black",
+    backgroundColor: "white",
     padding: 20,
     borderRadius: 12,
     alignItems: "center",
@@ -63,7 +60,7 @@ const styles = StyleSheet.create({
   text: {
     marginTop: 10,
     fontSize: 14,
-    color: "white",
+    color: "#333",
     textAlign: "center",
     fontFamily: "Excon-Regular",
   },
