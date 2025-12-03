@@ -112,7 +112,7 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
             fontFamily: "Excon-Regular",
             letterSpacing: 1,
             lineHeight: 18,
-            marginTop: -5, // small gap from TRONIX
+            marginTop: -3, // small gap from TRONIX
           }}
         >
           TECHNOLOGY PARTNER

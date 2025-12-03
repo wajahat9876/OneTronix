@@ -139,7 +139,7 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
               letterSpacing: 1,
               lineHeight: 18,
               marginBottom: vs(10),
-              marginTop: -5, // small gap from TRONIX
+              marginTop: -3, // small gap from TRONIX
             }}
           >
             TECHNOLOGY PARTNER
