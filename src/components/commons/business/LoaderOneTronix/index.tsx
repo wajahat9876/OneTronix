@@ -34,7 +34,7 @@ export default function Loader({ visible, message }: LoaderProps) {
     >
       <View style={styles.overlay}>
         <View style={styles.container}>
-          {visible && <ActivityIndicator size="large" color="#0a84ff" />}
+          {visible && <ActivityIndicator size="large" color="#f41a2c" />}
           {message ? <Text style={styles.text}>{message}</Text> : null}
         </View>
       </View>

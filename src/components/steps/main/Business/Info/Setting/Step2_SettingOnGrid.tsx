@@ -263,9 +263,15 @@ const Step2_SettingOnGrid = ({ back, goTo }: MultiStepFormProps) => {
                   },
                 ]}
                 formik={formik}
-                selectedTextStyle={{ color: "black" }}
-                placeholderStyle={{ color: "black" }}
-                itemTextStyle={{ color: "black" }}
+                selectedTextStyle={{
+                  color: "black",
+                  fontFamily: "Ranade-Regular",
+                }}
+                placeholderStyle={{
+                  color: "black",
+                  fontFamily: "Ranade-Regular",
+                }}
+                itemTextStyle={{ color: "black", fontFamily: "Ranade-Regular" }}
                 dropdownType="sm"
                 labelField="label"
                 valueField="value"
