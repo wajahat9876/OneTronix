@@ -125,16 +125,14 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
         style={{
           position: "absolute",
           width: 200,
-          height: 230,
-          // marginTop: 20,
+          height: 240,
           alignSelf: "flex-end",
         }}
       />
 
       <View
         style={{
-          // alignItems: "flex-start",
-          marginLeft: 12,
+          marginLeft: hs(15),
           marginTop: vs(60),
         }}
       >

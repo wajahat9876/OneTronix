@@ -138,7 +138,7 @@ const Step2_OTP = ({ back }: MultiStepFormProps) => {
         style={{
           position: "absolute",
           width: 200,
-          height: 230,
+          height: 240,
           alignSelf: "flex-end",
         }}
       />

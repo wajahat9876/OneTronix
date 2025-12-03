@@ -74,7 +74,7 @@ const Step0_ChooseAccount = ({ next, goTo }: MultiStepFormProps) => {
         style={{
           position: "absolute",
           width: 200,
-          height: 230,
+          height: 240,
           alignSelf: "flex-end",
         }}
       />
