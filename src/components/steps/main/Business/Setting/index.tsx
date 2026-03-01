@@ -85,6 +85,8 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
               <Image source={ProfileIcon} style={{ width: 55, height: 55 }} />
               <View>
                 <Text
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
                   allowFontScaling={false}
                   style={{
                     fontFamily: "Ranade-Medium",
@@ -96,6 +98,8 @@ const Settings = ({ goTo }: MultiStepFormProps) => {
                   {data?.firstName}
                 </Text>
                 <Text
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
                   allowFontScaling={false}
                   style={{
                     color: "gray",
