@@ -1,0 +1,40 @@
+---
+description: Redux, RTK Query, and store conventions
+globs: "store/**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# Store & API Rules
+
+## RTK Query APIs
+- One API slice per domain in `store/api/` (e.g. `businessAuthApi`, `businessMainApi`)
+- Typed payloads: import from `store/types/business/api_requests_data/`
+- Typed responses: import from `store/types/business/api_responses/`
+- Register reducer + middleware in `store/index.ts` and `store/rootReducer.ts`
+
+```ts
+// ✅ Typed endpoint
+businessSignin: builder.mutation<ISignInResponse, SignInPayload>({
+  query: (body) => ({ url: 'user/auth/signin', method: 'POST', body }),
+}),
+```
+
+## Auth headers
+- Read `auth_token` / `tempToken` from `business` slice in `prepareHeaders`
+- Hash-signed endpoints: use `baseQueryWithHash` + `createHash` + `HeaderKeys`
+
+## Selectors & slices
+- Selectors in `store/selectors/` — use in components via `useAppSelector(useBusinessDetails)`
+- Slice actions: import from `@/store/slices/business/businessSlice`
+- Persisted slices: `business`, `config` only
+
+## Error handling
+- Use `handleLogout` from `store/utils/errorHandler` for auth failures
+- Invalidate tags in `onQueryStarted` after successful mutations
+
+## Hooks in components
+```ts
+const [signIn, { isLoading }] = useBusinessSigninMutation();
+const businessData = useAppSelector(useBusinessDetails);
+const dispatch = useAppDispatch();
+```

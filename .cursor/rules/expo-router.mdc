@@ -1,0 +1,36 @@
+---
+description: Expo Router navigation and app directory conventions
+globs: "app/**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# Expo Router Rules
+
+## Route groups
+- `(auth)/` — unauthenticated: Welcome, Signin, Signup, Forgot
+- `(main)/Business/` — authenticated business app
+- Auth gate: `app/index.tsx` redirects on `auth_token` + `isVerifiedEmail`
+
+## Layout files
+- `app/_layout.tsx` — root providers only (Redux, Paper, Portal, Toast, Keyboard, Splash)
+- Group `_layout.tsx` files configure Stack/Tabs for that segment
+- Keep `headerShown: false` unless explicitly needed
+
+## Route file conventions
+- File name: `index.tsx` inside feature folders (`Signin/index.tsx`)
+- Default export arrow component matching folder purpose
+- No business logic beyond routing, redirects, and step orchestration
+
+## Navigation
+```ts
+import { useRouter, Redirect } from 'expo-router';
+
+router.replace('/(main)/Business/Home');
+router.push('/(auth)/Signup');
+return <Redirect href="/(auth)/Welcome" />;
+```
+
+## Multi-step in routes
+- Compose steps with `useMultistepForm([<Step1 />, <Step2 />], { animated: true })`
+- Import steps from `@steps/Auth/...` or `@steps/main/Business/...`
+- Background gradients/wrappers stay in route file; step content in `@steps/`

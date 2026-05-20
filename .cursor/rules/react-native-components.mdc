@@ -1,0 +1,41 @@
+---
+description: React Native component and styling patterns
+globs: "{src/**/*.tsx,app/**/*.tsx}"
+alwaysApply: false
+---
+
+# Component Patterns
+
+## Layering
+```tsx
+// ✅ Route shell (app/)
+const Signin = () => {
+  const { step } = useMultistepForm([<Step1 />, <Step2 />], { animated: true });
+  return <View className="flex-1">{step}</View>;
+};
+
+// ✅ Step screen (src/components/steps/)
+const Step1 = ({ next }: MultiStepFormProps) => { /* form + API */ };
+```
+
+## Imports
+- Primitives: `@src/components/libraries` (Text, TouchableOpacity, SafeAreaView)
+- UI: `@globals/Button`, `@globals/FormikInput`, `@globals/Screen`
+- Assets: `@assets/icons/...svg` (extension required)
+
+## Styling
+- Layout: NativeWind `className` (`flex-1`, `items-center`)
+- Sizing/spacing: `hs()`, `vs()`, `ms()` — not raw pixel values
+- Colors: `@src/constants/Colors`
+- Fonts: Ranade-Regular (body), Excon-Medium (buttons/headings)
+- Set `allowFontScaling={false}` on Text for design fidelity
+
+## Forms
+- Formik + Yup validation
+- Use `FormikInput`, `FormikDropDown`, `FormikPhoneInput` wrappers
+- API calls via RTK Query mutation hooks; handle with `.unwrap()` in try/catch
+
+## Components
+- Co-locate `types.ts` for prop interfaces (`IButtonProps`, etc.)
+- Use `React.forwardRef` when wrapping inputs
+- Multi-step flows: accept `next`, `back`, `goTo` from `MultiStepFormProps`

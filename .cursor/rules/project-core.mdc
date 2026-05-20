@@ -1,0 +1,31 @@
+---
+description: Core OneTronix project conventions — always apply
+alwaysApply: true
+---
+
+# OneTronix Core Rules
+
+Read `AGENTS.md` for full project context.
+
+## Stack
+Expo 53 + Expo Router + TypeScript + NativeWind + Redux Toolkit/RTK Query + Formik/Yup + MMKV persist.
+
+## Structure
+- `app/` = thin route shells only
+- `src/components/steps/` = multi-step screen UI
+- `src/components/globals/` = reusable UI + co-located `types.ts`
+- `store/api/` = RTK Query endpoints; `store/types/` = API types
+
+## Must Do
+- Use path aliases (`@src`, `@globals`, `@store`, `@hooks`, `@utils`, `@assets`) — no cross-folder relative imports
+- Use `useAppDispatch` / `useAppSelector` from `@src/hooks/useReduxHooks`
+- Arrow function components; default export for screens/components
+- Responsive sizing via `hs()`, `vs()`, `ms()` from `@utils/design/design`
+- Toast errors/success via `renderToastError` / `renderToastSuccess` from `@src/hooks/useToasty`
+- Match existing code style; minimize diff scope
+
+## Must Not
+- Add commits unless explicitly requested
+- Put heavy UI logic in `app/` route files
+- Introduce new state management libraries
+- Commit secrets or `.env` files
