@@ -5,24 +5,19 @@
 import { IBusinessState } from "@/store/slices/business/businessSlice";
 import { ICurrentResponse } from "@/store/types/business/api_responses/auth";
 import { handleLogout } from "@/store/utils/errorHandler";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import Config from "@src/constants/Config";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { createBaseQueryWithDemo } from "@utils/demo/baseQueryWithDemo";
 import { businessCurrentApi } from "./businessCurrent";
 
 export const businessMainApi = createApi({
   reducerPath: "businessMainApi",
   refetchOnFocus: false,
-  baseQuery: fetchBaseQuery({
-    baseUrl: Config.baseURL,
-    prepareHeaders: (headers, { getState }) => {
-      const { tempToken, auth_token } = (
-        getState() as { business: IBusinessState }
-      ).business;
-      if (auth_token) {
-        headers.set("Authorization", `Bearer ${auth_token}`);
-      }
-      return headers;
-    },
+  baseQuery: createBaseQueryWithDemo((headers, { getState }) => {
+    const { auth_token } = (getState() as { business: IBusinessState }).business;
+    if (auth_token) {
+      headers.set('Authorization', `Bearer ${auth_token}`);
+    }
+    return headers;
   }),
 
   tagTypes: ["getPendingExchange"],

@@ -10,6 +10,10 @@ import {
   OutgoingTransfer,
   VerifySignIn,
 } from "@/store/types/business/api_responses/auth";
+import {
+  DEMO_AUTH_TOKEN,
+  DEMO_BUSINESS_USER,
+} from "@utils/demo";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface IBusinessState {
@@ -284,6 +288,12 @@ const businessSlice = createSlice({
       state.businessBeneficiaryId = action.payload;
     },
 
+    setDemoSession(state: IBusinessState) {
+      state.auth_token = DEMO_AUTH_TOKEN;
+      state.isVerifiedEmail = true;
+      state.data = DEMO_BUSINESS_USER;
+    },
+
     businessLogout(state: IBusinessState) {
       console.log("Business Logout");
       state.role = false;
@@ -391,6 +401,7 @@ const businessSlice = createSlice({
 
 export const {
   setCurrentPassword,
+  setDemoSession,
   setLastSelectedDevice,
   setLastSelectedDeviceId,
   setPackageId,

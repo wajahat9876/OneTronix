@@ -2,7 +2,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable camelcase */
 import { useBusinessSigninMutation } from "@/store/api/business/authApis";
-import { setRole } from "@/store/slices/business/businessSlice";
+import { setDemoSession, setRole } from "@/store/slices/business/businessSlice";
+import { isDemoCredentials } from "@utils/demo";
 import Logoicon from "@assets/eccLogo/one-tronix-logo.png";
 import BottomSheet from "@gorhom/bottom-sheet";
 import Button from "@src/components/globals/Button";
@@ -27,6 +28,13 @@ const Step1_BasicDetails = ({ next }: MultiStepFormProps) => {
   const router = useRouter();
   const [isActive, setActive] = useState(false);
   const handleBusinessSignIn = async (values: any) => {
+    if (isDemoCredentials(values.email, values.password)) {
+      dispatch(setDemoSession());
+      router.replace("/(main)/Business/Home");
+      renderToastSuccess("Demo mode — signed in successfully");
+      return;
+    }
+
     try {
       const result = await businessSignIn(values).unwrap();
       // dispatch(setSigninBusinessEmail(values?.email));
